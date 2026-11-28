@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react';
 import { View } from 'react-native';
-import { mushafMarkOrder } from '@shared/quran/quranText/markOrder';
 import Svg, { Circle, G, Path, Rect, Text as SvgText } from 'react-native-svg';
 import land from '@shared/data/battles/land.json';
 import { frameOf, landPath, PIN_JOIN, pinsOf, placeLabels, projector, type Box, type LonLat } from '@shared/battles/map';
@@ -54,8 +53,8 @@ export default function BattleMap({ places: given, palette, box: fixed, onPin }:
     const where = { x: at.x, y: at.y, fontSize: size, textAnchor: at.anchor, fontFamily: 'Amiri' };
     return (
       <G>
-        <SvgText {...where} fill={palette.paper} stroke={palette.paper} strokeWidth={4}>{mushafMarkOrder(text)}</SvgText>
-        <SvgText {...where} fill={palette.ink}>{mushafMarkOrder(text)}</SvgText>
+        <SvgText {...where} fill={palette.paper} stroke={palette.paper} strokeWidth={4}>{text}</SvgText>
+        <SvgText {...where} fill={palette.ink}>{text}</SvgText>
       </G>
     );
   };

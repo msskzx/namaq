@@ -1,4 +1,4 @@
-import { createContext, isValidElement, memo, useCallback, useContext, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
+import { createContext, isValidElement, memo, useCallback, useContext, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { AppState, Dimensions, useWindowDimensions, View } from 'react-native';
 import { COLUMN_GAP, PageWidthProvider, usePageWidth } from '@/ui/column';
 import { router, useFocusEffect, type Href } from 'expo-router';
@@ -118,7 +118,6 @@ import { DarkSeaActions, DarkSeaCard, darkSeaName, darkSeaSourceList, openDarkSe
 import { DARK_SEA_KEY } from '@shared/quran/scenes/darkSea';
 import { RAHMAN_KEY } from '@shared/quran/scenes/rahman';
 import { RahmanActions, RahmanCard, openRahman, rahmanSourceList } from './RahmanScene';
-import { reportError } from '@shared/errors';
 import { prophetStory } from '@/lib/prophets';
 import gharib from '@shared/data/quran/gharib';
 import { wordsOf as gharibWordsOf } from '@shared/quran/gharib';
@@ -174,6 +173,12 @@ import { openDhikr } from '@/lib/adhkar';
 import { DhikrBody } from './Adhkar';
 import { QuranWord } from '@/components/quran/text/AyahFlow';
 import { dataOf } from '@shared/appData';
+import { useOnChange } from '@/lib/hooks/useOnChange';
+import { useLater } from '@/lib/hooks/useLater';
+import { useWhileOpen } from '@/lib/hooks/useWhileOpen';
+import { useNow } from '@/lib/hooks/useNow';
+import { runWhenIdle } from '@/lib/idle';
+import { useForeground } from '@/lib/adhan';
 
 const rajab = dataOf(rajabFile);
 
@@ -440,11 +445,11 @@ const QuizPost = memo(function QuizPost({ kind, seed, palette, sub, home = true 
   const [runOf, setRunOf] = useState(asked);
   if (runOf !== asked) { setRunOf(asked); setRun(asked); }
   const reported = useRef<string | null>(null);
-  useEffect(() => {
+  useOnChange([run, kind, seed], () => {
     if (!run?.checked[0] || reported.current === `${kind}:${seed}`) return;
     reported.current = `${kind}:${seed}`;
     answeredQuestion(kind, seed, questionState(run, 0) === 'correct');
-  }, [run, kind, seed]);
+  });
   if (!run) return null;
   const question = run.questions[0];
   const checked = run.checked[0];
@@ -1045,12 +1050,9 @@ function soonNow(): Soon | null {
 
 function usePrayerSoon(): Soon | null {
   const [soon, setSoon] = useState(soonNow);
-  useEffect(() => {
-    const check = () => setSoon(now => { const next = soonNow(); return next?.key === now?.key ? now : next; });
-    const timer = setInterval(check, 30_000);
-    const listener = AppState.addEventListener('change', state => { if (state === 'active') check(); });
-    return () => { clearInterval(timer); listener.remove(); };
-  }, []);
+  const clock = useNow(30_000);
+  const back = useForeground();
+  useOnChange([clock, back], () => setSoon(now => { const next = soonNow(); return next?.key === now?.key ? now : next; }));
   return soon;
 }
 
@@ -1454,14 +1456,7 @@ function warmFeed(day: number, memorized: Memorized | null) {
       }
     })),
   ];
-  const idle = (next: () => void) => (typeof requestIdleCallback === 'function' ? requestIdleCallback(next, { timeout: 500 }) : setTimeout(next, 16));
-  const step = () => {
-    const work = steps.shift();
-    if (!work) return;
-    try { work(); } catch (error) { reportError('home: warm a card kind', error); }
-    idle(step);
-  };
-  setTimeout(() => idle(step), WARM_AFTER);
+  runWhenIdle(steps, WARM_AFTER, 'home: warm a card kind');
 }
 const WARM_AFTER = 1500;
 
@@ -1562,16 +1557,16 @@ export const Feed = memo(function Feed({ palette, nearEnd, screenBottom, only = 
   const view = `${visit}|${only ?? ''}`;
   const [whole, setWhole] = useState<string | null>(() => (only ? null : view));
   const drawn = whole === view;
-  useEffect(() => {
+  const wholeLater = useLater();
+  useOnChange([drawn, view], () => {
+    wholeLater.cancel();
     if (drawn) return;
-    let later: ReturnType<typeof setTimeout> | undefined;
-    const frame = requestAnimationFrame(() => { later = setTimeout(() => setWhole(view), 0); });
-    return () => { cancelAnimationFrame(frame); clearTimeout(later); };
-  }, [drawn, view]);
+    wholeLater.afterPaint(() => setWhole(view));
+  });
   const [more, setMore] = useState({ view, batches: 0 });
-  useEffect(() => {
+  useOnChange([nearEnd], () => {
     if (nearEnd && drawn) setMore(now => ({ view, batches: (now.view === view && now.batches ? now.batches : step) + step }));
-  }, [nearEnd]); // eslint-disable-line react-hooks/exhaustive-deps -- only a new signal asks for more
+  });
   const seen = useSyncExternalStore(subscribeFeedSeen, readFeedSeen);
   const bookmarks = readBookmarks();
   const saved = useMemo(() => shownBookmarks(bookmarks).filter(item => !isCardBookmark(item.id)), [visit]); // eslint-disable-line react-hooks/exhaustive-deps -- read once a visit
@@ -1594,7 +1589,7 @@ export const Feed = memo(function Feed({ palette, nearEnd, screenBottom, only = 
   const picked = useSyncExternalStore(pickedInterests.subscribe, pickedInterests.read, pickedInterests.server);
   const surprise = useSyncExternalStore(surpriseMe.subscribe, surpriseMe.read, surpriseMe.server);
   useBooks();
-  useEffect(() => warmFeed(day, memorized && questions ? memorized : null), []); // eslint-disable-line react-hooks/exhaustive-deps -- once a run of the app
+  useOnChange([], () => warmFeed(day, memorized && questions ? memorized : null));
   const frozen = useMemo(() => ({ picked, surprise }), [visit]); // eslint-disable-line react-hooks/exhaustive-deps -- read once a visit
   const { active, others } = useMemo(() => {
     if (only) return { active: INTERESTS.filter(interest => interest.id === only), others: [] };
@@ -1608,10 +1603,10 @@ export const Feed = memo(function Feed({ palette, nearEnd, screenBottom, only = 
   const showing = new Set(activeInterests(picked).map(interest => interest.id));
   const rounds = useMemo(() => Array.from({ length: batches }, (_, round) => feedRound(active, round, day, others)), [active, others, batches, day]);
   const missed = useMemo(() => ({ list: readMissed(), at: Date.now() }), [visit]); // eslint-disable-line react-hooks/exhaustive-deps -- read once a visit
-  useEffect(() => {
+  useWhileOpen(() => {
     const listener = AppState.addEventListener('change', state => (state === 'active' ? backToVisit() : leftVisit()));
     return () => listener.remove();
-  }, []);
+  });
   const counts = useMemo(() => {
     const count: Record<string, number> = {};
     for (const slot of rounds.flat()) count[slot.kind] = (count[slot.kind] ?? 0) + 1;
@@ -1702,19 +1697,19 @@ export const Feed = memo(function Feed({ palette, nearEnd, screenBottom, only = 
   }
   if (!only && isKahfDay(now)) posts.splice(Math.min(KAHF_SLOT, posts.length), 0, <KahfPost key={`kahf${day}`} palette={palette} />);
   const renderedKey = rendered.join('\n');
-  useEffect(() => { if (renderedKey && shown) markFeedSeen(renderedKey.split('\n')); }, [renderedKey, shown]);
+  useOnChange([renderedKey, shown], () => { if (renderedKey && shown) markFeedSeen(renderedKey.split('\n')); });
   const soon = usePrayerSoon();
   const [cards, setCards] = useState<(Soon & { after: string | null })[]>(() => (soon ? [{ ...soon, after: null }] : []));
   const top = useRef(0);
   const tops = useRef(new Map<string, number>());
   const keys = posts.map(post => String((post as React.ReactElement).key));
-  useEffect(() => {
+  useOnChange([soon?.key, shown], () => {
     if (!shown || !soon || cards.some(card => card.key === soon.key)) return;
     const bottom = screenBottom();
     const below = (key: string) => (tops.current.get(key) ?? Infinity) + top.current >= bottom;
     const at = insertAt(keys.map(key => (tops.current.get(key) ?? Infinity) + top.current), bottom);
     setCards(now => [...now.filter(card => !below(`pr${card.key}`)), { ...soon, after: at ? keys[at - 1] : null }]);
-  }, [soon?.key, shown]); // eslint-disable-line react-hooks/exhaustive-deps -- once for each prayer, on the feed on screen
+  });
   const [cardsVisit, setCardsVisit] = useState(visit);
   if (cardsVisit !== visit) { setCardsVisit(visit); setCards(soon ? [{ ...soon, after: null }] : []); }
   for (const card of only ? [] : cards) {

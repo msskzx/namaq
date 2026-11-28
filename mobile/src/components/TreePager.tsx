@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
+import { useCallback, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { Pressable, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Text } from '@/ui/Text';
@@ -42,6 +42,9 @@ import { toTab } from '@/lib/ways';
 import { setCompact, useShrinkOnScroll } from '@/lib/chrome';
 import IconButton from '@/ui/IconButton';
 import DifferenceWords from '@/components/quran/text/DifferenceWords';
+import { useOnChange } from '@/lib/hooks/useOnChange';
+import { useOnLeave } from '@/lib/hooks/useOnLeave';
+import { useLater } from '@/lib/hooks/useLater';
 
 const PLACE = 'branches-place';
 const IDLE: Growth = { mode: 'watch', speed: 1, timer: 3, status: 'idle', at: 0, total: 0, studio: false, hidden: new Set(), now: new Set(), lit: null, tour: false, kind: 'tree' };
@@ -69,11 +72,11 @@ function Actions({ piece, palette, pop, current, embedded, extra, onVideo, onSha
   const studio = useGrowth().studio;
   const scale = useSharedValue(1);
   const seen = useRef(pop);
-  useEffect(() => {
+  useOnChange([pop, current, scale], () => {
     if (pop === seen.current) return;
     seen.current = pop;
     if (current) scale.value = withSequence(withTiming(1.35, { duration: 120 }), withTiming(1, { duration: 160 }));
-  }, [pop, current, scale]);
+  });
   const popped = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
   if (studio && current && !embedded) return <StudioControls palette={palette} onVideo={onVideo} choice={choice} />;
   const save = () => toggleSaved(piece);
@@ -125,7 +128,7 @@ function ScrollingTree({ view, studio, children }: { view: Size; studio: boolean
   const ayatRoom = useMemo(() => ({ height: room, set: setRoom, most: Math.round(view.height * 0.9) }), [room, view.height]);
   const added = studio ? 0 : room;
   const scroller = useRef<React.ComponentRef<typeof ScrollView>>(null);
-  useEffect(() => { if (!added) scroller.current?.scrollTo({ y: 0, animated: false }); }, [added]);
+  useOnChange([added], () => { if (!added) scroller.current?.scrollTo({ y: 0, animated: false }); });
   return (
     <ScrollView ref={scroller} scrollEnabled={added > 0} showsVerticalScrollIndicator={false} style={{ flex: 1 }}>
       {children({ width: view.width, height: view.height + added }, studio ? undefined : ayatRoom, added > 0)}
@@ -167,20 +170,19 @@ export default function TreePager({ pieces, list, palette, around: defaultAround
   const first = start ?? Math.max(0, pieces.findIndex(piece => piece.id === place?.id));
   const [index, setIndex] = useState(first);
   const currentMode = pieces[index] ? modeOf(pieces[index]) : DEFAULT_MODE;
-  useEffect(() => { if (currentMode === 'tree') embedded?.onFit?.(null); }, [currentMode]); // eslint-disable-line react-hooks/exhaustive-deps
+  useOnChange([currentMode], () => { if (currentMode === 'tree') embedded?.onFit?.(null); });
   const [view, setView] = useState<Size | null>(null);
   const [pop, setPop] = useState(0);
   const offset = useSharedValue(0);
   const lastTap = useRef({ at: 0, on: '' });
   const moved = useRef(0);
-  const pending = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const pending = useLater();
   const waiting = useRef<(() => void) | undefined>(undefined);
   const move = useCallback(() => {
     moved.current = Date.now();
-    clearTimeout(pending.current);
+    pending.cancel();
     waiting.current = undefined;
-  }, []);
-  useEffect(() => () => clearTimeout(pending.current), []);
+  }, [pending]);
   const restore = useRef(place?.id === pieces[first]?.id ? place?.camera : undefined);
   const width = view?.width ?? 0;
   const shared = useGrowth();
@@ -201,30 +203,30 @@ export default function TreePager({ pieces, list, palette, around: defaultAround
   const openCompare = (target: CompareTarget) => { embedded?.onLeave?.(); setIntent({ tab: 'compare', lead: target.lead, other: target.other }); toTab('/compare'); };
   const compare = (targets: CompareTarget[]) => (targets.length === 1 ? openCompare(targets[0]) : setChoosing(targets));
 
-  useEffect(() => { if (width) offset.value = index * width; }, [width]); // eslint-disable-line react-hooks/exhaustive-deps
-  useEffect(() => { onIndex?.(index); }, [index, onIndex]);
-  useEffect(() => {
+  useOnChange([width], () => { if (width) offset.value = index * width; });
+  useOnChange([index, onIndex], () => { onIndex?.(index); });
+  useOnChange([pieces.length], () => {
     if (index < pieces.length || !pieces.length) return;
     setIndex(pieces.length - 1);
     if (width) offset.value = (pieces.length - 1) * width;
-  }, [pieces.length]); // eslint-disable-line react-hooks/exhaustive-deps
+  });
 
   const piece = pieces[Math.min(index, pieces.length - 1)];
   const mode = piece ? modeOf(piece) : DEFAULT_MODE;
   const shrink = useShrinkOnScroll();
-  useEffect(() => { if (!embedded) setCompact(false); }, [index, mode]); // eslint-disable-line react-hooks/exhaustive-deps
+  useOnChange([index, mode], () => { if (!embedded) setCompact(false); });
   const around = piece ? surroundOf(piece) : defaultAround;
   const matrixGroup = useMemo(() => (mode === 'matrix' && piece ? evidenceOf(piece) : null), [mode, piece]);
   const studioTags = matrixGroup?.tags.length ? (tagsOf(piece, matrixGroup).length ? tagsOf(piece, matrixGroup) : matrixGroup.tags) : [];
   const studioKey = studioTags.join(' ');
-  useEffect(() => {
+  useOnChange([growth.studio, growth.kind, matrixGroup, piece], () => {
     if (growth.studio && growth.kind === 'matrix' && matrixGroup?.tags.length && piece && !tagsOf(piece, matrixGroup).length) setPicked({ id: piece.id, tags: matrixGroup.tags });
-  }, [growth.studio, growth.kind, matrixGroup, piece]); // eslint-disable-line react-hooks/exhaustive-deps
+  });
   const reading = useMemo(() => (mode === 'matrix' && piece ? matrixReading(cardOf(piece, list).presentation) : null), [mode, piece, list]);
   const [play, setPlay] = useState<'connections' | 'read'>('connections');
   const lines = useMemo(() => (matrixGroup ? studioTags.reduce((sum, tag) => sum + wordConnections(matrixGroup, tag).length, 0) : 0), [matrixGroup, studioKey]); // eslint-disable-line react-hooks/exhaustive-deps
   const connecting = lines > 0 && play === 'connections';
-  useEffect(() => {
+  useOnChange([piece, list, mode, around, studioKey, reading, connecting, lines], () => {
     if (embedded) return;
     if (mode === 'matrix' && matrixGroup && connecting) {
       claimTarget('branches', { kind: 'matrix', watch: connectionBeats(lines), ask: connectionBeats(lines, true) });
@@ -237,12 +239,12 @@ export default function TreePager({ pieces, list, palette, around: defaultAround
     const options = { ...parts, prefixes: presentation.prefixes, offsets: presentation.offsets, paths: true };
     beatsRef.current = { watch: withPathReading(presentation, growthBeats(presentation.tree, options)), ask: withPathReading(presentation, growthBeats(presentation.tree, { ...options, ask: true })) };
     claimTarget('branches', beatsRef.current);
-  }, [piece, list, mode, around, studioKey, reading, connecting, lines]); // eslint-disable-line react-hooks/exhaustive-deps
-  useEffect(() => () => { if (!embedded) claimTarget('branches', null); }, []); // eslint-disable-line react-hooks/exhaustive-deps
-  useEffect(() => {
+  });
+  useOnLeave(() => { if (!embedded) claimTarget('branches', null); });
+  useOnChange([piece], () => {
     setPlay('connections');
     if (!embedded && growthState().studio && studioOwner() === 'branches') closeStudio();
-  }, [piece]); // eslint-disable-line react-hooks/exhaustive-deps
+  });
 
   const arrive = useCallback((next: number) => {
     restore.current = undefined;
@@ -267,7 +269,7 @@ export default function TreePager({ pieces, list, palette, around: defaultAround
   const tap = useCallback((ayahKeys: string[] | null, lightPath?: () => void) => {
     const now = Date.now();
     if (now - moved.current < 350) return;
-    clearTimeout(pending.current);
+    pending.cancel();
     const on = ayahKeys?.join(' ') ?? '';
     if (waiting.current && lastTap.current.on !== on) waiting.current();
     waiting.current = undefined;
@@ -283,9 +285,9 @@ export default function TreePager({ pieces, list, palette, around: defaultAround
     lastTap.current = { at: now, on };
     if (lightPath) {
       waiting.current = lightPath;
-      pending.current = setTimeout(() => { waiting.current = undefined; lightPath(); }, DOUBLE_TAP);
+      pending.after(DOUBLE_TAP, () => { waiting.current = undefined; lightPath(); });
     }
-  }, [pieces, index, embedded]);
+  }, [pieces, index, embedded, pending]);
 
   const openVideo = async () => {
     stop();

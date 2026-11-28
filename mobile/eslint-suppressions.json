@@ -1,12 +1,4 @@
 {
-  "src/components/AppShell.tsx": {
-    "no-restricted-globals": {
-      "count": 1
-    },
-    "quality/no-raw-effects": {
-      "count": 5
-    }
-  },
   "src/components/BranchTree.tsx": {
     "react-hooks/refs": {
       "count": 3
@@ -23,23 +15,14 @@
     }
   },
   "src/components/HomeFeed.tsx": {
-    "no-restricted-globals": {
-      "count": 7
-    },
     "quality/import-boundaries": {
       "count": 5
-    },
-    "quality/no-raw-effects": {
-      "count": 8
     },
     "react-hooks/purity": {
       "count": 1
     },
     "react-hooks/refs": {
       "count": 2
-    },
-    "react-hooks/set-state-in-effect": {
-      "count": 1
     }
   },
   "src/components/Interests.tsx": {
@@ -48,20 +31,11 @@
     }
   },
   "src/components/MatrixCard.tsx": {
-    "no-restricted-globals": {
-      "count": 1
-    },
-    "quality/no-raw-effects": {
-      "count": 4
-    },
     "react-hooks/immutability": {
       "count": 8
     },
     "react-hooks/refs": {
       "count": 9
-    },
-    "react-hooks/set-state-in-effect": {
-      "count": 1
     }
   },
   "src/components/QuizLook.tsx": {
@@ -80,12 +54,6 @@
     }
   },
   "src/components/Reader.tsx": {
-    "no-restricted-globals": {
-      "count": 1
-    },
-    "quality/no-raw-effects": {
-      "count": 10
-    },
     "react-hooks/immutability": {
       "count": 5
     },
@@ -94,9 +62,6 @@
     },
     "react-hooks/refs": {
       "count": 7
-    },
-    "react-hooks/set-state-in-effect": {
-      "count": 5
     }
   },
   "src/components/ReaderPager.tsx": {
@@ -104,17 +69,6 @@
       "count": 4
     },
     "react-hooks/refs": {
-      "count": 1
-    }
-  },
-  "src/components/ShareSheet.tsx": {
-    "no-restricted-globals": {
-      "count": 2
-    },
-    "quality/no-raw-effects": {
-      "count": 2
-    },
-    "react-hooks/set-state-in-effect": {
       "count": 1
     }
   },
@@ -135,24 +89,7 @@
     }
   },
   "src/components/TreePager.tsx": {
-    "no-restricted-globals": {
-      "count": 1
-    },
-    "quality/no-raw-effects": {
-      "count": 12
-    },
     "react-hooks/immutability": {
-      "count": 2
-    },
-    "react-hooks/set-state-in-effect": {
-      "count": 3
-    }
-  },
-  "src/components/Utilities.tsx": {
-    "quality/no-raw-effects": {
-      "count": 4
-    },
-    "react-hooks/set-state-in-effect": {
       "count": 2
     }
   },
@@ -162,17 +99,6 @@
     },
     "react-hooks/refs": {
       "count": 1
-    }
-  },
-  "src/components/useReadAlong.ts": {
-    "no-restricted-globals": {
-      "count": 1
-    },
-    "quality/no-raw-effects": {
-      "count": 3
-    },
-    "react-hooks/set-state-in-effect": {
-      "count": 2
     }
   },
   "src/lib/keyboard.ts": {

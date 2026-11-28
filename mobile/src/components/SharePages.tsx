@@ -10,7 +10,7 @@ import { UI_FONT_BOLD, type Palette } from '@/lib/theme';
 import type { SharePaged } from '@/lib/shareImage';
 import { useLater } from '@/lib/hooks/useLater';
 import { useOnChange } from '@/lib/hooks/useOnChange';
-import { useOnLeave } from '@/lib/hooks/useOnLeave';
+import { useLatestRun } from '@/lib/hooks/useLatestRun';
 
 export type Shot = { uri: string; width: number; height: number };
 
@@ -53,11 +53,9 @@ export default function SharePages({ paged, width, palette, onShots, onFail }: {
   const refs = useRef<(ComponentRef<typeof View> | null)[]>([]);
   const pictureCount = drawn ? drawn.length : pages?.length;
   const capture = useLater();
-  const run = useRef(0);
-  useOnLeave(() => { run.current++; });
+  const begin = useLatestRun();
   useOnChange([pictureCount, onShots, onFail], () => {
-    const mine = ++run.current;
-    const live = () => run.current === mine;
+    const live = begin();
     if (!pictureCount) { capture.cancel(); return; }
     capture.after(150, () => {
       void (async () => {

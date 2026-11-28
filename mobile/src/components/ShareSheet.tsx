@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState, type ComponentRef, type ReactNode } from 'react';
+import { useCallback, useMemo, useRef, useState, type ComponentRef, type ReactNode } from 'react';
 import { Image, Platform, ScrollView, Share, View } from 'react-native';
 import { usePageWidth } from '@/ui/column';
 import { captureRef } from 'react-native-view-shot';
@@ -12,6 +12,9 @@ import SharePages, { ShareBrand, type Shot } from './SharePages';
 import { num } from '@shared/quran/arabicNumber';
 import { usePalette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
+import { useLater } from '@/lib/hooks/useLater';
+import { useOnChange } from '@/lib/hooks/useOnChange';
+import { useLatestRun } from '@/lib/hooks/useLatestRun';
 import StepDots from '@/ui/StepDots';
 
 const FRAME = 360;
@@ -45,29 +48,31 @@ export default function ShareSheet() {
   const pager = useRef<ComponentRef<typeof ScrollView>>(null);
   const [saved, setSaved] = useState<'saving' | 'saved' | 'denied' | 'failed' | null>(null);
   const [pageWidth, setPageWidth] = useState(0);
-  useEffect(() => { setShot(null); setShots(null); setShown(0); setSaved(null); setFailed(false); setDrawn(false); }, [request]);
+  useOnChange([request], () => { setShot(null); setShots(null); setShown(0); setSaved(null); setFailed(false); setDrawn(false); });
   const gotShots = useCallback((next: Shot[]) => { setShots(next); setShot(next[0]); }, []);
   const failedShots = useCallback(() => setFailed(true), []);
-  useEffect(() => {
-    if (!drawn) return;
-    let live = true;
-    const timer = setTimeout(() => {
+  const capture = useLater();
+  const begin = useLatestRun();
+  useOnChange([drawn], () => {
+    const live = begin();
+    if (!drawn) { capture.cancel(); return; }
+    capture.after(120, () => {
       if (!frame.current) return;
       captureRef(frame.current, { format: 'png', result: CAPTURE_RESULT })
         .then(uri => new Promise<Shot>((resolve, reject) => Image.getSize(uri, (w, h) => resolve({ uri, width: w, height: h }), reject)))
-        .then(next => { if (live) setShot(next); }, () => { if (live) setFailed(true); });
-    }, 120);
-    return () => { live = false; clearTimeout(timer); };
-  }, [drawn]);
+        .then(next => { if (live()) setShot(next); }, () => { if (live()) setFailed(true); });
+    });
+  });
   const frameWidth = request?.paged ? PAGED_FRAME : Math.min(FRAME, width - 24);
   const cardWidth = frameWidth - 32;
   const fit = shot && box ? Math.min(box.width / shot.width, box.height / shot.height, frameWidth / shot.width) : 0;
   const pending = useRef<(() => void) | null>(null);
+  const afterClose = useLater();
   const video = (onVideo?: () => void) => {
     closeShare();
     if (!onVideo) return;
     if (Platform.OS === 'ios') pending.current = onVideo;
-    else setTimeout(onVideo, MODAL_GAP + CLOSE_MS);
+    else afterClose.after(MODAL_GAP + CLOSE_MS, onVideo);
   };
   const dismissed = () => { const next = pending.current; pending.current = null; next?.(); };
   const link = () => { if (request?.link) void Share.share({ message: request.link }); };
