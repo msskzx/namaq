@@ -44,3 +44,12 @@ export function rangeSlice(lines: readonly (WordGroup[] | null)[], items: readon
   }
   return { from: start, to: rows[rows.length - 1] };
 }
+
+export function surahJoin(lines: readonly (WordGroup[] | null)[], items: readonly Item[], surah: number, last: string | null): { from: number; to: number; before: boolean } | null {
+  const title = items.findIndex(item => 'surah' in item && item.surah === surah);
+  if (title < 0) return null;
+  const first = lines.flatMap((line, at) => (line?.some(group => group.word && group.surah === surah && group.ayah === 1) ? [at] : []));
+  if (!first.length) return null;
+  const ending = last ? lines.flatMap((line, at) => (at < title && line?.some(group => group.word && `${group.surah}:${group.ayah}` === last) ? [at] : [])) : [];
+  return { from: ending[0] ?? title, to: first[first.length - 1], before: !!last && !ending.length };
+}

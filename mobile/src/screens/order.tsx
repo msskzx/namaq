@@ -5,7 +5,7 @@ import { ArrowDownWideNarrow, X } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
 import { holdsTerms } from '@shared/quran/searchAll';
 import Empty from '@/ui/Empty';
-import { linkShows, ORDER_JUZ, orderInJuz, toggledJuz } from '@shared/quran/surahOrder';
+import { ORDER_JUZ, orderInJuz, toggledJuz } from '@shared/quran/surahOrder';
 import HelpSheet from '@/components/HelpSheet';
 import TopBar from '@/ui/TopBar';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
@@ -15,7 +15,7 @@ import { usePalette } from '@/lib/theme';
 import Chip from '@/ui/Chip';
 import Button from '@/ui/Button';
 import OrderTray from '@/ui/OrderTray';
-import { LinkBlock, orderSurahList, SurahCard, SurahSheet } from '@/components/OrderSurah';
+import { orderSurahList, SurahSeam, SurahSheet } from '@/components/OrderSurah';
 import { shuffle } from '@shared/quiz/random';
 import { useAdjustOn } from '@/lib/hooks/useAdjustOn';
 
@@ -73,12 +73,9 @@ export default function OrderScreen() {
         </View>
       ) : <>
       <ScrollView ref={scroll} onScroll={event => { top.current = event.nativeEvent.contentOffset.y; shrink(event); }} scrollEventThrottle={16}
-        keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag" contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: bottom, gap: 10 }}>
+        keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag" contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: bottom, gap: 28 }}>
         {!shown.length && <Empty text="لا سورة بهذا الاسم في ما اخترت" palette={palette} />}
-        {shown.flatMap((s, i) => [
-          ...(linkShows(shown, i) ? [<LinkBlock key={`link-${s.surah}`} link={s.link!} palette={palette} />] : []),
-          <SurahCard key={s.surah} s={s} palette={palette} />,
-        ])}
+        {shown.map(s => <SurahSeam key={s.surah} s={s} palette={palette} />)}
       </ScrollView>
       </>}
       <HelpSheet topic={help ? 'order' : null} onClose={() => setHelp(false)} palette={palette} />

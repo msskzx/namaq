@@ -14,6 +14,7 @@ import { ayahMushafWords } from '@/lib/mushaf';
 import IconButton from '@/ui/IconButton';
 import { CardWithRow } from '@/ui/Card';
 import { FEATURE_ICON } from '@/components/featureIcons';
+import { SurahJoin } from '@/components/AyahLines';
 
 let surahs: OrderSurah[] | null = null;
 export const orderSurahList = () => (surahs ??= orderSurahs(ayahMushafWords, num));
@@ -108,5 +109,26 @@ export function SurahSheet({ surah, onClose, palette, top }: { surah: number | n
         <View style={{ alignItems: 'flex-start' }}><Button label="رجوع" onPress={onClose} /></View>
       </View>
     </Sheet>
+  );
+}
+
+export function SurahSeam({ s, palette }: { s: OrderSurah; palette: Palette }) {
+  const before = s.surah > 1 ? orderSurahList()[s.surah - 2] : null;
+  return (
+    <View style={{ gap: 10 }}>
+      <SurahJoin surah={s.surah} palette={palette} />
+      <View style={{ gap: 2 }}>
+        <Text style={{ color: palette.muted, fontSize: 14 }}>{`مقصود سورة ${s.name}`}</Text>
+        <BookWords runs={s.aim.runs} palette={palette} />
+        <Source cite={s.aim.src} palette={palette} />
+      </View>
+      {s.link && before && (
+        <View accessibilityLabel={`الصلة بين ${before.name} و${s.name}`} style={{ borderStartWidth: 2, borderColor: palette.rule, paddingStart: 12, gap: 2 }}>
+          <Text style={{ color: palette.muted, fontSize: 14 }}>{`الصلة بين ${before.name} و${s.name}`}</Text>
+          <LinkWords link={s.link} palette={palette} />
+          <Source cite={s.link.src} palette={palette} />
+        </View>
+      )}
+    </View>
   );
 }

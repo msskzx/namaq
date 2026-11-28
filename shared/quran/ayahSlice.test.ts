@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { ayahSlice, pageTop, pageEnd, rangeSlice } from './ayahSlice';
+import { ayahSlice, pageTop, pageEnd, rangeSlice, surahJoin } from './ayahSlice';
 import { pageGroups, type MushafPage } from './readerPage';
 import page293 from '../data/quran/mushaf/293.json';
 import page294 from '../data/quran/mushaf/294.json';
@@ -47,5 +47,23 @@ describe('the rows that hold a range of ayat', () => {
     const range = rangeSlice(pageGroups((page294 as MushafPage).items, 18), (page294 as MushafPage).items, '18:9', '18:10');
     expect(range).toEqual({ from: 4, to: 7 });
     expect(rangeSlice(pageGroups((page294 as MushafPage).items, 18), (page294 as MushafPage).items, '2:1', '2:5')).toBeNull();
+  });
+});
+
+describe('the rows that show where one surah ends and the next begins', () => {
+  const join = (data: MushafPage, surah: number, last: string | null, top?: number) => surahJoin(pageGroups(data.items, top), data.items, surah, last);
+
+  it('shows the whole last ayah of the surah before, the title, the basmala and the first ayah', () => {
+    const rows = join(page293 as MushafPage, 18, '17:111', 17)!;
+    const items = (page293 as MushafPage).items;
+    expect(rows.before).toBe(false);
+    expect(slice(page293 as MushafPage, '17:111', 17)!.to).toBeLessThan(rows.to);
+    expect(rows.from).toBe(rangeSlice(pageGroups(items, 17), items, '17:111', '17:111')!.from);
+    expect(items.slice(rows.from, rows.to + 1).some(item => 'surah' in item && item.surah === 18)).toBe(true);
+    expect(rows.to).toBe(slice(page293 as MushafPage, '18:1', 17)!.to);
+  });
+
+  it('finds no join on a page where the surah does not begin', () => {
+    expect(join(page294 as MushafPage, 18, '17:111', 18)).toBeNull();
   });
 });

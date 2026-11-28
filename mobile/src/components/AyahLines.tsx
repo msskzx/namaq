@@ -1,9 +1,9 @@
 import { memo, useMemo, useState } from 'react';
 import { View } from 'react-native';
 import { pageModel, reciteView } from '@shared/quran/recitePage';
-import { ayahSlice, pageEnd, pageTop, rangeSlice, READING_LINES } from '@shared/quran/ayahSlice';
+import { ayahSlice, pageEnd, pageTop, rangeSlice, READING_LINES, surahJoin } from '@shared/quran/ayahSlice';
 import MushafPageView, { type Checked, type Touch, type Write } from './MushafPageView';
-import { pageData, pageOfAyah, surahBefore } from '@/lib/mushaf';
+import { ayahCounts, pageData, pageOfAyah, surahBefore } from '@/lib/mushaf';
 import type { Palette } from '@/lib/theme';
 import { SURAH_TITLES } from '@shared/quran/surahNames';
 import { AyahMenuPress, type AyahMenuKeys } from '@/ui/AyahMenuPress';
@@ -92,6 +92,36 @@ export const AyatRange = memo(function AyatRange({ from, to, palette }: { from: 
     const last = Number(to.split(':')[1]);
     return Array.from({ length: last - first + 1 }, (_, i) => `${surah}:${first + i}`);
   }, [from, to]);
+  return (
+    <AyahMenuPress menu={keys}>
+    <View onLayout={event => setWidth(event.nativeEvent.layout.width)}>
+      {width > 0 && parts.map(part => (
+        <MushafPageView key={part.page} page={part.page} data={part.data} model={part.model} palette={palette} width={width} height={width * PAGE_TEXT_RATIO}
+          top={surahBefore(part.page)} names={SURAH_TITLES} forgot={NONE} saved={NO_SAVES} onTouch={noTouch} slice={part.slice} />
+      ))}
+    </View>
+    </AyahMenuPress>
+  );
+});
+
+export const SurahJoin = memo(function SurahJoin({ surah, palette }: { surah: number; palette: Palette }) {
+  const [width, setWidth] = useState(0);
+  const parts = useMemo(() => {
+    const page = pageOfAyah(`${surah}:1`);
+    if (!page) return [];
+    const last = surah > 1 ? `${surah - 1}:${ayahCounts.get(surah - 1)}` : null;
+    const data = pageData(page);
+    const model = pageModel(data, surahBefore(page));
+    const slice = surahJoin(model.lines, data.items, surah, last);
+    if (!slice) return [];
+    const here = { page, data, model, slice };
+    if (!slice.before || !last || page < 2) return [here];
+    const before = pageData(page - 1);
+    const beforeModel = pageModel(before, surahBefore(page - 1));
+    const ending = rangeSlice(beforeModel.lines, before.items, last, last);
+    return ending ? [{ page: page - 1, data: before, model: beforeModel, slice: ending }, here] : [here];
+  }, [surah]);
+  const keys = useMemo(() => [...(surah > 1 ? [`${surah - 1}:${ayahCounts.get(surah - 1)}`] : []), `${surah}:1`], [surah]);
   return (
     <AyahMenuPress menu={keys}>
     <View onLayout={event => setWidth(event.nativeEvent.layout.width)}>
