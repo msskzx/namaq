@@ -8,13 +8,14 @@ flowchart RL
   style me stroke-width:3px
   me -- "…" --> out0["الغزوة"]
   me -- "…" --> out1["القصة"]
-  me -- "…" --> out2["التراجم"]
-  me -- "شجرة النسب" --> out3["النسب"]
-  me -- "…" --> out4["كل التراجم"]
-  me -- "قارن حياته بغيره" --> out5["حياتهم جنبًا إلى جنب"]
-  me -- "تنقّل في صلاته" --> out6["الصلات"]
-  me -- "بينه وبين…" --> out7["بين عدة أشخاص"]
-  me -- "…" --> out8["صفحة الآية"]
+  me -- "افتح ‹›" --> out2["حديث الصحيح"]
+  me -- "…" --> out3["التراجم"]
+  me -- "شجرة النسب" --> out4["النسب"]
+  me -- "…" --> out5["كل التراجم"]
+  me -- "قارن حياته بغيره" --> out6["حياتهم جنبًا إلى جنب"]
+  me -- "تنقّل في صلاته" --> out7["الصلات"]
+  me -- "بينه وبين…" --> out8["بين عدة أشخاص"]
+  me -- "…" --> out9["صفحة الآية"]
   me -.-> sheet0{{"LifeSheet"}}
   me -.-> sheet1{{"TieSheet"}}
 ```
@@ -41,10 +42,11 @@ flowchart RL
 
 | Part of the screen | Label | Opens | Code |
 | --- | --- | --- | --- |
-| `Item` | (onPress) | [الغزوة](battle.md) | [components/LifeTimeline.tsx:107](../../mobile/src/components/LifeTimeline.tsx#L107) |
-|  | (onPress) | [القصة](story.md) | [components/LifeTimeline.tsx:107](../../mobile/src/components/LifeTimeline.tsx#L107) |
-| `LifeSheet` | (onPress) | [الغزوة](battle.md) | [components/LifeTimeline.tsx:146](../../mobile/src/components/LifeTimeline.tsx#L146) |
-|  | (onPress) | [القصة](story.md) | [components/LifeTimeline.tsx:146](../../mobile/src/components/LifeTimeline.tsx#L146) |
+| `Item` | (onPress) | [الغزوة](battle.md) | [components/LifeTimeline.tsx:106](../../mobile/src/components/LifeTimeline.tsx#L106) |
+|  | (onPress) | [القصة](story.md) | [components/LifeTimeline.tsx:106](../../mobile/src/components/LifeTimeline.tsx#L106) |
+| `LifeSheet` | (onPress) | [الغزوة](battle.md) | [components/LifeTimeline.tsx:145](../../mobile/src/components/LifeTimeline.tsx#L145) |
+|  | (onPress) | [القصة](story.md) | [components/LifeTimeline.tsx:145](../../mobile/src/components/LifeTimeline.tsx#L145) |
+| `SahihSaying` | افتح ‹› | [حديث الصحيح](hadith-sahih.md) | [components/SahihSaying.tsx:43](../../mobile/src/components/SahihSaying.tsx#L43) |
 | `StoryLinkRow` | (onPress) | [القصة](story.md) | [components/stories/StoryParts.tsx:131](../../mobile/src/components/stories/StoryParts.tsx#L131) |
 | `Names` | (onPress) | [الترجمة](person.md) | [screens/person.tsx:214](../../mobile/src/screens/person.tsx#L214) |
 | `PersonScreen` | (showBattle) | [الغزوة](battle.md) | [screens/person.tsx:251](../../mobile/src/screens/person.tsx#L251) |

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { View } from 'react-native';
 import Svg, { Line, Polygon } from 'react-native-svg';
-import { router } from 'expo-router';
+import { toTab } from '@/lib/ways';
 import { stepClause, tieName, type GraphNode, type Step, type Tie, type TieKind } from '@shared/tarajimGraph';
 import { Text } from '@/ui/Text';
 import Card from '@/ui/Card';
@@ -132,7 +132,7 @@ export default function TiesChain({ nodes, steps, first, picked, width, palette,
       {nodes.map(slug => {
         const node = GRAPH.nodes.get(slug)!;
         const at = place.get(slug)!;
-        const open = node.inApp ? () => router.push({ pathname: '/ties', params: { slug } }) : () => setShown(sentenceOf(slug));
+        const open = node.inApp ? () => toTab({ pathname: '/ties', params: { slug } }) : () => setShown(sentenceOf(slug));
         return (
           <View key={slug} onLayout={e => { const h = Math.round(e.nativeEvent.layout.height); if (h !== at.h && (h > NODE_H || tall[slug])) setTall(t => ({ ...t, [slug]: h })); }}
             style={{ position: 'absolute', left: at.x - at.w / 2, top: at.y - at.h / 2, width: at.w, minHeight: NODE_H, justifyContent: 'center', alignItems: inCard ? 'center' : 'stretch' }}>

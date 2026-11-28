@@ -1,6 +1,6 @@
 import { PROPHET_AGENT, PROPHET_LABEL } from '@shared/hadith';
 import { View } from 'react-native';
-import { router } from 'expo-router';
+import { toTab } from '@/lib/ways';
 import { findPerson } from '@/lib/tarajim';
 import { UNIT_WORDS, unitFor, type AppBattle, type AppCite, type AppCited, type AppMoment, type AppPersonLink } from '@shared/battles/battle';
 import { num } from '@shared/quran/arabicNumber';
@@ -110,7 +110,7 @@ export function People({ people, palette, tints, more = [] }: { people: AppPerso
         const tint = tints?.get(person.slug);
         const page = !!findPerson(person.slug);
         return <Chip key={person.slug} label={person.slug === PROPHET_AGENT ? PROPHET_LABEL : person.name} on={!!tint} lit={!!tint} tint={tint} small palette={palette}
-          role={page ? 'button' : 'text'} onPress={page ? () => router.push({ pathname: '/person', params: { slug: person.slug } }) : undefined} />;
+          role={page ? 'button' : 'text'} onPress={page ? () => toTab({ pathname: '/person', params: { slug: person.slug } }) : undefined} />;
       })}
       {more.map(one => <Chip key={one.name} label={one.name} on lit tint={one.tint} role="text" small palette={palette} />)}
     </View>

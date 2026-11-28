@@ -44,3 +44,6 @@ Counts are of product code: test files are left out. "Empty catch blocks" counts
 | 2026-11-28 | 4 no comments | shared | comment lines | 3511 | 62 | pointers, plus the header of each generated `.d.ts` data file |
 | 2026-11-28 | 4 no comments | app + shared | comments turned into a doc or record pointer | 0 | 87 | a removed comment that named docs/… or R00xx kept only that name |
 | 2026-11-28 | 4 no comments | website | comment lines | 4443 | 4443 | the website is paused; the rule reaches it when it returns |
+| 2026-11-28 | 3 feature map, fixed | app | screens whose ayah menu has no «صفحة الآية» | 1 | 0 | the mushaf's long-press menu now offers it |
+| 2026-11-28 | 3 feature map, fixed | app | single-thing pages linked one way only | 1 | 0 | a person's Sahih saying now opens its hadith page |
+| 2026-11-28 | 3 feature map, fixed | app | links into another tab without its first page under it | 79 | 0 | `router.push` changed to `toTab` in the helpers and cards that open a page in another tab |

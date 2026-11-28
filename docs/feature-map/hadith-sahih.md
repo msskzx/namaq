@@ -18,6 +18,10 @@ flowchart RL
 
 - [الرئيسية](home.md)
 - [مدونتي](library.md)
+- [الترجمة](person.md)
+- [الاختبارات](quizzes.md)
+- [غرفة الاختبار الجماعي](quiz-party-code.md)
+- [الاختبار](quiz-play.md)
 - [البحث](search.md)
 - [القرآن](quran.md)
 - [مشاهد](lataif.md)
@@ -26,9 +30,6 @@ flowchart RL
 - [الحديث](hadith.md)
 - [أبواب الكتاب](hadith-kitab.md)
 - [القصة](story.md)
-- [الاختبارات](quizzes.md)
-- [غرفة الاختبار الجماعي](quiz-party-code.md)
-- [الاختبار](quiz-play.md)
 
 ## What it opens
 

@@ -293,9 +293,7 @@ has one.
 
 ### The ayah menu offers «صفحة الآية» wherever it shows
 
-Broken in 1 places today:
-
-- المصحف: components/Reader.tsx#Reader
+Holds everywhere today.
 
 ### A page's search stays on the page (only home opens the search page)
 
@@ -307,93 +305,11 @@ Holds everywhere today.
 
 ### Pages of single things link both ways
 
-Broken in 1 places today:
-
-- حديث الصحيح opens الترجمة, الترجمة does not open حديث الصحيح
+Holds everywhere today.
 
 ### A screen in another tab opens through toTab, so the tab's first page sits under it
 
-Broken in 79 places today:
-
-- الاختبار → الترجمة: components/battles/BattleParts.tsx#People
-- الاختبار → الترجمة: screens/nasab.tsx#Box
-- الاختبار → القصة: components/LifeTimeline.tsx#Item
-- الاختبار → القصة: components/LifeTimeline.tsx#LifeSheet
-- الاختبار → حديث الصحيح: screens/story.tsx#HadithOpen
-- الاختبارات → الترجمة: components/HomeFeed.tsx#QuizPost
-- الاختبارات → الترجمة: components/battles/BattleParts.tsx#People
-- الاختبارات → الترجمة: screens/nasab.tsx#Box
-- الاختبارات → الذكر: components/HomeFeed.tsx#QuizPost
-- الاختبارات → القصة: components/LifeTimeline.tsx#Item
-- الاختبارات → القصة: components/LifeTimeline.tsx#LifeSheet
-- الاختبارات → النسب: components/HomeFeed.tsx#QuizPost
-- الاختبارات → ترتيب السور: components/HomeFeed.tsx#QuizPost
-- الاختبارات → حديث الصحيح: screens/story.tsx#HadithOpen
-- الاختبارات → مدونتي: components/HomeFeed.tsx#ForgottenPost
-- الرئيسية → الترجمة: components/HomeFeed.tsx#LifePost
-- الرئيسية → الترجمة: components/HomeFeed.tsx#NamePost
-- الرئيسية → الترجمة: components/HomeFeed.tsx#NasabPost
-- الرئيسية → الترجمة: components/HomeFeed.tsx#QuizPost
-- الرئيسية → الترجمة: components/HomeFeed.tsx#RingPost
-- الرئيسية → الترجمة: components/HomeFeed.tsx#TarajimPost
-- الرئيسية → الترجمة: components/HomeFeed.tsx#TiesPost
-- الرئيسية → الترجمة: components/battles/BattleParts.tsx#People
-- الرئيسية → الترجمة: screens/nasab.tsx#Box
-- الرئيسية → الصلات: components/HomeFeed.tsx#RingPost
-- الرئيسية → الصلات: components/HomeFeed.tsx#TiesPost
-- الرئيسية → الصلات: components/TiesChain.tsx#TiesChain
-- الرئيسية → القصة: components/LifeColumns.tsx#Cell
-- الرئيسية → القصة: components/LifeTimeline.tsx#Item
-- الرئيسية → القصة: components/LifeTimeline.tsx#LifeSheet
-- الرئيسية → النسب: components/HomeFeed.tsx#MeetPost
-- الرئيسية → النسب: components/HomeFeed.tsx#NasabPost
-- الرئيسية → النسب: components/HomeFeed.tsx#QuizPost
-- الرئيسية → بين عدة أشخاص: components/HomeFeed.tsx#GroupPost
-- الرئيسية → بين عدة أشخاص: components/HomeFeed.tsx#TiePost
-- الرئيسية → ترتيب السور: components/HomeFeed.tsx#QuizPost
-- الرئيسية → ترتيب السور: components/HomeFeed.tsx#SurahAimPost
-- الرئيسية → ترتيب السور: components/HomeFeed.tsx#SurahLinkPost
-- الرئيسية → حديث الصحيح: components/scenes/RahmanPage.tsx#Hadith
-- الرئيسية → حديث الصحيح: screens/story.tsx#HadithOpen
-- الرئيسية → حياتهم جنبًا إلى جنب: components/HomeFeed.tsx#LivesPost
-- الرئيسية → كل التراجم: components/HomeFeed.tsx#RingPost
-- القرآن → الذكر: components/SearchResults.tsx#HitRow
-- القصة → حديث الصحيح: screens/story.tsx#HadithOpen
-- المشهد → حديث الصحيح: components/scenes/RahmanPage.tsx#Hadith
-- حديث الصحيح → الترجمة: components/battles/BattleParts.tsx#People
-- حديث الصحيح → القصة: components/stories/StoryParts.tsx#StoryLinkRow
-- صفحة الآية → الترجمة: components/battles/BattleParts.tsx#People
-- صفحة الآية → الترجمة: screens/ayah.tsx#SectionPart
-- صفحة الآية → حديث الصحيح: screens/ayah.tsx#SectionPart
-- غرفة الاختبار الجماعي → الترجمة: components/battles/BattleParts.tsx#People
-- غرفة الاختبار الجماعي → الترجمة: screens/nasab.tsx#Box
-- غرفة الاختبار الجماعي → القصة: components/LifeTimeline.tsx#Item
-- غرفة الاختبار الجماعي → القصة: components/LifeTimeline.tsx#LifeSheet
-- غرفة الاختبار الجماعي → حديث الصحيح: screens/story.tsx#HadithOpen
-- مدونتي → الترجمة: components/HomeFeed.tsx#LifePost
-- مدونتي → الترجمة: components/HomeFeed.tsx#NamePost
-- مدونتي → الترجمة: components/HomeFeed.tsx#NasabPost
-- مدونتي → الترجمة: components/HomeFeed.tsx#RingPost
-- مدونتي → الترجمة: components/HomeFeed.tsx#TarajimPost
-- مدونتي → الترجمة: components/HomeFeed.tsx#TiesPost
-- مدونتي → الترجمة: components/battles/BattleParts.tsx#People
-- مدونتي → الترجمة: screens/nasab.tsx#Box
-- مدونتي → الصلات: components/HomeFeed.tsx#RingPost
-- مدونتي → الصلات: components/HomeFeed.tsx#TiesPost
-- مدونتي → الصلات: components/TiesChain.tsx#TiesChain
-- مدونتي → القصة: components/LifeColumns.tsx#Cell
-- مدونتي → القصة: components/LifeTimeline.tsx#Item
-- مدونتي → القصة: components/LifeTimeline.tsx#LifeSheet
-- مدونتي → النسب: components/HomeFeed.tsx#MeetPost
-- مدونتي → النسب: components/HomeFeed.tsx#NasabPost
-- مدونتي → بين عدة أشخاص: components/HomeFeed.tsx#GroupPost
-- مدونتي → بين عدة أشخاص: components/HomeFeed.tsx#TiePost
-- مدونتي → ترتيب السور: components/HomeFeed.tsx#SurahAimPost
-- مدونتي → ترتيب السور: components/HomeFeed.tsx#SurahLinkPost
-- مدونتي → حديث الصحيح: components/scenes/RahmanPage.tsx#Hadith
-- مدونتي → حياتهم جنبًا إلى جنب: components/HomeFeed.tsx#LivesPost
-- مدونتي → كل التراجم: components/HomeFeed.tsx#RingPost
-- مشاهد → حديث الصحيح: components/scenes/RahmanPage.tsx#Hadith
+Holds everywhere today.
 
 ## How the links are found
 

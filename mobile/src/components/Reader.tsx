@@ -47,6 +47,7 @@ import { pageModel, reciteView } from '@shared/quran/recitePage';
 import { lemmasAtMushafWord } from '@shared/quran/words';
 import { sectionAt, surahTopicsOf } from '@shared/quran/surahTopics';
 import { words } from '@/lib/words';
+import { openAyahPage } from '@/lib/ways';
 import { isBoolean, isNumberIn, isRecord, readJson, writeJson } from '@/lib/storage';
 import { setImmersive } from '@/lib/chrome';
 import { buzz } from '@/lib/haptics';
@@ -433,6 +434,7 @@ export default function Reader() {
         <FloatingMenu at={actionsAt} label={`الآية ${num(actionAyah)} من السورة ${num(actionSurah)}`} onClose={() => setActions(null)} top={pageInsets.top} palette={palette}
           groups={ayahMenuGroups(facts, {
             listen: () => { const key = actions.key; setActions(null); setFollowing(true); listen(key); },
+            page: () => { const key = actions.key; setActions(null); openAyahPage(key); },
             recite: reciting ? undefined : () => startRecite(actions.key),
             forgot: lit
               ? { on: ayahForgot || litForgot, label: 'نسيت: الآية أو ما أضاءته', expanded: !!actions.bubble, onPressAt: openBubble }
