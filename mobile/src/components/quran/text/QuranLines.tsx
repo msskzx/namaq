@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react';
+import { Fragment, useState, type ReactNode } from 'react';
 import { useWindowDimensions, View, type LayoutChangeEvent } from 'react-native';
 import { Text } from '@/ui/Text';
 import { QURAN_FONT } from '@/lib/theme';
@@ -27,6 +27,16 @@ export type Piece<W> = { text: string; bold: boolean; words: W[]; newLine?: bool
 
 const paragraphs = (pieces: { newLine?: boolean }[]) => pieces.reduce<[number, number][]>((list, piece, at) =>
   piece.newLine || !list.length ? [...list, [at, at + 1]] : [...list.slice(0, -1), [list[list.length - 1][0], at + 1]], []);
+
+const runsOf = (from: number, to: number, tone: (at: number) => string | undefined) => {
+  const runs: { start: number; end: number; tone?: string }[] = [];
+  for (let at = from; at < to; at++) {
+    const last = runs[runs.length - 1];
+    if (last && last.tone && last.tone === tone(at)) last.end = at + 1;
+    else runs.push({ start: at, end: at + 1, tone: tone(at) });
+  }
+  return runs;
+};
 
 const widthKey = (piece: { text: string; bold: boolean }, scale: number) => `${scale}${piece.bold ? 'b' : 'r'}${piece.text}`;
 
@@ -80,14 +90,14 @@ export default function QuranLines<W>({ pieces, size, color, draw, band, center 
         return (
           <View key={n} style={{ height: line, flexDirection: 'row', alignItems: 'center', justifyContent: center ? 'center' : 'flex-start' }}>
             <QuranLine spread={spread} width={width} scale={Math.min(1, width / drawn)} gap={0} origin={center ? 'center' : 'right'}>
-              {pieces.slice(from, to).map((piece, at) => {
-                const tone = band?.(piece);
-                const joinsBefore = !!tone && at > 0 && band?.(pieces[from + at - 1]) === tone;
-                const joinsAfter = !!tone && from + at + 1 < to && band?.(pieces[from + at + 1]) === tone;
+              {runsOf(from, to, at => band?.(pieces[at])).map(({ start, end, tone }, k) => {
+                const spacer = (at: number) => <View key={`${at}-`} style={spread ? { flexGrow: 1 } : { width: gap }} />;
+                const drawn = Array.from({ length: end - start }, (_, i) => [i > 0 && spacer(start + i), <Fragment key={start + i}>{draw(pieces[start + i], start + i)}</Fragment>]);
                 return [
-                  at > 0 && <View key={`${from + at}-`} style={{ alignSelf: 'stretch', ...(spread ? { flexGrow: 1 } : { width: gap }), backgroundColor: joinsBefore ? tone : undefined }} />,
-                  <View key={from + at} style={tone ? { backgroundColor: tone, borderTopStartRadius: joinsBefore ? 0 : BAND_ROUND, borderBottomStartRadius: joinsBefore ? 0 : BAND_ROUND,
-                    borderTopEndRadius: joinsAfter ? 0 : BAND_ROUND, borderBottomEndRadius: joinsAfter ? 0 : BAND_ROUND } : undefined}>{draw(piece, from + at)}</View>,
+                  k > 0 && spacer(start),
+                  tone
+                    ? <View key={`r${start}`} style={{ flexGrow: spread ? end - start - 1 : 0, flexDirection: 'row', alignItems: 'center', backgroundColor: tone, borderRadius: BAND_ROUND }}>{drawn}</View>
+                    : drawn,
                 ];
               })}
               {more && <View style={{ width: gap }} />}
