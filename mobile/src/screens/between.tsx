@@ -17,8 +17,8 @@ import { usePalette } from '@/lib/theme';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { toTab } from '@/lib/ways';
 import { findPerson, GRAPH, personName, searchPeople } from '@/lib/tarajim';
-import { Credit } from './person';
 import TiesChain from '@/components/TiesChain';
+import { Credit } from '@/components/Credit';
 
 export default function BetweenScreen() {
   const palette = usePalette();

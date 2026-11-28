@@ -89,6 +89,9 @@
     "no-restricted-globals": {
       "count": 7
     },
+    "quality/import-boundaries": {
+      "count": 5
+    },
     "quality/no-raw-effects": {
       "count": 8
     },
@@ -180,6 +183,11 @@
   "src/components/ProphetStory.tsx": {
     "no-restricted-globals": {
       "count": 2
+    }
+  },
+  "src/components/QuizLook.tsx": {
+    "quality/import-boundaries": {
+      "count": 6
     }
   },
   "src/components/QuizPage.tsx": {
@@ -658,6 +666,9 @@
     }
   },
   "src/ui/LoadingScreen.tsx": {
+    "quality/import-boundaries": {
+      "count": 1
+    },
     "quality/no-raw-effects": {
       "count": 1
     }
@@ -696,6 +707,11 @@
   "src/ui/TabBar.tsx": {
     "quality/no-raw-effects": {
       "count": 1
+    }
+  },
+  "src/ui/TopBar.tsx": {
+    "quality/import-boundaries": {
+      "count": 2
     }
   },
   "src/ui/motion.ts": {

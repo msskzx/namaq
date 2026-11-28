@@ -3,14 +3,6 @@ import { storePageKey } from '../../src/lib/history/batchSchema';
 import { pageAnchors } from '../../src/lib/history/sourceStore';
 import { matchForm } from '../../src/lib/model/span';
 
-/**
- * The needle-assertion check this batch's authoring harness relies on: every
- * claim citation's excerptArabic must be a literal substring of the page
- * paragraph its passageAnchor names. validateBatch checks an anchor resolves
- * to *some* paragraph; this checks the excerpt is actually drawn from it,
- * which is what keeps a batch's citations from being malformed quietly.
- */
-
 const dir = process.argv[2];
 if (!dir) {
   console.error('Usage: tsx scripts/history/verifyExcerpts.ts data/history/batches/<batch>');
@@ -38,7 +30,7 @@ let checked = 0;
 for (const claim of batch.claims) {
   for (const citation of claim.citations) {
     checked += 1;
-    if (!citation.passageAnchor) continue; // some citations may target a whole-page reference
+    if (!citation.passageAnchor) continue;
     const paragraph = paragraphsByAnchor.get(citation.passageAnchor);
     if (paragraph === undefined) {
       console.error(`FAIL ${claim.key}: anchor "${citation.passageAnchor}" has no paragraph`);

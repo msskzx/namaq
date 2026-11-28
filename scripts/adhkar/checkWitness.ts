@@ -1,8 +1,3 @@
-/**
- * Checks shared/adhkar.ts against the two books themselves, not against our saved excerpts:
- * downloads the page-numbered Turath copies and confirms every shown word, quote, grade, printed page and link.
- * Run with `npm run adhkar:check` after changing the selection. Needs the network, so it is not part of `npm test`.
- */
 import { ADHKAR, type AdhkarCitation } from '../../shared/adhkar';
 
 type Book = { pages: { text: string; vol: string; page: number }[] };
@@ -28,7 +23,6 @@ async function main() {
     for (const quote of quotes) if (quote && !text.includes(quote)) problems.push(`${label}: not on the page: ${quote.slice(0, 60)}`);
   };
   for (const item of ADHKAR) {
-    // The words as the book prints them: each part, or the text with any fix undone; a fix's own words are on its own page.
     let printed = item.content.kind === 'text' ? item.content.text : undefined;
     for (const fix of item.fixes ?? []) printed = printed?.replace(fix.reads, fix.printed);
     const words = item.content.kind === 'text' && item.content.parts ? item.content.parts : [printed];

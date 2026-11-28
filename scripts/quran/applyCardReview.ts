@@ -1,8 +1,3 @@
-/**
- * Writes the owner's card review presses (.card-review-log.jsonl, left as it is) into the compare and branch verdicts, then
- * rebuilds the compare cards and the review index. The older compare review log's unapplied presses, all made before the card
- * review, are folded in first, so each pair keeps its latest press. Neither log is edited. Usage: npm run quran:card-apply
- */
 import { execFileSync } from 'node:child_process';
 import { readFileSync, renameSync, writeFileSync } from 'node:fs';
 import { applyCardPresses } from '../../src/lib/quran/curation/cardApply';

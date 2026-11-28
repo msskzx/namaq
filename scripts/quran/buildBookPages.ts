@@ -9,14 +9,11 @@ import sadi from '../../shared/data/quran/tafsirSadi.json';
 import kashshaf from '../../shared/data/quran/kashshaf';
 import ukbari from '../../shared/data/quran/irabUkbari';
 
-// docs/plans/book-reader.md: the printed pages of the books the book reader turns, written to
-// shared/data/quran/bookPages.json. Reads the same Quranpedia dumps the books were built from (run their builders first
-// to fetch them).
+// see docs/plans/book-reader.md
 type Piece = { text: string; part: string; page: number | null };
 type Dump = { license: { version: string }; ayahs: { surah: number; ayah: number; content: Piece[] }[] };
 const dump = (name: string): Dump => JSON.parse(readFileSync(join(tmpdir(), `${name}.json`), 'utf8'));
 
-/** The dump's pieces in page order, each kept once (a piece repeats under every ayah its passage holds). */
 function pagesOf(data: Dump, keep: (piece: Piece) => boolean, cleanText: (html: string) => string): RawPage[] {
   const pieces = new Map<string, { part: number; page: number; owner: number; text: string }>();
   for (const row of data.ayahs) for (const piece of row.content) {

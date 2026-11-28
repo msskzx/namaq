@@ -73,9 +73,6 @@ async function main() {
         defaultAccessMode: neo4j.session.WRITE,
       });
       try {
-        // PostgreSQL is authoritative for profile-backed people. This MERGE only
-        // creates missing nodes/updates shared properties; it never deletes nodes,
-        // relationships, or Neo4j-only properties.
         await writeSession.executeWrite((transaction) =>
           transaction.run(upsertQuery, { people: postgresPeople }),
         );
@@ -101,7 +98,4 @@ main()
     console.error('Canonical people reconciliation failed:', error);
     process.exitCode = 1;
   })
-  // The Neo4j driver's connection pool keeps the event loop alive, so the
-  // process won't exit on its own once main() resolves (see the same
-  // process.exit() pattern in neo4j/graphSeed.ts).
   .finally(() => process.exit(process.exitCode ?? 0));

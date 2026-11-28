@@ -1,5 +1,6 @@
 import { router, type Href } from 'expo-router';
 import type { CompareTarget } from './compare';
+import type { SahihSlug } from '@shared/sahih';
 import type { CardWay } from './home';
 import { setIntent, type Intent } from './intent';
 import { utilityView, type UtilityView } from './settings';
@@ -64,3 +65,8 @@ export const openUtility = (view: UtilityView, spot?: 'qibla') => {
 
 export const openAyahPage = (key: string, at?: string, word?: number) =>
   router.push({ pathname: '/ayah', params: { key, ...(at ? { at } : {}), ...(word !== undefined ? { word: String(word) } : {}) } });
+
+export const openBook = (book: SahihSlug | 'forty') => router.push({ pathname: '/hadith-book', params: { book } });
+export const openKitab = (book: SahihSlug, kitab: number) => router.push({ pathname: '/hadith-kitab', params: { book, kitab: String(kitab) } });
+export const openBab = (book: SahihSlug, kitab: number, bab: number) => router.push({ pathname: '/hadith-kitab', params: { book, kitab: String(kitab), bab: String(bab) } });
+export const openSahih = (book: SahihSlug, n: number) => toTab({ pathname: '/hadith-sahih', params: { book, n: String(n) } });

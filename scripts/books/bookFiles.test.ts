@@ -6,7 +6,6 @@ import { BOOK_DATA } from './bookData';
 
 const downloaded = BOOKS.filter(book => !book.builtIn);
 
-// The phone downloads these files from GitHub (shared/books.ts bookUrl), so each must be there and match the book.
 describe('downloadable book files', () => {
   it.each(downloaded.map(book => book.id))('%s has its file in the repository', id => {
     expect(existsSync(path.join(process.cwd(), bookFile(id)))).toBe(true);

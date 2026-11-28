@@ -1,27 +1,19 @@
-// docs/plans/balagha.md: al-Suyuti's al-Itqan, kinds 52 to 58 (the chapters on balagha), from Turath's export of
-// Shamela book 11728. Each line of the export is one of his paragraphs; a printed page may break one in two.
+// see docs/plans/balagha.md
 import { same, skeleton } from './irabUkbari';
 import type { ItqanEntry, ItqanPlace } from '../../shared/quran/itqanBalagha';
 
 export type TurathPage = { text: string; vol: string; page: number };
 
-/** One of his paragraphs: its kind, the heading it falls under, its pages and Shamela id, and the text. */
 export type Paragraph = { kind: number; heading: string; part: number; first: number; last: number; id: number; text: string };
 
-// Marks are compared in Unicode's order (NFC): the export writes shadda before fatha, the canonical order is the reverse.
 const KIND = /^النَّوْعُ \S+ وَالْخَمْسُونَ\s*:/;
 const ORDINALS = ['الثَّانِي', 'الثَّالِثُ', 'الرَّابِعُ', 'الْخَامِسُ', 'السَّادِسُ', 'السَّابِعُ', 'الثَّامِنُ'];
-// Headings that name no device (a note, a rule, a closing word, «already covered»); the device heading before them
-// still holds.
 const PLAIN = /^(?:تَنْبِيهٌ|تَنْبِيهَاتٌ|فَصْلٌ|فصل|فَائِدَةٌ(?: ثَانِيَةٌ)?|قَاعِدَةٌ|خَاتِمَةٌ|فَرْعٌ|تَذَنِيبٌ|ذِكْرُ أَقْسَامِهِ|ذِكْرُ شُرُوطِهِ|وَهِيَ سِتَّةٌ|حَذْفُ الْعَاطِفِ مَعَ الْمَعْطُوفِ تَقَدَّمَ)$/;
 
 const words = (line: string) => line.split(/\s+/).filter(Boolean);
-/** A short line of his own, no Quran in it, not a lead-in («…:») or the end of a sentence. */
 const short = (line: string, most = 5) => words(line).length <= most && !line.includes('﴿') && !/[:.،]$/.test(line.trim());
-/** A line as short as a line of verse: a heading standing next to one is verse too. */
 const brief = (line: string) => short(line, 8);
 
-/** The device a heading names, in his words: «فصل: ومن أقسامه النهي» names «النهي», «النوع الرابع- التكرير» «التكرير». */
 export function headingName(line: string): string | null {
   const text = line.trim();
   if (PLAIN.test(text)) return null;
@@ -35,12 +27,6 @@ export function headingName(line: string): string | null {
     .trim() || null;
 }
 
-/**
- * His paragraphs in the pages given, in order. The pages are laid end to end: a page that does not open on a heading
- * carries on the paragraph before it. A kind opens on its title («النوع الثالث والخمسون: …»), as a marked title or a
- * plain line. A short line is a heading when neither line beside it is as short as a line of verse: short lines in a
- * row are verse.
- */
 export function readParagraphs(pages: (TurathPage & { id: number })[]): { paragraphs: Paragraph[]; kinds: Record<number, string> } {
   type Line = { text: string; part: number; page: number; id: number; joined: boolean };
   const lines: Line[] = [];
@@ -52,7 +38,6 @@ export function readParagraphs(pages: (TurathPage & { id: number })[]): { paragr
   const paragraphs: Paragraph[] = [];
   let kind = 0;
   let heading = '';
-  // A kind's title is no verse, though as short.
   const isBrief = (i: number) => i >= 0 && i < lines.length && !KIND.test(lines[i].text) && brief(lines[i].text);
   lines.forEach((line, i) => {
     if (KIND.test(line.text)) {
@@ -67,7 +52,6 @@ export function readParagraphs(pages: (TurathPage & { id: number })[]): { paragr
       return;
     }
     const last = paragraphs.at(-1);
-    // A page's first line carries on the paragraph the page before broke off, unless a heading came between.
     if (line.joined && last && last.kind === kind && last.heading === heading && lines[i - 1] && !KIND.test(lines[i - 1].text) && !short(lines[i - 1].text)) {
       last.text += ` ${line.text}`;
       last.last = line.page;
@@ -78,12 +62,10 @@ export function readParagraphs(pages: (TurathPage & { id: number })[]): { paragr
   return { paragraphs: paragraphs.filter(paragraph => paragraph.kind >= 52), kinds };
 }
 
-/** The mushaf's words in order, each with its ayah and place in it. */
 export type MushafWord = { surah: number; ayah: number; at: number; skeleton: string; text?: string };
 
 const quoteWords = (quote: string) => quote.replace(/[^ء-ۭ࣓-ࣿ\s]/g, ' ').split(/\s+/).map(skeleton).filter(Boolean);
 
-/** Every place a quote's words run in the mushaf, within one surah: the index of its first word. */
 export function placesOf(quote: string, mushaf: MushafWord[], first: Map<string, number[]>): number[] {
   const wanted = quoteWords(quote);
   if (!wanted.length || wanted.join('').length < 3) return [];
@@ -94,7 +76,6 @@ export function placesOf(quote: string, mushaf: MushafWord[], first: Map<string,
   }));
 }
 
-/** The index the search starts from: each skeleton (and each without a leading ف، ل، ب، ك) to where it stands. */
 export function firstWords(mushaf: MushafWord[]) {
   const index = new Map<string, number[]>();
   const add = (key: string, at: number) => index.set(key, [...(index.get(key) ?? []), at]);
@@ -102,12 +83,6 @@ export function firstWords(mushaf: MushafWord[]) {
   return index;
 }
 
-/**
- * The ayah words a paragraph quotes. A quote found in one place is placed there. A quote found in several is placed on
- * the one in the surah of the paragraph's other placed quotes, nearest to them; failing that, on every one of them, with
- * their count, however many: the sheet says he named none of them and lists them all (owner, 2026-11-18: quote him as
- * he wrote, never pin his words on an ayah he did not name, and hide no place).
- */
 export function placeQuotes(text: string, mushaf: MushafWord[], first: Map<string, number[]>): ItqanPlace[] {
   const found = [...text.matchAll(/﴿([^﴾]*)﴾/g)].map(match => ({ quote: match[1], starts: placesOf(match[1], mushaf, first), length: quoteWords(match[1]).length }));
   const sure = found.filter(item => item.starts.length === 1).map(item => mushaf[item.starts[0]]);

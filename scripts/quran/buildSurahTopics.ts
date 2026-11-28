@@ -4,9 +4,7 @@ import { join } from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { noteLines, parseSurahTopics, rangeGaps, type Section, type SurahTopics } from './surahTopicsParse';
 
-// docs/plans/surah-topics.md: each surah's sections from Quranpedia's surahs dump, where the note cites al-Tafsir
-// al-Mawdu'i li-Suwar al-Quran al-Karim (University of Sharjah). Writes shared/data/quran/surahTopics.json and prints
-// the ranges the source leaves out or counts twice.
+// see docs/plans/surah-topics.md
 const VERSION = '2026-11-14';
 const URL = 'https://quranpedia.net/dumps/surahs.json.gz';
 const DATA = join(__dirname, '../../shared/data/quran');
@@ -17,10 +15,6 @@ const dump = JSON.parse(readFileSync(dumpPath, 'utf8')) as { license: { version:
 if (dump.license.version !== VERSION) throw new Error(`dump version ${dump.license.version}, expected ${VERSION}`);
 const counts = JSON.parse(readFileSync(join(DATA, 'surahs.json'), 'utf8')) as { number: number; numberOfAyat: number }[];
 
-// Surahs the dump leaves empty, read by hand from the same book's printed headings (vol. 7; the archive.org scan
-// https://archive.org/details/20260607_20260607_1233, PDF pages 3771-3864). Each range is the one the book's running
-// head gives for the pages under that heading. Al-Fatiha's are the book's «موضوعات سورة الفاتحة» (vol. 1 pp. 12-14),
-// seven topics each taken from the words it names, so ayat 5 and 7 hold two and the basmala none.
 const PRINTED: Record<number, SurahTopics> = {
   1: { volume: 1, page: 12, sections: [
     { title: 'الألوهية', from: 2, to: 3 },
@@ -53,11 +47,7 @@ const PRINTED: Record<number, SurahTopics> = {
   ] },
 };
 
-// Ranges the dump mistypes, checked against the printed book. Each keeps what the dump says, so a later dump that
-// fixes it (or changes it) stops the build instead of being overwritten.
 const CORRECTED: { surah: number; title: string; dump: [number, number]; printed: [number, number]; where: string }[] = [
-  // The dump's «(١٠٧-١٢١)» in a surah of 112. The section's page has the running head «سورة الأنبياء/١٠٧-١١٢» and quotes
-  // 21:107-112 (vol. 5 p. 72; archive.org scan PDF page 2560).
   { surah: 21, title: 'ختام سلسلة الأنبياء رحمةٌ مهداة', dump: [107, 121], printed: [107, 112], where: 'vol. 5 p. 72' },
 ];
 
@@ -74,7 +64,6 @@ function correct(number: number, topics: SurahTopics): SurahTopics {
   return { ...topics, sections };
 }
 
-/** Every range must be one that can exist: whole numbers, from ≤ to, inside the surah. */
 function impossible(number: number, numberOfAyat: number, list: Section[]): string[] {
   return list.flatMap(s => [
     ...(s.from === undefined ? [] : !Number.isInteger(s.from) || !Number.isInteger(s.to) || s.from < 1 || s.to! < s.from || s.to! > numberOfAyat
@@ -97,7 +86,6 @@ for (const { number, numberOfAyat } of counts) {
   surahs[number] = fixed;
   report.push(...rangeGaps(fixed.sections, 1, numberOfAyat).map(gap => `${number}: ${gap}`));
 }
-// A range that cannot exist is never published: check it in the printed book and add it to CORRECTED.
 if (errors.length) throw new Error(`impossible ranges:\n${errors.join('\n')}`);
 writeFileSync(join(DATA, 'surahTopics.json'), `${JSON.stringify({ version: dump.license.version, surahs })}\n`);
 console.log(`Wrote ${Object.keys(surahs).length} surahs.\n${report.join('\n')}`);

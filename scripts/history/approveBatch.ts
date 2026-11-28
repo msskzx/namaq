@@ -3,7 +3,7 @@ import { join } from 'node:path';
 import { batchRevision, checkApproval, validateBatch } from '../../src/lib/history/batchSchema';
 import { batchDefinitionFile, loadBatch } from '../../src/lib/history/loadBatch';
 
-// What approval permits, and what it does not: docs/adr/0008-separate-review-from-visibility.md.
+// see docs/adr/0008-separate-review-from-visibility.md
 
 const apply = process.argv.includes('--apply');
 const all = process.argv.includes('--all');

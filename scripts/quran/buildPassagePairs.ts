@@ -1,4 +1,4 @@
-// docs/plans/curated-passage-comparisons.md
+// see docs/plans/curated-passage-comparisons.md
 import { writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import type { BranchAyah } from '../../shared/quran/branches';
@@ -35,11 +35,9 @@ for (const pair of similar.pairs as SimilarPair[]) {
   if (pair.a[0] === pair.b[0] || !inRange(pair.a) || !inRange(pair.b) || touchesEngine(pair)) continue;
   for (const key of new Set(pair.marksA.map(mark => mark[3]))) {
     const [marksA, marksB] = [pair.marksA, pair.marksB].map(marks => marks.filter(mark => mark[3] === key));
-    // A root can recur in a span or an ayah: pair the closest forms first, then the occurrences at the same place.
     const candidates = marksA.flatMap(markA => marksB.flatMap(markB => {
       const [a, b] = [`${pair.a[0]}:${markA[0]}`, `${pair.b[0]}:${markB[0]}`];
       const level = levelOf(a, markA[1], b, markB[1]);
-      // Particles have no key of their own, so only the same word counts.
       return !level || (!key && level !== 'exact') ? [] : [{ markA, markB, a, b, level, apart: Math.abs((markA[0] - pair.a[1]) - (markB[0] - pair.b[1])), drift: Math.abs(markA[1] / ayat.get(a)!.words.length - markB[1] / ayat.get(b)!.words.length) }];
     })).sort((p, q) => LEVELS.indexOf(p.level) - LEVELS.indexOf(q.level) || p.apart - q.apart || p.drift - q.drift);
     const used = new Set<unknown>();

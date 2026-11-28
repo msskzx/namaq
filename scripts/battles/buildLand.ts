@@ -1,10 +1,6 @@
-// Writes the land the battle maps draw (shared/battles/map.ts) from Natural Earth's 1:50m land (public domain):
-// npm run battles:land -- <path to ne_50m_land.geojson>, from
-// https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_50m_land.geojson
 import { readFileSync, writeFileSync } from 'node:fs';
 import { clipRing, type Box, type LonLat } from '../../shared/battles/map';
 
-/** Egypt to Persia, Yemen to Anatolia: every place a battle in the catalog is pinned at, with room around it. */
 export const LAND_BOX: Box = [24, 12, 52, 40];
 
 type Geometry = { type: 'Polygon'; coordinates: number[][][] } | { type: 'MultiPolygon'; coordinates: number[][][][] };

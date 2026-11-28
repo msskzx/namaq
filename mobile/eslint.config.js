@@ -1,6 +1,8 @@
 const { defineConfig } = require('eslint/config');
 const expoConfig = require('eslint-config-expo/flat');
+const path = require('node:path');
 const { default: quality } = require('../shared/lint/quality.mjs');
+const { default: importZones } = require('../shared/lint/importZones.mjs');
 
 module.exports = defineConfig([
   expoConfig,
@@ -29,6 +31,7 @@ module.exports = defineConfig([
     plugins: { quality },
     rules: {
       'quality/no-comments': 'error',
+      'quality/import-boundaries': ['error', { root: path.resolve(__dirname, '..'), zones: importZones }],
       'no-empty': ['error', { allowEmptyCatch: false }],
       'no-restricted-syntax': ['error',
         { selector: "CatchClause > BlockStatement[body.length=0]", message: "Report the error with reportError(where, error) from @shared/errors, so its cause is not lost." },

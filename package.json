@@ -8,7 +8,7 @@
     "build": "next build",
     "postinstall": "prisma generate",
     "start": "next start",
-    "lint": "next lint --dir src --dir shared",
+    "lint": "next lint --dir src --dir shared --dir scripts",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:live": "vitest run --config vitest.live.config.mts",

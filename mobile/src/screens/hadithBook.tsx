@@ -8,14 +8,14 @@ import TopBar from '@/ui/TopBar';
 import { usePalette } from '@/lib/theme';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
-import { toTab } from '@/lib/ways';
+import { toTab, openBab, openKitab } from '@/lib/ways';
 import { FORTY } from '@/lib/hadith';
 import { SAHIH, isSahihSlug, useSahihText } from '@/lib/sahih';
 import { SahihDownload, SahihKitabList, SahihShape } from '@/components/Sahih';
 import Card from '@/ui/Card';
 import Empty from '@/ui/Empty';
 import { kitabsHolding } from '@shared/sahih';
-import { FortyCard, openBab, openKitab } from './hadith';
+import { FortyCard } from '@/components/FortyCard';
 
 export default function HadithBookScreen() {
   const palette = usePalette();

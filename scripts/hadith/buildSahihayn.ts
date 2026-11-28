@@ -1,12 +1,4 @@
-// Sahih al-Bukhari and Sahih Muslim whole, read from the same pinned turath.io exports of the editions the Forty uses
-// (docs/audits/2026-11-18-hadith-sources.md; docs/audits/2026-11-19-sahihayn-full.md): al-Bukhari's Sultaniyya with Abd
-// al-Baqi's numbers (Tawq al-Najah 1422), and Muslim in Abd al-Baqi's edition. For each book it writes
-//   shared/data/hadith/<book>.json  the kitabs and their babs, with the hadith numbers under each (small: ships in the app)
-//   data/hadith/sahih/<book>.json   each kitab's bab texts and hadith, verbatim, with volume and page (read by the website,
-//                                   and downloaded once by the phone from /api/books/<book>)
-// Editors' footnotes and Shamela's comments are dropped, as in buildForty. al-Bukhari's kitab and bab headings are his own;
-// Muslim's are al-Nawawi's (as Abd al-Baqi prints them), and the index says so.
-// Run: npx tsx scripts/hadith/buildSahihayn.ts
+// see docs/audits/2026-11-18-hadith-sources.md, docs/audits/2026-11-19-sahihayn-full.md
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
@@ -16,7 +8,6 @@ import { BOOKS, bare, bareText, cut, en, joined, load } from './buildForty';
 interface TocEntry { title: string; level: number; page: number }
 interface Heading { at: number; title: string; level: 1 | 2; text?: string }
 
-/** The export's own table of contents (Shamela's): its titles, levels and the page each starts on. */
 function toc(id: number): TocEntry[] {
   const raw = JSON.parse(readFileSync(join('/tmp', `turath-${id}.json`), 'utf8')) as Record<string, unknown>;
   const meta = Object.values(raw).find(v => v && typeof v === 'object' && !Array.isArray(v) && Object.values(v as object).some(Array.isArray)) as Record<string, unknown>;
@@ -24,7 +15,6 @@ function toc(id: number): TocEntry[] {
   return list;
 }
 
-/** Where each Shamela page starts in the joined book. */
 function pageStarts(book: string) {
   const starts = new Map<number, number>();
   for (const m of book.matchAll(/⟦\d+:\d+:(\d+)⟧/g)) starts.set(Number(m[1]), m.index!);
@@ -33,11 +23,6 @@ function pageStarts(book: string) {
 
 const key = (title: string) => bareText(title).replace(/^\(?[٠-٩]+\)?\s*-?\s*/, '').replace(/[«»"():،.؟]/g, ' ').replace(/^(?:باب|كتاب|ابواب)\s+/, '').replace(/\s+/g, ' ').trim();
 
-/**
- * A heading of the table of contents placed in the text: the heading printed on its page (a title the export marks, or a
- * line opening «باب»/«كتاب») whose words match it. A kitab takes only a printed «كتاب»/«أبواب» line, since its name often
- * repeats in its first bab. Its title is the printed one when found.
- */
 function place(book: string, starts: Map<number, number>, entry: TocEntry, kitab: boolean, after: number): { at: number; printed?: string } | undefined {
   const from = Math.max(starts.get(entry.page) ?? 0, after);
   const to = starts.get(entry.page + 1) ?? book.length;
@@ -51,10 +36,6 @@ function place(book: string, starts: Map<number, number>, entry: TocEntry, kitab
   return undefined;
 }
 
-/**
- * The table of contents placed in the text. A bab not found on its page starts with the page; a kitab not found starts
- * just before the heading after it (its first bab), with the table's own title.
- */
 function headings(book: string, entries: TocEntry[], kitabs: (entry: TocEntry) => boolean): Heading[] {
   const starts = pageStarts(book);
   let after = 0;
@@ -72,19 +53,10 @@ function headings(book: string, entries: TocEntry[], kitabs: (entry: TocEntry) =
   });
 }
 
-/**
- * al-Bukhari's records by Abd al-Baqi's numbers. A number opening a line is a record's head («N - », or «N - M - K» when
- * he gives one printed record several numbers). He also numbers a few reports inside one printed record, where the number
- * stands mid-line. The print's order differs from his numbers in places (2973 after 2975), so each number takes its line
- * head, else a mid-line «N - » between the numbers either side of it, else the record `shared` names (a number the edition
- * prints under another, data/hadith/bukhari-numbers.json).
- */
 interface Numbers { shared: Record<string, number>; starts: Record<string, string>; absent: number[] }
 
 function bukhariMarks(book: string, start: number, last: number, { shared, starts, absent }: Numbers) {
   const heads = new Map<number, { at: number; also: number[] }[]>();
-  // A kitab the table of contents does not find stands half a character before its first bab (headings): the marks are
-  // whole offsets, or each would take the digit before it into the record before.
   start = Math.ceil(start);
   for (const m of book.slice(start).matchAll(/(?<=^|\n|⟧)\s*([٠-٩]+(?: \(م\))?(?:(?: ?- ?| )[٠-٩]+)* ?-(?: ?[٠-٩]+ ?-?)*)(?=\s)/g)) {
     const [n, ...also] = m[1].match(/[٠-٩]+/g)!.map(en);
@@ -95,8 +67,6 @@ function bukhariMarks(book: string, start: number, last: number, { shared, start
   let prev = start;
   for (let n = 1; n <= last; n++) {
     if (starts[n]) {
-      // The phrase's letters as printed, whatever order its marks are typed in, with the export's narrator links
-      // (⁅id⁆name⁆) allowed anywhere in it.
       const re = new RegExp([...bare(starts[n])].map(c => c.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('[\\u064B-\\u0652\\u0670]*(?:⁅\\d+⁆|⁆)*'), 'g');
       re.lastIndex = prev;
       const at = re.exec(book)?.index ?? -1;
@@ -138,11 +108,7 @@ function bukhariMarks(book: string, start: number, last: number, { shared, start
 
 const ROUTE = /(?:^|\n|⟧)\s*((?:[٠-٩]+ ?)?(?:- )?(?:٠ )?(?:م(?: [٠-٩]+)? ?)?(?:- )?)\(([٠-٩]+)(?:\/ ?([٠-٩]+))?\)(?: -)?\s/g;
 
-/** Muslim's routes in order, each with Abd al-Baqi's number N; the first route of each N, 1 to the last, in order. */
 function muslimMarks(book: string, start: number, last: number, { fixes, absent }: { fixes: { page: number; printed: number; n: number }[]; absent: number[] }) {
-  // Every head with a route count («k - (N)», «k م - (N)») is a route. A bare «(N) -» is one only for the number now open
-  // or the next, since «(N)» also stands inside texts. Slips of the edition («(٣٩٩)» where 299 is due) are fixed in
-  // data/hadith/muslim-numbers.json from Abd al-Baqi's numbering.
   const heads: { at: number; n: number; label: string; page: number; printed: string; counted: boolean; also?: number[] }[] = [];
   ROUTE.lastIndex = start;
   for (let m = ROUTE.exec(book); m; m = ROUTE.exec(book)) {
@@ -153,13 +119,10 @@ function muslimMarks(book: string, start: number, last: number, { fixes, absent 
     const n = fixes.find(f => f.page === page && f.printed === printed)?.n ?? printed;
     heads.push({ at, n, label: label.replace(/^([٠-٩]+) ٠$/, '$1'), page, printed: m[2], counted: /[٠-٩]/.test(label), ...(m[3] ? { also: [en(m[3])] } : {}) });
   }
-  // Abd al-Baqi gives a hadith Muslim brings again later its first number, so a counted head may go back to any earlier
-  // number; one ahead of the next new number is a slip.
   const routes: { at: number; n: number; label: string; also?: number[] }[] = [];
   const odd: string[] = [];
   let open = 0;
   for (const h of heads) {
-    // A few numbers ahead is a number whose own head the export prints another way, listed below as missing.
     if (h.n > open + (h.counted ? 5 : 1)) { if (h.counted) odd.push(`page ${h.page}: «${h.label} (${h.printed})» where ${open + 1} at most was due`); continue; }
     if (!h.counted && h.n !== open && h.n !== open + 1) continue;
     routes.push({ at: h.at, n: h.n, label: h.label, also: h.also });
@@ -177,7 +140,6 @@ const clean = (text: string) => text.replace(/⁅\d+⁆([^⁆]*)⁆/g, '$1').rep
 interface Cut { start: number; end: number; n: number; route?: string; also?: number[] }
 interface Built { index: SahihIndex; files: SahihKitabFile[] }
 
-/** Each hadith with its kitab and bab: the last heading of each level before it. */
 function assemble(book: string, heads: Heading[], cuts: Cut[], meta: SahihBook, muslim: boolean, unmark: (text: string, n: number) => string): Built {
   const kitabs: SahihKitab[] = [];
   const files: SahihKitabFile[] = [];
@@ -188,7 +150,6 @@ function assemble(book: string, heads: Heading[], cuts: Cut[], meta: SahihBook, 
     while (h < sorted.length && sorted[h].at <= c.start) {
       const head = sorted[h++];
       if (head.level === 1) {
-        // Two kitab headings with no hadith between them (a part's title, then its first kitab): the later one names it.
         if (kitabs.length && !kitabs[kitabs.length - 1].from) { kitabs[kitabs.length - 1].title = head.title; continue; }
         kitabs.push({ n: kitabs.length + 1, title: head.title, from: 0, to: 0, babs: [] });
         files.push({ n: kitabs.length, said: [], hadith: [] });
@@ -206,14 +167,9 @@ function assemble(book: string, heads: Heading[], cuts: Cut[], meta: SahihBook, 
     if (!kitab) throw new Error(`hadith ${c.n} before the first kitab`);
     if (!kitab.babs.length) { kitab.babs.push({ title: '', from: 0, to: 0 }); file.said.push(''); }
     const bab = kitab.babs[kitab.babs.length - 1];
-    // A title the export marks is a heading, never a hadith's words: one the table of contents does not place (Muslim's
-    // kitabs, printed «٣٣ - كتاب الإمارة») ends the hadith before it all the same.
     const titled = book.indexOf('⟪باب⟫', c.start);
     const end = Math.min(c.end, sorted[h]?.at ?? book.length, titled < 0 ? book.length : titled);
     const piece = cut(book, c.start, Math.ceil(end));
-    // The number heading the text («٨ - », «١٩ - (١٦) ») is shown apart from it.
-    // The next number's digits can stay at the end, after the closing mark («… إِلَيْهِ». ٢»): they are its head, not this text.
-    // A bab heading the table of contents places after its first word leaves «بَابُ» at the end of the hadith before it.
     const text = unmark(piece.text.replace(/\s+بَ?ا?بٌ?ُ?:?$/, '').replace(/([».،:؟])\s*[٠-٩]+(?:\s*-\s*[٠-٩]+)*\s*-?$/, '$1').replace(/^[٠-٩]+(?: \(م\))?(?:(?: ?- ?| )[٠-٩]+)* ?-?(?: ?[٠-٩]+ ?-?)*\s*/, '').replace(/^(?:[٠-٩]+ ?)?(?:- )?(?:٠ )?(?:م(?: [٠-٩]+)? ?)?(?:- )?\([٠-٩]+(?:\/ ?[٠-٩]+)?\)(?: -)?\s*/, '').replace(/^\(م\)\s*/, ''), c.n);
     const route: SahihRoute = { ...(c.route ? { route: c.route } : {}), ...(piece.chain ? { chain: piece.chain } : {}), text, volume: piece.volume, pages: piece.pages, shamela: piece.shamela };
     const earlier = muslim ? byNumber.get(c.n) : undefined;
@@ -233,23 +189,11 @@ function assemble(book: string, heads: Heading[], cuts: Cut[], meta: SahihBook, 
   return { index: { ...meta, kitabs }, files };
 }
 
-/**
- * The edition's own numbers taken out of a hadith's words, where they stand inside a record (the record's head is shown
- * apart already). al-Bukhari's print gives a report within a record Abd al-Baqi's number again, «٣٩٣ (م) -», «١٧٧٤ (م)», «١٣٩٠ م (١) -»,
- * «١٧٦٧ م ١», «٣٧٥٦ - (م ١)», or a number of its own mid-line («٦٥٩٢ - وَزَادَ»), and a kitab its number («﷽ ٤٠ -»);
- * bukhariMarks keeps the numbers, the text keeps only al-Bukhari's words.
- */
 const bukhariUnmarked = (text: string) => text
   .replace(/(?:^|\s+)(?:[٠-٩]{1,4}(?: \(م\)(?: -)?| م \([٠-٩]+\) -| م [٠-٩]+| - \(م [٠-٩]+\))|[٠-٩]{3,4}(?: - [٠-٩]{3,4})* -)(?=\s|$)/g, '')
   .replace(/(?<=﷽)\s+[٠-٩]+ -$/, '')
   .trim();
 
-/**
- * Muslim's route heads the export prints inside a route's line, so that the route before runs on over them: «(١٤٢) -»,
- * «٦١ - (٣٧)», «١٥١ - م-٢ - (٢٢٤٢)», «م (١١٧٧)», «(٢٩٢٠ - م)», «(١٤٨٨/ ١٤٨٧)», a head's «م-١» left at a route's start,
- * and the misprinted heads data/hadith/muslim-numbers.json lists under `heads` («٨٣ - ٠٤١٢)»). Abd al-Baqi's route
- * numbers are his, not Muslim's words: they go, and the route keeps the words.
- */
 function muslimUnmarked(misprinted: Record<string, string[]>) {
   const used = new Set<string>();
   const unmark = (text: string, n: number) => {
@@ -269,10 +213,6 @@ function muslimUnmarked(misprinted: Record<string, string[]>) {
   return { unmark, check };
 }
 
-/**
- * Slips of the turath.io export, each fixed from the printed page it names (data/hadith/sahih-text-fixes.json): applied to
- * every build, so a rebuild never brings a slip back. shared/sahihTextFixes.test.ts checks the built text holds each fix.
- */
 type TextFix = { book: string; n: number; route?: string; wrong: string; right: string; witness: string };
 function fixText(built: Built) {
   const fixes = (JSON.parse(readFileSync('data/hadith/sahih-text-fixes.json', 'utf8')) as TextFix[]).filter(fix => fix.book === built.index.slug);
@@ -295,7 +235,6 @@ function write(built: Built) {
 export function buildBukhari() {
   const book = joined(load(BOOKS.bukhari.id));
   const entries = toc(BOOKS.bukhari.id).filter(e => e.level <= 3);
-  // Before «بدء الوحي» stand the print's reports and the correctors' foreword, not al-Bukhari's book.
   const startAt = entries.findIndex(e => /بدء الوحي/.test(e.title));
   const isKitab = (e: TocEntry) => e.level === 1;
   const heads = headings(book, entries.slice(startAt), isKitab);
@@ -307,7 +246,6 @@ export function buildBukhari() {
 export function buildMuslim() {
   const book = joined(load(BOOKS.muslim.id));
   const entries = toc(BOOKS.muslim.id);
-  // Muslim's own introduction comes first: Abd al-Baqi numbers its reports 1–7, before «كتاب الإيمان» opens at 8.
   const startAt = entries.findIndex(e => /مقدمة المصنف/.test(e.title));
   const isKitab = (e: TocEntry) => e.level === 1;
   const heads = headings(book, entries.slice(startAt), isKitab).map(head => ({ ...head, title: head.level === 1 ? head.title.replace(/^[٠-٩]+ ?- ?/, '').replace(/^مقدمة المصنف$/, 'المقدمة') : head.title.replace(/^\([٠-٩]+\) ?/, '').replace(/^[٠-٩]+ ?- ?/, '') }));

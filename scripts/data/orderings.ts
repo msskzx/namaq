@@ -1,4 +1,4 @@
-// docs/adr/0028-a-stated-ordering-is-recorded-and-its-placement-is-derived.md
+// see docs/adr/0028-a-stated-ordering-is-recorded-and-its-placement-is-derived.md
 import { legacyUnreviewed, type Catalog } from '../../src/lib/catalog/types';
 
 export interface OrderingRow {

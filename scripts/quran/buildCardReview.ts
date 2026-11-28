@@ -1,10 +1,3 @@
-/**
- * Builds the index the owner's card review page reads (src/lib/quran/curation/cardReview.json): every tree card of the review
- * pool and every compare card, each with the rows its matrix draws today and its verdict. The page reads only this file and the
- * agents' proposals, so a page of cards opens without building trees (owner 2026-11-20: performance matters).
- *
- * With `--agents <dir>`, it also writes the agents' input: one JSON line per card with every row's ayah text.
- */
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import corpus from '../../shared/quran/quranText/corpus';
@@ -22,7 +15,6 @@ const byKey = new Map(ayat.map(ayah => [ayah.key, ayah]));
 const positions = new Map(ayat.map((ayah, i) => [ayah.key, i]));
 const textOf = (key: string) => byKey.get(key)!.words.join(' ');
 
-/** The rows the website's matrix draws for a card: each ayah run on to its end, rows inside another row left out (as matrixOf). */
 function rowsOf(piece: BranchPiece): string[][] {
   const presentation = piece.group ? groupPresentation(piece.group, byKey, null, {}) : phrasePresentation(piece.phrase, ayat, true, true);
   const ends = ownAyatOnly(piece) ? ownEnds(presentation.tree) : twoAyat(piece) ? twoEnds(presentation.tree, key => positions.has(key)) : ayahEnds(presentation.tree);
@@ -36,7 +28,6 @@ type CompareCard = { p: string[]; k?: number; a?: number[][] };
 function compareCards() {
   const source = readFileSync('shared/data/quran/compareCards.js', 'utf8');
   const data = JSON.parse(JSON.parse(source.slice(source.indexOf('JSON.parse(') + 11, source.lastIndexOf(')')))) as { cards: Record<string, CompareCard[]>; stories: Record<string, CompareCard[]> };
-  // A story card is listed in `cards` too: each card once.
   const seen = new Set<string>();
   return [...Object.entries(data.cards), ...Object.entries(data.stories)].flatMap(([page, cards]) => cards.flatMap(card => {
     const id = compareCardId(card.p);
@@ -55,7 +46,6 @@ const runs = (numbers: number[]) => numbers.reduce<number[][]>((all, n) => {
 
 function compareRows(page: string, card: CompareCard): string[][] {
   const [a, b] = page.split(':');
-  // A passage card: each side's ayat, a row for each run of consecutive ayat.
   if (card.a) return card.a.flatMap((side, i) => runs(side).map(run => run.map(n => `${i ? b : a}:${n}`)));
   const sides = [new Set<string>(), new Set<string>()];
   for (const pair of card.p) pair.split('|').forEach((key, side) => sides[side].add(key));
@@ -91,7 +81,6 @@ for (const { page, card } of compareCards()) {
     page: page.replace(':', '/'),
     rows: compareRows(page, card),
     pairs: card.p,
-    // A surah-order book's card: exactly the ayat the book names, never dropped (owner 2026-11-20).
     ...(card.k ? { link: card.k, books: [tanasubSource(tanasubLink(card.k)!).book] } : {}),
     verdict: cardVerdict(card.p.flatMap(pair => pairs[pair] ? [pairs[pair]] : [])),
   });

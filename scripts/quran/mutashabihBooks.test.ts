@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { authorsWords, chaptersOf, surahOfHeading } from './mutashabihBooks';
 
-// Lines as the editions print them (Turath 1340, 1419, 3580); the book reader shows the author's words only (AGENTS.md).
 describe("the author's words", () => {
   it("takes out the editor's references, ayah numbers and entry numbers and keeps every word of the author's", () => {
     expect(authorsWords('عَلَيْنَا نَصِيرًا) (الإسراء: ٧٥)، (ثم) قال')).toBe('عَلَيْنَا نَصِيرًا)، (ثم) قال');

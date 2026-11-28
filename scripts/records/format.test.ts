@@ -21,7 +21,7 @@ describe('docs/records', () => {
     expect(formatRecord(r.meta, r.body)).toBe(r.text);
   });
 
-  // "Records used: R0031" must name one record.
+  // see R0031
   it('gives each record its own number, and lists each in the README index', () => {
     const numbers = files.map((f) => f.slice(0, 5));
     expect(numbers.filter((n, i) => numbers.indexOf(n) !== i)).toEqual([]);

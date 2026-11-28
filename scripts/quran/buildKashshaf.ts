@@ -7,8 +7,7 @@ import { entryOf, litSentences, markQuran, readPassages, type Dump, type Exclusi
 import surahs from '../../shared/data/quran/surahs.json';
 import type { KashshafData } from '../../shared/quran/kashshaf';
 
-// docs/plans/balagha.md: al-Kashshaf for the reader's balagha sheet, a book the phone downloads and the website reads
-// on its server. Quranpedia's dump of book 346 (Dar al-Kitab al-Arabi, 3rd ed. 1407), pinned by version.
+// see docs/plans/balagha.md
 const VERSION = '2026-08-10';
 const URL = 'https://quranpedia.net/dumps/tafsir-book-346.json.gz';
 const OUT = join(__dirname, '../../shared/data/quran');
@@ -43,13 +42,11 @@ const entries = passages.map(passage => {
   return entryOf(passage, text, litSentences({ ...passage, text }, key => words.get(key) ?? [], exclusions));
 });
 
-// Every ayah must fall in a passage; a grouped passage may cover ayat the dump keys nowhere.
 const missing: string[] = [];
 for (const row of surahs) for (let ayah = 1; ayah <= row.numberOfAyat; ayah++) {
   if (!entries.some(([s, from, to]) => s === row.number && from <= ayah && ayah <= to)) missing.push(`${row.number}:${ayah}`);
 }
 if (missing.length) throw new Error(`ayat in no passage: ${missing.join(', ')}`);
-// And in one passage only, with text: the reader shows the first passage holding an ayah, so a second would be lost.
 const twice = entries.flatMap((entry, i) => entries.slice(i + 1).filter(other => other[0] === entry[0] && other[1] <= entry[2] && entry[1] <= other[2]).map(other => `${entry[0]}:${entry[1]}-${entry[2]} / ${other[1]}-${other[2]}`));
 if (twice.length) throw new Error(`ayat in two passages: ${twice.join(', ')}`);
 const empty = entries.filter(entry => !entry[6].trim()).map(([s, from]) => `${s}:${from}`);

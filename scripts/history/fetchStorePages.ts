@@ -4,10 +4,6 @@ import { JSDOM } from 'jsdom';
 import { bodyMarkdown, extractShamelaPage, notesMarkdown } from '../../src/lib/history/shamelaEntry';
 import { sourcesRoot } from '../../src/lib/history/sourceStore';
 
-// Stores whole Shamela pages of the Siyar (book 10906) in the source store, one
-// file per printed page, without slicing them to an entry. Usage:
-//   npx tsx scripts/history/fetchStorePages.ts --from <id> --to <id> --volume <n>
-// Pages already stored are left as they are.
 const userAgent =
   'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0 Safari/537.36';
 

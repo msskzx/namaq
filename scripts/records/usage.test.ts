@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { buildUsage, oldSlug, parseUsedLine, usedLine } from './usage';
 
-// R0045 was 0031-a-scaled before the R ids, so old lines' bare 0031 named two records.
+// see R0045
 const slugs = ['R0005-checks', 'R0008-split', 'R0027-context', 'R0031-a-card', 'R0032-branch', 'R0036-video', 'R0037-one-rule', 'R0045-a-scaled'];
 const used = (line: string) => parseUsedLine(line, slugs);
 

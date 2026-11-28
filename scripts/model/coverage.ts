@@ -1,4 +1,4 @@
-// docs/plans/siyar-parsing.md
+// see docs/plans/siyar-parsing.md
 import { coverageOf } from '../../src/lib/model/coverage';
 import { loadModel } from '../../src/lib/model/load';
 

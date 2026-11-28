@@ -58,7 +58,7 @@ flowchart RL
 | `QuizzesScreen` | (five) | [الاختبار](quiz-play.md) | [screens/quizzes.tsx:76](../../mobile/src/screens/quizzes.tsx#L76) |
 |  | اختبار مخصص | [اختبار مخصص](quiz-solo.md) | [screens/quizzes.tsx:92](../../mobile/src/screens/quizzes.tsx#L92) |
 |  | اختبار جماعي | [اختبار جماعي](quiz-party.md) | [screens/quizzes.tsx:93](../../mobile/src/screens/quizzes.tsx#L93) |
-| `HadithOpen` | افتح ‹› | [حديث الصحيح](hadith-sahih.md) | [screens/story.tsx:68](../../mobile/src/screens/story.tsx#L68) |
+| `HadithOpen` | افتح ‹› | [حديث الصحيح](hadith-sahih.md) | [screens/story.tsx:67](../../mobile/src/screens/story.tsx#L67) |
 
 ## Sheets
 
