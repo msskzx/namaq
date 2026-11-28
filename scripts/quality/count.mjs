@@ -14,14 +14,23 @@ const filesUnder = dir => readdirSync(dir).flatMap(name => {
   return /\.(ts|tsx|mjs|js)$/.test(name) && !/\.test\.(ts|tsx)$/.test(name) ? [path] : [];
 });
 
-const commentsOf = text => {
-  const scanner = ts.createScanner(ts.ScriptTarget.Latest, false, ts.LanguageVariant.JSX, text);
+const commentsOf = (file, text) => {
+  const kind = file.endsWith('.tsx') ? ts.ScriptKind.TSX : file.endsWith('.ts') ? ts.ScriptKind.TS : ts.ScriptKind.JS;
+  const source = ts.createSourceFile(file, text, ts.ScriptTarget.Latest, true, kind);
+  const seen = new Map();
+  const collect = ranges => { for (const range of ranges ?? []) seen.set(range.pos, range); };
+  const walk = node => {
+    if (node.kind === ts.SyntaxKind.JsxText) return;
+    collect(ts.getLeadingCommentRanges(text, node.pos));
+    collect(ts.getTrailingCommentRanges(text, node.end));
+    for (const child of node.getChildren(source)) walk(child);
+  };
+  walk(source);
   let comments = 0;
   let lines = 0;
   let directives = 0;
-  for (let kind = scanner.scan(); kind !== ts.SyntaxKind.EndOfFileToken; kind = scanner.scan()) {
-    if (kind !== ts.SyntaxKind.SingleLineCommentTrivia && kind !== ts.SyntaxKind.MultiLineCommentTrivia) continue;
-    const comment = scanner.getTokenText();
+  for (const range of seen.values()) {
+    const comment = text.slice(range.pos, range.end);
     if (/^\/[/*]\s*(eslint-|@ts-|prettier-ignore)/.test(comment)) { directives += 1; continue; }
     comments += 1;
     lines += comment.split('\n').length;
@@ -36,7 +45,7 @@ const rows = Object.entries(AREAS).map(([area, dir]) => {
   const total = { area, files: files.length, commentLines: 0, comments: 0, lintDirectives: 0, useEffect: 0, setTimeout: 0, emptyCatch: 0 };
   for (const file of files) {
     const text = readFileSync(file, 'utf8');
-    const found = commentsOf(text);
+    const found = commentsOf(file, text);
     total.comments += found.comments;
     total.commentLines += found.lines;
     total.lintDirectives += found.directives;

@@ -37,7 +37,7 @@ export default function VideoSheet({ input, page, onClose, palette, part, onNext
     setFont(null);
     if (!open) return;
     fontFace().then(face => { if (request.current === own) setFont(face); }, () => { if (request.current === own) setFont(''); });
-  }, [input, page, open]);  
+  }, [input, page, open]);
   const message = useCallback((own: number, data: string) => {
     if (request.current !== own) return;
     const said = readRecorderMessage(data);

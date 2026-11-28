@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useLiftSource, Quote } from '@/ui/sourceSlot';
+import { useLiftSource, type Quote } from '@/ui/sourceSlot';
 import { View } from 'react-native';
 import { ChevronDown } from 'lucide-react-native';
 import { Text } from '@/ui/Text';

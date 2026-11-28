@@ -2,7 +2,7 @@ import { notesByDate, readAyahNotes } from '@shared/ayahNotes';
 import { searchAll, SEARCH_ORDER, type SearchHit, type SearchSources } from '@shared/quran/searchAll';
 import { ADHKAR_ITEMS, bundledSources, GROUP_MAX } from '@shared/quran/searchSources';
 import { battleLine, searchBattles } from '@shared/battles/battle';
-import { searchSahih, type SahihSlug, SahihIndex } from '@shared/sahih';
+import { searchSahih, type SahihSlug, type SahihIndex } from '@shared/sahih';
 
 import { sayingStart, searchForty } from '@shared/hadith';
 import { listedPairs } from './compare';

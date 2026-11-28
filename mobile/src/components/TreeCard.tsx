@@ -130,7 +130,7 @@ export default function TreeCard({ piece, list, palette, view: full, lane, aroun
   const strip = fixed ? ayatRoom?.height ?? room : readKeys.length ? stripHeight : 0;
   const askRoom = ayatRoom?.set;
   useEffect(() => { askRoom?.(readKeys.length ? room : 0); }, [askRoom, readKeys.length > 0, room]); // eslint-disable-line react-hooks/exhaustive-deps
-  const view = useMemo(() => ({ width: full.width, height: Math.max(1, full.height - footHeight - strip) }), [full.width, full.height, footHeight, strip]);  
+  const view = useMemo(() => ({ width: full.width, height: Math.max(1, full.height - footHeight - strip) }), [full.width, full.height, footHeight, strip]);
   const surrounding = useMemo(() => around ? aroundOf(card.presentation) : undefined, [around, card]);
   // The tree opens the way it fits bigger, as on the website. Its sizes both ways are known ahead (or kept from the
   // first time it opened), so the tree shows at once; a tree with no sizes yet shows sideways while both ways are

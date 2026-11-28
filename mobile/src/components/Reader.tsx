@@ -141,7 +141,7 @@ export default function Reader() {
   const [following, setFollowing] = useState(true);
   const listenPage = listening ? pageOfAyah(listening.key) ?? null : null;
   // Reciting keeps its own place on the pages; the recitation does not move them then.
-  useEffect(() => { if (listenPage && following && !position) setPage(listenPage); }, [listenPage, following, position]);  
+  useEffect(() => { if (listenPage && following && !position) setPage(listenPage); }, [listenPage, following, position]);
   // A new recitation (from the ayah buttons or the sheet) follows again.
   useEffect(() => { if (listening) setFollowing(true); }, [listening?.range]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => { if (!listening) setFollowing(true); }, [listening]);
@@ -356,7 +356,7 @@ export default function Reader() {
   }, []);
   const scrolled = useRef(0);
   const scrollTo = (y: number) => { scroller.current?.scrollTo({ y, animated: false }); scrolled.current = y; scrollY.current = y; };
-  useEffect(() => { if (!keyboard && !flowing) { scrollTo(0); setScrollTop(0); } }, [keyboard, flowing]);  
+  useEffect(() => { if (!keyboard && !flowing) { scrollTo(0); setScrollTop(0); } }, [keyboard, flowing]);
   // With bigger text the row of pages is as tall as the current page; a neighbour sliding in shows its top where the reader is.
   const pagerHeight = flowing ? Math.max(height, heights[page] ?? 0) : height;
   const [scrollTop, setScrollTop] = useState(0);
@@ -369,7 +369,7 @@ export default function Reader() {
     restoring.current = false;
     scrollTo(0);
     setScrollTop(0);
-  }, [page]);  
+  }, [page]);
   // Once the page is drawn at its size: back where the reader left it, or after a pinch, the same words under the fingers.
   const drawnHeight = heights[page];
   useEffect(() => {

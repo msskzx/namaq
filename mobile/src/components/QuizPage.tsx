@@ -3,7 +3,7 @@ import { UnderCard, useCardRow } from '@/ui/Card';
 import { View } from 'react-native';
 import type { RecitePosition } from '@shared/quran/recite';
 import { pageModel } from '@shared/quran/recitePage';
-import { shownCut, type PageAsk, PenRule } from '@shared/quran/writeAyah';
+import { shownCut, type PageAsk, type PenRule } from '@shared/quran/writeAyah';
 import MushafPageView, { type Recite } from './MushafPageView';
 import RecitePill from './recite/RecitePill';
 import { writtenGrade } from '@shared/quiz/score';

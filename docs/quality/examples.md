@@ -32,3 +32,16 @@ New checks add their cases here, so later work can learn from them.
 - **Effect:** `tsc` failed. Lint and the type check have to run together, and an autofix is not trusted
   until `tsc` passes.
 - **Fix:** one import with inline `type` markers.
+
+The same autofix went the other way in three files (`QuizPage.tsx`, `searchAll.ts`, `Reference.tsx`): it merged a
+type into a value import without the `type` mark. Nothing failed, because the bundler drops imports used only as
+types, but the import no longer says what it is. Each got its `type` mark back. Found by the reviewer, not by a check.
+
+## A counter that miscounted (step 1, tooling)
+
+- **Where:** `scripts/quality/count.mjs`, its first version.
+- **Wrong:** it read comments with a bare token scanner, which loses its place inside template strings
+  (`` `https://shamela.ws/book/${id}` `` reads as a `//` comment) and JSX text.
+- **Effect:** it reported 7,700 comment lines where there are 13,461, about 40% too few.
+- **Found by:** the reviewer recounting from the parsed syntax tree.
+- **Fix:** the counter walks the parsed file and collects the comments around every node.
