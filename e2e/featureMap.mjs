@@ -160,7 +160,7 @@ Add the route file, then an entry in \`SCREENS\` in \`e2e/featureMap.mjs\`, and 
 - \`tabBar\`: only on the screen a tab bar button opens, the button's label.
 - \`from\`: each way in, as the screen a person is on, then the labels tapped there in order. A label in ‹› is what a
   row shows, a typed search or a gesture; every other label must appear in the app's code.
-- \`sample\`: for a screen that needs params, a query (\`?slug=badr\`) or a path (\`/musa\`) that gives it something to show.
+- \`sample\`: for a screen that needs params, a query (\`?slug=badr\`) or a path (\`/musa\`) that gives it something to show. The party room's \`/000000\` is no real room, so it opens on the room's empty state.
 - \`unlinked\`: why nothing in the app opens the screen, for a tool such as \`tree-sizes\`.
 `;
 }
