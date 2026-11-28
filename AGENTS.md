@@ -114,6 +114,10 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   owner applies is not a reason to hold the merge: write the change so the app
   works before the migration is applied. Do not open a PR to ask whether the
   work is right; ask before, in the plan.
+- After merging a PR that touches `mobile/` or `shared/`, check that the `expo update` run for the merge
+  commit (`.github/workflows/expo-update.yml`) succeeded: it is how the owner's Expo Go gets the change, and
+  it failed silently from #1253 to #1268. A failed run is fixed before anything else merges. Its typecheck
+  installs only `mobile/`, so code under `mobile/` (tests included) must not need the root `node_modules`.
 - The skills `pr-cycle`, `blind-test-brief`, `review-brief` and
   `expand-contract-migration` (kept in the distillate repo under `skill/`) carry the
   steps and the subagent briefs for this cycle.

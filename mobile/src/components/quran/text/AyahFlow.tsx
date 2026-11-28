@@ -105,18 +105,21 @@ export function QuranWord({ children, look, place, lines, header = false }: { ch
   lines?: number;
   header?: boolean }) {
   const size = useWordSize();
+  const { ink } = usePalette();
   return (
     <Text numberOfLines={lines} accessibilityRole={header ? 'header' : undefined}
-      style={{ fontFamily: QURAN_FONT, fontSize: size, lineHeight: size * FLOW_LINE, writingDirection: 'rtl', ...place, ...look }}>{mushafText(children)}</Text>
+      style={{ color: ink, fontFamily: QURAN_FONT, fontSize: size, lineHeight: size * FLOW_LINE, writingDirection: 'rtl', ...place, ...look }}>{mushafText(children)}</Text>
   );
 }
 
 export function TreeText({ ref, children, look, center = false }: { ref?: Ref<ComponentRef<typeof Text>>; children: ReactNode; look?: WordLook; center?: boolean }) {
   const size = useWordSize();
-  return <Text ref={ref} style={{ fontFamily: QURAN_FONT, fontSize: size, lineHeight: size * FLOW_LINE, writingDirection: 'rtl', textAlign: center ? 'center' : undefined, ...look }}>{children}</Text>;
+  const { ink } = usePalette();
+  return <Text ref={ref} style={{ color: ink, fontFamily: QURAN_FONT, fontSize: size, lineHeight: size * FLOW_LINE, writingDirection: 'rtl', textAlign: center ? 'center' : undefined, ...look }}>{children}</Text>;
 }
 
 export function MiniQuran({ share, children, look, lines, center = true }: { share: number; children: ReactNode; look?: WordLook; lines?: number; center?: boolean }) {
   const size = useWordSize() * share;
-  return <Text numberOfLines={lines} style={{ fontFamily: QURAN_FONT, fontSize: size, lineHeight: size * FLOW_LINE, textAlign: center ? 'center' : undefined, ...look }}>{children}</Text>;
+  const { ink } = usePalette();
+  return <Text numberOfLines={lines} style={{ color: ink, fontFamily: QURAN_FONT, fontSize: size, lineHeight: size * FLOW_LINE, textAlign: center ? 'center' : undefined, ...look }}>{children}</Text>;
 }

@@ -1,4 +1,4 @@
-import { normalizeWord, plainName } from './normalize';
+import { holdsWord, normalizeWord, plainName, searchTerm } from './normalize';
 import { searchSurahs, type SearchableSurah } from './surahSearch';
 import { searchable } from './searchText';
 import { surahName } from './surahNames';
@@ -41,13 +41,13 @@ export type SearchSources = {
 };
 
 const loose = (text: string) => normalizeWord(plainName(text)).replace(/[«»،؛؟.,:;!?()\-]/g, ' ');
-const terms = (query: string) => loose(query).split(/\s+/).filter(Boolean);
+const terms = (query: string) => query.split(/\s+/).flatMap(typed => loose(typed).split(/\s+/).filter(Boolean).map(term => searchTerm(typed, term)));
 
 export function holdsTerms(text: string, query: string) {
   const wanted = terms(query);
   if (!wanted.length) return false;
   const hay = loose(text);
-  return wanted.every(term => hay.includes(term) || (term.length > 4 && term.startsWith('ال') && hay.includes(term.slice(2))));
+  return wanted.every(term => holdsWord(hay, term));
 }
 
 export function searchAll(sources: SearchSources, query: string): SearchGroup[] {

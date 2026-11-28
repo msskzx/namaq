@@ -1,4 +1,4 @@
-import { normalizeWord } from './normalize';
+import { holdsWord, normalizeWord, searchTerm } from './normalize';
 
 // see docs/plans/word-counts-app.md
 export type WordsData = {
@@ -53,14 +53,22 @@ export function countsBySurah(places: WordPlace[]): number[] {
   return counts;
 }
 
+const DAGGER_ALIF = /\u0670/g;
+const lemmaForms = (lemma: string) => [normalizeWord(lemma), normalizeWord(lemma.replace(DAGGER_ALIF, 'ا'))];
+
 export function searchWords(data: WordsData, query: string, limit: number): number[] {
-  const needle = normalizeWord(query.trim());
+  const typed = query.trim();
+  const needle = normalizeWord(typed);
   if (!needle) return [];
-  const found: number[] = [];
-  for (let id = 0; id < data.lemmas.length && found.length < limit; id++) {
-    if (normalizeWord(data.lemmas[id][0]).includes(needle)) found.push(id);
+  const term = searchTerm(typed, needle);
+  const whole: number[] = [];
+  const bare: number[] = [];
+  for (let id = 0; id < data.lemmas.length && whole.length < limit; id++) {
+    const forms = lemmaForms(data.lemmas[id][0]);
+    if (forms.some(form => form.includes(needle))) whole.push(id);
+    else if (bare.length < limit && forms.some(form => holdsWord(form, term))) bare.push(id);
   }
-  return found;
+  return [...whole, ...bare].slice(0, limit);
 }
 
 const SPACING: Record<string, { at: number; mushaf: 'two' | 'one' }> = {
