@@ -13,13 +13,18 @@ describe('the ayat list', () => {
     expect(typedAyah('البقرة ٣٦')).toBe('2:36');
     expect(typedAyah('2:255')).toBe('2:255');
     expect(typedAyah('الفاتحة 8')).toBeNull();
-    expect(ayatFound('البقرة ٣٦', 5).ayat[0]).toBe('2:36');
+    expect(typedAyah('سورة ٢')).toBeNull();
+    expect(typedAyah('سورة ٢ ٣')).toBe('2:3');
+    expect(typedAyah('البقرة۳۶')).toBe('2:36');
+    expect(typedAyah('ال ٥')).toBeNull();
+    expect(ayatFound('البقرة ٣٦').ayat[0]).toBe('2:36');
   });
 
   it('finds ayat by their words, and only inside the surah when searching a surah', () => {
-    expect(ayatFound('الحمد لله رب العالمين', 50).ayat).toContain('1:2');
-    const inBaqara = surahAyatFound(2, 'الحمد لله', 50);
+    expect(ayatFound('الحمد لله رب العالمين').ayat).toContain('1:2');
+    const inBaqara = surahAyatFound(2, 'الحمد لله');
     expect(inBaqara.every(key => key.startsWith('2:'))).toBe(true);
-    expect(surahAyatFound(2, '٣٦', 50)).toEqual(['2:36']);
+    expect(surahAyatFound(2, '٣٦')).toEqual(['2:36']);
+    expect(surahAyatFound(2, 'البقرة ٣٦')).toEqual(['2:36']);
   });
 });

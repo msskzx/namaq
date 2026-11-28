@@ -7,7 +7,7 @@ import { Text } from '@/ui/Text';
 import TapRow from '@/ui/TapRow';
 import type { Palette } from '@/lib/theme';
 import { openAyahPage } from '@/lib/ways';
-import { ayahText } from '@/lib/mushaf';
+import { ayahMushafTokens } from '@/lib/mushaf';
 import AyahFlow, { AyahWords } from './quran/text/AyahFlow';
 
 const LINE = (palette: Palette) => ({ borderBottomWidth: 1, borderColor: `${palette.rule}66` });
@@ -26,7 +26,7 @@ export function SurahListRow({ surah, onOpen, palette }: { surah: Surah; onOpen:
 
 export function AyahListRow({ ayahKey, named = false, palette }: { ayahKey: string; named?: boolean; palette: Palette }) {
   const [surah, ayah] = ayahKey.split(':').map(Number);
-  const text = ayahText(ayahKey);
+  const text = ayahMushafTokens(ayahKey).join(' ');
   const place = `${surahName(surah)} ${num(ayah)}`;
   return (
     <TapRow role="link" onPress={() => openAyahPage(ayahKey)} label={`${place}: ${text}`}

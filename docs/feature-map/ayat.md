@@ -20,7 +20,7 @@ flowchart RL
 | Part of the screen | Label | Opens | Code |
 | --- | --- | --- | --- |
 | `AyahListRow` | ‹›: ‹› | [صفحة الآية](ayah.md) | [components/AyahListRow.tsx:32](../../mobile/src/components/AyahListRow.tsx#L32) |
-| `AyatScreen` | (onOpen) | [آيات السورة](ayat-surah.md) | [screens/ayat.tsx:39](../../mobile/src/screens/ayat.tsx#L39) |
+| `AyatScreen` | (onOpen) | [آيات السورة](ayat-surah.md) | [screens/ayat.tsx:42](../../mobile/src/screens/ayat.tsx#L42) |
 
 ## Sheets
 

@@ -2,7 +2,7 @@ import { compactKeys, compactQuery } from './searchText';
 
 export type SearchableSurah = { number: number; name: string; nameTransliterated?: string | null };
 
-const westernDigits = (text: string) => text.replace(/[٠-٩]/g, d => String(d.charCodeAt(0) - 0x660)).replace(/[۰-۹]/g, d => String(d.charCodeAt(0) - 0x6f0));
+export const westernDigits = (text: string) => text.replace(/[٠-٩]/g, d => String(d.charCodeAt(0) - 0x660)).replace(/[۰-۹]/g, d => String(d.charCodeAt(0) - 0x6f0));
 const SURAH = /^سوره/;
 const arabicKeys = (text: string) => compactKeys(text).map(value => value.replace(SURAH, ''));
 

@@ -1,6 +1,6 @@
 import { useDeferredValue, useMemo, useRef, useState, type ComponentRef } from 'react';
 import { FlatList, View } from 'react-native';
-import { AYAT_FOUND, ayatFound, SURAHS } from '@shared/quran/ayatList';
+import { ayatFound, SURAHS, type SurahRow } from '@shared/quran/ayatList';
 import TopBar from '@/ui/TopBar';
 import Empty from '@/ui/Empty';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
@@ -8,9 +8,11 @@ import { useShrinkOnScroll } from '@/lib/chrome';
 import { useTabRetap } from '@/lib/tabRetap';
 import { usePalette } from '@/lib/theme';
 import { toTab } from '@/lib/ways';
+import { useAfter } from '@/lib/hooks/useAfter';
+import { warmSearch } from '@/lib/searchAll';
 import { AyahListRow, SurahListRow } from '@/components/AyahListRow';
 
-type Row = { kind: 'surah'; surah: (typeof SURAHS)[number] } | { kind: 'ayah'; key: string };
+type Row = { kind: 'surah'; surah: SurahRow } | { kind: 'ayah'; key: string };
 
 const openSurah = (surah: number) => toTab({ pathname: '/ayat-surah', params: { surah: String(surah) } });
 
@@ -20,12 +22,13 @@ export default function AyatScreen() {
   const bottom = useTabBarSpace();
   const list = useRef<ComponentRef<typeof FlatList<Row>>>(null);
   const top = useRef(0);
+  useAfter(400, warmSearch);
   const [query, setQuery] = useState('');
   const typed = useDeferredValue(query.trim());
   useTabRetap('ayat', () => { if (top.current > 4) list.current?.scrollToOffset({ offset: 0, animated: true }); else setQuery(''); });
   const rows = useMemo<Row[]>(() => {
     if (!typed) return SURAHS.map(surah => ({ kind: 'surah', surah }));
-    const found = ayatFound(typed, AYAT_FOUND);
+    const found = ayatFound(typed);
     return [...found.surahs.map(surah => ({ kind: 'surah' as const, surah })), ...found.ayat.map(key => ({ kind: 'ayah' as const, key }))];
   }, [typed]);
   return (
