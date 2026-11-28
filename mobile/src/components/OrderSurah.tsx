@@ -71,12 +71,12 @@ export function LinkBlock({ link, palette }: { link: OrderLinkView; palette: Pal
   );
 }
 
-export function SurahBody({ s, palette }: { s: OrderSurah; palette: Palette }) {
+export function SurahBody({ s, palette, bare = false }: { s: OrderSurah; palette: Palette; bare?: boolean }) {
   return (
     <>
       <View style={{ flexDirection: 'row', alignItems: 'baseline', gap: 8 }}>
         <Text accessibilityRole="header" style={{ color: palette.accent, fontSize: 22, fontWeight: '700' }}>{s.name}</Text>
-        <Text style={{ color: palette.muted, fontSize: 14 }}>{num(s.surah)}</Text>
+        {!bare && <Text style={{ color: palette.muted, fontSize: 14 }}>{num(s.surah)}</Text>}
       </View>
       <AyahFlow color={palette.ink} screen menu={s.opening.map(a => `${s.surah}:${a.ayah}`)}>
         {s.opening.map(a => [
@@ -84,7 +84,7 @@ export function SurahBody({ s, palette }: { s: OrderSurah; palette: Palette }) {
           <AyahWords key={`${a.ayah}-n`} look={{ color: palette.amber }}>{`${num(a.ayah)} `}</AyahWords>,
         ])}
       </AyahFlow>
-      <BookWords runs={s.aim.runs} palette={palette} style={{ marginTop: 4, marginBottom: 6 }} />
+      {!bare && <BookWords runs={s.aim.runs} palette={palette} style={{ marginTop: 4, marginBottom: 6 }} />}
     </>
   );
 }

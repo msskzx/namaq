@@ -52,6 +52,7 @@ export function orderQuestion(surahs: number[], random: Random, kind: string = S
     promptArabic: prompt,
     ...(kind === SURAH_ORDER_JUZ && { tray: true }),
     choices: mixed(order, random).map(n => ({ value: String(n), labelArabic: SURAH_NAMES[n] })),
+    look: { view: 'own' },
     correctAnswer: right.join(PICKS),
     order: right,
     whereOf: Object.fromEntries(order.map(n => [String(n), num(n)])),

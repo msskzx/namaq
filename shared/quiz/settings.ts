@@ -9,6 +9,7 @@ export const RANGED_TOPICS: readonly QuizTopic[] = ['BRANCHES', 'SURAH', 'ORDER'
 
 export const QUIZ_LENGTHS = [5, 10, 15] as const;
 export type QuizLength = (typeof QUIZ_LENGTHS)[number];
+export const quizLength = (value: unknown, fallback: number) => (Number.isInteger(value) && (value as number) >= 1 ? value as number : fallback);
 
 // see docs/quiz-ayah-branches.md
 export const QUIZ_LEAVES = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] as const;

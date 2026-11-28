@@ -6,7 +6,7 @@ import { kunyaFacts, laqabFacts, type NameFact } from '../tarajimNames';
 import { bareName, chainOf, lineOf, meetingOf, type LineName } from '../tarajimLine';
 import { genitive, peopleGraph, TIE_KINDS, tieWord, type TieKind } from '../tarajimGraph';
 import { shuffle, type Random } from './random';
-import { PICKS, type ChoiceKind, type ChoiceQuestion } from './choiceKinds';
+import { PICKS, type ChoiceKind, type ChoiceQuestion, type QuizLook } from './choiceKinds';
 import { dataOf } from '../appData';
 
 const peopleJson = dataOf(peopleJsonFile);
@@ -207,6 +207,8 @@ function bearers(facts: readonly NameFact[]) {
 
 export function nameQuestions(family: typeof TARAJIM_KUNYA | typeof TARAJIM_LAQAB, people: AppPerson[] = PEOPLE, random: Random = Math.random): ChoiceQuestion[] {
   const facts: NameFact[] = family === TARAJIM_KUNYA ? kunyaFacts(people) : laqabFacts(people);
+  const graph = peopleGraph(people);
+  const hintOf = (person: AppPerson): QuizLook => (graph.ties.get(person.slug)?.length ? { view: 'ties', slug: person.slug } : { view: 'nasab', slugs: [person.slug], text: true });
   const bearer = bearers(facts);
   const ownNames = new Map<string, Set<string>>();
   for (const { person, name } of facts) ownNames.set(person.slug, (ownNames.get(person.slug) ?? new Set()).add(bareName(name)));
@@ -229,6 +231,7 @@ export function nameQuestions(family: typeof TARAJIM_KUNYA | typeof TARAJIM_LAQA
       promptArabic,
       choices: shuffle([name, ...others.map(other => other.name)], random).map(each => ({ value: each, labelArabic: each })),
       correctAnswer: name,
+      look: hintOf(person),
       whereOf: Object.fromEntries([[name, nameOf(person)], ...wrong.map(each => [each.name, each.names])]),
       sources: uniqueSources([...pageSources(fact.refs, { text: fact.text, by: saidBy(fact) }), ...wrong.flatMap(each => each.sources)]),
       evidence: { claimKeys: [] },
@@ -268,6 +271,7 @@ export function prophetNameQuestions(people: AppPerson[] = PEOPLE, random: Rando
       choices: choices.map(name => ({ value: name, labelArabic: name })),
       correctAnswer: correctAnswers.join(PICKS),
       correctAnswers,
+      look: { view: 'virtues', slugs: ['prophet-muhammad'] },
       whereOf: Object.fromEntries([...right.map(title => [title.name, his]), ...wrong.map(name => [name, bearer(name).names])]),
       sources: uniqueSources([...right.flatMap(title => pageSources(title.refs, { text: title.text })), ...wrong.flatMap(name => bearer(name).sources)]),
       evidence: { claimKeys: [] },

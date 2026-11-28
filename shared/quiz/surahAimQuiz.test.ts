@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { aimChoice, askable, surahAimQuiz } from './surahAimQuiz';
 import { seededRandom } from './feedQuiz';
-import { ORDER_AIMS } from '../quran/surahOrder';
+import { BOOKS, ORDER_AIMS } from '../quran/surahOrder';
+import { SURAH_NAMES } from '../quran/surahNames';
 import { juzOf } from '../quran/juz';
 
 const ALL = { range: null, filters: {} };
@@ -18,6 +19,13 @@ describe('«ما مقصود هذه السورة؟»', () => {
       }
       expect(question.sources).toHaveLength(3);
       expect(question.sources.every(source => source.book.startsWith('البقاعي') && source.url?.startsWith('https://shamela.ws/'))).toBe(true);
+    }
+  });
+
+  it('names in the question the scholar whose words the choices are, so a reader knows whose aim is asked (owner, 2026-11-28)', () => {
+    for (const question of surahAimQuiz.questions(ALL, 'medium', seededRandom(5))) {
+      const by = BOOKS[ORDER_AIMS[Number(question.correctAnswer)].src.book].by;
+      expect(question.promptArabic).toBe(`ما مقصود سورة ${SURAH_NAMES[Number(question.correctAnswer)]} عند ${by}؟`);
     }
   });
 

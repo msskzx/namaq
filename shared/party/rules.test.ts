@@ -64,7 +64,8 @@ describe('party lobby', () => {
     const state = lobby('Host', 'Amina');
     expect(act(state, { type: 'settings', playerId: 'p1', settings: { length: 10 } }, 0).error).toBe('not-host');
     const next = act(state, { type: 'settings', playerId: 'p0', settings: { length: 7, seconds: 30, juzFrom: 29, juzTo: 3 } }, 0).state;
-    expect(next.settings).toMatchObject({ length: 5, seconds: 30, juzFrom: 3, juzTo: 29 });
+    expect(next.settings).toMatchObject({ length: 7, seconds: 30, juzFrom: 3, juzTo: 29 });
+    for (const length of [0, -3, 2.5, '9' as never]) expect(act(next, { type: 'settings', playerId: 'p0', settings: { length } }, 0).state.settings.length).toBe(7);
   });
 
   it('asks the host to confirm a start before every player is ready', () => {

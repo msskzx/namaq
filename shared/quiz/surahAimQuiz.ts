@@ -3,7 +3,7 @@ import type { BranchAyah } from '../quran/branches';
 import { filteredAyat } from '../quran/mutashabih/browse';
 import { normalizeWord } from '../quran/normalize';
 import { SURAH_NAMES } from '../quran/surahNames';
-import { ORDER_AIMS, orderCiteSource } from '../quran/surahOrder';
+import { BOOKS, ORDER_AIMS, orderCiteSource } from '../quran/surahOrder';
 import { shuffle, type Random } from './random';
 import type { ChoiceKind, ChoiceQuestion, ChoiceScope } from './choiceKinds';
 
@@ -41,10 +41,11 @@ export function aimQuestion(surah: number, random: Random): ChoiceQuestion {
   return {
     key: `${SURAH_AIM}:${surah}`,
     family: SURAH_AIM,
-    promptArabic: `ما مقصود سورة ${SURAH_NAMES[surah]}؟`,
+    promptArabic: `ما مقصود سورة ${SURAH_NAMES[surah]} عند ${BOOKS[ORDER_AIMS[surah].src.book].by}؟`,
     choices: shuffle(offered, random).map(n => ({ value: String(n), labelArabic: aimChoice(n) })),
     correctAnswer: String(surah),
     whereOf: Object.fromEntries(offered.map(n => [String(n), `مقصود سورة ${SURAH_NAMES[n]}`])),
+    look: { view: 'surahs', surahs: [surah] },
     sources: offered.map(n => orderCiteSource(ORDER_AIMS[n].src)),
     evidence: { claimKeys: [] },
   };

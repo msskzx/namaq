@@ -24,6 +24,7 @@ const ask = (family: string, key: string, promptArabic: string): ChoiceQuestion 
   correctAnswer: RECITED,
   ayahKey: key,
   page: { shows: 0, recite: true, title: 'shown' },
+  look: { view: 'prompt', key, word: ayat!.get(key)!.words[0], first: true },
   sources: [mushafSource(key, ayat?.get(key)?.page)],
   evidence: { claimKeys: [] },
 });

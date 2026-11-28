@@ -2,7 +2,7 @@ import corpus from '@shared/quran/quranText/corpus';
 import type { BranchAyah } from '@shared/quran/branches';
 import { branchQuestionPool, branchQuiz, type AskedBranchQuestion } from '@shared/quiz/branchQuestions';
 import { branchesCorrect, emptyBranchAnswers, isAsked, questionPoints } from '@shared/quiz/score';
-import { DEFAULT_LEAVES, QUIZ_LEAVES, QUIZ_LENGTHS } from '@shared/quiz/settings';
+import { DEFAULT_LEAVES, QUIZ_LEAVES, quizLength } from '@shared/quiz/settings';
 import { QUIZ_CATEGORIES } from '@shared/quiz/scopeParams';
 import { DEFAULT_DIFFICULTY, parseDifficulty, type Difficulty } from '@shared/quiz/difficulty';
 import type { Random } from '@shared/quiz/random';
@@ -50,7 +50,7 @@ export function cleanSolo(settings: Partial<SoloSettings> & { juzFrom?: number; 
     list: cleanList(settings),
     difficulty: parseDifficulty(settings?.difficulty),
     leaves: (QUIZ_LEAVES as readonly number[]).includes(settings?.leaves as number) ? settings!.leaves! : DEFAULT_SOLO.leaves,
-    length: (QUIZ_LENGTHS as readonly number[]).includes(settings?.length as number) ? settings!.length! : DEFAULT_SOLO.length,
+    length: quizLength(settings?.length, DEFAULT_SOLO.length),
     ...(settings?.apart === true && { apart: true }),
   };
 }
@@ -78,7 +78,22 @@ const kindsOf = (settings: Pick<SoloSettings, 'kinds'>) => CHOICE_KINDS.filter(k
 export function availability(settings: Pick<SoloSettings, 'kinds' | 'list' | 'apart'>, bookmarks?: Bookmark[]) {
   const trees = settings.kinds.includes('BRANCHES') ? poolFor(settings.list, bookmarks).candidates.length : 0;
   const available = trees + kindsOf(settings).reduce((sum, kind) => sum + kind.count(scopeOf(settings)), 0);
-  return { available, lengths: QUIZ_LENGTHS.filter(length => length <= available) };
+  return { available };
+}
+
+const partyCounts = new Map<string, number>();
+export function partyAvailable(settings: PartySettings) {
+  const id = JSON.stringify({ ...settings, length: 0, seconds: 0, treeSeconds: 0, pen: '' });
+  const known = partyCounts.get(id);
+  if (known !== undefined) return known;
+  const params = new URLSearchParams(quizQuery(settings));
+  const range = parseJuzRange(params.get('juzFrom'), params.get('juzTo'));
+  const scope = parseTreeScope(params);
+  const trees = settings.topics.includes('BRANCHES') ? branchQuestionPool(corpus.ayat as BranchAyah[], range, quizTrees(range, scope)).candidates.length : 0;
+  const count = trees + CHOICE_KINDS.filter(kind => settings.topics.includes(kind.id)).reduce((sum, kind) => sum + kind.count({ range, filters: scope.filters ?? {} }), 0);
+  if (partyCounts.size > 4) partyCounts.delete(partyCounts.keys().next().value!);
+  partyCounts.set(id, count);
+  return count;
 }
 
 export type SoloQuestion = AskedBranchQuestion | ChoiceQuestion;

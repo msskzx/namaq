@@ -78,6 +78,7 @@ const MENU_VIEWS: Record<string, RegExp[]> = {
 const MENU_OFF: Record<string, string> = {
   'mobile/src/components/QuizChoice.tsx': 'a question and its choices before the answer',
   'mobile/src/components/QuizCompare.tsx': 'a compare question',
+  'mobile/src/components/QuizLook.tsx': 'a hint\'s ayat, which must not name their surah before the answer',
   'mobile/src/components/QuizTree.tsx': 'a tree',
   'mobile/src/components/MatrixCard.tsx': 'the matrix, a tree view',
   'mobile/src/components/HomeFeed.tsx': 'the recall card in recite mode, and its share picture',

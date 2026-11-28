@@ -54,6 +54,7 @@ function question(ayah: BranchAyah, difficulty: Difficulty): ChoiceQuestion {
     correctAnswer: RECITED,
     ayahKey: ayah.key,
     page: { shows: shown, recite: true },
+    look: { view: 'prompt', key: ayah.key, word: ayah.words[shown], first: false },
     sources: [mushafSource(ayah.key, ayah.page)],
     evidence: { claimKeys: [] },
   };

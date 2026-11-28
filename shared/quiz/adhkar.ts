@@ -58,12 +58,18 @@ export function completeDhikrQuestions(random: Random): ChoiceQuestion[] {
       promptArabic: `${start} …`,
       choices: choices.map((choice, i) => ({ value: String(i), labelArabic: choice.label })),
       correctAnswer: String(choices.findIndex(choice => !choice.of)),
+      look: { view: 'dhikr', id: item.id },
       whereOf: Object.fromEntries(choices.flatMap((choice, i) => (choice.of ? [[String(i), `آخر ذكر من ${adhkarTimes(choice.of)}`]] : []))),
       sources: uniqueSources([...dhikrSources(item), ...choices.flatMap(choice => (choice.of ? [{ ...BOOKS[choice.of.citation.source], at: at(choice.of.citation), url: choice.of.citation.url }] : []))]),
       evidence: { claimKeys: [] },
     };
     return [question];
   }), random);
+}
+
+export function dhikrHint(item: Dhikr): string[] {
+  const cut = item.content.kind === 'text' ? dhikrEnding(item.content.text) : null;
+  return [item.occasionQuote, item.virtueQuote].filter((quote): quote is string => !!quote && (!cut || !bare(quote).includes(bare(cut.end))));
 }
 
 export const askedDhikr = (key: string) => (key.startsWith(`${ADHKAR_COMPLETE}:`) ? ADHKAR.find(item => item.id === key.slice(ADHKAR_COMPLETE.length + 1)) : undefined);

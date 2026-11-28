@@ -1,7 +1,7 @@
 // see docs/adr/0031-a-live-party-runs-in-one-durable-object.md
 import { partyPoints, questionPoints, share, type QuestionAnswer, type ScoredQuestion } from '../quiz/score';
 import { unmarked, type QuizLook } from '../quiz/choiceKinds';
-import { QUIZ_LEAVES, QUIZ_LENGTHS, QUIZ_TOPICS, RANGED_TOPICS, WRITTEN_TOPICS, type QuizTopic } from '../quiz/settings';
+import { QUIZ_LEAVES, QUIZ_TOPICS, quizLength, RANGED_TOPICS, WRITTEN_TOPICS, type QuizTopic } from '../quiz/settings';
 import { isPenRule, type PenRule } from '../quran/writeAyah';
 import { DEFAULT_DIFFICULTY, DIFFICULTIES, type Difficulty } from '../quiz/difficulty';
 import { QUIZ_CATEGORIES, quizFilters, treeScopeParams, type ScopeFilters } from '../quiz/scopeParams';
@@ -94,7 +94,7 @@ export function cleanSettings(settings: Partial<PartySettings>, base: PartySetti
   const to = juz(settings.juzTo, base.juzTo);
   return {
     topics,
-    length: pick(QUIZ_LENGTHS, settings.length, base.length as (typeof QUIZ_LENGTHS)[number]),
+    length: quizLength(settings.length, base.length),
     person: typeof settings.person === 'string' ? settings.person.trim() : base.person,
     juzFrom: Math.min(from, to),
     juzTo: Math.max(from, to),
