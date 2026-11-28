@@ -10,12 +10,14 @@ import type { PageModel, reciteView } from '@shared/quran/recitePage';
 import { Mistyped, tint, Veil, WriteBox } from './quran/text/WriteBoxes';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
 import { breakLines, FLOW_LINE, flowSize } from '@/lib/pageZoom';
+import { WORD_GAP } from '@shared/quran/quranText/flow';
+import { QuranLine } from './quran/text/QuranLines';
 import { useOnChange } from '@/lib/hooks/useOnChange';
 
 const BASMALA = 'بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ';
 const BASE = 40;
 const EMPTY_END = '\u06DD';
-const GAP = 0.2;
+const GAP = WORD_GAP;
 const SQUEEZE = 0.9;
 const STRETCH = 1.15;
 const SLICE_LINE = 1.9;
@@ -375,9 +377,7 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
               return (
                 <View key={row.id} ref={holdsFocus ? focusRow : undefined} onLayout={holdsFocus ? findFocus : undefined}
                   style={[{ height: flowing ? size * FLOW_LINE : oval ? oneLine : lineHeight, flexDirection: 'row', alignItems: 'center', justifyContent: (centred && !flowing) || oval || (flowing && opening) ? 'center' : 'flex-start' }, inBlock]}>
-                  <View style={centred
-                    ? { flexDirection: 'row', alignItems: 'center', gap: GAP * size }
-                    : { width: width / scale, flexShrink: 0, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', transform: [{ scaleX: scale }], transformOrigin: oval ? 'center' : 'right' }}>
+                  <QuranLine spread={!centred} width={width} scale={scale} gap={GAP * size} origin={oval ? 'center' : 'right'}>
                     {bands(row.id, cells)}
                     {cells.map(({ group, key, wordHidden, rel, at: wordAt }, at) => {
                       const endHidden = (end: number) => !!hidden?.(`${group.surah}:${end}`, Number.MAX_SAFE_INTEGER);
@@ -406,7 +406,7 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
                         </Word>
                       );
                     })}
-                  </View>
+                  </QuranLine>
                 </View>
               );
             })}

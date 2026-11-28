@@ -44,48 +44,46 @@ function cardLink(card: PairCard) {
   return `${mushafText(a.ayat[0]?.words.slice(0, 6).join(' ') ?? '')} …\n${WEBSITE}${href}`;
 }
 
-function AyahText({ ayah, surah, palette, light, plain = false, inline = false }: { ayah: CardAyah; surah: number; palette: Palette; light?: Light; plain?: boolean; inline?: boolean }) {
-  const words = <>
-    {ayah.words.map((word, i) => {
+function ayahTextWords({ ayah, palette, light, plain = false }: { ayah: CardAyah; palette: Palette; light?: Light; plain?: boolean }) {
+  return [
+    ...ayah.words.map((word, i) => {
       const mark = plain ? undefined : ayah.marks?.[i];
       const lit = !!mark?.link && mark.link === light?.lit;
       const reading = light?.reading === i;
       const written = !!mark?.link && !!light?.written?.has(mark.link);
       const link = mark?.link;
       return (
-        <Text key={i}>
-          {i > 0 ? ' ' : ''}
-          <AyahWords lit={lit} mark={mark?.kind && { kind: written && mark.kind === 'exact' ? 'written' : mark.kind }} onPress={link && light?.onWord ? () => light.onWord!(link) : undefined}
-            look={{ ...(reading ? { textDecorationLine: 'underline', textDecorationColor: palette.accent, ...(lit ? null : { backgroundColor: palette.paperDeep }) } : null) }}>
-            {word}
-          </AyahWords>
-        </Text>
+        <AyahWords key={i} lit={lit} mark={mark?.kind && { kind: written && mark.kind === 'exact' ? 'written' : mark.kind }} onPress={link && light?.onWord ? () => light.onWord!(link) : undefined}
+          look={{ ...(reading ? { textDecorationLine: 'underline', textDecorationColor: palette.accent, ...(lit ? null : { backgroundColor: palette.paperDeep }) } : null) }}>
+          {`${i > 0 ? ' ' : ''}${word}`}
+        </AyahWords>
       );
-    })}
-    <AyahWords look={{ color: palette.accent }}>{`\u00A0${num(ayah.number)}`}</AyahWords>
-  </>;
-  return inline ? <Text style={{ color: plain ? palette.muted : palette.ink }}>{words}</Text> : <AyahFlow center menu={`${surah}:${ayah.number}`} color={plain ? palette.muted : palette.ink}>{words}</AyahFlow>;
+    }),
+    <AyahWords key="n" look={{ color: palette.accent }}>{`\u00A0${num(ayah.number)}`}</AyahWords>,
+  ];
 }
 
-function Neighbour({ ayah, palette }: { ayah: AroundAyah; palette: Palette }) {
-  return (
-    <Text>
-      {ayah.words.map((word, i) => {
-        const kind = likenessAt(ayah, i);
-        const color = kind && palette.marks[kind];
-        return <Text key={i}>{i > 0 ? ' ' : ''}<AyahWords look={{ color: color ? blend(color, palette.card, 0.8) : palette.muted }}>{word}</AyahWords></Text>;
-      })}
-      <AyahWords look={{ color: palette.muted }}>{`\u00A0${num(ayah.number)}`}</AyahWords>
-    </Text>
-  );
+function AyahText({ ayah, surah, palette, light, plain = false }: { ayah: CardAyah; surah: number; palette: Palette; light?: Light; plain?: boolean }) {
+  return <AyahFlow center menu={`${surah}:${ayah.number}`} color={plain ? palette.muted : palette.ink}>{ayahTextWords({ ayah, palette, light, plain })}</AyahFlow>;
+}
+
+function neighbourWords(ayah: AroundAyah, palette: Palette) {
+  return [
+    ...ayah.words.map((word, i) => {
+      const kind = likenessAt(ayah, i);
+      const color = kind && palette.marks[kind];
+      return <AyahWords key={i} look={{ color: color ? blend(color, palette.card, 0.8) : palette.muted }}>{`${i > 0 ? ' ' : ''}${word}`}</AyahWords>;
+    }),
+    <AyahWords key="n" look={{ color: palette.muted }}>{`\u00A0${num(ayah.number)}`}</AyahWords>,
+  ];
 }
 
 function RunningAyat({ ayat, surah, before, after, palette, light, lane = false }: { ayat: CardAyah[]; surah: number; before?: AroundAyah | null; after?: AroundAyah | null; palette: Palette; light: (ayah: CardAyah) => Light; lane?: boolean }) {
   return (
     <AyahFlow center screen={lane} menu={[...(before ? [before.key] : []), ...ayat.map(ayah => `${surah}:${ayah.number}`), ...(after ? [after.key] : [])]} color={palette.ink}>
-      {before && <><Neighbour ayah={before} palette={palette} />{' '}</>}
-      {ayat.map((ayah, i) => <Text key={ayah.number}>{i > 0 ? ' ' : ''}<AyahText ayah={ayah} surah={surah} palette={palette} light={light(ayah)} inline /></Text>)}
-      {after && <>{' '}<Neighbour ayah={after} palette={palette} /></>}
+      {before && [...neighbourWords(before, palette), ' ']}
+      {ayat.map((ayah, i) => [i > 0 ? ' ' : '', ...ayahTextWords({ ayah, palette, light: light(ayah) })])}
+      {after && [' ', ...neighbourWords(after, palette)]}
     </AyahFlow>
   );
 }
@@ -325,7 +323,7 @@ function CompareCard({ card, palette, onPageVideo, onOpen, aside }: { card: Pair
   const share = () => shareCard({ content: width => <View style={{ ...cardBox, width }}>{body}{quote}</View>, link: cardLink(card), onVideo: record, onPageVideo });
   const link = card.book ? tanasubLink(card.book) : undefined;
   const sources = useMemo(() => (link ? sourcesOf([tanasubSource(link)]) : []), [link]);
-  const quote = link && <Text style={{ color: palette.ink, fontSize: 17, lineHeight: 31, textAlign: 'justify', writingDirection: 'rtl', borderTopWidth: tree ? 0 : 1, borderTopColor: palette.rule, paddingTop: 6 }}>«{link.text}»</Text>;
+  const quote = link && <Text style={{ color: palette.ink, fontSize: 17, lineHeight: 31, textAlign: 'right', writingDirection: 'rtl', borderTopWidth: tree ? 0 : 1, borderTopColor: palette.rule, paddingTop: 6 }}>«{link.text}»</Text>;
   const saveButton = <IconButton Icon={Bookmark} label={saved ? 'إزالة من المحفوظة' : 'حفظ'} onPress={() => toggleCardSaved(card)} on={saved} fill
     render={icon => <Animated.View style={popped}><Bookmark {...icon} /></Animated.View>} />;
   return (

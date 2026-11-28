@@ -43,7 +43,7 @@ function QuranPage({ item, palette }: { item: Dhikr; palette: Palette }) {
 export function DhikrBody({ item, palette }: { item: Dhikr; palette: Palette }) {
   return <>
     {item.content.kind === 'text'
-      ? <Text style={{ color: palette.ink, fontSize: 21, lineHeight: 40, textAlign: 'justify' }}>{item.content.text}</Text>
+      ? <Text style={{ color: palette.ink, fontSize: 21, lineHeight: 40, textAlign: 'right' }}>{item.content.text}</Text>
       : <QuranPage item={item} palette={palette} />}
     {item.virtueQuote && (
       <Text style={{ color: palette.muted, fontSize: 16, lineHeight: 28, textAlign: 'right' }}>

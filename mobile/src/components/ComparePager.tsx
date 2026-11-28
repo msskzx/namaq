@@ -24,7 +24,7 @@ function PairNote({ link, palette }: { link: Link; palette: Palette }) {
   return (
     <View accessibilityLabel="بين السورتين" style={{ borderStartWidth: 2, borderColor: palette.rule, paddingStart: 12, marginHorizontal: 4, gap: 2 }}>
       <Text style={{ color: palette.amber, fontSize: 14, textAlign: 'right' }}>بين السورتين</Text>
-      <Text style={{ color: palette.ink, fontSize: 17, lineHeight: 31, textAlign: 'justify', writingDirection: 'rtl' }}>«{link.text}»</Text>
+      <Text style={{ color: palette.ink, fontSize: 17, lineHeight: 31, textAlign: 'right', writingDirection: 'rtl' }}>«{link.text}»</Text>
       <View style={{ marginStart: -12 }}><SourceLine named={sources} sources={sources} palette={palette} /></View>
     </View>
   );

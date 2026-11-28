@@ -66,8 +66,8 @@ function witnessPieces(text: string, lit?: string): QuotePiece[] {
 
 const CHIP_LETTERS = 26;
 
-function Words({ words, marked, palette }: { words: string[]; marked?: number[]; palette: Palette }) {
-  return <>{words.map((word, at) => <AyahWords key={at} look={marked?.includes(at) || AYAH_NUMBER.test(word) ? { color: palette.accent } : undefined}>{`${word}${at < words.length - 1 ? ' ' : ''}`}</AyahWords>)}</>;
+function ayahWords(words: string[], palette: Palette, marked?: number[]) {
+  return words.map((word, at) => <AyahWords key={at} look={marked?.includes(at) || AYAH_NUMBER.test(word) ? { color: palette.accent } : undefined}>{`${word}${at < words.length - 1 ? ' ' : ''}`}</AyahWords>);
 }
 
 export default function QuizChoice({ question, picked, shown, onPick, onReveal, onOpen, header, palette, scroll = true, pen, onWrite, written, onLook, costs, lookTop, onTicks }: {
@@ -150,9 +150,9 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
       ) : question.quran && (
         <Card palette={palette} pad={16} style={{ marginHorizontal: 16 }}>
           <AyahFlow color={palette.ink} menu={answered && question.ayahKey ? question.ayahKey : false}>
-            <Words words={question.quran} marked={diff?.a ?? question.marked} palette={palette} />
+            {ayahWords(question.quran, palette, diff?.a ?? question.marked)}
             {question.number !== undefined && <AyahWords look={{ color: palette.accent }}>{` ${num(question.number)}`}</AyahWords>}
-            {question.reveal && (revealed ? <Text>{' '}<Words words={question.reveal} marked={question.reveal.map((_, at) => at)} palette={palette} /></Text> : ' …')}
+            {question.reveal && (revealed ? [' ', ...ayahWords(question.reveal, palette, question.reveal.map((_, at) => at))] : ' …')}
           </AyahFlow>
         </Card>
       )}
@@ -226,7 +226,7 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
         <View style={{ marginHorizontal: 16, borderTopWidth: 1, borderStyle: 'dashed', borderColor: palette.rule, paddingTop: 10, gap: 4 }}>
           <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>{`آية ${name(picked!)} التي تشبهها، ${num(Number(alike.key.split(':')[1]))}`}</Text>
           <AyahFlow color={palette.ink} menu={alike.key}>
-            <Words words={alike.words} marked={diff.b} palette={palette} />
+            {ayahWords(alike.words, palette, diff.b)}
           </AyahFlow>
         </View>
       )}

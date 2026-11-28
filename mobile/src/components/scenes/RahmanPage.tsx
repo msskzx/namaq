@@ -94,7 +94,7 @@ function NamedText({ text, size, lit, before }: { text: string; size: number; li
   before?: string }) {
   const colour = (run: { name: boolean; lit: boolean }) => (run.name ? { color: paper.accent } : run.lit ? { color: RAHMAN_ART.lit } : undefined);
   return (
-    <Text style={{ color: paper.ink, fontSize: size, lineHeight: size * 1.85, textAlign: 'justify', writingDirection: 'rtl' }}>
+    <Text style={{ color: paper.ink, fontSize: size, lineHeight: size * 1.85, textAlign: 'right', writingDirection: 'rtl' }}>
       {before ? <Text style={{ color: paper.muted }}>{`${before} `}</Text> : null}
       {tafsirRuns(text).map((part, k) => {
         const runs = nameRuns(part.text, lit).map((run, i) => <Text key={i} style={colour(run)}>{run.text}</Text>);

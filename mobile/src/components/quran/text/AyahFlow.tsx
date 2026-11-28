@@ -1,12 +1,14 @@
-import { createContext, useContext, useState, type ComponentRef, type ReactNode, type Ref } from 'react';
-import { View, type TextStyle, type ViewStyle } from 'react-native';
+import { createContext, Fragment, isValidElement, useContext, useState, type ComponentRef, type ReactNode, type Ref } from 'react';
+import { StyleSheet, View, type StyleProp, type TextStyle, type ViewStyle } from 'react-native';
 import { usePageWidth } from '@/ui/column';
 import { Text } from '@/ui/Text';
 import { QURAN_FONT, usePalette } from '@/lib/theme';
 import { markTone, type WordMark } from '@/lib/marks';
-import { CARD_MARGINS, FLOW_LINE, flowFontSize, wordFontSize } from '@shared/quran/quranText/flow';
+import { CARD_MARGINS, FLOW_LINE, flowFontSize, WORD_GAP, wordFontSize } from '@shared/quran/quranText/flow';
 import { mushafText } from '@shared/quran/mushafText';
 import { AyahMenuPress, type AyahMenuKeys } from '@/ui/AyahMenuPress';
+import QuranLines, { type Piece } from './QuranLines';
+import { flowPieces } from '@shared/quran/quranText/flowPieces';
 
 const FlowSize = createContext({ size: 0, color: '' });
 
@@ -27,12 +29,53 @@ export default function AyahFlow({ children, color, menu, row = false, center = 
     <View style={style} onLayout={event => setMeasured(flowFontSize(event.nativeEvent.layout.width))}>
       <FlowSize.Provider value={{ size, color }}>
         {row
-          ? <View style={{ direction: 'rtl', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: center ? 'center' : 'flex-start', columnGap: size * 0.35 }}>{children}</View>
-          : <Text numberOfLines={lines} style={{ fontFamily: QURAN_FONT, fontSize: size, lineHeight: size * FLOW_LINE, color, textAlign: center ? 'center' : 'justify', writingDirection: 'rtl' }}>{children}</Text>}
+          ? <View style={{ direction: 'rtl', flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', justifyContent: center ? 'center' : 'flex-start', columnGap: size * WORD_GAP }}>{children}</View>
+          : <FlowText size={size} color={color} center={center} lines={lines}>{children}</FlowText>}
       </FlowSize.Provider>
     </View>
     </AyahMenuPress>
   );
+}
+
+type Run = { text: string; look?: WordLook; mark?: WordMark; lit: boolean; onPress?: () => void };
+
+function runsOf(node: ReactNode): Run[] {
+  if (typeof node === 'string' || typeof node === 'number') return [{ text: String(node), lit: false }];
+  if (Array.isArray(node)) return node.flatMap(runsOf);
+  if (!isValidElement(node)) return [];
+  if (node.type === Fragment) return runsOf((node.props as { children?: ReactNode }).children);
+  if (node.type === Text) {
+    const { children, style } = node.props as { children?: ReactNode; style?: StyleProp<TextStyle> };
+    const { color } = StyleSheet.flatten(style) ?? {};
+    return runsOf(children).map(run => color === undefined || run.look?.color !== undefined || run.mark || run.lit ? run : { ...run, look: { ...run.look, color } });
+  }
+  if (node.type !== AyahWords) throw new Error('AyahFlow draws only AyahWords and text');
+  const { children, look, mark, lit = false, onPress } = node.props as Parameters<typeof AyahWords>[0];
+  return [{ text: children, look, mark, lit, onPress }];
+}
+
+const BOLD = new Set<TextStyle['fontWeight']>(['700', 'bold']);
+
+const piecesOf = (runs: Run[]): Piece<Run>[] => flowPieces<Run>(runs, text => ({ text, lit: false }))
+  .map(piece => ({ text: piece.text, bold: piece.runs.some(run => BOLD.has(run.look?.fontWeight)), words: piece.runs, newLine: piece.newLine }));
+
+function FlowText({ children, size, color, center, lines }: { children: ReactNode; size: number; color: string; center: boolean; lines?: number }) {
+  const pieces = piecesOf(runsOf(children));
+  const pressed = pieces.some(piece => piece.words.some(run => run.onPress));
+  const style = { fontFamily: QURAN_FONT, fontSize: size, lineHeight: size * FLOW_LINE, color, writingDirection: 'rtl' as const };
+  return (
+    <QuranLines pieces={pieces} size={size} center={center} lines={lines} label={pressed ? undefined : mushafText(pieces.map(piece => piece.text).join(' '))}
+      draw={(piece, at) => (
+        <Text key={at} style={style}>
+          {piece.words.map((run, k) => <Word key={k} run={run} style={style} />)}
+        </Text>
+      )} />
+  );
+}
+
+function Word({ run, style }: { run: Run; style: TextStyle }) {
+  const word = run.lit || run.mark ? <ToneWord style={style} look={run.look} mark={run.mark} lit={run.lit}>{run.text}</ToneWord> : <Text style={run.look}>{mushafText(run.text)}</Text>;
+  return run.onPress ? <Text onPress={run.onPress}>{word}</Text> : word;
 }
 
 export type WordLook = Pick<TextStyle, 'color' | 'fontWeight' | 'textDecorationLine' | 'textDecorationColor' | 'backgroundColor'>;

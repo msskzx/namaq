@@ -80,13 +80,18 @@ function Ayah({ ayah, palette, muted, light, read, shown = Infinity }: { ayah: M
     })}
     <AyahWords look={{ color: palette.accent, ...(ayah.words.length > shown ? UNSEEN : null) }}>{num(number)}</AyahWords>
   </>;
-  return <>
-    {ayah.words.map((word, i) => {
-      const lit = isLit(ayah, i, light, read);
-      return <Text key={i}>{i > 0 ? ' ' : ''}<AyahWords lit={lit} mark={sharedMark(ayah, i)} onPress={press(i)} look={i >= shown ? UNSEEN : undefined}>{word}</AyahWords></Text>;
-    })}
-    <Text style={[{ color: muted ? palette.muted : palette.accent }, ayah.words.length > shown && UNSEEN]}> {num(number)} </Text>
-  </>;
+  return <>{ayahRuns({ ayah, palette, muted, light, read, shown })}</>;
+}
+
+function ayahRuns({ ayah, palette, muted, light, read, shown = Infinity }: { ayah: MatrixAyah; palette: Palette; muted: boolean; light?: Light; read?: Read; shown?: number }) {
+  const [, number] = ayah.key.split(':').map(Number);
+  return [
+    ...ayah.words.map((word, i) => {
+      const link = light && ayah.links?.get(i)?.link;
+      return <AyahWords key={i} lit={isLit(ayah, i, light, read)} mark={sharedMark(ayah, i)} onPress={link ? () => light.onWord(link) : undefined} look={i >= shown ? UNSEEN : undefined}>{`${i > 0 ? ' ' : ''}${word}`}</AyahWords>;
+    }),
+    <AyahWords key="n" look={{ color: muted ? palette.muted : palette.accent, ...(ayah.words.length > shown ? UNSEEN : null) }}>{` ${num(number)} `}</AyahWords>,
+  ];
 }
 
 export function Cell({ cell, at, palette, width, current, onPress, light, note, still, read, tools, stacked = false, shown, around }: { cell: MatrixCell; at: 'before' | 'ayah' | 'after'; palette: Palette; width: number; current: boolean;
@@ -108,11 +113,12 @@ export function Cell({ cell, at, palette, width, current, onPress, light, note, 
   const shownOf = (index: number) => shown === undefined ? undefined : shown - cell.ayat.slice(0, index).reduce((sum, item) => sum + item.words.length, 0);
   const tapped = current && !muted && light ? { lit: light.lit, onWord: (link: string) => { light.onWord(link); onPress?.(); } } : undefined;
   const mutedText = { color: palette.muted };
-  const aroundOf = (ayat: MatrixAyah[], side: 'before' | 'after') => ayat.map(ayah => <Text key={ayah.key}>
-    {side === 'after' && ayah.basmala && <AyahWords look={mutedText}>{`${ayah.basmala.join(' ')} `}</AyahWords>}
-    <Ayah ayah={ayah} palette={palette} muted={false} />
-    {side === 'before' && ayah.basmala && <AyahWords look={mutedText}>{` ${ayah.basmala.join(' ')} `}</AyahWords>}
-  </Text>);
+  const aroundOf = (ayat: MatrixAyah[], side: 'before' | 'after') => ayat.flatMap(ayah => [
+    side === 'after' && ayah.basmala && <AyahWords key={`${ayah.key}b`} look={mutedText}>{`${ayah.basmala.join(' ')} `}</AyahWords>,
+    ...ayahRuns({ ayah, palette, muted: false }),
+    side === 'before' && ayah.basmala && <AyahWords key={`${ayah.key}a`} look={mutedText}>{` ${ayah.basmala.join(' ')} `}</AyahWords>,
+    ' ',
+  ]);
   const basmala = first.basmala && <AyahFlow center color={palette.muted} menu={false}><AyahWords>{first.basmala.join(' ')}</AyahWords></AyahFlow>;
   return (
     // see R0055
@@ -126,13 +132,13 @@ export function Cell({ cell, at, palette, width, current, onPress, light, note, 
       {at === 'after' && basmala}
       {around ? <AyahFlow center color={palette.ink} menu={false}>
           {aroundOf(around.before, 'before')}
-          {cell.ayat.map((ayah, index) => <Ayah key={ayah.key} ayah={ayah} palette={palette} muted={false} light={tapped} read={read} shown={shownOf(index)} />)}
+          {cell.ayat.flatMap((ayah, index) => [...ayahRuns({ ayah, palette, muted: false, light: tapped, read, shown: shownOf(index) }), ' '])}
           {aroundOf(around.after, 'after')}
         </AyahFlow>
       : wordViews && !muted
         ? <AyahFlow row center color={palette.ink} menu={false}>{cell.ayat.map((ayah, index) => <Ayah key={ayah.key} ayah={ayah} palette={palette} muted={muted} light={tapped} read={muted ? undefined : read} shown={shownOf(index)} />)}</AyahFlow>
         : <AyahFlow center color={muted ? palette.muted : palette.ink} menu={false}>
-          {cell.ayat.map((ayah, index) => <Ayah key={ayah.key} ayah={ayah} palette={palette} muted={muted} light={tapped} read={muted ? undefined : read} shown={shownOf(index)} />)}
+          {cell.ayat.flatMap((ayah, index) => [...ayahRuns({ ayah, palette, muted, light: tapped, read: muted ? undefined : read, shown: shownOf(index) }), ' '])}
         </AyahFlow>}
       {at === 'before' && basmala}
       {at === 'ayah' && note?.(own.key)}
