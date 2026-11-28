@@ -54,7 +54,7 @@ export function countsBySurah(places: WordPlace[]): number[] {
 }
 
 const DAGGER_ALIF = /\u0670/g;
-const lemmaForms = (lemma: string) => `${normalizeWord(lemma)} ${normalizeWord(lemma.replace(DAGGER_ALIF, 'ا'))}`;
+const lemmaForms = (lemma: string) => [normalizeWord(lemma), normalizeWord(lemma.replace(DAGGER_ALIF, 'ا'))];
 
 export function searchWords(data: WordsData, query: string, limit: number): number[] {
   const typed = query.trim();
@@ -65,8 +65,8 @@ export function searchWords(data: WordsData, query: string, limit: number): numb
   const bare: number[] = [];
   for (let id = 0; id < data.lemmas.length && whole.length < limit; id++) {
     const forms = lemmaForms(data.lemmas[id][0]);
-    if (forms.includes(needle)) whole.push(id);
-    else if (bare.length < limit && holdsWord(forms, term)) bare.push(id);
+    if (forms.some(form => form.includes(needle))) whole.push(id);
+    else if (bare.length < limit && forms.some(form => holdsWord(form, term))) bare.push(id);
   }
   return [...whole, ...bare].slice(0, limit);
 }

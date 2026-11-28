@@ -46,6 +46,7 @@ describe('word counts', () => {
       expect(searchWords(words, withArticle, 5)).toEqual(searchWords(words, bare, 5));
     }
     expect(searchWords(words, 'الكتاب', 5).map(id => words.lemmas[id][0])).toContain('كِتَٰب');
+    expect(searchWords(words, 'اَلرحمن', 5)).toEqual(searchWords(words, 'رحمن', 5));
   });
 
   it('cuts no «ال» off a word whose «أل» is its own letters', () => {
