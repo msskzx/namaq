@@ -42,7 +42,6 @@ export function useHeading(on: boolean): number | null | 'none' | 'denied' {
   }, []);
   useEffect(() => {
     if (!on) return;
-    setHeading(null);
     let sub: Location.LocationSubscription | undefined;
     let gone = false;
     let heard = false;
@@ -58,7 +57,7 @@ export function useHeading(on: boolean): number | null | 'none' | 'denied' {
         setHeading(value);
       }).then(watch => { if (gone) watch.remove(); else sub = watch; });
     }).catch(() => { if (!gone) setHeading('none'); });
-    return () => { gone = true; clearTimeout(quiet); sub?.remove(); };
+    return () => { gone = true; clearTimeout(quiet); sub?.remove(); setHeading(null); };
   }, [on, wake]);
   return heading;
 }

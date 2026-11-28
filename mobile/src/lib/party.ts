@@ -65,10 +65,7 @@ export function usePartySocket(code: string, id: string | null, name: string | n
     let timer: ReturnType<typeof setTimeout> | undefined;
     let reached = false;
     const url = partyUrl();
-    if (!url) {
-      setStatus('offline');
-      return;
-    }
+    if (!url) return;
     const connect = () => {
       setStatus(current => current === 'offline' ? current : 'connecting');
       const ws = new WebSocket(`${url.replace(/^http/, 'ws')}/parties/${code}?player=${encodeURIComponent(id)}`);
@@ -118,5 +115,6 @@ export function usePartySocket(code: string, id: string | null, name: string | n
     if (socket.current?.readyState === WebSocket.OPEN) socket.current.send(JSON.stringify(action));
   }, []);
 
-  return { view, error, status, send, offset };
+  const offline = !!id && !!name && !partyUrl();
+  return { view, error, status: offline ? 'offline' : status, send, offset };
 }

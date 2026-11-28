@@ -85,3 +85,6 @@ Counts are of product code: test files are left out. "Empty catch blocks" counts
 | 2026-11-28 | 7, components batch 3b | app | timers on the shrink-only list | 14 | 0 | the feed's idle warm-up moved to `lib/idle.ts`, the prayer card's clock to `useNow` and `useForeground` |
 | 2026-11-28 | 7, components batch 3b | app | React Compiler findings | 132 | 117 | 15 set-state-in-effect went with the effects; the 6 left are in lib/ |
 | 2026-11-28 | 7, components batch 3b | app | shared hooks | 13 | 15 | useWhileOpen (start on open, stop on close, restart on change), useLatestRun (drop a late answer) |
+| 2026-11-28 | 7, lib leftovers | app lib/ (6 files) | React Compiler set-state-in-effect findings | 6 | 0 | the keyboard height and compass heading reset in the effect's cleanup; the party's offline status and a closed keyboard are derived; the reader books and Sahih texts load through `useLoaded`; the write boxes reset through `useAdjustOn` |
+| 2026-11-28 | 7, final | app | effects / timers / set-state-in-effect on the shrink-only list | 138 / 40 / 31 | 0 / 0 / 0 | step 7 is finished; the list holds only the compiler's refs, immutability, memoization and purity findings and the import rules |
+| 2026-11-28 | 7, final | app | React Compiler findings | 166 | 111 | |

@@ -1,10 +1,11 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import bukhari from '@shared/data/hadith/bukhari.json';
 import muslim from '@shared/data/hadith/muslim.json';
 import type { SahihIndex, SahihSlug, SahihText } from '@shared/sahih';
 import { bookState, readBook, useBooks, type BookState } from './books';
 import { readJson, writeJson } from './storage';
 import { FORTY } from './hadith';
+import { useLoaded } from './hooks/useLoaded';
 
 export const SAHIH: Record<SahihSlug, SahihIndex> = { bukhari: bukhari as SahihIndex, muslim: muslim as SahihIndex };
 export const SAHIH_SLUGS: SahihSlug[] = ['bukhari', 'muslim'];
@@ -13,13 +14,7 @@ export const isSahihSlug = (slug: string | undefined): slug is SahihSlug => slug
 export function useSahihText(slug: SahihSlug | undefined, wanted = true): { state: BookState; text: SahihText | null } {
   useBooks();
   const state = slug ? bookState(slug) : 'off';
-  const [text, setText] = useState<SahihText | null>(null);
-  useEffect(() => {
-    let live = true;
-    if (!slug || state !== 'on' || !wanted) { setText(null); return; }
-    readBook<SahihText>(slug).then(data => { if (live) setText(data); });
-    return () => { live = false; };
-  }, [slug, state, wanted]);
+  const text = useLoaded(slug && state === 'on' && wanted ? slug : null, asked => readBook<SahihText>(asked as SahihSlug));
   return { state, text };
 }
 
