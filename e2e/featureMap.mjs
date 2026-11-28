@@ -119,7 +119,7 @@ function diagram(section) {
   return lines.join('\n');
 }
 
-export function renderDoc({ shared, pageOf, sharedAcross }) {
+export function renderDoc({ shared, pageOf, sharedAcross, rules }) {
   const table = SCREENS.map(screen => {
     const ways = screen.tabBar ? `شريط التبويب: ${screen.tabBar}`
       : screen.unlinked ? `لا يُفتح من التطبيق (${screen.unlinked})`
@@ -156,6 +156,16 @@ ${table.join('\n')}
 What the bars and menus that nearly every screen draws can open. Each screen's page leaves these out.
 
 ${shared}
+
+## Rules
+
+The owner agreed these on 2026-11-28. \`e2e/featureRules.test.ts\` checks them against the links found in the code
+(\`e2e/featureRules.mjs\`). What breaks a rule today is listed in \`e2e/featureRules.baseline.json\`, which may only
+shrink: a new break fails the test, and a fixed one must leave the list. Two more rules wait on a walk through the
+running app: a person's name opens their page wherever it shows, and no place builds its own page for something that
+has one.
+
+${rules}
 
 ## How the links are found
 

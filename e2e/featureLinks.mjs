@@ -114,7 +114,6 @@ function topLevelOwner(node) {
 
 const isHelperName = name => !!name && /^[a-z]/.test(name) && !/^use[A-Z]/.test(name);
 
-/** Reads every file once: imports, top-level helpers and the places that navigate or open a sheet. */
 function parse(file) {
   const source = ts.createSourceFile(file, fs.readFileSync(file, 'utf8'), ts.ScriptTarget.Latest, true, file.endsWith('x') ? ts.ScriptKind.TSX : ts.ScriptKind.TS);
   const imports = new Map();
@@ -167,7 +166,6 @@ function parse(file) {
   return { file, source, imports, deps, consts, keyed, helpers, tops };
 }
 
-/** The routes a call opens: a router call or toTab by its argument, any other function by what its body opens. */
 function callTargets(parsed, call, helperRoutes) {
   const callee = call.expression;
   if (ts.isPropertyAccessExpression(callee) && callee.expression.getText() === 'router' && ROUTER_METHODS.has(callee.name.text)) {
@@ -197,7 +195,6 @@ function isNavPrimitive(parsed, call) {
   return ts.isIdentifier(callee) && PASS_THROUGH.has(refOf(parsed, callee.text)?.name);
 }
 
-/** Routes held in a list of tiles or links (`{ route: '/words', label: … }`) that one call opens by its variable. */
 function routeProperties(source) {
   const found = [];
   const visit = n => {
@@ -278,6 +275,32 @@ export function extractLinks() {
     return picked;
   };
 
+  const kindMemo = new Map();
+  const kindOf = (p, call) => {
+    const callee = call.expression;
+    if (ts.isPropertyAccessExpression(callee) && callee.expression.getText() === 'router' && ROUTER_METHODS.has(callee.name.text)) return new Set([callee.name.text === 'navigate' ? 'tab' : callee.name.text]);
+    const ref = ts.isIdentifier(callee) ? refOf(p, callee.text) : null;
+    if (!ref) return new Set();
+    if (PASS_THROUGH.has(ref.name)) return new Set(['tab']);
+    return helperKinds(ref);
+  };
+  const helperKinds = ({ file, name }) => {
+    const key = `${file}#${name}`;
+    if (kindMemo.has(key)) return kindMemo.get(key);
+    kindMemo.set(key, new Set());
+    const p = parsed.get(file);
+    const body = p?.helpers.get(name);
+    const kinds = new Set();
+    const visit = n => {
+      if (ts.isCallExpression(n)) for (const kind of kindOf(p, n)) kinds.add(kind);
+      else if (ts.isIdentifier(n) && ts.isCallExpression(n.parent) && n.parent.arguments.includes(n) && refOf(p, n.text)) for (const kind of helperKinds(refOf(p, n.text))) kinds.add(kind);
+      ts.forEachChild(n, visit);
+    };
+    if (body) visit(body);
+    kindMemo.set(key, kinds);
+    return kinds;
+  };
+
   const links = [];
   const sheets = [];
   for (const p of parsed.values()) {
@@ -293,17 +316,18 @@ export function extractLinks() {
       if (!routes.size && !inHelper && ts.isCallExpression(n) && isNavPrimitive(p, n)) {
         for (const literal of routeProperties(p.source)) {
           const { line } = p.source.getLineAndCharacterOfPosition(literal.getStart());
-          links.push({ file: rel(p.file), line: line + 1, owner: topLevelOwner(literal), label: labelNear(literal), route: routeLiteral(literal.text) });
+          links.push({ file: rel(p.file), line: line + 1, owner: topLevelOwner(literal), label: labelNear(literal), route: routeLiteral(literal.text), how: [...kindOf(p, n)].sort().join('+') });
         }
       }
       if (routes.size && !inHelper) {
         const { line } = p.source.getLineAndCharacterOfPosition(n.getStart());
-        for (const route of routes) links.push({ file: rel(p.file), line: line + 1, owner, key: keyNear(n), label: labelNear(n), route });
+        for (const route of routes) links.push({ file: rel(p.file), line: line + 1, owner, key: keyNear(n), label: labelNear(n), route, how: [...(ts.isCallExpression(n) ? kindOf(p, n) : helperKinds(refOf(p, n.text)))].sort().join('+') });
         return;
       }
       if ((ts.isJsxSelfClosingElement(n) || ts.isJsxOpeningElement(n)) && /(Sheet|Menu)$/.test(n.tagName.getText()) && !['Sheet', 'Menu'].includes(n.tagName.getText())) {
         const { line } = p.source.getLineAndCharacterOfPosition(n.getStart());
-        sheets.push({ file: rel(p.file), line: line + 1, owner, sheet: n.tagName.getText() });
+        const attr = n.attributes.properties.find(prop => ts.isJsxAttribute(prop) && prop.name.getText() === 'label');
+        sheets.push({ file: rel(p.file), line: line + 1, owner, sheet: n.tagName.getText(), label: attr ? textOf(attr.initializer) : null });
       }
       ts.forEachChild(n, visit);
     };

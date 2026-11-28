@@ -267,7 +267,7 @@ What the bars and menus that nearly every screen draws can open. Each screen's p
 | `TopBar` | المكتبة | [المكتبة](feature-map/books.md) | [ui/TopBar.tsx:84](../mobile/src/ui/TopBar.tsx#L84) |
 | `TopBar` | الصفحة الرئيسية | [الرئيسية](feature-map/home.md) | [ui/TopBar.tsx:107](../mobile/src/ui/TopBar.tsx#L107) |
 | `AppShell` |  | sheet `ShareSheet` | [components/AppShell.tsx:63](../mobile/src/components/AppShell.tsx#L63) |
-| `AyahMenuHost` |  | sheet `FloatingMenu` | [components/AyahMenuHost.tsx:53](../mobile/src/components/AyahMenuHost.tsx#L53) |
+| `AyahMenuHost` | الآية ‹› من السورة ‹› | sheet `FloatingMenu` | [components/AyahMenuHost.tsx:53](../mobile/src/components/AyahMenuHost.tsx#L53) |
 | `AyahMenuHost` |  | sheet `AyahPreviewSheet` | [components/AyahMenuHost.tsx:72](../mobile/src/components/AyahMenuHost.tsx#L72) |
 | `AyahMenuHost` |  | sheet `BalaghaSheet` | [components/AyahMenuHost.tsx:73](../mobile/src/components/AyahMenuHost.tsx#L73) |
 | `AyahMenuHost` |  | sheet `NoteSheet` | [components/AyahMenuHost.tsx:74](../mobile/src/components/AyahMenuHost.tsx#L74) |
@@ -279,6 +279,101 @@ What the bars and menus that nearly every screen draws can open. Each screen's p
 | `CardWithRow` |  | sheet `MoreMenu` | [ui/Card.tsx:88](../mobile/src/ui/Card.tsx#L88) |
 | `MoreMenu` |  | sheet `FloatingMenu` | [ui/MoreMenu.tsx:26](../mobile/src/ui/MoreMenu.tsx#L26) |
 | `TopBar` |  | sheet `SettingsSheet` | [ui/TopBar.tsx:112](../mobile/src/ui/TopBar.tsx#L112) |
+
+## Rules
+
+The owner agreed these on 2026-11-28. `e2e/featureRules.test.ts` checks them against the links found in the code
+(`e2e/featureRules.mjs`). What breaks a rule today is listed in `e2e/featureRules.baseline.json`, which may only
+shrink: a new break fails the test, and a fixed one must leave the list. Two more rules wait on a walk through the
+running app: a person's name opens their page wherever it shows, and no place builds its own page for something that
+has one.
+
+### The ayah menu offers «صفحة الآية» wherever it shows
+
+Broken in 1 places today:
+
+- المصحف
+
+### A page's search stays on the page (only home opens the search page)
+
+Holds everywhere today.
+
+### A button named after a screen opens that screen
+
+Holds everywhere today.
+
+### Pages of single things link both ways
+
+Broken in 3 places today:
+
+- حديث الصحيح opens الترجمة, الترجمة does not open حديث الصحيح
+- صفحة الآية opens القصة, القصة does not open صفحة الآية
+- صفحة الآية opens قصة النبي, قصة النبي does not open صفحة الآية
+
+### A screen in another tab opens through toTab, so the tab's first page sits under it
+
+Broken in 60 places today:
+
+- الاختبار → الترجمة: components/battles/BattleParts.tsx#People
+- الاختبار → الترجمة: screens/nasab.tsx#Box
+- الاختبار → حديث الصحيح: screens/story.tsx#HadithOpen
+- الاختبارات → الترجمة: components/battles/BattleParts.tsx#People
+- الاختبارات → الترجمة: screens/nasab.tsx#Box
+- الاختبارات → حديث الصحيح: screens/story.tsx#HadithOpen
+- الاختبارات → مدونتي: components/HomeFeed.tsx#ForgottenPost
+- الرئيسية → الترجمة: components/HomeFeed.tsx#LifePost
+- الرئيسية → الترجمة: components/HomeFeed.tsx#NamePost
+- الرئيسية → الترجمة: components/HomeFeed.tsx#NasabPost
+- الرئيسية → الترجمة: components/HomeFeed.tsx#RingPost
+- الرئيسية → الترجمة: components/HomeFeed.tsx#TarajimPost
+- الرئيسية → الترجمة: components/HomeFeed.tsx#TiesPost
+- الرئيسية → الترجمة: components/battles/BattleParts.tsx#People
+- الرئيسية → الترجمة: screens/nasab.tsx#Box
+- الرئيسية → الصلات: components/HomeFeed.tsx#RingPost
+- الرئيسية → الصلات: components/HomeFeed.tsx#TiesPost
+- الرئيسية → الصلات: components/TiesChain.tsx#TiesChain
+- الرئيسية → النسب: components/HomeFeed.tsx#MeetPost
+- الرئيسية → النسب: components/HomeFeed.tsx#NasabPost
+- الرئيسية → بين عدة أشخاص: components/HomeFeed.tsx#GroupPost
+- الرئيسية → بين عدة أشخاص: components/HomeFeed.tsx#TiePost
+- الرئيسية → ترتيب السور: components/HomeFeed.tsx#SurahAimPost
+- الرئيسية → ترتيب السور: components/HomeFeed.tsx#SurahLinkPost
+- الرئيسية → حديث الصحيح: components/scenes/RahmanPage.tsx#Hadith
+- الرئيسية → حديث الصحيح: screens/story.tsx#HadithOpen
+- الرئيسية → حياتهم جنبًا إلى جنب: components/HomeFeed.tsx#LivesPost
+- الرئيسية → كل التراجم: components/HomeFeed.tsx#RingPost
+- القرآن → الذكر: components/SearchResults.tsx#HitRow
+- القصة → حديث الصحيح: screens/story.tsx#HadithOpen
+- المشهد → حديث الصحيح: components/scenes/RahmanPage.tsx#Hadith
+- حديث الصحيح → الترجمة: components/battles/BattleParts.tsx#People
+- حديث الصحيح → القصة: components/stories/StoryParts.tsx#StoryLinkRow
+- صفحة الآية → الترجمة: components/battles/BattleParts.tsx#People
+- صفحة الآية → الترجمة: screens/ayah.tsx#SectionPart
+- صفحة الآية → حديث الصحيح: screens/ayah.tsx#SectionPart
+- غرفة الاختبار الجماعي → الترجمة: components/battles/BattleParts.tsx#People
+- غرفة الاختبار الجماعي → الترجمة: screens/nasab.tsx#Box
+- غرفة الاختبار الجماعي → حديث الصحيح: screens/story.tsx#HadithOpen
+- مدونتي → الترجمة: components/HomeFeed.tsx#LifePost
+- مدونتي → الترجمة: components/HomeFeed.tsx#NamePost
+- مدونتي → الترجمة: components/HomeFeed.tsx#NasabPost
+- مدونتي → الترجمة: components/HomeFeed.tsx#RingPost
+- مدونتي → الترجمة: components/HomeFeed.tsx#TarajimPost
+- مدونتي → الترجمة: components/HomeFeed.tsx#TiesPost
+- مدونتي → الترجمة: components/battles/BattleParts.tsx#People
+- مدونتي → الترجمة: screens/nasab.tsx#Box
+- مدونتي → الصلات: components/HomeFeed.tsx#RingPost
+- مدونتي → الصلات: components/HomeFeed.tsx#TiesPost
+- مدونتي → الصلات: components/TiesChain.tsx#TiesChain
+- مدونتي → النسب: components/HomeFeed.tsx#MeetPost
+- مدونتي → النسب: components/HomeFeed.tsx#NasabPost
+- مدونتي → بين عدة أشخاص: components/HomeFeed.tsx#GroupPost
+- مدونتي → بين عدة أشخاص: components/HomeFeed.tsx#TiePost
+- مدونتي → ترتيب السور: components/HomeFeed.tsx#SurahAimPost
+- مدونتي → ترتيب السور: components/HomeFeed.tsx#SurahLinkPost
+- مدونتي → حديث الصحيح: components/scenes/RahmanPage.tsx#Hadith
+- مدونتي → حياتهم جنبًا إلى جنب: components/HomeFeed.tsx#LivesPost
+- مدونتي → كل التراجم: components/HomeFeed.tsx#RingPost
+- مشاهد → حديث الصحيح: components/scenes/RahmanPage.tsx#Hadith
 
 ## How the links are found
 

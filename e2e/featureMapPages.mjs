@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { SCREENS, renderDoc, urlOf } from './featureMap.mjs';
+import { brokenRules } from './featureRules.mjs';
 
 export const SHARED_ACROSS = 20;
 
@@ -78,14 +79,17 @@ function sharedSection(data) {
   return `| Part | Label | Opens | Code |\n| --- | --- | --- | --- |\n${[...rows.values()].join('\n')}`;
 }
 
-/** The files `npm run feature-map` writes besides docs/feature-map.md, by their path from the repo root. */
 export function renderPages() {
   const data = mapData();
   const pages = new Map(SCREENS.map(screen => [`docs/feature-map/${pageOf(screen)}.md`, screenPage(screen, data)]));
-  const list = data.links.map(({ file, line, owner, key, label, route, target, in: on, everywhere }) =>
-    ({ file: `mobile/src/${file}`, line, owner, key, label, route, opens: target?.name ?? null, on: everywhere ? 'every screen' : on.map(screen => screen.name) }));
+  const list = data.links.map(({ file, line, owner, key, label, route, how, target, in: on, everywhere }) =>
+    ({ file: `mobile/src/${file}`, line, owner, key, label, how, route, opens: target?.name ?? null, on: everywhere ? 'every screen' : on.map(screen => screen.name) }));
   pages.set('docs/feature-map/links.json', `${JSON.stringify(list, null, 1)}\n`);
-  pages.set('docs/feature-map.md', renderDoc({ shared: sharedSection(data), pageOf, sharedAcross: SHARED_ACROSS }));
+  const rules = Object.entries(brokenRules(data)).map(([rule, list]) => {
+    const unique = [...new Set(list)].sort();
+    return `### ${rule}\n\n${unique.length ? `Broken in ${unique.length} places today:\n\n${unique.map(item => `- ${item}`).join('\n')}` : 'Holds everywhere today.'}`;
+  }).join('\n\n');
+  pages.set('docs/feature-map.md', renderDoc({ shared: sharedSection(data), pageOf, sharedAcross: SHARED_ACROSS, rules }));
   return pages;
 }
 

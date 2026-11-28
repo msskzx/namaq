@@ -5,6 +5,7 @@
   "owner": "HomeScreen",
   "key": "search",
   "label": null,
+  "how": "tab",
   "route": "/search",
   "opens": "البحث",
   "on": [
@@ -17,6 +18,7 @@
   "owner": "DhikrRow",
   "key": "onPress",
   "label": "‹›‹›",
+  "how": "push",
   "route": "/dhikr",
   "opens": "الذكر",
   "on": [
@@ -29,6 +31,7 @@
   "owner": "AppShell",
   "key": null,
   "label": null,
+  "how": "tab",
   "route": "/utilities",
   "opens": "الأدوات والأذكار",
   "on": "every screen"
@@ -39,6 +42,7 @@
   "owner": "AyahMenuHost",
   "key": "page",
   "label": null,
+  "how": "push",
   "route": "/ayah",
   "opens": "صفحة الآية",
   "on": "every screen"
@@ -49,6 +53,7 @@
   "owner": "AyahMenuHost",
   "key": "mushaf",
   "label": null,
+  "how": "tab",
   "route": "/read",
   "opens": "المصحف",
   "on": "every screen"
@@ -59,6 +64,7 @@
   "owner": "AyahMenuHost",
   "key": "recite",
   "label": null,
+  "how": "tab",
   "route": "/read",
   "opens": "المصحف",
   "on": "every screen"
@@ -69,6 +75,7 @@
   "owner": "AyahMenuHost",
   "key": "onJump",
   "label": null,
+  "how": "tab",
   "route": "/read",
   "opens": "المصحف",
   "on": "every screen"
@@ -79,6 +86,7 @@
   "owner": "AyahPreviewSheet",
   "key": "open",
   "label": null,
+  "how": "tab",
   "route": "/branches",
   "opens": "متشابهات القرآن",
   "on": "every screen"
@@ -89,6 +97,7 @@
   "owner": "AyahPreviewSheet",
   "key": "onPress",
   "label": "‹›، ‹› ‹›",
+  "how": "tab",
   "route": "/compare",
   "opens": "مقارنة السور",
   "on": "every screen"
@@ -99,6 +108,7 @@
   "owner": "AyahPreviewSheet",
   "key": "onPress",
   "label": null,
+  "how": "tab",
   "route": "/branches",
   "opens": "متشابهات القرآن",
   "on": "every screen"
@@ -109,6 +119,7 @@
   "owner": "AyahPreviewSheet",
   "key": "onPress",
   "label": null,
+  "how": "tab",
   "route": "/compare",
   "opens": "مقارنة السور",
   "on": "every screen"
@@ -119,6 +130,7 @@
   "owner": "Itqan",
   "key": "onPress",
   "label": "افتح ‹› ‹› في المصحف",
+  "how": "tab",
   "route": "/read",
   "opens": "المصحف",
   "on": "every screen"
@@ -129,6 +141,7 @@
   "owner": "TermLink",
   "key": "onPress",
   "label": "‹› في مصطلحات البلاغة",
+  "how": "tab",
   "route": "/term",
   "opens": "المصطلح",
   "on": "every screen"
@@ -139,6 +152,7 @@
   "owner": "TermExampleCard",
   "key": "onPress",
   "label": "افتح ‹› في المصحف",
+  "how": "tab",
   "route": "/read",
   "opens": "المصحف",
   "on": [
@@ -151,6 +165,7 @@
   "owner": "SideHead",
   "key": "onPress",
   "label": null,
+  "how": "tab",
   "route": "/read",
   "opens": "المصحف",
   "on": [
@@ -164,6 +179,7 @@
   "owner": "SideHead",
   "key": "onPress",
   "label": "افتح في متشابهات القرآن",
+  "how": "tab",
   "route": "/branches",
   "opens": "متشابهات القرآن",
   "on": [
@@ -177,6 +193,7 @@
   "owner": "LaneHead",
   "key": "onPress",
   "label": "اقرأ ‹› في المصحف",
+  "how": "tab",
   "route": "/read",
   "opens": "المصحف",
   "on": [
@@ -190,6 +207,7 @@
   "owner": "LaneHead",
   "key": "onPress",
   "label": "افتح في متشابهات القرآن",
+  "how": "tab",
   "route": "/branches",
   "opens": "متشابهات القرآن",
   "on": [
@@ -203,6 +221,7 @@
   "owner": "CompareCard",
   "key": "onPress",
   "label": "اقرأ ‹› في المصحف",
+  "how": "tab",
   "route": "/read",
   "opens": "المصحف",
   "on": [
@@ -216,6 +235,7 @@
   "owner": "CompareCard",
   "key": "onPress",
   "label": "افتح في متشابهات القرآن",
+  "how": "tab",
   "route": "/branches",
   "opens": "متشابهات القرآن",
   "on": [
@@ -229,6 +249,7 @@
   "owner": "ErrorBoundary",
   "key": "onPress",
   "label": "الرئيسية",
+  "how": "replace",
   "route": "/",
   "opens": "الرئيسية",
   "on": []
@@ -239,6 +260,7 @@
   "owner": "DarkSea",
   "key": "onPress",
   "label": "رجوع",
+  "how": "tab",
   "route": "/lataif",
   "opens": "مشاهد",
   "on": [
@@ -251,6 +273,7 @@
   "owner": "DarkSeaActions",
   "key": "onPress",
   "label": "افتح مشهد ‹›",
+  "how": "push",
   "route": "/scene",
   "opens": "المشهد",
   "on": [
@@ -264,6 +287,7 @@
   "owner": "DarkSeaActions",
   "key": "onPress",
   "label": "افتح ‹› في المصحف",
+  "how": "tab",
   "route": "/read",
   "opens": "المصحف",
   "on": [
@@ -277,6 +301,7 @@
   "owner": "EventPlaces",
   "key": "onPress",
   "label": "افتح ‹› في المصحف",
+  "how": "tab",
   "route": "/read",
   "opens": "المصحف",
   "on": [
@@ -292,6 +317,7 @@
   "owner": "EventPlaces",
   "key": "onPick",
   "label": null,
+  "how": "tab",
   "route": "/compare",
   "opens": "مقارنة السور",
   "on": [
@@ -307,6 +333,7 @@
   "owner": "CompareButton",
   "key": "onPress",
   "label": "قارن ‹›",
+  "how": "tab",
   "route": "/compare",
   "opens": "مقارنة السور",
   "on": [
@@ -322,6 +349,7 @@
   "owner": "BUTTONS",
   "key": "open",
   "label": "القبلة",
+  "how": "tab",
   "route": "/utilities",
   "opens": "الأدوات والأذكار",
   "on": [
@@ -334,6 +362,7 @@
   "owner": "BUTTONS",
   "key": "open",
   "label": "الأذكار",
+  "how": "tab",
   "route": "/utilities",
   "opens": "الأدوات والأذكار",
   "on": [
@@ -346,6 +375,7 @@
   "owner": "BUTTONS",
   "key": "open",
   "label": "المكتبة",
+  "how": "tab",
   "route": "/books",
   "opens": "المكتبة",
   "on": [
@@ -358,6 +388,7 @@
   "owner": "BUTTONS",
   "key": "open",
   "label": "مشاهد",
+  "how": "tab",
   "route": "/lataif",
   "opens": "مشاهد",
   "on": [
@@ -370,6 +401,7 @@
   "owner": "BUTTONS",
   "key": "open",
   "label": "مدونتي",
+  "how": "push",
   "route": "/library",
   "opens": "مدونتي",
   "on": [
@@ -382,6 +414,7 @@
   "owner": "useHomeCards",
   "key": "onPress",
   "label": null,
+  "how": "tab",
   "route": "/read",
   "opens": "المصحف",
   "on": [
@@ -394,6 +427,7 @@
   "owner": "useHomeCards",
   "key": "onPress",
   "label": null,
+  "how": "tab",
   "route": "/branches",
   "opens": "متشابهات القرآن",
   "on": [
@@ -406,6 +440,7 @@
   "owner": "useHomeCards",
   "key": "onPress",
   "label": null,
+  "how": "tab",
   "route": "/compare",
   "opens": "مقارنة السور",
   "on": [
@@ -418,6 +453,7 @@
   "owner": "useHomeCards",
   "key": "onPress",
   "label": "افتح صفحة الآية",
+  "how": "push",
   "route": "/ayah",
   "opens": "صفحة الآية",
   "on": [
@@ -430,6 +466,7 @@
   "owner": "useHomeCards",
   "key": "onPress",
   "label": "افتح المقارنة",
+  "how": "tab",
   "route": "/branches",
   "opens": "متشابهات القرآن",
   "on": [
@@ -442,6 +479,7 @@
   "owner": "useHomeCards",
   "key": "onPress",
   "label": "افتح المقارنة",
+  "how": "tab",
   "route": "/compare",
   "opens": "مقارنة السور",
   "on": [
@@ -454,6 +492,7 @@
   "owner": "useHomeCards",
   "key": "onPress",
   "label": "افتح المقارنة",
+  "how": "tab",
   "route": "/read",
   "opens": "المصحف",
   "on": [
@@ -466,6 +505,7 @@
   "owner": "useHomeCards",
   "key": "onPress",
   "label": "افتح صفحة الآية",
+  "how": "push",
   "route": "/ayah",
   "opens": "صفحة الآية",
   "on": [
@@ -478,6 +518,7 @@
   "owner": "useHomeCards",
   "key": "onPick",
   "label": null,
+  "how": "tab",
   "route": "/read",
   "opens": "المصحف",
   "on": [
@@ -490,6 +531,7 @@
   "owner": "useHomeCards",
   "key": "onPick",
   "label": null,
+  "how": "tab",
   "route": "/branches",
   "opens": "متشابهات القرآن",
   "on": [
@@ -502,6 +544,7 @@
   "owner": "useHomeCards",
   "key": "onPick",
   "label": null,
+  "how": "tab",
   "route": "/compare",
   "opens": "مقارنة السور",
   "on": [
@@ -514,6 +557,7 @@
   "owner": "ContinueReading",
   "key": "read",
   "label": null,
+  "how": "tab",
   "route": "/read",
   "opens": "المصحف",
   "on": [
@@ -526,6 +570,7 @@
   "owner": "ContinueReading",
   "key": "open",
   "label": "ابدأ القراءة",
+  "how": "tab",
   "route": "/quran",
   "opens": "القرآن",
   "on": [
@@ -538,6 +583,7 @@
   "owner": "PairPost",
   "key": "compare",
   "label": null,
+  "how": "tab",
   "route": "/compare",
   "opens": "مقارنة السور",
   "on": [
@@ -550,6 +596,7 @@
   "owner": "PairPost",
   "key": "open",
   "label": "آيتان متشابهتان",
+  "how": "tab",
   "route": "/compare",
   "opens": "مقارنة السور",
   "on": [
@@ -562,6 +609,7 @@
   "owner": "ForgottenPost",
   "key": "onPress",
   "label": "افتح صفحة الآية",
+  "how": "push",
   "route": "/ayah",
   "opens": "صفحة الآية",
   "on": [
@@ -576,6 +624,7 @@
   "owner": "ForgottenPost",
   "key": "onPress",
   "label": "افتح ما نسيته",
+  "how": "push",
   "route": "/library",
   "opens": "مدونتي",
   "on": [
@@ -590,6 +639,7 @@
   "owner": "ForgottenPost",
   "key": "head",
   "label": null,
+  "how": "tab",
   "route": "/quizzes",
   "opens": "الاختبارات",
   "on": [
@@ -604,6 +654,7 @@
   "owner": "ReciteAction",
   "key": "onPress",
   "label": "تسميع",
+  "how": "tab",
   "route": "/read",
   "opens": "المصحف",
   "on": [
@@ -617,6 +668,7 @@
   "owner": "QuizPost",
   "key": "open",
   "label": null,
+  "how": "tab",
   "route": "/quizzes",
   "opens": "الاختبارات",
   "on": [
@@ -630,6 +682,7 @@
   "owner": "QuizPost",
   "key": "onPress",
   "label": "افتح ما يشرح الجواب",
+  "how": "push+tab",
   "route": "/person",
   "opens": "الترجمة",
   "on": [
@@ -643,6 +696,7 @@
   "owner": "QuizPost",
   "key": "onPress",
   "label": "افتح ما يشرح الجواب",
+  "how": "push+tab",
   "route": "/branches",
   "opens": "متشابهات القرآن",
   "on": [
@@ -656,6 +710,7 @@
   "owner": "QuizPost",
   "key": "onPress",
   "label": "افتح ما يشرح الجواب",
+  "how": "push+tab",
   "route": "/compare",
   "opens": "مقارنة السور",
   "on": [
@@ -669,6 +724,7 @@
   "owner": "QuizPost",
   "key": "onPress",
   "label": "افتح ما يشرح الجواب",
+  "how": "push+tab",
   "route": "/atlas",
   "opens": "الأطلس",
   "on": [
@@ -682,6 +738,7 @@
   "owner": "QuizPost",
   "key": "onPress",
   "label": "افتح ما يشرح الجواب",
+  "how": "push+tab",
   "route": "/prophets/[slug]",
   "opens": "قصة النبي",
   "on": [
@@ -695,6 +752,7 @@
   "owner": "QuizPost",
   "key": "onPress",
   "label": "افتح ما يشرح الجواب",
+  "how": "push+tab",
   "route": "/nasab",
   "opens": "النسب",
   "on": [
@@ -708,6 +766,7 @@
   "owner": "QuizPost",
   "key": "onPress",
   "label": "افتح ما يشرح الجواب",
+  "how": "push+tab",
   "route": "/term",
   "opens": "المصطلح",
   "on": [
@@ -721,6 +780,7 @@
   "owner": "QuizPost",
   "key": "onPress",
   "label": "افتح ما يشرح الجواب",
+  "how": "push+tab",
   "route": "/hadith-forty",
   "opens": "حديث الأربعين",
   "on": [
@@ -734,6 +794,7 @@
   "owner": "QuizPost",
   "key": "onPress",
   "label": "افتح ما يشرح الجواب",
+  "how": "push+tab",
   "route": "/hadith-book",
   "opens": "كتاب الحديث",
   "on": [
@@ -747,6 +808,7 @@
   "owner": "QuizPost",
   "key": "onPress",
   "label": "افتح ما يشرح الجواب",
+  "how": "push+tab",
   "route": "/hadith-kitab",
   "opens": "أبواب الكتاب",
   "on": [
@@ -760,6 +822,7 @@
   "owner": "QuizPost",
   "key": "onPress",
   "label": "افتح ما يشرح الجواب",
+  "how": "push+tab",
   "route": "/hadith",
   "opens": "الحديث",
   "on": [
@@ -773,6 +836,7 @@
   "owner": "QuizPost",
   "key": "onPress",
   "label": "افتح ما يشرح الجواب",
+  "how": "push+tab",
   "route": "/story",
   "opens": "القصة",
   "on": [
@@ -786,6 +850,7 @@
   "owner": "QuizPost",
   "key": "onPress",
   "label": "افتح ما يشرح الجواب",
+  "how": "push+tab",
   "route": "/battle",
   "opens": "الغزوة",
   "on": [
@@ -799,6 +864,7 @@
   "owner": "QuizPost",
   "key": "onPress",
   "label": "افتح ما يشرح الجواب",
+  "how": "push+tab",
   "route": "/read",
   "opens": "المصحف",
   "on": [
@@ -812,6 +878,7 @@
   "owner": "QuizPost",
   "key": "onPress",
   "label": "افتح ما يشرح الجواب",
+  "how": "push+tab",
   "route": "/tuhfa",
   "opens": "تحفة الأطفال",
   "on": [
@@ -825,6 +892,7 @@
   "owner": "QuizPost",
   "key": "onPress",
   "label": "افتح ما يشرح الجواب",
+  "how": "push+tab",
   "route": "/dhikr",
   "opens": "الذكر",
   "on": [
@@ -838,6 +906,7 @@
   "owner": "QuizPost",
   "key": "onPress",
   "label": "افتح ما يشرح الجواب",
+  "how": "push+tab",
   "route": "/order",
   "opens": "ترتيب السور",
   "on": [
@@ -851,6 +920,7 @@
   "owner": "TarajimPost",
   "key": "open",
   "label": null,
+  "how": "push",
   "route": "/person",
   "opens": "الترجمة",
   "on": [
@@ -864,6 +934,7 @@
   "owner": "TarajimPost",
   "key": "open",
   "label": "من التراجم",
+  "how": "tab",
   "route": "/tarajim",
   "opens": "التراجم",
   "on": [
@@ -877,6 +948,7 @@
   "owner": "TiePost",
   "key": "open",
   "label": null,
+  "how": "push",
   "route": "/between",
   "opens": "بين عدة أشخاص",
   "on": [
@@ -890,6 +962,7 @@
   "owner": "TiePost",
   "key": "open",
   "label": "صلة",
+  "how": "tab",
   "route": "/tarajim",
   "opens": "التراجم",
   "on": [
@@ -903,6 +976,7 @@
   "owner": "NamePost",
   "key": "open",
   "label": null,
+  "how": "push",
   "route": "/person",
   "opens": "الترجمة",
   "on": [
@@ -916,6 +990,7 @@
   "owner": "NamePost",
   "key": "open",
   "label": "كنية وصاحبها",
+  "how": "tab",
   "route": "/tarajim",
   "opens": "التراجم",
   "on": [
@@ -929,6 +1004,7 @@
   "owner": "LifePost",
   "key": "open",
   "label": null,
+  "how": "push",
   "route": "/person",
   "opens": "الترجمة",
   "on": [
@@ -942,6 +1018,7 @@
   "owner": "LifePost",
   "key": "open",
   "label": "من حياته",
+  "how": "push",
   "route": "/person",
   "opens": "الترجمة",
   "on": [
@@ -955,6 +1032,7 @@
   "owner": "NasabPost",
   "key": "open",
   "label": null,
+  "how": "push",
   "route": "/nasab",
   "opens": "النسب",
   "on": [
@@ -968,6 +1046,7 @@
   "owner": "NasabPost",
   "key": "open",
   "label": null,
+  "how": "push",
   "route": "/person",
   "opens": "الترجمة",
   "on": [
@@ -981,6 +1060,7 @@
   "owner": "TiesPost",
   "key": "open",
   "label": null,
+  "how": "push",
   "route": "/ties",
   "opens": "الصلات",
   "on": [
@@ -994,6 +1074,7 @@
   "owner": "TiesPost",
   "key": "open",
   "label": null,
+  "how": "push",
   "route": "/person",
   "opens": "الترجمة",
   "on": [
@@ -1007,6 +1088,7 @@
   "owner": "TiesPost",
   "key": "onPick",
   "label": null,
+  "how": "push",
   "route": "/person",
   "opens": "الترجمة",
   "on": [
@@ -1020,6 +1102,7 @@
   "owner": "GroupPost",
   "key": "open",
   "label": null,
+  "how": "push",
   "route": "/between",
   "opens": "بين عدة أشخاص",
   "on": [
@@ -1033,6 +1116,7 @@
   "owner": "GroupPost",
   "key": "open",
   "label": null,
+  "how": "tab",
   "route": "/tarajim",
   "opens": "التراجم",
   "on": [
@@ -1046,6 +1130,7 @@
   "owner": "LivesPost",
   "key": "open",
   "label": null,
+  "how": "push",
   "route": "/life",
   "opens": "حياتهم جنبًا إلى جنب",
   "on": [
@@ -1059,6 +1144,7 @@
   "owner": "LivesPost",
   "key": "open",
   "label": "حياتهما",
+  "how": "tab",
   "route": "/tarajim",
   "opens": "التراجم",
   "on": [
@@ -1072,6 +1158,7 @@
   "owner": "MeetPost",
   "key": "open",
   "label": null,
+  "how": "push",
   "route": "/nasab",
   "opens": "النسب",
   "on": [
@@ -1085,6 +1172,7 @@
   "owner": "MeetPost",
   "key": "open",
   "label": "أين يلتقي نسبهما؟",
+  "how": "tab",
   "route": "/tarajim",
   "opens": "التراجم",
   "on": [
@@ -1098,6 +1186,7 @@
   "owner": "RingPost",
   "key": "go",
   "label": null,
+  "how": "push",
   "route": "/person",
   "opens": "الترجمة",
   "on": [
@@ -1111,6 +1200,7 @@
   "owner": "RingPost",
   "key": "open",
   "label": null,
+  "how": "push",
   "route": "/person",
   "opens": "الترجمة",
   "on": [
@@ -1124,6 +1214,7 @@
   "owner": "RingPost",
   "key": "open",
   "label": null,
+  "how": "tab",
   "route": "/hadith-book",
   "opens": "كتاب الحديث",
   "on": [
@@ -1137,6 +1228,7 @@
   "owner": "RingPost",
   "key": "open",
   "label": null,
+  "how": "tab",
   "route": "/tarajim",
   "opens": "التراجم",
   "on": [
@@ -1150,6 +1242,7 @@
   "owner": "RingPost",
   "key": "open",
   "label": null,
+  "how": "push",
   "route": "/ties",
   "opens": "الصلات",
   "on": [
@@ -1163,6 +1256,7 @@
   "owner": "RingPost",
   "key": "open",
   "label": null,
+  "how": "push",
   "route": "/people",
   "opens": "كل التراجم",
   "on": [
@@ -1176,6 +1270,7 @@
   "owner": "RingPost",
   "key": "open",
   "label": null,
+  "how": "tab",
   "route": "/hadith-sahih",
   "opens": "حديث الصحيح",
   "on": [
@@ -1189,6 +1284,7 @@
   "owner": "BattlePost",
   "key": "open",
   "label": null,
+  "how": "tab",
   "route": "/battle",
   "opens": "الغزوة",
   "on": [
@@ -1202,6 +1298,7 @@
   "owner": "BattlePost",
   "key": "open",
   "label": null,
+  "how": "tab",
   "route": "/battles",
   "opens": "الغزوات والمعارك",
   "on": [
@@ -1215,6 +1312,7 @@
   "owner": "BattleYearPost",
   "key": "toYear",
   "label": null,
+  "how": "tab",
   "route": "/atlas",
   "opens": "الأطلس",
   "on": [
@@ -1228,6 +1326,7 @@
   "owner": "BattleYearPost",
   "key": "open",
   "label": "من الأطلس",
+  "how": "tab",
   "route": "/atlas",
   "opens": "الأطلس",
   "on": [
@@ -1241,6 +1340,7 @@
   "owner": "BattleYearPost",
   "key": "onPress",
   "label": "افتح ‹›",
+  "how": "tab",
   "route": "/battle",
   "opens": "الغزوة",
   "on": [
@@ -1254,6 +1354,7 @@
   "owner": "ArmiesPost",
   "key": "open",
   "label": "الجيشان في الغزوات",
+  "how": "tab",
   "route": "/battles",
   "opens": "الغزوات والمعارك",
   "on": [
@@ -1267,6 +1368,7 @@
   "owner": "ArmiesPost",
   "key": "onPress",
   "label": "افتح الغزوات والمعارك",
+  "how": "tab",
   "route": "/battles",
   "opens": "الغزوات والمعارك",
   "on": [
@@ -1280,6 +1382,7 @@
   "owner": "ArmiesPost",
   "key": "onPress",
   "label": "افتح ‹›",
+  "how": "tab",
   "route": "/battle",
   "opens": "الغزوة",
   "on": [
@@ -1293,6 +1396,7 @@
   "owner": "HadithScenePost",
   "key": "open",
   "label": null,
+  "how": "tab",
   "route": "/hadith-unit",
   "opens": "رواية الصحيح",
   "on": [
@@ -1306,6 +1410,7 @@
   "owner": "HadithScenePost",
   "key": "open",
   "label": "من ‹›",
+  "how": "tab",
   "route": "/hadith",
   "opens": "الحديث",
   "on": [
@@ -1319,6 +1424,7 @@
   "owner": "OpeningCardPost",
   "key": "open",
   "label": null,
+  "how": "tab",
   "route": "/openings",
   "opens": "فواتح السور",
   "on": [
@@ -1332,6 +1438,7 @@
   "owner": "OpeningCardPost",
   "key": "open",
   "label": "من فواتح السور",
+  "how": "tab",
   "route": "/openings",
   "opens": "فواتح السور",
   "on": [
@@ -1345,6 +1452,7 @@
   "owner": "OathPost",
   "key": "open",
   "label": null,
+  "how": "tab",
   "route": "/oaths",
   "opens": "الأقسام",
   "on": [
@@ -1358,6 +1466,7 @@
   "owner": "OathPost",
   "key": "open",
   "label": "من الأقسام",
+  "how": "tab",
   "route": "/oaths",
   "opens": "الأقسام",
   "on": [
@@ -1371,6 +1480,7 @@
   "owner": "OathPost",
   "key": "onPress",
   "label": "افتح ‹› في المصحف",
+  "how": "tab",
   "route": "/read",
   "opens": "المصحف",
   "on": [
@@ -1384,6 +1494,7 @@
   "owner": "SurahAimPost",
   "key": "open",
   "label": "مقصود السورة",
+  "how": "tab",
   "route": "/order",
   "opens": "ترتيب السور",
   "on": [
@@ -1397,6 +1508,7 @@
   "owner": "SurahAimPost",
   "key": "onPress",
   "label": "افتح سورة ‹› في ترتيب السور",
+  "how": "push",
   "route": "/order",
   "opens": "ترتيب السور",
   "on": [
@@ -1410,6 +1522,7 @@
   "owner": "SurahLinkPost",
   "key": "open",
   "label": "بين سورتين",
+  "how": "tab",
   "route": "/order",
   "opens": "ترتيب السور",
   "on": [
@@ -1423,6 +1536,7 @@
   "owner": "SurahLinkPost",
   "key": "onPress",
   "label": "افتح ‹› و‹› في ترتيب السور",
+  "how": "push",
   "route": "/order",
   "opens": "ترتيب السور",
   "on": [
@@ -1436,6 +1550,7 @@
   "owner": "EventPost",
   "key": "open",
   "label": null,
+  "how": "push",
   "route": "/prophets/[slug]",
   "opens": "قصة النبي",
   "on": [
@@ -1449,6 +1564,7 @@
   "owner": "EventPost",
   "key": "open",
   "label": null,
+  "how": "tab",
   "route": "/prophets",
   "opens": "قصص الأنبياء",
   "on": [
@@ -1462,6 +1578,7 @@
   "owner": "TreePost",
   "key": "open",
   "label": null,
+  "how": "tab",
   "route": "/branches",
   "opens": "متشابهات القرآن",
   "on": [
@@ -1474,6 +1591,7 @@
   "owner": "TreePost",
   "key": "open",
   "label": "من متشابهات القرآن",
+  "how": "tab",
   "route": "/branches",
   "opens": "متشابهات القرآن",
   "on": [
@@ -1486,6 +1604,7 @@
   "owner": "SavedAyahPost",
   "key": "onPress",
   "label": "افتح المحفوظات",
+  "how": "push",
   "route": "/library",
   "opens": "مدونتي",
   "on": [
@@ -1498,6 +1617,7 @@
   "owner": "SavedAyahPost",
   "key": "onPress",
   "label": "افتح صفحة الآية",
+  "how": "push",
   "route": "/ayah",
   "opens": "صفحة الآية",
   "on": [
@@ -1510,6 +1630,7 @@
   "owner": "StoryPost",
   "key": "open",
   "label": null,
+  "how": "push",
   "route": "/prophets/[slug]",
   "opens": "قصة النبي",
   "on": [
@@ -1523,6 +1644,7 @@
   "owner": "StoryPost",
   "key": "open",
   "label": null,
+  "how": "tab",
   "route": "/prophets",
   "opens": "قصص الأنبياء",
   "on": [
@@ -1536,6 +1658,7 @@
   "owner": "JuzPost",
   "key": "open",
   "label": null,
+  "how": "tab",
   "route": "/read",
   "opens": "المصحف",
   "on": [
@@ -1548,6 +1671,7 @@
   "owner": "JuzPost",
   "key": "open",
   "label": "جزء اليوم",
+  "how": "tab",
   "route": "/quran",
   "opens": "القرآن",
   "on": [
@@ -1560,6 +1684,7 @@
   "owner": "KahfPost",
   "key": "read",
   "label": null,
+  "how": "tab",
   "route": "/read",
   "opens": "المصحف",
   "on": [
@@ -1572,6 +1697,7 @@
   "owner": "KahfPost",
   "key": "open",
   "label": "سورة الكهف",
+  "how": "tab",
   "route": "/quran",
   "opens": "القرآن",
   "on": [
@@ -1584,6 +1710,7 @@
   "owner": "PrayerPost",
   "key": "open",
   "label": null,
+  "how": "tab",
   "route": "/utilities",
   "opens": "الأدوات والأذكار",
   "on": [
@@ -1596,6 +1723,7 @@
   "owner": "PrayerPost",
   "key": "onPress",
   "label": "مواقيت الصلاة",
+  "how": "tab",
   "route": "/utilities",
   "opens": "الأدوات والأذكار",
   "on": [
@@ -1608,6 +1736,7 @@
   "owner": "PrayerPost",
   "key": "onPress",
   "label": "القبلة",
+  "how": "tab",
   "route": "/utilities",
   "opens": "الأدوات والأذكار",
   "on": [
@@ -1620,6 +1749,7 @@
   "owner": "BooksPost",
   "key": "onPress",
   "label": "افتح المكتبة",
+  "how": "tab",
   "route": "/books",
   "opens": "المكتبة",
   "on": [
@@ -1632,6 +1762,7 @@
   "owner": "BooksPost",
   "key": "onPress",
   "label": null,
+  "how": "tab",
   "route": "/tuhfa",
   "opens": "تحفة الأطفال",
   "on": [
@@ -1644,6 +1775,7 @@
   "owner": "ScenePost",
   "key": "onPress",
   "label": "افتح المشاهد",
+  "how": "tab",
   "route": "/lataif",
   "opens": "مشاهد",
   "on": [
@@ -1657,6 +1789,7 @@
   "owner": "ScenePost",
   "key": "onPress",
   "label": null,
+  "how": "push",
   "route": "/scene",
   "opens": "المشهد",
   "on": [
@@ -1670,6 +1803,7 @@
   "owner": "ScenePost",
   "key": "onPress",
   "label": "افتح المشاهد",
+  "how": "tab",
   "route": "/lataif",
   "opens": "مشاهد",
   "on": [
@@ -1683,6 +1817,7 @@
   "owner": "ScenePost",
   "key": "onPress",
   "label": null,
+  "how": "push",
   "route": "/scene",
   "opens": "المشهد",
   "on": [
@@ -1696,6 +1831,7 @@
   "owner": "SiraPost",
   "key": "open",
   "label": null,
+  "how": "tab",
   "route": "/story",
   "opens": "القصة",
   "on": [
@@ -1709,6 +1845,7 @@
   "owner": "SiraPost",
   "key": "open",
   "label": "من قصص السيرة",
+  "how": "tab",
   "route": "/stories",
   "opens": "قصص السيرة",
   "on": [
@@ -1722,6 +1859,7 @@
   "owner": "RajabPost",
   "key": "open",
   "label": null,
+  "how": "tab",
   "route": "/hadith-forty",
   "opens": "حديث الأربعين",
   "on": [
@@ -1735,6 +1873,7 @@
   "owner": "RajabPost",
   "key": "open",
   "label": "من شرح ابن رجب",
+  "how": "tab",
   "route": "/hadith-book",
   "opens": "كتاب الحديث",
   "on": [
@@ -1748,6 +1887,7 @@
   "owner": "HadithPost",
   "key": "open",
   "label": null,
+  "how": "tab",
   "route": "/hadith-forty",
   "opens": "حديث الأربعين",
   "on": [
@@ -1761,6 +1901,7 @@
   "owner": "HadithPost",
   "key": "open",
   "label": "من الحديث",
+  "how": "tab",
   "route": "/hadith-book",
   "opens": "كتاب الحديث",
   "on": [
@@ -1774,6 +1915,7 @@
   "owner": "SahihPost",
   "key": "open",
   "label": null,
+  "how": "tab",
   "route": "/hadith-sahih",
   "opens": "حديث الصحيح",
   "on": [
@@ -1787,6 +1929,7 @@
   "owner": "SahihPost",
   "key": "open",
   "label": "من ‹›",
+  "how": "tab",
   "route": "/hadith-book",
   "opens": "كتاب الحديث",
   "on": [
@@ -1800,6 +1943,7 @@
   "owner": "RecordedPost",
   "key": "open",
   "label": null,
+  "how": "tab",
   "route": "/hadith-forty",
   "opens": "حديث الأربعين",
   "on": [
@@ -1813,6 +1957,7 @@
   "owner": "RecordedPost",
   "key": "open",
   "label": "من أخرجه",
+  "how": "tab",
   "route": "/hadith-book",
   "opens": "كتاب الحديث",
   "on": [
@@ -1826,6 +1971,7 @@
   "owner": "IsnadPost",
   "key": "open",
   "label": null,
+  "how": "tab",
   "route": "/hadith-forty",
   "opens": "حديث الأربعين",
   "on": [
@@ -1839,6 +1985,7 @@
   "owner": "IsnadPost",
   "key": "open",
   "label": "من الإسناد",
+  "how": "tab",
   "route": "/hadith-book",
   "opens": "كتاب الحديث",
   "on": [
@@ -1852,6 +1999,7 @@
   "owner": "TermPost",
   "key": "open",
   "label": null,
+  "how": "tab",
   "route": "/term",
   "opens": "المصطلح",
   "on": [
@@ -1865,6 +2013,7 @@
   "owner": "TermPost",
   "key": "open",
   "label": "من مصطلحات البلاغة",
+  "how": "tab",
   "route": "/terms",
   "opens": "مصطلحات البلاغة",
   "on": [
@@ -1878,6 +2027,7 @@
   "owner": "TermPost",
   "key": "onPress",
   "label": "مصطلحات البلاغة",
+  "how": "tab",
   "route": "/terms",
   "opens": "مصطلحات البلاغة",
   "on": [
@@ -1891,6 +2041,7 @@
   "owner": "GharibPost",
   "key": "open",
   "label": null,
+  "how": "tab",
   "route": "/word",
   "opens": "الكلمة",
   "on": [
@@ -1904,6 +2055,7 @@
   "owner": "GharibPost",
   "key": "open",
   "label": null,
+  "how": "push",
   "route": "/ayah",
   "opens": "صفحة الآية",
   "on": [
@@ -1917,6 +2069,7 @@
   "owner": "GharibPost",
   "key": "open",
   "label": "من غريب القرآن",
+  "how": "tab",
   "route": "/words",
   "opens": "ألفاظ القرآن",
   "on": [
@@ -1930,6 +2083,7 @@
   "owner": "TuhfaPost",
   "key": "open",
   "label": "من تحفة الأطفال",
+  "how": "tab",
   "route": "/tuhfa",
   "opens": "تحفة الأطفال",
   "on": [
@@ -1943,6 +2097,7 @@
   "owner": "TuhfaPost",
   "key": "onPress",
   "label": "افتح المنظومة",
+  "how": "tab",
   "route": "/tuhfa",
   "opens": "تحفة الأطفال",
   "on": [
@@ -1956,6 +2111,7 @@
   "owner": "MomentPost",
   "key": "open",
   "label": null,
+  "how": "tab",
   "route": "/battle",
   "opens": "الغزوة",
   "on": [
@@ -1969,6 +2125,7 @@
   "owner": "MomentPost",
   "key": "open",
   "label": "من ‹›",
+  "how": "tab",
   "route": "/battle",
   "opens": "الغزوة",
   "on": [
@@ -1982,6 +2139,7 @@
   "owner": "NOTE_TOPICS",
   "key": "tafsir",
   "label": null,
+  "how": "tab",
   "route": "/book",
   "opens": "الكتاب",
   "on": [
@@ -1995,6 +2153,7 @@
   "owner": "NOTE_TOPICS",
   "key": "balagha",
   "label": null,
+  "how": "tab",
   "route": "/terms",
   "opens": "مصطلحات البلاغة",
   "on": [
@@ -2008,6 +2167,7 @@
   "owner": "NOTE_TOPICS",
   "key": "irab",
   "label": null,
+  "how": "tab",
   "route": "/books",
   "opens": "المكتبة",
   "on": [
@@ -2021,6 +2181,7 @@
   "owner": "NOTE_TOPICS",
   "key": "qiraat",
   "label": null,
+  "how": "tab",
   "route": "/qiraat",
   "opens": "القراءات",
   "on": [
@@ -2034,6 +2195,7 @@
   "owner": "AyahNotePost",
   "key": "show",
   "label": null,
+  "how": "push",
   "route": "/ayah",
   "opens": "صفحة الآية",
   "on": [
@@ -2047,6 +2209,7 @@
   "owner": "DhikrPost",
   "key": "onPress",
   "label": "افتح الأذكار",
+  "how": "tab",
   "route": "/utilities",
   "opens": "الأدوات والأذكار",
   "on": [
@@ -2060,6 +2223,7 @@
   "owner": "DhikrPost",
   "key": "onPress",
   "label": "افتح الذكر في الأذكار",
+  "how": "push",
   "route": "/dhikr",
   "opens": "الذكر",
   "on": [
@@ -2073,6 +2237,7 @@
   "owner": "Feed",
   "key": "review",
   "label": null,
+  "how": "tab",
   "route": "/read",
   "opens": "المصحف",
   "on": [
@@ -2085,6 +2250,7 @@
   "owner": "Cell",
   "key": "onPress",
   "label": null,
+  "how": "push+tab",
   "route": "/battle",
   "opens": "الغزوة",
   "on": [
@@ -2099,6 +2265,7 @@
   "owner": "Cell",
   "key": "onPress",
   "label": null,
+  "how": "push+tab",
   "route": "/story",
   "opens": "القصة",
   "on": [
@@ -2113,6 +2280,7 @@
   "owner": "Item",
   "key": "onPress",
   "label": null,
+  "how": "push+tab",
   "route": "/battle",
   "opens": "الغزوة",
   "on": [
@@ -2130,6 +2298,7 @@
   "owner": "Item",
   "key": "onPress",
   "label": null,
+  "how": "push+tab",
   "route": "/story",
   "opens": "القصة",
   "on": [
@@ -2147,6 +2316,7 @@
   "owner": "LifeSheet",
   "key": "onPress",
   "label": null,
+  "how": "push+tab",
   "route": "/battle",
   "opens": "الغزوة",
   "on": [
@@ -2165,6 +2335,7 @@
   "owner": "LifeSheet",
   "key": "onPress",
   "label": null,
+  "how": "push+tab",
   "route": "/story",
   "opens": "القصة",
   "on": [
@@ -2183,6 +2354,7 @@
   "owner": "Cell",
   "key": "onPress",
   "label": "قراءة ‹› ‹›",
+  "how": "tab",
   "route": "/read",
   "opens": "المصحف",
   "on": "every screen"
@@ -2193,6 +2365,7 @@
   "owner": "BookAnswers",
   "key": "onPress",
   "label": "اقرأ كلام ‹› كاملًا في ‹›",
+  "how": "tab",
   "route": "/book",
   "opens": "الكتاب",
   "on": "every screen"
@@ -2203,6 +2376,7 @@
   "owner": "OpenInBook",
   "key": "onPress",
   "label": "اقرأ في الكتاب",
+  "how": "tab",
   "route": "/book",
   "opens": "الكتاب",
   "on": "every screen"
@@ -2213,6 +2387,7 @@
   "owner": "OpenInBook",
   "key": "onPress",
   "label": "اقرأ في الكتاب",
+  "how": "tab",
   "route": "/book",
   "opens": "الكتاب",
   "on": "every screen"
@@ -2223,6 +2398,7 @@
   "owner": "SurahCard",
   "key": "onPress",
   "label": "افتح سورة ‹› في المصحف",
+  "how": "tab",
   "route": "/read",
   "opens": "المصحف",
   "on": [
@@ -2239,6 +2415,7 @@
   "owner": "PathAyat",
   "key": "onPress",
   "label": "قارن ‹›",
+  "how": "tab",
   "route": "/compare",
   "opens": "مقارنة السور",
   "on": "every screen"
@@ -2249,6 +2426,7 @@
   "owner": "PathAyat",
   "key": "onPick",
   "label": null,
+  "how": "tab",
   "route": "/compare",
   "opens": "مقارنة السور",
   "on": "every screen"
@@ -2259,6 +2437,7 @@
   "owner": "CompareFeedback",
   "key": "open",
   "label": null,
+  "how": "tab",
   "route": "/compare",
   "opens": "مقارنة السور",
   "on": [
@@ -2274,6 +2453,7 @@
   "owner": "TreeActions",
   "key": "onPress",
   "label": "افتح في متشابهات القرآن",
+  "how": "tab",
   "route": "/branches",
   "opens": "متشابهات القرآن",
   "on": [
@@ -2289,6 +2469,7 @@
   "owner": "RahmanScene",
   "key": "onPress",
   "label": "رجوع",
+  "how": "tab",
   "route": "/lataif",
   "opens": "مشاهد",
   "on": [
@@ -2301,6 +2482,7 @@
   "owner": "RahmanActions",
   "key": "onPress",
   "label": "افتح مشهد ‹›",
+  "how": "push",
   "route": "/scene",
   "opens": "المشهد",
   "on": [
@@ -2314,6 +2496,7 @@
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
+  "how": "tab",
   "route": "/read",
   "opens": "المصحف",
   "on": [
@@ -2327,6 +2510,7 @@
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
+  "how": "tab",
   "route": "/read",
   "opens": "المصحف",
   "on": [
@@ -2340,6 +2524,7 @@
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
+  "how": "tab",
   "route": "/branches",
   "opens": "متشابهات القرآن",
   "on": [
@@ -2353,6 +2538,7 @@
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
+  "how": "tab",
   "route": "/compare",
   "opens": "مقارنة السور",
   "on": [
@@ -2366,6 +2552,7 @@
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
+  "how": "push",
   "route": "/prophets/[slug]",
   "opens": "قصة النبي",
   "on": [
@@ -2379,6 +2566,7 @@
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
+  "how": "tab",
   "route": "/story",
   "opens": "القصة",
   "on": [
@@ -2392,6 +2580,7 @@
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
+  "how": "tab",
   "route": "/stories",
   "opens": "قصص السيرة",
   "on": [
@@ -2405,6 +2594,7 @@
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
+  "how": "tab",
   "route": "/person",
   "opens": "الترجمة",
   "on": [
@@ -2418,6 +2608,7 @@
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
+  "how": "tab",
   "route": "/battle",
   "opens": "الغزوة",
   "on": [
@@ -2431,6 +2622,7 @@
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
+  "how": "tab",
   "route": "/hadith-forty",
   "opens": "حديث الأربعين",
   "on": [
@@ -2444,6 +2636,7 @@
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
+  "how": "tab",
   "route": "/hadith-sahih",
   "opens": "حديث الصحيح",
   "on": [
@@ -2457,6 +2650,7 @@
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
+  "how": "tab",
   "route": "/hadith-kitab",
   "opens": "أبواب الكتاب",
   "on": [
@@ -2470,6 +2664,7 @@
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
+  "how": "tab",
   "route": "/tuhfa",
   "opens": "تحفة الأطفال",
   "on": [
@@ -2483,6 +2678,7 @@
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
+  "how": "push",
   "route": "/dhikr",
   "opens": "الذكر",
   "on": [
@@ -2496,6 +2692,7 @@
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
+  "how": "tab",
   "route": "/read",
   "opens": "المصحف",
   "on": [
@@ -2508,6 +2705,7 @@
   "line": 28,
   "owner": "SettingsSheet",
   "label": "عن نمق",
+  "how": "push",
   "route": "/about",
   "opens": "عن نمق",
   "on": [
@@ -2568,6 +2766,7 @@
   "line": 29,
   "owner": "SettingsSheet",
   "label": "المصادر والتراخيص",
+  "how": "push",
   "route": "/attributions",
   "opens": "المصادر والتراخيص",
   "on": [
@@ -2628,6 +2827,7 @@
   "line": 30,
   "owner": "SettingsSheet",
   "label": "سياسة الخصوصية",
+  "how": "push",
   "route": "/privacy",
   "opens": "سياسة الخصوصية",
   "on": [
@@ -2689,6 +2889,7 @@
   "owner": "TermChips",
   "key": "onPress",
   "label": "أمثلته في مصطلحات البلاغة",
+  "how": "tab",
   "route": "/term",
   "opens": "المصطلح",
   "on": [
@@ -2704,6 +2905,7 @@
   "owner": "TiesChain",
   "key": "open",
   "label": null,
+  "how": "push",
   "route": "/ties",
   "opens": "الصلات",
   "on": [
@@ -2718,6 +2920,7 @@
   "owner": "TreePager",
   "key": "openCompare",
   "label": null,
+  "how": "tab",
   "route": "/compare",
   "opens": "مقارنة السور",
   "on": "every screen"
@@ -2728,6 +2931,7 @@
   "owner": "Month",
   "key": "onPress",
   "label": "اقرأ جزء اليوم: ‹›",
+  "how": "tab",
   "route": "/read",
   "opens": "المصحف",
   "on": [
@@ -2740,6 +2944,7 @@
   "owner": "Calendar",
   "key": "onPress",
   "label": "اقرأ جزء اليوم: ‹›",
+  "how": "tab",
   "route": "/read",
   "opens": "المصحف",
   "on": [
@@ -2752,6 +2957,7 @@
   "owner": "WordView",
   "key": "open",
   "label": null,
+  "how": "tab",
   "route": "/read",
   "opens": "المصحف",
   "on": [
@@ -2767,6 +2973,7 @@
   "owner": "Station",
   "key": "onPress",
   "label": null,
+  "how": "push",
   "route": "/battle",
   "opens": "الغزوة",
   "on": [
@@ -2779,6 +2986,7 @@
   "owner": "People",
   "key": "onPress",
   "label": null,
+  "how": "push",
   "route": "/person",
   "opens": "الترجمة",
   "on": [
@@ -2799,6 +3007,7 @@
   "owner": "Hadith",
   "key": "onPress",
   "label": "افتح الحديث كاملًا: ‹›",
+  "how": "push",
   "route": "/hadith-sahih",
   "opens": "حديث الصحيح",
   "on": [
@@ -2814,6 +3023,7 @@
   "owner": "StoryLinkRow",
   "key": "onPress",
   "label": null,
+  "how": "push",
   "route": "/story",
   "opens": "القصة",
   "on": [
@@ -2827,6 +3037,7 @@
   "owner": "PersonRows",
   "key": "onPress",
   "label": null,
+  "how": "push",
   "route": "/person",
   "opens": "الترجمة",
   "on": [
@@ -2840,6 +3051,7 @@
   "owner": "BattleRow",
   "key": "onPress",
   "label": "افتح ‹›",
+  "how": "push",
   "route": "/battle",
   "opens": "الغزوة",
   "on": [
@@ -2852,6 +3064,7 @@
   "owner": "AtlasBattle",
   "key": "onPress",
   "label": "افتح ‹›",
+  "how": "push",
   "route": "/battle",
   "opens": "الغزوة",
   "on": [
@@ -2864,6 +3077,7 @@
   "owner": "PlaceSheet",
   "key": "onPress",
   "label": "افتح ‹›",
+  "how": "push",
   "route": "/battle",
   "opens": "الغزوة",
   "on": [
@@ -2876,6 +3090,7 @@
   "owner": "AtlasScreen",
   "key": "pickFound",
   "label": null,
+  "how": "push",
   "route": "/battle",
   "opens": "الغزوة",
   "on": [
@@ -2888,6 +3103,7 @@
   "owner": "AyahScreen",
   "key": "back",
   "label": null,
+  "how": "tab",
   "route": "/",
   "opens": "الرئيسية",
   "on": [
@@ -2900,6 +3116,7 @@
   "owner": "AyahScreen",
   "key": "onPress",
   "label": "افتح ‹› في المصحف",
+  "how": "tab",
   "route": "/read",
   "opens": "المصحف",
   "on": [
@@ -2912,6 +3129,7 @@
   "owner": "AyahScreen",
   "key": "onPress",
   "label": "سمّع من هذه الآية",
+  "how": "tab",
   "route": "/read",
   "opens": "المصحف",
   "on": [
@@ -2924,6 +3142,7 @@
   "owner": "AyahScreen",
   "key": "onJump",
   "label": null,
+  "how": "tab",
   "route": "/read",
   "opens": "المصحف",
   "on": [
@@ -2936,6 +3155,7 @@
   "owner": "SectionPart",
   "key": "open",
   "label": "افتح «‹›» في فواتح السور",
+  "how": "tab",
   "route": "/openings",
   "opens": "فواتح السور",
   "on": [
@@ -2948,6 +3168,7 @@
   "owner": "SectionPart",
   "key": "open",
   "label": "افتح ‹› في الأقسام",
+  "how": "tab",
   "route": "/oaths",
   "opens": "الأقسام",
   "on": [
@@ -2960,6 +3181,7 @@
   "owner": "SectionPart",
   "key": "open",
   "label": "افتح ‹› في القصة",
+  "how": "push",
   "route": "/prophets/[slug]",
   "opens": "قصة النبي",
   "on": [
@@ -2972,6 +3194,7 @@
   "owner": "SectionPart",
   "key": "openStory",
   "label": null,
+  "how": "tab",
   "route": "/story",
   "opens": "القصة",
   "on": [
@@ -2984,6 +3207,7 @@
   "owner": "SectionPart",
   "key": "onPress",
   "label": null,
+  "how": "push",
   "route": "/hadith-sahih",
   "opens": "حديث الصحيح",
   "on": [
@@ -2996,6 +3220,7 @@
   "owner": "SectionPart",
   "key": "open",
   "label": "افتح ‹›",
+  "how": "push",
   "route": "/person",
   "opens": "الترجمة",
   "on": [
@@ -3008,6 +3233,7 @@
   "owner": "BalaghaTermsScreen",
   "key": "onPress",
   "label": null,
+  "how": "tab",
   "route": "/term",
   "opens": "المصطلح",
   "on": [
@@ -3020,6 +3246,7 @@
   "owner": "BetweenScreen",
   "key": "back",
   "label": null,
+  "how": "tab",
   "route": "/tarajim",
   "opens": "التراجم",
   "on": [
@@ -3032,6 +3259,7 @@
   "owner": "BookReader",
   "key": "openAyah",
   "label": null,
+  "how": "tab",
   "route": "/read",
   "opens": "المصحف",
   "on": [
@@ -3044,6 +3272,7 @@
   "owner": "LibraryScreen",
   "key": "back",
   "label": null,
+  "how": "tab",
   "route": "/",
   "opens": "الرئيسية",
   "on": [
@@ -3056,6 +3285,7 @@
   "owner": "LibraryScreen",
   "key": "onPress",
   "label": null,
+  "how": "tab",
   "route": "/tuhfa",
   "opens": "تحفة الأطفال",
   "on": [
@@ -3068,6 +3298,7 @@
   "owner": "BookCard",
   "key": "open",
   "label": null,
+  "how": "tab",
   "route": "/hadith-book",
   "opens": "كتاب الحديث",
   "on": [
@@ -3081,6 +3312,7 @@
   "owner": "BookCard",
   "key": "open",
   "label": null,
+  "how": "tab",
   "route": "/book",
   "opens": "الكتاب",
   "on": [
@@ -3094,6 +3326,7 @@
   "owner": "DhikrScreen",
   "key": "back",
   "label": null,
+  "how": "tab",
   "route": "/utilities",
   "opens": "الأدوات والأذكار",
   "on": [
@@ -3106,6 +3339,7 @@
   "owner": "ContinueCard",
   "key": "onPress",
   "label": "افتح ‹›",
+  "how": "push",
   "route": "/hadith-sahih",
   "opens": "حديث الصحيح",
   "on": [
@@ -3118,6 +3352,7 @@
   "owner": "FortyShape",
   "key": "onOpen",
   "label": null,
+  "how": "push",
   "route": "/hadith-forty",
   "opens": "حديث الأربعين",
   "on": [
@@ -3130,6 +3365,7 @@
   "owner": "Hit",
   "key": "onPress",
   "label": null,
+  "how": "push",
   "route": "/hadith-sahih",
   "opens": "حديث الصحيح",
   "on": [
@@ -3142,6 +3378,7 @@
   "owner": "Hit",
   "key": "onPress",
   "label": null,
+  "how": "push",
   "route": "/hadith-kitab",
   "opens": "أبواب الكتاب",
   "on": [
@@ -3154,6 +3391,7 @@
   "owner": "Hit",
   "key": "onPress",
   "label": null,
+  "how": "push",
   "route": "/hadith-kitab",
   "opens": "أبواب الكتاب",
   "on": [
@@ -3166,6 +3404,7 @@
   "owner": "HadithScreen",
   "key": "onPress",
   "label": null,
+  "how": "push",
   "route": "/hadith-forty",
   "opens": "حديث الأربعين",
   "on": [
@@ -3178,6 +3417,7 @@
   "owner": "HadithScreen",
   "key": "onOpenBook",
   "label": null,
+  "how": "push",
   "route": "/hadith-book",
   "opens": "كتاب الحديث",
   "on": [
@@ -3190,6 +3430,7 @@
   "owner": "HadithScreen",
   "key": "onOpenKitab",
   "label": null,
+  "how": "push",
   "route": "/hadith-kitab",
   "opens": "أبواب الكتاب",
   "on": [
@@ -3202,6 +3443,7 @@
   "owner": "HadithScreen",
   "key": "onOpenBook",
   "label": null,
+  "how": "push",
   "route": "/hadith-book",
   "opens": "كتاب الحديث",
   "on": [
@@ -3214,6 +3456,7 @@
   "owner": "HadithBookScreen",
   "key": "back",
   "label": null,
+  "how": "tab",
   "route": "/hadith",
   "opens": "الحديث",
   "on": [
@@ -3226,6 +3469,7 @@
   "owner": "HadithBookScreen",
   "key": "onPress",
   "label": null,
+  "how": "push",
   "route": "/hadith-forty",
   "opens": "حديث الأربعين",
   "on": [
@@ -3238,6 +3482,7 @@
   "owner": "HadithBookScreen",
   "key": "onOpenKitab",
   "label": null,
+  "how": "push",
   "route": "/hadith-kitab",
   "opens": "أبواب الكتاب",
   "on": [
@@ -3250,6 +3495,7 @@
   "owner": "HadithBookScreen",
   "key": "onOpen",
   "label": null,
+  "how": "push",
   "route": "/hadith-kitab",
   "opens": "أبواب الكتاب",
   "on": [
@@ -3262,6 +3508,7 @@
   "owner": "HadithBookScreen",
   "key": "onOpenBab",
   "label": null,
+  "how": "push",
   "route": "/hadith-kitab",
   "opens": "أبواب الكتاب",
   "on": [
@@ -3274,6 +3521,7 @@
   "owner": "HadithFortyScreen",
   "key": "back",
   "label": null,
+  "how": "tab",
   "route": "/hadith",
   "opens": "الحديث",
   "on": [
@@ -3286,6 +3534,7 @@
   "owner": "HadithFortyScreen",
   "key": "unit",
   "label": null,
+  "how": "push",
   "route": "/hadith-unit",
   "opens": "رواية الصحيح",
   "on": [
@@ -3298,6 +3547,7 @@
   "owner": "BabRow",
   "key": "onPress",
   "label": null,
+  "how": "push",
   "route": "/hadith-kitab",
   "opens": "أبواب الكتاب",
   "on": [
@@ -3310,6 +3560,7 @@
   "owner": "KitabIndex",
   "key": "back",
   "label": null,
+  "how": "tab",
   "route": "/hadith",
   "opens": "الحديث",
   "on": [
@@ -3322,6 +3573,7 @@
   "owner": "BabPage",
   "key": "back",
   "label": null,
+  "how": "tab",
   "route": "/hadith",
   "opens": "الحديث",
   "on": [
@@ -3334,6 +3586,7 @@
   "owner": "BabPage",
   "key": "go",
   "label": null,
+  "how": "replace",
   "route": "/hadith-kitab",
   "opens": "أبواب الكتاب",
   "on": [
@@ -3346,6 +3599,7 @@
   "owner": "BabPage",
   "key": "onPress",
   "label": "‹›‹›",
+  "how": "replace",
   "route": "/hadith-kitab",
   "opens": "أبواب الكتاب",
   "on": [
@@ -3358,6 +3612,7 @@
   "owner": "BabPage",
   "key": "onPress",
   "label": null,
+  "how": "push",
   "route": "/hadith-sahih",
   "opens": "حديث الصحيح",
   "on": [
@@ -3370,6 +3625,7 @@
   "owner": "HadithKitabScreen",
   "key": "back",
   "label": null,
+  "how": "tab",
   "route": "/hadith",
   "opens": "الحديث",
   "on": [
@@ -3382,6 +3638,7 @@
   "owner": "SahihPage",
   "key": "onPress",
   "label": "‹›‹›",
+  "how": "push",
   "route": "/hadith-kitab",
   "opens": "أبواب الكتاب",
   "on": [
@@ -3394,6 +3651,7 @@
   "owner": "SahihPage",
   "key": "onPress",
   "label": "‹›‹›",
+  "how": "push",
   "route": "/hadith-kitab",
   "opens": "أبواب الكتاب",
   "on": [
@@ -3406,6 +3664,7 @@
   "owner": "SahihPage",
   "key": "onOpen",
   "label": null,
+  "how": "push",
   "route": "/hadith-sahih",
   "opens": "حديث الصحيح",
   "on": [
@@ -3418,6 +3677,7 @@
   "owner": "SahihPage",
   "key": "onPress",
   "label": null,
+  "how": "push",
   "route": "/hadith-forty",
   "opens": "حديث الأربعين",
   "on": [
@@ -3430,6 +3690,7 @@
   "owner": "InHadith",
   "key": "onPress",
   "label": "‹› · ‹›",
+  "how": "push",
   "route": "/ayah",
   "opens": "صفحة الآية",
   "on": [
@@ -3442,6 +3703,7 @@
   "owner": "HadithSahihScreen",
   "key": "back",
   "label": null,
+  "how": "tab",
   "route": "/hadith",
   "opens": "الحديث",
   "on": [
@@ -3454,6 +3716,7 @@
   "owner": "HadithUnitScreen",
   "key": "back",
   "label": null,
+  "how": "tab",
   "route": "/hadith",
   "opens": "الحديث",
   "on": [
@@ -3466,6 +3729,7 @@
   "owner": "HadithUnitScreen",
   "key": "open",
   "label": null,
+  "how": "push",
   "route": "/hadith-unit",
   "opens": "رواية الصحيح",
   "on": [
@@ -3478,6 +3742,7 @@
   "owner": "About",
   "key": "onPress",
   "label": null,
+  "how": "push",
   "route": "/attributions",
   "opens": "المصادر والتراخيص",
   "on": [
@@ -3492,6 +3757,7 @@
   "owner": "InfoScreen",
   "key": "back",
   "label": null,
+  "how": "tab",
   "route": "/",
   "opens": "الرئيسية",
   "on": [
@@ -3506,6 +3772,7 @@
   "owner": "LataifScreen",
   "key": "onPress",
   "label": null,
+  "how": "push",
   "route": "/scene",
   "opens": "المشهد",
   "on": [
@@ -3518,6 +3785,7 @@
   "owner": "LataifScreen",
   "key": "onPress",
   "label": null,
+  "how": "push",
   "route": "/scene",
   "opens": "المشهد",
   "on": [
@@ -3530,6 +3798,7 @@
   "owner": "LibraryScreen",
   "key": "{ cards, noteCards, savedItems, noteItems, openOf, openAyah, menus }",
   "label": null,
+  "how": "push+tab",
   "route": "/read",
   "opens": "المصحف",
   "on": [
@@ -3542,6 +3811,7 @@
   "owner": "LibraryScreen",
   "key": "{ cards, noteCards, savedItems, noteItems, openOf, openAyah, menus }",
   "label": null,
+  "how": "push+tab",
   "route": "/branches",
   "opens": "متشابهات القرآن",
   "on": [
@@ -3554,6 +3824,7 @@
   "owner": "LibraryScreen",
   "key": "{ cards, noteCards, savedItems, noteItems, openOf, openAyah, menus }",
   "label": null,
+  "how": "push+tab",
   "route": "/compare",
   "opens": "مقارنة السور",
   "on": [
@@ -3566,6 +3837,7 @@
   "owner": "LibraryScreen",
   "key": "{ cards, noteCards, savedItems, noteItems, openOf, openAyah, menus }",
   "label": null,
+  "how": "push+tab",
   "route": "/ayah",
   "opens": "صفحة الآية",
   "on": [
@@ -3578,6 +3850,7 @@
   "owner": "LibraryScreen",
   "key": "onPress",
   "label": "افتح الآية في المصحف",
+  "how": "tab",
   "route": "/read",
   "opens": "المصحف",
   "on": [
@@ -3590,6 +3863,7 @@
   "owner": "LibraryScreen",
   "key": "back",
   "label": null,
+  "how": "tab",
   "route": "/",
   "opens": "الرئيسية",
   "on": [
@@ -3602,6 +3876,7 @@
   "owner": "LifeScreen",
   "key": "back",
   "label": null,
+  "how": "tab",
   "route": "/tarajim",
   "opens": "التراجم",
   "on": [
@@ -3614,6 +3889,7 @@
   "owner": "Box",
   "key": "onPress",
   "label": null,
+  "how": "push",
   "route": "/person",
   "opens": "الترجمة",
   "on": [
@@ -3631,6 +3907,7 @@
   "owner": "NasabScreen",
   "key": "back",
   "label": null,
+  "how": "tab",
   "route": "/tarajim",
   "opens": "التراجم",
   "on": [
@@ -3643,6 +3920,7 @@
   "owner": "OathCard",
   "key": "onPress",
   "label": "افتح ‹› في المصحف",
+  "how": "tab",
   "route": "/read",
   "opens": "المصحف",
   "on": [
@@ -3655,6 +3933,7 @@
   "owner": "OpeningRows",
   "key": "onPress",
   "label": "افتح ‹› في المصحف",
+  "how": "tab",
   "route": "/read",
   "opens": "المصحف",
   "on": [
@@ -3669,6 +3948,7 @@
   "owner": "Names",
   "key": "onPress",
   "label": null,
+  "how": "push",
   "route": "/person",
   "opens": "الترجمة",
   "on": [
@@ -3681,6 +3961,7 @@
   "owner": "PersonScreen",
   "key": "showBattle",
   "label": null,
+  "how": "tab",
   "route": "/battle",
   "opens": "الغزوة",
   "on": [
@@ -3693,6 +3974,7 @@
   "owner": "PersonScreen",
   "key": "back",
   "label": null,
+  "how": "tab",
   "route": "/tarajim",
   "opens": "التراجم",
   "on": [
@@ -3705,6 +3987,7 @@
   "owner": "PersonScreen",
   "key": "tree",
   "label": null,
+  "how": "push",
   "route": "/nasab",
   "opens": "النسب",
   "on": [
@@ -3717,6 +4000,7 @@
   "owner": "PersonScreen",
   "key": "onPress",
   "label": null,
+  "how": "tab",
   "route": "/people",
   "opens": "كل التراجم",
   "on": [
@@ -3729,6 +4013,7 @@
   "owner": "PersonScreen",
   "key": "onPress",
   "label": "قارن حياته بغيره",
+  "how": "push",
   "route": "/life",
   "opens": "حياتهم جنبًا إلى جنب",
   "on": [
@@ -3741,6 +4026,7 @@
   "owner": "PersonScreen",
   "key": "onPin",
   "label": null,
+  "how": "tab",
   "route": "/battle",
   "opens": "الغزوة",
   "on": [
@@ -3753,6 +4039,7 @@
   "owner": "PersonScreen",
   "key": "onPress",
   "label": null,
+  "how": "tab",
   "route": "/battle",
   "opens": "الغزوة",
   "on": [
@@ -3765,6 +4052,7 @@
   "owner": "PersonScreen",
   "key": "onPress",
   "label": "تنقّل في صلاته",
+  "how": "push",
   "route": "/ties",
   "opens": "الصلات",
   "on": [
@@ -3777,6 +4065,7 @@
   "owner": "PersonScreen",
   "key": "onPress",
   "label": "بينه وبين…",
+  "how": "push",
   "route": "/between",
   "opens": "بين عدة أشخاص",
   "on": [
@@ -3789,6 +4078,7 @@
   "owner": "PersonScreen",
   "key": "onPick",
   "label": null,
+  "how": "push",
   "route": "/person",
   "opens": "الترجمة",
   "on": [
@@ -3801,6 +4091,7 @@
   "owner": "PersonScreen",
   "key": "onPress",
   "label": "‹›‹›",
+  "how": "push",
   "route": "/ayah",
   "opens": "صفحة الآية",
   "on": [
@@ -3813,6 +4104,7 @@
   "owner": "PersonScreen",
   "key": "onPress",
   "label": null,
+  "how": "push",
   "route": "/ayah",
   "opens": "صفحة الآية",
   "on": [
@@ -3825,6 +4117,7 @@
   "owner": "ProphetScreen",
   "key": "back",
   "label": null,
+  "how": "tab",
   "route": "/prophets",
   "opens": "قصص الأنبياء",
   "on": [
@@ -3837,6 +4130,7 @@
   "owner": "QuestionStage",
   "key": "onOpen",
   "label": null,
+  "how": "tab",
   "route": "/read",
   "opens": "المصحف",
   "on": [
@@ -3849,6 +4143,7 @@
   "owner": "QuestionStage",
   "key": "onOpen",
   "label": null,
+  "how": "tab",
   "route": "/read",
   "opens": "المصحف",
   "on": [
@@ -3861,6 +4156,7 @@
   "owner": "FinalResults",
   "key": "onOpen",
   "label": null,
+  "how": "tab",
   "route": "/read",
   "opens": "المصحف",
   "on": [
@@ -3873,6 +4169,7 @@
   "owner": "PartyStart",
   "key": "start",
   "label": null,
+  "how": "push",
   "route": "/quiz/party/[param]",
   "opens": "غرفة الاختبار الجماعي",
   "on": [
@@ -3885,6 +4182,7 @@
   "owner": "PartyStart",
   "key": "join",
   "label": null,
+  "how": "push",
   "route": "/quiz/party/[param]",
   "opens": "غرفة الاختبار الجماعي",
   "on": [
@@ -3897,6 +4195,7 @@
   "owner": "Results",
   "key": "onOpen",
   "label": null,
+  "how": "tab",
   "route": "/read",
   "opens": "المصحف",
   "on": [
@@ -3909,6 +4208,7 @@
   "owner": "QuizPlay",
   "key": "onOpen",
   "label": null,
+  "how": "tab",
   "route": "/read",
   "opens": "المصحف",
   "on": [
@@ -3921,6 +4221,7 @@
   "owner": "SoloSetup",
   "key": "start",
   "label": null,
+  "how": "push",
   "route": "/quiz/play",
   "opens": "الاختبار",
   "on": [
@@ -3933,6 +4234,7 @@
   "owner": "SoloSetup",
   "key": "onPress",
   "label": "أكمله",
+  "how": "push",
   "route": "/quiz/play",
   "opens": "الاختبار",
   "on": [
@@ -3945,6 +4247,7 @@
   "owner": "QuizzesScreen",
   "key": "five",
   "label": null,
+  "how": "push",
   "route": "/quiz/play",
   "opens": "الاختبار",
   "on": [
@@ -3957,6 +4260,7 @@
   "owner": "QuizzesScreen",
   "key": "onPress",
   "label": "اختبار مخصص",
+  "how": "push",
   "route": "/quiz/solo",
   "opens": "اختبار مخصص",
   "on": [
@@ -3969,6 +4273,7 @@
   "owner": "QuizzesScreen",
   "key": "onPress",
   "label": "اختبار جماعي",
+  "how": "push",
   "route": "/quiz/party",
   "opens": "اختبار جماعي",
   "on": [
@@ -3980,6 +4285,7 @@
   "line": 20,
   "owner": "QURAN_TILES",
   "label": "المصحف",
+  "how": "tab",
   "route": "/read",
   "opens": "المصحف",
   "on": [
@@ -3991,6 +4297,7 @@
   "line": 21,
   "owner": "QURAN_TILES",
   "label": "متشابهات القرآن",
+  "how": "tab",
   "route": "/branches",
   "opens": "متشابهات القرآن",
   "on": [
@@ -4002,6 +4309,7 @@
   "line": 22,
   "owner": "QURAN_TILES",
   "label": "مقارنة السور",
+  "how": "tab",
   "route": "/compare",
   "opens": "مقارنة السور",
   "on": [
@@ -4013,6 +4321,7 @@
   "line": 23,
   "owner": "QURAN_TILES",
   "label": "قصص الأنبياء",
+  "how": "tab",
   "route": "/prophets",
   "opens": "قصص الأنبياء",
   "on": [
@@ -4024,6 +4333,7 @@
   "line": 24,
   "owner": "QURAN_TILES",
   "label": "تحفة الأطفال",
+  "how": "tab",
   "route": "/tuhfa",
   "opens": "تحفة الأطفال",
   "on": [
@@ -4035,6 +4345,7 @@
   "line": 25,
   "owner": "QURAN_TILES",
   "label": "ألفاظ القرآن",
+  "how": "tab",
   "route": "/words",
   "opens": "ألفاظ القرآن",
   "on": [
@@ -4046,6 +4357,7 @@
   "line": 26,
   "owner": "QURAN_TILES",
   "label": "الأقسام",
+  "how": "tab",
   "route": "/oaths",
   "opens": "الأقسام",
   "on": [
@@ -4057,6 +4369,7 @@
   "line": 27,
   "owner": "QURAN_TILES",
   "label": "مشاهد",
+  "how": "tab",
   "route": "/lataif",
   "opens": "مشاهد",
   "on": [
@@ -4068,6 +4381,7 @@
   "line": 28,
   "owner": "QURAN_TILES",
   "label": "مصطلحات البلاغة",
+  "how": "tab",
   "route": "/terms",
   "opens": "مصطلحات البلاغة",
   "on": [
@@ -4079,6 +4393,7 @@
   "line": 29,
   "owner": "QURAN_TILES",
   "label": "القراءات",
+  "how": "tab",
   "route": "/qiraat",
   "opens": "القراءات",
   "on": [
@@ -4090,6 +4405,7 @@
   "line": 30,
   "owner": "QURAN_TILES",
   "label": "فواتح السور",
+  "how": "tab",
   "route": "/openings",
   "opens": "فواتح السور",
   "on": [
@@ -4101,6 +4417,7 @@
   "line": 31,
   "owner": "QURAN_TILES",
   "label": "ترتيب السور",
+  "how": "tab",
   "route": "/order",
   "opens": "ترتيب السور",
   "on": [
@@ -4113,6 +4430,7 @@
   "owner": "StoryRow",
   "key": "onPress",
   "label": null,
+  "how": "push",
   "route": "/story",
   "opens": "القصة",
   "on": [
@@ -4125,6 +4443,7 @@
   "owner": "ChapterCard",
   "key": "onPress",
   "label": null,
+  "how": "tab",
   "route": "/battle",
   "opens": "الغزوة",
   "on": [
@@ -4137,6 +4456,7 @@
   "owner": "HadithOpen",
   "key": "onPress",
   "label": "افتح ‹›",
+  "how": "push",
   "route": "/hadith-sahih",
   "opens": "حديث الصحيح",
   "on": [
@@ -4153,6 +4473,7 @@
   "owner": "TarajimScreen",
   "key": "onPress",
   "label": "كل التراجم",
+  "how": "push",
   "route": "/people",
   "opens": "كل التراجم",
   "on": [
@@ -4165,6 +4486,7 @@
   "owner": "TarajimScreen",
   "key": "onPress",
   "label": "قصص السيرة",
+  "how": "push",
   "route": "/stories",
   "opens": "قصص السيرة",
   "on": [
@@ -4177,6 +4499,7 @@
   "owner": "TarajimScreen",
   "key": "onPress",
   "label": "الغزوات والمعارك",
+  "how": "push",
   "route": "/battles",
   "opens": "الغزوات والمعارك",
   "on": [
@@ -4189,6 +4512,7 @@
   "owner": "TarajimScreen",
   "key": "onPress",
   "label": "الأطلس",
+  "how": "push",
   "route": "/atlas",
   "opens": "الأطلس",
   "on": [
@@ -4201,6 +4525,7 @@
   "owner": "TarajimScreen",
   "key": "onPress",
   "label": "النسب",
+  "how": "push",
   "route": "/nasab",
   "opens": "النسب",
   "on": [
@@ -4213,6 +4538,7 @@
   "owner": "TarajimScreen",
   "key": "onPress",
   "label": "بين عدة أشخاص",
+  "how": "push",
   "route": "/between",
   "opens": "بين عدة أشخاص",
   "on": [
@@ -4225,6 +4551,7 @@
   "owner": "TarajimScreen",
   "key": "onPress",
   "label": "حياتهم جنبًا إلى جنب",
+  "how": "push",
   "route": "/life",
   "opens": "حياتهم جنبًا إلى جنب",
   "on": [
@@ -4237,6 +4564,7 @@
   "owner": "TiesScreen",
   "key": "back",
   "label": null,
+  "how": "tab",
   "route": "/tarajim",
   "opens": "التراجم",
   "on": [
@@ -4249,6 +4577,7 @@
   "owner": "TiesScreen",
   "key": "onPress",
   "label": "ترجمته",
+  "how": "push",
   "route": "/person",
   "opens": "الترجمة",
   "on": [
@@ -4261,6 +4590,7 @@
   "owner": "TiesScreen",
   "key": "onPress",
   "label": "النسب",
+  "how": "push",
   "route": "/nasab",
   "opens": "النسب",
   "on": [
@@ -4273,6 +4603,7 @@
   "owner": "TiesScreen",
   "key": "onPress",
   "label": "بينه وبين…",
+  "how": "push",
   "route": "/between",
   "opens": "بين عدة أشخاص",
   "on": [
@@ -4285,6 +4616,7 @@
   "owner": "TiesScreen",
   "key": "onPress",
   "label": null,
+  "how": "tab",
   "route": "/battle",
   "opens": "الغزوة",
   "on": [
@@ -4297,6 +4629,7 @@
   "owner": "TiesScreen",
   "key": "onPress",
   "label": null,
+  "how": "tab",
   "route": "/people",
   "opens": "كل التراجم",
   "on": [
@@ -4309,6 +4642,7 @@
   "owner": "WordsScreen",
   "key": "onPress",
   "label": "‹›، ‹› مرة",
+  "how": "tab",
   "route": "/word",
   "opens": "الكلمة",
   "on": [
@@ -4321,6 +4655,7 @@
   "owner": "TabBar",
   "key": "press",
   "label": null,
+  "how": "tab",
   "route": "/quran",
   "opens": "القرآن",
   "on": []
@@ -4331,6 +4666,7 @@
   "owner": "TabBar",
   "key": "press",
   "label": null,
+  "how": "tab",
   "route": "/",
   "opens": "الرئيسية",
   "on": []
@@ -4341,6 +4677,7 @@
   "owner": "TopBar",
   "key": "onPress",
   "label": "أدوات القرآن",
+  "how": "dismissTo",
   "route": "/quran",
   "opens": "القرآن",
   "on": [
@@ -4402,6 +4739,7 @@
   "owner": "TopBar",
   "key": "onPress",
   "label": "المكتبة",
+  "how": "dismissTo",
   "route": "/books",
   "opens": "المكتبة",
   "on": [
@@ -4463,6 +4801,7 @@
   "owner": "TopBar",
   "key": "onPress",
   "label": "الصفحة الرئيسية",
+  "how": "tab",
   "route": "/",
   "opens": "الرئيسية",
   "on": [
