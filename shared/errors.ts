@@ -1,4 +1,4 @@
-export type ReportedError = { where: string; reason: string; at: number };
+export type ReportedError = { where: string; reason: string; at: number; times: number };
 
 const KEEP = 20;
 const recent: ReportedError[] = [];
@@ -21,7 +21,13 @@ export function causeChain(error: unknown): string {
 
 export function reportError(where: string, error: unknown) {
   const reason = causeChain(error);
-  recent.unshift({ where, reason, at: Date.now() });
+  const index = recent.findIndex(item => item.where === where && item.reason === reason);
+  if (index >= 0) {
+    const [same] = recent.splice(index, 1);
+    recent.unshift({ ...same, at: Date.now(), times: same.times + 1 });
+    return;
+  }
+  recent.unshift({ where, reason, at: Date.now(), times: 1 });
   recent.length = Math.min(recent.length, KEEP);
   console.warn(`[${where}] ${reason}`);
 }

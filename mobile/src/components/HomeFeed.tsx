@@ -118,6 +118,7 @@ import { DarkSeaActions, DarkSeaCard, darkSeaName, darkSeaSourceList, openDarkSe
 import { DARK_SEA_KEY } from '@shared/quran/scenes/darkSea';
 import { RAHMAN_KEY } from '@shared/quran/scenes/rahman';
 import { RahmanActions, RahmanCard, openRahman, rahmanSourceList } from './RahmanScene';
+import { reportError } from '@shared/errors';
 import { prophetStory } from '@/lib/prophets';
 import gharib from '@shared/data/quran/gharib';
 import { wordsOf as gharibWordsOf } from '@shared/quran/gharib';
@@ -1788,7 +1789,7 @@ function warmFeed(day: number, memorized: Memorized | null) {
   const step = () => {
     const work = steps.shift();
     if (!work) return;
-    try { work(); } catch { /* a kind that cannot be worked out now is worked out when its card asks, as before */ }
+    try { work(); } catch (error) { reportError('home: warm a card kind', error); }
     idle(step);
   };
   setTimeout(() => idle(step), WARM_AFTER);

@@ -13,8 +13,10 @@ import { causeChain, recentErrors } from '@shared/errors';
  */
 export function ErrorBoundary({ error, retry }: ErrorBoundaryProps) {
   const palette = usePalette();
-  const where = (error.stack ?? '').split('\n').filter(line => line.trim() && !line.includes(error.message)).slice(0, 6).join('\n');
-  const before = recentErrors().slice(0, 5).map(item => `[${item.where}] ${item.reason}`).join('\n');
+  const stack = (error.stack ?? '').split('\n');
+  const first = stack.findIndex(line => /^\s*at |@/.test(line));
+  const where = (first < 0 ? [] : stack.slice(first)).slice(0, 6).join('\n');
+  const before = recentErrors().slice(0, 5).map(item => `[${item.where}]${item.times > 1 ? ` ×${item.times}` : ''} ${item.reason}`).join('\n');
   const details = [causeChain(error), where, before && `---\n${before}`].filter(Boolean).join('\n\n');
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: palette.paper }}>

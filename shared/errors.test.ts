@@ -22,4 +22,12 @@ describe('reportError', () => {
     reportError('bookmarks: save', new Error('quota exceeded'));
     expect(recentErrors()[0]).toMatchObject({ where: 'bookmarks: save', reason: 'quota exceeded' });
   });
+
+  it('counts the same failure again instead of filling the list with it, so an offline download keeps older errors visible', () => {
+    reportError('settings: read', new Error('denied'));
+    for (let i = 0; i < 50; i++) reportError('listen: download ayah', new TypeError('Network request failed'));
+    const kept = recentErrors();
+    expect(kept[0]).toMatchObject({ where: 'listen: download ayah', times: 50 });
+    expect(kept.some(item => item.where === 'settings: read')).toBe(true);
+  });
 });

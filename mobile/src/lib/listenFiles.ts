@@ -204,7 +204,7 @@ export async function downloadPack(reciter: number, kind: PackKind, label: strin
     progress.total = queue.length;
     const worker = async () => {
       for (let key = queue.shift(); key && !stopped.has(id); key = queue.shift()) {
-        try { if (repair.has(key) || !have(reciter, key)) { await fetchAyah(reciter, key, rows[key].url); fetched.add(key); } } catch (error) { reportError(`listen: download ${key}`, error); failed = true; }
+        try { if (repair.has(key) || !have(reciter, key)) { await fetchAyah(reciter, key, rows[key].url); fetched.add(key); } } catch (error) { reportError('listen: download ayah', error); failed = true; }
         progress.done += 1;
         if (progress.done % 10 === 0 || progress.done === progress.total) changed();
       }

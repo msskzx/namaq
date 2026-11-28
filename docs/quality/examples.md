@@ -62,11 +62,12 @@ types, but the import no longer says what it is. Each got its `type` mark back. 
 - **Effect:** "the video failed" with no way to learn why.
 - **Found by:** reading every catch while fixing the empty ones. No rule catches this one, because the catch
   was not empty.
-- **Fix:** the message carries a `reason`, which is reported. The same reading found six more failures that kept
+- **Fix:** the message carries a `reason`, which is reported. The same reading found more failures that kept
   no reason, among them scheduling the adhan alerts. A failure there meant the adhan silently never rang.
 
 ## Comments that justified a shortcut (step 2, noticed for step 4)
 
 - `mobile/src/lib/lazyScreen.ts` and `HomeFeed.tsx` each have a `catch { /* … */ }` whose comment explains why
   the error can be dropped. That is the pattern from the talk: the comment makes the shortcut look reviewed.
-  Step 4 removes the comments, and these catches then have to say what they do in code.
+  The stricter rule from the review (a catch block holding only a comment counts as empty) flagged both, and
+  they now report what failed.

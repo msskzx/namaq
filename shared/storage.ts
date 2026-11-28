@@ -29,7 +29,7 @@ export function keepingStorage(base: KeyStorage) {
     getItem: key => (unsaved.has(key) ? unsaved.get(key)! : base.getItem(key)),
     setItem: (key, value) => {
       const before = unsaved.size;
-      try { base.setItem(key, value); unsaved.delete(key); } catch { unsaved.set(key, value); }
+      try { base.setItem(key, value); unsaved.delete(key); } catch (error) { reportError('storage: save', error); unsaved.set(key, value); }
       changed(before);
     },
     subscribe: base.subscribe,
