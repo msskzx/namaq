@@ -438,6 +438,31 @@ test.describe('the eye with a recitation to continue and a forgotten ayah', () =
   });
 });
 
+test.describe('a long review', () => {
+  const forgot = Object.fromEntries(Array.from({ length: 120 }, (_, at) => [`2:${at + 5}`, { forgot: 1, at: 1 }]));
+  test.use({ seed: { 'ayah-forgot': forgot } });
+  test('its count fits in the recite bar beside every button on a 360-point phone', async ({ page }) => {
+    await page.setViewportSize({ width: 360, height: 800 });
+    await open(page, '/read');
+    await page.getByText(HAMD, { exact: true }).first().click();
+    await page.getByRole('button', { name: 'تسميع: أخفِ الآيات وأظهرها واحدة واحدة' }).click();
+    await page.getByRole('button', { name: 'راجع ما نسيت' }).click();
+    const bar = page.getByRole('toolbar', { name: 'أدوات التسميع' });
+    const edge = (await bar.boundingBox())!;
+    const inside = (box: { x: number; y: number; width: number; height: number }) => {
+      expect(box.x).toBeGreaterThanOrEqual(edge.x);
+      expect(box.x + box.width).toBeLessThanOrEqual(edge.x + edge.width);
+      expect(box.y + box.height).toBeLessThanOrEqual(edge.y + edge.height);
+    };
+    inside((await bar.getByLabel('مراجعة ١ من ١٢٠').boundingBox())!);
+    for (const button of await bar.getByRole('button').all()) {
+      const box = (await button.boundingBox())!;
+      inside(box);
+      expect(box.width).toBeGreaterThanOrEqual(44);
+    }
+  });
+});
+
 test('recite from an ayah\'s long-press menu starts at that ayah', async ({ page }) => {
   const start = async () => (await stored<{ position: { start: string } }>(page, 'reader-recite-last'))?.position.start;
   await open(page, '/read');
