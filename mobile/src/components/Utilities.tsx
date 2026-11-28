@@ -12,7 +12,7 @@ import { dayDigits, FACING, hijriMonth, METHODS, MY_LOCATION, nextPrayer, PRAYER
 import { locate, qiblaFor, timesFor, useHeading, useMinute } from '@/lib/prayer';
 import { adhanAlerts, prayerPlace, prayerView, type PrayerView, prayerSettings, utilityView, type UtilityView } from '@/lib/settings';
 import { buzz } from '@/lib/haptics';
-import { ALERTS_SUPPORTED, allowAlerts, alertsAllowed, openPhoneSettings, useForeground } from '@/lib/adhan';
+import { ALERTS_SUPPORTED, allowAlerts, openPhoneSettings, useAlertsBlocked, useForeground } from '@/lib/adhan';
 import { anyAlert } from '@shared/adhanAlerts';
 import { type Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
@@ -25,7 +25,6 @@ import { DayDial, DayLine, MonthMoons, TimeCells } from './DayView';
 import { Tap } from '@/ui/Tap';
 import TapRow from '@/ui/TapRow';
 import { FEATURE_ICON } from '@/components/featureIcons';
-import { useLoaded } from '@/lib/hooks/useLoaded';
 
 const DAY_VIEWS = [{ key: 'dial', label: 'دائرة' }, { key: 'line', label: 'خط' }] as const satisfies readonly { key: PrayerView; label: string }[];
 
@@ -159,11 +158,8 @@ function Times({ place, palette, onPlace }: { place: Place; palette: Palette; on
   const [alerts, setAlerts] = adhanAlerts.use();
   const [view, setView] = prayerView.use();
   const upcoming = { key: next ?? 'fajr', at: nextAt, left } as const;
-  const [refused, setBlocked] = useState(false);
   const back = useForeground();
-  const asking = ALERTS_SUPPORTED && anyAlert(alerts);
-  const allowed = useLoaded(asking ? `adhan alerts ${JSON.stringify(alerts)} ${dayKey} ${back}` : null, () => alertsAllowed());
-  const blocked = asking ? allowed === false : refused;
+  const [blocked, setBlocked] = useAlertsBlocked(ALERTS_SUPPORTED && anyAlert(alerts), [alerts, dayKey, back]);
   const toggle = async (key: PrayerKey) => {
     buzz();
     if (alerts[key]) { setAlerts({ ...adhanAlerts.get(), [key]: false }); return; }

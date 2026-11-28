@@ -171,5 +171,5 @@ types, but the import no longer says what it is. Each got its `type` mark back. 
 - **Where:** `components/scenes/SeaArt.web.tsx`.
 - **Wrong:** Skia for the web was loaded in an effect with no rejection handler.
 - **Effect:** if the file failed to load, the sea scene stayed empty with no error anywhere.
-- **Fix:** a module-level `lazy()` under `Suspense`: no effect, and a failed load reaches the crash screen's error
-  boundary with its cause.
+- **Fix:** a module-level `lazy()` under `Suspense`, with no effect. A failed load is passed to `reportError` with its
+  cause, and the scene draws nothing instead of crashing the screen.

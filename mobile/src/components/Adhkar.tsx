@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { View } from 'react-native';
 import { Bed, Bell, BellOff, ChevronLeft, ChevronRight, Circle, CircleCheck, Moon, Mosque, Sun, Sunrise } from 'lucide-react-native';
 import { ADHKAR, adhkarFor, type AdhkarOccasion, type Dhikr } from '@shared/adhkar';
@@ -15,12 +15,11 @@ import TapRow from '@/ui/TapRow';
 import { Text } from '@/ui/Text';
 import { AyatRange } from './AyahLines';
 import { buzz } from '@/lib/haptics';
-import { ALERTS_SUPPORTED, allowAlerts, alertsAllowed, openPhoneSettings, useForeground } from '@/lib/adhan';
+import { ALERTS_SUPPORTED, allowAlerts, openPhoneSettings, useAlertsBlocked, useForeground } from '@/lib/adhan';
 import { openDhikr, showAdhkar, useAdhkarPlace, useSaidToday } from '@/lib/adhkar';
 import { saidDone, saidKey, type SaidToday } from '@shared/adhkarCount';
 import { adhkarAlerts, prayerPlace } from '@/lib/settings';
 import type { Palette } from '@/lib/theme';
-import { useLoaded } from '@/lib/hooks/useLoaded';
 
 export const ADHKAR_ICONS = { morning: Sun, evening: Moon, sleep: Bed, waking: Sunrise, 'after-prayer': Mosque } as const;
 const GAP = 16;
@@ -56,11 +55,9 @@ export function DhikrBody({ item, palette }: { item: Dhikr; palette: Palette }) 
 function useReminder(time: AdhkarTime | undefined, onPlace: () => void) {
   const [alerts, setAlerts] = adhkarAlerts.use();
   const [place] = prayerPlace.use();
-  const [refused, setBlocked] = useState(false);
   const back = useForeground();
   const on = !!time && alerts[time];
-  const allowed = useLoaded(on ? `adhkar alerts ${back}` : null, () => alertsAllowed());
-  const blocked = on ? allowed === false : refused;
+  const [blocked, setBlocked] = useAlertsBlocked(on, [back]);
   const toggle = async () => {
     if (!time) return;
     buzz();
