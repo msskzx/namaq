@@ -28,8 +28,8 @@ import { useOnChange } from '@/lib/hooks/useOnChange';
 import { useLoaded } from '@/lib/hooks/useLoaded';
 
 // see docs/plans/balagha.md
-const band = (palette: Palette) => palette.bands.mark;
-const deepBand = (palette: Palette) => `${palette.ink}33`;
+const band = (palette: Palette) => `${palette.ink}1a`;
+const deepBand = (palette: Palette) => palette.bands.mark;
 
 type Book = 'itqan' | 'kashshaf';
 const BOOK_NAMES: Record<Book, string> = { itqan: 'الإتقان للسيوطي', kashshaf: 'الكشاف للزمخشري' };

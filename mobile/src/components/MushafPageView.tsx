@@ -275,7 +275,7 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
     cells.forEach((cell, at) => {
       if (!cell.band) return;
       const run = runs[runs.length - 1];
-      if (run && run[run.length - 1] === at - 1 && cells[run[0]].band === cell.band) run.push(at);
+      if (run && run[run.length - 1] === at - 1 && BAND_TINT[cells[run[0]].band!](palette) === BAND_TINT[cell.band](palette)) run.push(at);
       else runs.push([at]);
     });
     return runs.map(run => {
@@ -405,8 +405,12 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
                           )) : null}
                         </Text>
                         {loose ? null : group.marks.map(end => (
-                          <View key={end} style={{ marginRight: group.word ? size * WORD_GAP : 0, width: size * SAVED_CIRCLE, height: size * SAVED_CIRCLE, borderRadius: size, backgroundColor: isSaved(end) ? palette.bands.saved : undefined, alignItems: 'center', justifyContent: 'center' }}>
-                            <Text style={{ fontFamily: QURAN_FONT, fontSize: size, lineHeight: size * SAVED_CIRCLE, color: isSaved(end) ? palette.ink : tone(end) }}>{endHidden(end) ? EMPTY_END : num(end)}</Text>
+                          <View key={end} style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            {group.word ? <Text style={{ fontFamily: QURAN_FONT, fontSize: size }}>{' '}</Text> : null}
+                            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                              {isSaved(end) ? <View style={{ position: 'absolute', width: size * SAVED_CIRCLE, height: size * SAVED_CIRCLE, borderRadius: size, backgroundColor: palette.bands.saved }} /> : null}
+                              <Text style={{ fontFamily: QURAN_FONT, fontSize: size, color: isSaved(end) ? palette.ink : tone(end) }}>{endHidden(end) ? EMPTY_END : num(end)}</Text>
+                            </View>
                           </View>
                         ))}
                         </View>
