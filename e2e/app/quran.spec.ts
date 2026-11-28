@@ -1,6 +1,7 @@
 import type { Page } from '@playwright/test';
 import { closeSource, expect, onScreen, open, openSource, readerPage, tab, test, openCards } from './fixtures';
 import { surahName as S } from '../../shared/quran/surahNames';
+import { mushafMarkOrder as drawn } from '../../shared/quran/quranText/markOrder';
 
 test('the Quran hub links to every tool', async ({ page }) => {
   await open(page, '/');
@@ -47,7 +48,7 @@ test('the surah order narrows to a juz and cites its books', async ({ page }) =>
     if (strip) strip.scrollLeft = strip.scrollWidth;
   });
   await page.getByRole('button', { name: '٣٠', exact: true }).click();
-  await expect(page.getByRole('heading', { name: `${S(78)}` })).toBeVisible();
+  await expect(page.getByRole('heading', { name: drawn(S(78)) })).toBeVisible();
   await expect(page.getByRole('button', { name: /^المصدر: البقاعي، نظم الدرر/ }).first()).toBeVisible();
 });
 
@@ -442,7 +443,7 @@ test("a word's page holds Ibn Qutaybah's note on a phrase that explains it, and 
   await page.getByLabel('ابحث عن كلمة في القرآن').fill('ريب');
   await page.getByRole('button', { name: /^رَيۡب، / }).click();
   // His note is a branch of the word's meanings at the top too; the book's own section adds its card under them.
-  const note = page.getByText('لا شكَّ فيه', { exact: false });
+  const note = page.getByText(drawn('لا شكَّ فيه'), { exact: false });
   await expect(note.first()).toBeVisible();
   const before = await note.count();
   await page.getByRole('tab', { name: 'غريب القرآن لابن قتيبة' }).click();

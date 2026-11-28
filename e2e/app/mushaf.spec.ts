@@ -1,5 +1,6 @@
 import { closeSource, expect, longPress, open, openSource, readerPage, reciteBarsHidden, stored, test } from './fixtures';
 import { surahName as S } from '../../shared/quran/surahNames';
+import { mushafMarkOrder as drawn } from '../../shared/quran/quranText/markOrder';
 import { bookUrl } from '../../shared/books';
 import itqan from '../../shared/data/quran/itqanBalagha';
 import { itqanAt, itqanCredit } from '../../shared/quran/itqanBalagha';
@@ -145,7 +146,7 @@ test('an ayah\'s balagha shows al-Suyuti\'s paragraphs, then al-Zamakhshari\'s p
   await page.getByRole('button', { name: 'البلاغة في الآية' }).click();
   await expect(page.getByRole('heading', { name: `${S(1)} ٢` })).toBeVisible();
   await expect(page.getByRole('tab', { name: 'الإتقان للسيوطي' })).toHaveAttribute('aria-selected', 'true');
-  await expect(page.getByText('«الصِّفَةُ»', { exact: false }).first()).toBeVisible();
+  await expect(page.getByText(drawn('«الصِّفَةُ»'), { exact: false }).first()).toBeVisible();
   await openSource(page);
   // The first source line is the first paragraph's: its part and page.
   await expect(page.getByText(itqanCredit(itqanAt(itqan, '1:2')[0]), { exact: true })).toBeVisible();
@@ -192,7 +193,7 @@ test.describe('surah topics', () => {
     await open(page, '/read');
     await pressWord(page, 'عَنِ');
     await page.getByRole('button', { name: 'موضوع الآية في السورة' }).click();
-    await expect(page.getByRole('heading', { name: `موضوعات سورة ${S(78)}` })).toBeVisible();
+    await expect(page.getByRole('heading', { name: drawn(`موضوعات سورة ${S(78)}`) })).toBeVisible();
     await expect(page.getByText(/^مقصودها الدلالة على أن يوم القيامة/)).toBeVisible();
     await expect(page.getByText('التفسير الموضوعي لسور القرآن الكريم، جامعة الشارقة، ج ٩ ص ٤')).toBeVisible();
     await page.getByRole('button', { name: /^٤\. جزاء المتقين/ }).click();
