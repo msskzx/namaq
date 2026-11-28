@@ -2,7 +2,7 @@ import { createContext, Fragment, isValidElement, useContext, useState, type Com
 import { View, type TextStyle, type ViewStyle } from 'react-native';
 import { usePageWidth } from '@/ui/column';
 import { Text } from '@/ui/Text';
-import { QURAN_FONT, usePalette, type Palette } from '@/lib/theme';
+import { QURAN_FONT, usePalette } from '@/lib/theme';
 import { markTone, type WordMark } from '@/lib/marks';
 import { CARD_MARGINS, FLOW_LINE, flowFontSize, WORD_GAP, wordFontSize } from '@shared/quran/quranText/flow';
 import { mushafText } from '@shared/quran/mushafText';
@@ -57,21 +57,27 @@ const piecesOf = (runs: Run[]): Piece<Run>[] => flowPieces<Run>(runs, text => ({
 
 function FlowText({ children, size, color, center, lines, guess }: { children: ReactNode; size: number; color: string; center: boolean; lines?: number; guess: number }) {
   const pieces = piecesOf(runsOf(children));
-  const palette = usePalette();
   const pressed = pieces.some(piece => piece.words.some(run => run.onPress));
   const style = { fontFamily: QURAN_FONT, fontSize: size, lineHeight: size * FLOW_LINE, color, writingDirection: 'rtl' as const };
   return (
     <QuranLines pieces={pieces} size={size} color={color} guess={guess} center={center} lines={lines} label={pressed ? undefined : mushafText(pieces.map(piece => piece.text).join(' '))}
-      between={(before, after) => bandOf(before.words[before.words.length - 1], palette) === bandOf(after.words[0], palette) ? bandOf(after.words[0], palette) : undefined}
+      band={bandOf}
       draw={(piece, at) => (
         <Text key={at} style={style}>
-          {piece.words.map((run, k) => <AyahWords key={k} look={run.look} mark={run.mark} lit={run.lit} onPress={run.onPress}>{run.text}</AyahWords>)}
+          {piece.words.map((run, k) => <AyahWords key={k} look={unbanded(run, piece)} mark={run.mark} lit={run.lit} onPress={run.onPress}>{run.text}</AyahWords>)}
         </Text>
       )} />
   );
 }
 
-const bandOf = (run: Run, palette: Palette) => run.look?.backgroundColor as string | undefined ?? (run.lit ? palette.highlight : undefined);
+const SIGN_ONLY = /^[\s\u0660-\u0669\u06F0-\u06F9\u06D6-\u06DE\u06E9\uFD3E\uFD3F]+$/;
+const runBand = (run: Run) => run.look?.backgroundColor as string | undefined;
+const bandOf = (piece: Piece<Run>) => {
+  const runs = piece.words.filter(run => !SIGN_ONLY.test(run.text));
+  const tone = runs.length ? runBand(runs[0]) : undefined;
+  return tone && runs.every(run => runBand(run) === tone) ? tone : undefined;
+};
+const unbanded = (run: Run, piece: Piece<Run>) => (bandOf(piece) ? { ...run.look, backgroundColor: undefined } : run.look);
 
 export type WordLook = Pick<TextStyle, 'color' | 'fontWeight' | 'textDecorationLine' | 'textDecorationColor' | 'backgroundColor'>;
 

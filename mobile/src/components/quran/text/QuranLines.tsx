@@ -1,4 +1,4 @@
-import { Fragment, useState, type ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import { useWindowDimensions, View, type LayoutChangeEvent } from 'react-native';
 import { Text } from '@/ui/Text';
 import { QURAN_FONT } from '@/lib/theme';
@@ -18,6 +18,7 @@ export function QuranLine({ spread, width, scale = 1, gap, origin = 'right', chi
 }
 
 const BASE = 40;
+const BAND_ROUND = 4;
 const MEASURE_ROOM = 100 * BASE;
 const widths = new Map<string, number>();
 const ELLIPSIS = '…';
@@ -29,9 +30,9 @@ const paragraphs = (pieces: { newLine?: boolean }[]) => pieces.reduce<[number, n
 
 const widthKey = (piece: { text: string; bold: boolean }, scale: number) => `${scale}${piece.bold ? 'b' : 'r'}${piece.text}`;
 
-export default function QuranLines<W>({ pieces, size, color, draw, between, center = false, lines, label, guess = 0 }: { pieces: Piece<W>[]; size: number; color: string;
+export default function QuranLines<W>({ pieces, size, color, draw, band, center = false, lines, label, guess = 0 }: { pieces: Piece<W>[]; size: number; color: string;
   draw: (piece: Piece<W>, at: number) => ReactNode;
-  between?: (before: Piece<W>, after: Piece<W>) => string | undefined;
+  band?: (piece: Piece<W>) => string | undefined;
   center?: boolean;
   lines?: number;
   label?: string;
@@ -79,10 +80,16 @@ export default function QuranLines<W>({ pieces, size, color, draw, between, cent
         return (
           <View key={n} style={{ height: line, flexDirection: 'row', alignItems: 'center', justifyContent: center ? 'center' : 'flex-start' }}>
             <QuranLine spread={spread} width={width} scale={Math.min(1, width / drawn)} gap={0} origin={center ? 'center' : 'right'}>
-              {pieces.slice(from, to).map((piece, at) => [
-                at > 0 && <View key={`${from + at}-`} style={{ alignSelf: 'stretch', ...(spread ? { flexGrow: 1 } : { width: gap }), backgroundColor: between?.(pieces[from + at - 1], piece) }} />,
-                <Fragment key={from + at}>{draw(piece, from + at)}</Fragment>,
-              ])}
+              {pieces.slice(from, to).map((piece, at) => {
+                const tone = band?.(piece);
+                const joinsBefore = !!tone && at > 0 && band?.(pieces[from + at - 1]) === tone;
+                const joinsAfter = !!tone && from + at + 1 < to && band?.(pieces[from + at + 1]) === tone;
+                return [
+                  at > 0 && <View key={`${from + at}-`} style={{ alignSelf: 'stretch', ...(spread ? { flexGrow: 1 } : { width: gap }), backgroundColor: joinsBefore ? tone : undefined }} />,
+                  <View key={from + at} style={tone ? { backgroundColor: tone, borderTopStartRadius: joinsBefore ? 0 : BAND_ROUND, borderBottomStartRadius: joinsBefore ? 0 : BAND_ROUND,
+                    borderTopEndRadius: joinsAfter ? 0 : BAND_ROUND, borderBottomEndRadius: joinsAfter ? 0 : BAND_ROUND } : undefined}>{draw(piece, from + at)}</View>,
+                ];
+              })}
               {more && <View style={{ width: gap }} />}
               {more && <Text style={{ fontFamily: QURAN_FONT, fontSize: size, lineHeight: line, color }}>{ELLIPSIS}</Text>}
             </QuranLine>
