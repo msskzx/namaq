@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
+import { useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { Animated, Pressable, ScrollView, View } from 'react-native';
 import Svg, { Circle, G, Line, Polygon, Rect, Text as SvgText } from 'react-native-svg';
 import { Bell, BellOff, CalendarDays, Check, HandHeart, ChevronDown, ChevronLeft, ChevronRight, Compass, Infinity as InfinityIcon, List, LocateFixed, MapPin, type LucideProps } from 'lucide-react-native';
@@ -26,6 +26,8 @@ import { DayDial, DayLine, MonthMoons, TimeCells } from './DayView';
 import { Tap } from '@/ui/Tap';
 import TapRow from '@/ui/TapRow';
 import { FEATURE_ICON } from '@/components/featureIcons';
+import { useOnChange } from '@/lib/hooks/useOnChange';
+import { useWhileOpen } from '@/lib/hooks/useWhileOpen';
 
 const DAY_VIEWS = [{ key: 'dial', label: 'دائرة' }, { key: 'line', label: 'خط' }] as const satisfies readonly { key: PrayerView; label: string }[];
 
@@ -38,7 +40,7 @@ export function UtilityPicker({ palette, progress }: { palette: Palette; progres
   const [view, setView] = utilityView.use();
   const [spots, setSpots] = useState<{ x: number; width: number }[]>([]);
   const [lit, setLit] = useState(() => Math.max(0, VIEWS.findIndex(item => item.id === view)));
-  useEffect(() => {
+  useWhileOpen(() => {
     if (!progress) { setLit(Math.max(0, VIEWS.findIndex(item => item.id === view))); return; }
     const id = progress.addListener(({ value }) => setLit(Math.round(value)));
     return () => progress.removeListener(id);
@@ -79,10 +81,10 @@ function Tools({ palette, on, onPlace, scrollTo, reach }: { palette: Palette; on
   const [place] = prayerPlace.use();
   const [qiblaY, setQiblaY] = useState(0);
   const asks = useSyncExternalStore(subscribeQiblaAsks, readQiblaAsks);
-  useEffect(() => {
+  useOnChange([asks, place, qiblaY, scrollTo], () => {
     if (!place) takeQiblaAsk();
     else if (qiblaY && takeQiblaAsk()) scrollTo?.(qiblaY - 8);
-  }, [asks, place, qiblaY, scrollTo]);
+  });
   const reached = qiblaY > 0 && qiblaY + 80 <= reach;
   return (
     <View style={{ gap: 16 }}>
@@ -258,7 +260,7 @@ export function PlaceSheet({ open, onClose, palette }: { open: boolean; onClose:
   const [refused, setRefused] = useState(false);
   const [busy, setBusy] = useState(false);
   const shown = useMemo(() => searchPlaces(query), [query]);
-  useEffect(() => { if (!open) { setQuery(''); setRefused(false); } }, [open]);
+  useOnChange([open], () => { if (!open) { setQuery(''); setRefused(false); } });
   const here = async () => {
     setBusy(true);
     const found = await locate();
@@ -291,7 +293,7 @@ function Qibla({ place, palette, on }: { place: Place; palette: Palette; on: boo
   const turn = live ? turnTo(heading, bearing) : null;
   const facing = turn !== null && Math.abs(turn) <= FACING;
   const was = useRef(false);
-  useEffect(() => { if (facing && !was.current) buzz(); was.current = facing; }, [facing]);
+  useOnChange([facing], () => { if (facing && !was.current) buzz(); was.current = facing; });
   const spin = live ? -heading : 0;
   const tone = facing ? palette.green : palette.accent;
   const ticks = Array.from({ length: 72 }, (_, i) => i * 5);

@@ -1,8 +1,11 @@
-import { useEffect, useState, useSyncExternalStore } from 'react';
+import { useState, useSyncExternalStore } from 'react';
 import type { PairCard } from '@shared/quran/compareCards';
 import { readPlan, READ_SPEEDS, stepTime } from '@shared/quran/readPlan';
 import { device as deviceStorage } from '@/lib/storage';
 import { reportError } from '@shared/errors';
+import { useLater } from '@/lib/hooks/useLater';
+import { useOnChange } from '@/lib/hooks/useOnChange';
+import { useOnLeave } from '@/lib/hooks/useOnLeave';
 
 const SPEED_KEY = 'compare-read-pace';
 type Shared = { active: string | null; speed: number };
@@ -25,23 +28,23 @@ export type ReadStatus = 'idle' | 'playing' | 'paused' | 'done';
 export function useReadAlong(card: PairCard) {
   const { active, speed } = useSyncExternalStore(subscribe, () => shared);
   const [studio, setStudio] = useState(false);
-  const [status, setStatus] = useState<ReadStatus>('idle');
-  const [at, setAt] = useState(0);
+  const [kept, setStatus] = useState<ReadStatus>('idle');
+  const [keptAt, setAt] = useState(0);
   const [plan] = useState(() => readPlan(card));
-  useEffect(() => {
-    if (active !== card.id && (status === 'playing' || status === 'paused')) { setStatus('idle'); setAt(0); }
-  }, [active, card.id, status]);
-  useEffect(() => {
-    if (status !== 'playing') return;
-    const step = plan[at];
-    if (!step) { setStatus('done'); return; }
-    const timer = setTimeout(() => {
+  const stopped = active !== card.id && (kept === 'playing' || kept === 'paused');
+  const status = stopped ? 'idle' : kept;
+  const at = stopped ? 0 : keptAt;
+  const step = useLater();
+  useOnChange([status, at, plan, speed], () => {
+    if (status !== 'playing') { step.cancel(); return; }
+    const now = plan[at];
+    if (!now) { setStatus('done'); return; }
+    step.after(stepTime(now, speed), () => {
       if (at + 1 >= plan.length) setStatus('done');
       else setAt(at + 1);
-    }, stepTime(step, speed));
-    return () => clearTimeout(timer);
-  }, [status, at, plan, speed]);
-  useEffect(() => () => { if (shared.active === card.id) setShared({ active: null }); }, [card.id]);
+    });
+  });
+  useOnLeave(() => { if (shared.active === card.id) setShared({ active: null }); });
   const play = (from?: number) => {
     setShared({ active: card.id });
     if (from !== undefined) setAt(from);

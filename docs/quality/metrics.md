@@ -80,3 +80,8 @@ Counts are of product code: test files are left out. "Empty catch blocks" counts
 | 2026-11-28 | 7, components batch 3a | app | timers on the shrink-only list | 25 | 14 | |
 | 2026-11-28 | 7, components batch 3a | app | React Compiler findings | 143 | 132 | 10 set-state-in-effect and 1 refs went with the effects |
 | 2026-11-28 | 7, components batch 3a | app | shared hooks | 12 | 13 | useBeforePaint, for the reader's page offset and zoom |
+| 2026-11-28 | 7, components batch 3b | app components (8 files) | useEffect / useLayoutEffect calls / timers | 48 / 14 | 0 / 0 | the home feed, tree pager, reader, app shell, matrix card, share sheet, tools page, read-along |
+| 2026-11-28 | 7, components batch 3b | app | effects on the shrink-only list | 48 | 0 | |
+| 2026-11-28 | 7, components batch 3b | app | timers on the shrink-only list | 14 | 0 | the feed's idle warm-up moved to `lib/idle.ts`, the prayer card's clock to `useNow` and `useForeground` |
+| 2026-11-28 | 7, components batch 3b | app | React Compiler findings | 132 | 117 | 15 set-state-in-effect went with the effects; the 6 left are in lib/ |
+| 2026-11-28 | 7, components batch 3b | app | shared hooks | 13 | 15 | useWhileOpen (start on open, stop on close, restart on change), useLatestRun (drop a late answer) |

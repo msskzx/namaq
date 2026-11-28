@@ -6,6 +6,7 @@ import { useAfter } from './useAfter';
 import { useBeforePaint } from './useBeforePaint';
 import { useDebounced } from './useDebounced';
 import { useDelayedFlag } from './useDelayedFlag';
+import { useLatestRun } from './useLatestRun';
 import { useLater } from './useLater';
 import { useLiftInto } from './useLiftInto';
 import { useLoaded } from './useLoaded';
@@ -13,6 +14,7 @@ import { useNow } from './useNow';
 import { useOnChange } from './useOnChange';
 import { useOnLeave } from './useOnLeave';
 import { useWindowEvent } from './useWindowEvent';
+import { useWhileOpen } from './useWhileOpen';
 import { SCROLL_QUIET_MS, useWebScrollEnd } from './useWebScrollEnd';
 
 const platform = vi.hoisted(() => ({ OS: 'web' }));
@@ -373,5 +375,51 @@ describe('useWindowEvent', () => {
     view.unmount();
     window.dispatchEvent(new MessageEvent('message', { data: 'y' }));
     expect(late).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('useWhileOpen', () => {
+  it('starts once while the screen is open and stops when it closes, whatever the screen redraws', () => {
+    const log: string[] = [];
+    const view = mount(({ at }: { at: number }) => useWhileOpen(() => { log.push(`start ${at}`); return () => log.push(`stop ${at}`); }), { at: 1 });
+    view.rerender({ at: 2 });
+    expect(log).toEqual(['start 1']);
+    view.unmount();
+    expect(log).toEqual(['start 1', 'stop 1']);
+  });
+
+  it('stops and starts again when one of its values changes, so a listener follows the thing it listens to', () => {
+    const log: string[] = [];
+    const view = mount(({ at }: { at: number }) => useWhileOpen(() => { log.push(`start ${at}`); return () => log.push(`stop ${at}`); }, [at]), { at: 1 });
+    view.rerender({ at: 1 });
+    view.rerender({ at: 2 });
+    view.unmount();
+    expect(log).toEqual(['start 1', 'stop 1', 'start 2', 'stop 2']);
+  });
+
+  it('under StrictMode stops the first start before starting again, so nothing is left listening twice', () => {
+    const log: string[] = [];
+    const Probe = () => { useWhileOpen(() => { log.push('start'); return () => log.push('stop'); }); return null; };
+    const root = createRoot(document.createElement('div'));
+    act(() => root.render(<StrictMode><Probe /></StrictMode>));
+    expect(log).toEqual(['start', 'stop', 'start']);
+    act(() => root.unmount());
+    expect(log).toEqual(['start', 'stop', 'start', 'stop']);
+  });
+});
+
+describe('useLatestRun', () => {
+  it('keeps only the newest run live, so an older answer that comes late is dropped', () => {
+    const view = mount(() => useLatestRun(), {});
+    const first = view.seen.current();
+    const second = view.seen.current();
+    expect([first(), second()]).toEqual([false, true]);
+  });
+
+  it('drops every run when the screen closes, so nothing sets state after it', () => {
+    const view = mount(() => useLatestRun(), {});
+    const live = view.seen.current();
+    view.unmount();
+    expect(live()).toBe(false);
   });
 });
