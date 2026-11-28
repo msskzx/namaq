@@ -1,6 +1,6 @@
 # Effects and timers in app code
 
-Owner, 2026-11-28 (quality step 7). Screens, components, `ui/` and `app/` routes in `mobile/src` may not call
+Owner, 2026-11-28 (quality step 7). Outside test files, screens, components, `ui/` and `app/` routes in `mobile/src` may not call
 `useEffect`, `useLayoutEffect` or `useInsertionEffect`, or use `setTimeout`, `setInterval`,
 `requestAnimationFrame` or `requestIdleCallback`. Lint enforces it (`quality/no-raw-effects` in
 `shared/lint/quality.mjs`, `no-restricted-globals` and `no-restricted-properties` in `mobile/eslint.config.js`).
@@ -22,6 +22,7 @@ and only show up on a phone, so the rule moves them into a few small hooks that 
 | a value that waits until typing stops | `useDebounced(value, ms)` |
 | a clock that ticks | `useNow(ms)` |
 | something to run once, a little after the screen opens | `useAfter(ms, run)` |
+| a flag that turns on only after a state has lasted a while ("still loading") | `useDelayedFlag(on, ms, key)` |
 | the end of a horizontal page swipe on web | `useWebScrollEnd(settle)` |
 
 The hooks are in `mobile/src/lib/hooks/` and tested in `hooks.test.tsx`. Each clears its timer when the
@@ -29,7 +30,7 @@ screen closes.
 
 ## Exceptions
 
-There are no inline exceptions: lint rejects an `eslint-disable` that names one of these rules. When a case fits
+There are no inline exceptions: lint rejects an `eslint-disable` that names one of these rules or names no rule, and an `/* eslint … */` comment that turns one off. When a case fits
 none of the hooks above, it gets a new hook in `mobile/src/lib/hooks/` with a test. The lint rule does not
 reach that folder. A new hook is accepted when:
 

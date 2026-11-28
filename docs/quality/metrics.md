@@ -36,10 +36,10 @@ Counts are of product code: test files are left out. "Empty catch blocks" counts
 | 2026-11-28 | 4 no comments | shared | comment lines | 3511 | 62 | pointers, plus the header of each generated `.d.ts` data file |
 | 2026-11-28 | 4 no comments | app + shared | comments turned into a doc or record pointer | 0 | 87 | a removed comment that named docs/… or R00xx kept only that name |
 | 2026-11-28 | 4 no comments | website | comment lines | 4443 | 4443 | the website is paused; the rule reaches it when it returns |
-| 2026-11-28 | 7 no raw effects or timers | app (outside lib/) | useEffect calls | 145 | 138 | the 7 removed were a search waiting for typing to stop (3), two clocks, a loading flag and a timer cleanup; the 138 left are frozen in eslint-suppressions.json |
-| 2026-11-28 | 7 no raw effects or timers | app (outside lib/) | setTimeout / setInterval / requestAnimationFrame | 51 | 40 | 5 copies of the same web scroll timer, 3 search delays, 2 clocks, a delayed warm-up, a loading flag |
-| 2026-11-28 | 7 no raw effects or timers | app | timers left without cleanup on unmount | 4 | 0 | the web scroll timer in the compare pager, the hadith pager, the stories pages and the tools pages |
-| 2026-11-28 | 7 no raw effects or timers | app | shared hooks replacing copies | 0 | 4 | useDebounced, useNow, useAfter, useWebScrollEnd, with 7 tests |
+| 2026-11-28 | 7 no raw effects or timers | app (outside lib/) | useEffect calls | 145 | 138 | the 7 removed were a search waiting for typing to stop (3), a clock, a delayed warm-up, a loading flag and a timer cleanup; the 138 left are frozen in eslint-suppressions.json |
+| 2026-11-28 | 7 no raw effects or timers | app (outside lib/) | setTimeout / setInterval / requestAnimationFrame | 51 | 40 | 5 copies of the same web scroll timer, 3 search delays, a clock, a delayed warm-up, a loading flag; the app clock in lib/prayer.ts moved to a hook too but lib/ is not counted here |
+| 2026-11-28 | 7 no raw effects or timers | app | copies of the web scroll timer without cleanup on unmount | 4 | 0 | the compare pager, the hadith pager, the stories pages and the tools pages; the 40 frozen timers were not checked for this |
+| 2026-11-28 | 7 no raw effects or timers | app | shared hooks replacing copies | 0 | 5 | useDebounced, useNow, useAfter, useDelayedFlag, useWebScrollEnd, with tests |
 | 2026-11-28 | 7 no raw effects or timers | app | React Compiler findings | 168 | 166 | now errors; the 166 left are frozen in eslint-suppressions.json (set-state-in-effect 54, immutability 53, refs 50, preserve-manual-memoization 7, purity 1, use-memo 1) |
 | 2026-11-28 | 7 no raw effects or timers | app | lint warnings | 169 | 0 | the compiler rules became errors and a type that shared its name with an icon (`Send`) was renamed |
 | 2026-11-28 | 7 no raw effects or timers | app | files on the shrink-only list | 0 | 89 | |

@@ -19,7 +19,8 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   Lint directives (`eslint-disable…`, `@ts-…`, `@vitest-environment`) stay. `quality/no-comments`
   (`shared/lint/quality.mjs`) enforces this in `mobile/` and `shared/`.
 - No raw effects or timers in app screens and components (owner, 2026-11-28): no `useEffect`,
-  `useLayoutEffect`, `setTimeout`, `setInterval` or `requestAnimationFrame` outside `mobile/src/lib/`.
+  `useLayoutEffect`, `useInsertionEffect`, `setTimeout`, `setInterval`, `requestAnimationFrame` or
+  `requestIdleCallback` outside `mobile/src/lib/` and test files.
   Derive the value, act in the event handler, or use a hook from `mobile/src/lib/hooks/`. Old code is
   listed in `mobile/eslint-suppressions.json`, which may only shrink: after removing a case, run
   `npx eslint src scripts --prune-suppressions` in `mobile/`. See docs/quality/effects.md.

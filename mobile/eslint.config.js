@@ -50,7 +50,7 @@ module.exports = defineConfig([
         ...['setTimeout', 'setInterval', 'requestAnimationFrame', 'requestIdleCallback'].map(name => ({ name, message: `No raw ${name} in app code (owner, 2026-11-28): use useDebounced, useNow, useAfter or useWebScrollEnd from @/lib/hooks, which clear themselves on unmount. If none fits, add a hook there with a test, or move the scheduling into a lib/ module that owns it. See docs/quality/effects.md.` })),
       ],
       'no-restricted-properties': ['error',
-        ...['window', 'globalThis'].flatMap(object => ['setTimeout', 'setInterval', 'requestAnimationFrame', 'requestIdleCallback'].map(property => ({ object, property, message: 'No raw timers in app code: use a hook from @/lib/hooks. See docs/quality/effects.md.' }))),
+        ...['window', 'globalThis', 'global', 'self'].flatMap(object => ['setTimeout', 'setInterval', 'requestAnimationFrame', 'requestIdleCallback'].map(property => ({ object, property, message: 'No raw timers in app code: use a hook from @/lib/hooks. See docs/quality/effects.md.' }))),
       ],
     },
   },

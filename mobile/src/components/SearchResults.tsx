@@ -159,6 +159,7 @@ export function useAppSearch(query: string, keep?: (kind: SearchKind) => boolean
     const groups = searchApp(settled);
     return { query: settled, groups: keep ? groups.filter(group => keep(group.kind)) : groups, notes };
   }, [settled, keep, notes]);
+  if (!typed) return { found: { query: '', groups: [], notes }, waiting: false };
   return { found, waiting: typed !== found.query };
 }
 

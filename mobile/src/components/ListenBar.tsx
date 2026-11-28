@@ -12,7 +12,7 @@ import type { Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
 import { Tap } from '@/ui/Tap';
 import { surahName } from '@shared/quran/surahNames';
-import { useDebounced } from '@/lib/hooks/useDebounced';
+import { useDelayedFlag } from '@/lib/hooks/useDelayedFlag';
 
 export const LISTEN_BAR = 58;
 
@@ -27,9 +27,7 @@ export default function ListenBar({ width, onRepeat, onFold, palette }: { width:
   const listening = useListening();
   const plan = useSyncExternalStore(subscribeListenPlan, readListenPlan, serverListenPlan);
   const loading = !!listening?.loading;
-  const waitingFor = loading ? listening?.key ?? '' : null;
-  const settled = useDebounced(waitingFor, 800);
-  const slow = waitingFor !== null && settled === waitingFor;
+  const slow = useDelayedFlag(loading, 800, listening?.key);
   if (!listening) return null;
   const repeating = plan.eachAyah !== ONCE.eachAyah || plan.rangeTimes !== ONCE.rangeTimes || plan.pause !== ONCE.pause;
   const { playing, failed } = listening;

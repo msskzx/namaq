@@ -3,7 +3,12 @@ const DIRECTIVE = new RegExp(String.raw`^\*?\s*(eslint-(disable|enable)(-next-li
 const SEE = new RegExp(String.raw`^\s*see ${POINTER}(, ${POINTER})*\s*$`);
 const REFERENCE = /^\/\s*<reference\s+(path|types|lib)=/;
 const LOCKED = /\b(quality\/no-raw-effects|no-restricted-globals|no-restricted-properties|react-hooks\/(set-state-in-effect|refs|immutability|preserve-manual-memoization|purity|use-memo))\b/;
-const unlocks = comment => /^\s*eslint-(disable|enable)/.test(comment.value) && LOCKED.test(comment.value);
+const unlocks = comment => {
+  const directive = comment.value.replace(/^\*?\s*/, '').split(/\s--\s/)[0];
+  const disable = directive.match(/^eslint-(disable|enable)(-next-line|-line)?(\s+(.*))?$/);
+  if (disable) return !disable[4]?.trim() || LOCKED.test(disable[4]);
+  return /^eslint\s/.test(directive) && LOCKED.test(directive);
+};
 const allowed = comment => DIRECTIVE.test(comment.value) || SEE.test(comment.value) || REFERENCE.test(comment.value) || (comment.type === 'Block' && /^\s*global\s/.test(comment.value));
 
 const quality = {
@@ -38,6 +43,10 @@ const quality = {
         const EFFECTS = new Set(['useEffect', 'useLayoutEffect', 'useInsertionEffect']);
         const nameOf = callee => (callee.type === 'Identifier' ? callee.name : callee.type === 'MemberExpression' && !callee.computed ? callee.property.name : null);
         return {
+          ImportSpecifier(node) {
+            const name = node.imported.name;
+            if (EFFECTS.has(name) && node.local.name !== name) context.report({ node, messageId: 'effect', data: { name } });
+          },
           CallExpression(node) {
             const name = nameOf(node.callee);
             if (name && EFFECTS.has(name)) context.report({ node: node.callee, messageId: 'effect', data: { name } });

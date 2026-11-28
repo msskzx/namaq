@@ -3,6 +3,7 @@ import { createRoot, type Root } from 'react-dom/client';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useAfter } from './useAfter';
 import { useDebounced } from './useDebounced';
+import { useDelayedFlag } from './useDelayedFlag';
 import { useNow } from './useNow';
 import { SCROLL_QUIET_MS, useWebScrollEnd } from './useWebScrollEnd';
 
@@ -38,6 +39,44 @@ describe('useDebounced', () => {
     expect(view.seen.current).toBe('a');
     wait(50);
     expect(view.seen.current).toBe('abc');
+  });
+
+  it('leaves no timer behind after unmount', () => {
+    const view = mount(({ value }: { value: string }) => useDebounced(value, 150), { value: 'a' });
+    view.rerender({ value: 'ab' });
+    view.unmount();
+    expect(vi.getTimerCount()).toBe(0);
+  });
+});
+
+describe('useDelayedFlag', () => {
+  type Props = { on: boolean; key: string };
+  const useFlag = ({ on, key }: Props) => useDelayedFlag(on, 800, key);
+
+  it('stays off until the state has lasted the whole delay', () => {
+    const view = mount(useFlag, { on: true, key: 'a' });
+    expect(view.seen.current).toBe(false);
+    wait(799);
+    expect(view.seen.current).toBe(false);
+    wait(1);
+    expect(view.seen.current).toBe(true);
+  });
+
+  it('starts the wait again when the state stops and starts for the same key', () => {
+    const view = mount(useFlag, { on: true, key: 'a' });
+    wait(800);
+    view.rerender({ on: false, key: 'a' });
+    view.rerender({ on: true, key: 'a' });
+    expect(view.seen.current).toBe(false);
+    wait(800);
+    expect(view.seen.current).toBe(true);
+  });
+
+  it('starts the wait again for a new key', () => {
+    const view = mount(useFlag, { on: true, key: 'a' });
+    wait(800);
+    view.rerender({ on: true, key: 'b' });
+    expect(view.seen.current).toBe(false);
   });
 });
 
