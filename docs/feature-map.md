@@ -254,6 +254,7 @@ What the bars and menus that nearly every screen draws can open. Each screen's p
 | `AyahPreviewSheet` | (onPress) | [مقارنة السور](feature-map/compare.md) | [components/AyahPreviewSheet.tsx:112](../mobile/src/components/AyahPreviewSheet.tsx#L112) |
 | `Itqan` | افتح ‹› ‹› في المصحف | [المصحف](feature-map/read.md) | [components/BalaghaSheet.tsx:104](../mobile/src/components/BalaghaSheet.tsx#L104) |
 | `TermLink` | ‹› في مصطلحات البلاغة | [المصطلح](feature-map/term.md) | [components/BalaghaSheet.tsx:121](../mobile/src/components/BalaghaSheet.tsx#L121) |
+| `ErrorBoundary` | الرئيسية | [الرئيسية](feature-map/home.md) | [components/CrashScreen.tsx:31](../mobile/src/components/CrashScreen.tsx#L31) |
 | `Cell` | قراءة ‹› ‹› | [المصحف](feature-map/read.md) | [components/MatrixCard.tsx:169](../mobile/src/components/MatrixCard.tsx#L169) |
 | `BookAnswers` | اقرأ كلام ‹› كاملًا في ‹› | [الكتاب](feature-map/book.md) | [components/MutashabihFace.tsx:62](../mobile/src/components/MutashabihFace.tsx#L62) |
 | `OpenInBook` | اقرأ في الكتاب | [الكتاب](feature-map/book.md) | [components/OpenInBook.tsx:14](../mobile/src/components/OpenInBook.tsx#L14) |
@@ -263,6 +264,8 @@ What the bars and menus that nearly every screen draws can open. Each screen's p
 | `SettingsSheet` | المصادر والتراخيص | [المصادر والتراخيص](feature-map/attributions.md) | [components/SettingsSheet.tsx:29](../mobile/src/components/SettingsSheet.tsx#L29) |
 | `SettingsSheet` | سياسة الخصوصية | [سياسة الخصوصية](feature-map/privacy.md) | [components/SettingsSheet.tsx:30](../mobile/src/components/SettingsSheet.tsx#L30) |
 | `TreePager` | (openCompare) | [مقارنة السور](feature-map/compare.md) | [components/TreePager.tsx:245](../mobile/src/components/TreePager.tsx#L245) |
+| `TabBar` | (press) | [القرآن](feature-map/quran.md) | [ui/TabBar.tsx:76](../mobile/src/ui/TabBar.tsx#L76) |
+| `TabBar` | (press) | [الرئيسية](feature-map/home.md) | [ui/TabBar.tsx:76](../mobile/src/ui/TabBar.tsx#L76) |
 | `TopBar` | أدوات القرآن | [القرآن](feature-map/quran.md) | [ui/TopBar.tsx:81](../mobile/src/ui/TopBar.tsx#L81) |
 | `TopBar` | المكتبة | [المكتبة](feature-map/books.md) | [ui/TopBar.tsx:84](../mobile/src/ui/TopBar.tsx#L84) |
 | `TopBar` | الصفحة الرئيسية | [الرئيسية](feature-map/home.md) | [ui/TopBar.tsx:107](../mobile/src/ui/TopBar.tsx#L107) |
@@ -292,7 +295,7 @@ has one.
 
 Broken in 1 places today:
 
-- المصحف
+- المصحف: components/Reader.tsx#Reader
 
 ### A page's search stays on the page (only home opens the search page)
 
@@ -304,26 +307,33 @@ Holds everywhere today.
 
 ### Pages of single things link both ways
 
-Broken in 3 places today:
+Broken in 1 places today:
 
 - حديث الصحيح opens الترجمة, الترجمة does not open حديث الصحيح
-- صفحة الآية opens القصة, القصة does not open صفحة الآية
-- صفحة الآية opens قصة النبي, قصة النبي does not open صفحة الآية
 
 ### A screen in another tab opens through toTab, so the tab's first page sits under it
 
-Broken in 60 places today:
+Broken in 79 places today:
 
 - الاختبار → الترجمة: components/battles/BattleParts.tsx#People
 - الاختبار → الترجمة: screens/nasab.tsx#Box
+- الاختبار → القصة: components/LifeTimeline.tsx#Item
+- الاختبار → القصة: components/LifeTimeline.tsx#LifeSheet
 - الاختبار → حديث الصحيح: screens/story.tsx#HadithOpen
+- الاختبارات → الترجمة: components/HomeFeed.tsx#QuizPost
 - الاختبارات → الترجمة: components/battles/BattleParts.tsx#People
 - الاختبارات → الترجمة: screens/nasab.tsx#Box
+- الاختبارات → الذكر: components/HomeFeed.tsx#QuizPost
+- الاختبارات → القصة: components/LifeTimeline.tsx#Item
+- الاختبارات → القصة: components/LifeTimeline.tsx#LifeSheet
+- الاختبارات → النسب: components/HomeFeed.tsx#QuizPost
+- الاختبارات → ترتيب السور: components/HomeFeed.tsx#QuizPost
 - الاختبارات → حديث الصحيح: screens/story.tsx#HadithOpen
 - الاختبارات → مدونتي: components/HomeFeed.tsx#ForgottenPost
 - الرئيسية → الترجمة: components/HomeFeed.tsx#LifePost
 - الرئيسية → الترجمة: components/HomeFeed.tsx#NamePost
 - الرئيسية → الترجمة: components/HomeFeed.tsx#NasabPost
+- الرئيسية → الترجمة: components/HomeFeed.tsx#QuizPost
 - الرئيسية → الترجمة: components/HomeFeed.tsx#RingPost
 - الرئيسية → الترجمة: components/HomeFeed.tsx#TarajimPost
 - الرئيسية → الترجمة: components/HomeFeed.tsx#TiesPost
@@ -332,10 +342,15 @@ Broken in 60 places today:
 - الرئيسية → الصلات: components/HomeFeed.tsx#RingPost
 - الرئيسية → الصلات: components/HomeFeed.tsx#TiesPost
 - الرئيسية → الصلات: components/TiesChain.tsx#TiesChain
+- الرئيسية → القصة: components/LifeColumns.tsx#Cell
+- الرئيسية → القصة: components/LifeTimeline.tsx#Item
+- الرئيسية → القصة: components/LifeTimeline.tsx#LifeSheet
 - الرئيسية → النسب: components/HomeFeed.tsx#MeetPost
 - الرئيسية → النسب: components/HomeFeed.tsx#NasabPost
+- الرئيسية → النسب: components/HomeFeed.tsx#QuizPost
 - الرئيسية → بين عدة أشخاص: components/HomeFeed.tsx#GroupPost
 - الرئيسية → بين عدة أشخاص: components/HomeFeed.tsx#TiePost
+- الرئيسية → ترتيب السور: components/HomeFeed.tsx#QuizPost
 - الرئيسية → ترتيب السور: components/HomeFeed.tsx#SurahAimPost
 - الرئيسية → ترتيب السور: components/HomeFeed.tsx#SurahLinkPost
 - الرئيسية → حديث الصحيح: components/scenes/RahmanPage.tsx#Hadith
@@ -352,6 +367,8 @@ Broken in 60 places today:
 - صفحة الآية → حديث الصحيح: screens/ayah.tsx#SectionPart
 - غرفة الاختبار الجماعي → الترجمة: components/battles/BattleParts.tsx#People
 - غرفة الاختبار الجماعي → الترجمة: screens/nasab.tsx#Box
+- غرفة الاختبار الجماعي → القصة: components/LifeTimeline.tsx#Item
+- غرفة الاختبار الجماعي → القصة: components/LifeTimeline.tsx#LifeSheet
 - غرفة الاختبار الجماعي → حديث الصحيح: screens/story.tsx#HadithOpen
 - مدونتي → الترجمة: components/HomeFeed.tsx#LifePost
 - مدونتي → الترجمة: components/HomeFeed.tsx#NamePost
@@ -364,6 +381,9 @@ Broken in 60 places today:
 - مدونتي → الصلات: components/HomeFeed.tsx#RingPost
 - مدونتي → الصلات: components/HomeFeed.tsx#TiesPost
 - مدونتي → الصلات: components/TiesChain.tsx#TiesChain
+- مدونتي → القصة: components/LifeColumns.tsx#Cell
+- مدونتي → القصة: components/LifeTimeline.tsx#Item
+- مدونتي → القصة: components/LifeTimeline.tsx#LifeSheet
 - مدونتي → النسب: components/HomeFeed.tsx#MeetPost
 - مدونتي → النسب: components/HomeFeed.tsx#NasabPost
 - مدونتي → بين عدة أشخاص: components/HomeFeed.tsx#GroupPost
@@ -382,7 +402,9 @@ Broken in 60 places today:
 whose name ends in `Sheet`). It gives each the label on the button around it, when the label is written there. Then it
 follows what each route file uses, function by function, to tell which screens show it. A link drawn by a piece that
 20 screens or more use goes under "On almost every screen". A route that depends on what the card holds
-(`openIntent`) is listed once for each route it can take. `docs/feature-map/links.json` holds every link for agents to
+(`openIntent`) is listed once for each route it can take, and each route keeps how its own call opens it: `tab`
+(`toTab`), `push`, `navigate`, `replace` or `dismissTo`. A screen whose ayat open the ayah menu on a long press
+(`AyahMenuPress`) counts as opening «صفحة الآية». `docs/feature-map/links.json` holds every link for agents to
 search.
 
 ## Adding a screen

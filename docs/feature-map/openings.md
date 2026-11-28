@@ -10,7 +10,7 @@ flowchart RL
   in1(["مدونتي"]) --> me
   in2(["صفحة الآية"]) --> me
   in3(["القرآن"]) --> me
-  me -- "افتح ‹› في المصحف" --> out0["المصحف"]
+  me -- "…" --> out0["المصحف"]
 ```
 
 ## Ways in
@@ -24,7 +24,7 @@ flowchart RL
 
 | Part of the screen | Label | Opens | Code |
 | --- | --- | --- | --- |
-| `OpeningRows` | افتح ‹› في المصحف | [المصحف](read.md) | [screens/openings.tsx:74](../../mobile/src/screens/openings.tsx#L74) |
+| `OpeningRows` | ‹›:1 | [المصحف](read.md) | [screens/openings.tsx:74](../../mobile/src/screens/openings.tsx#L74) |
 
 ## Sheets
 

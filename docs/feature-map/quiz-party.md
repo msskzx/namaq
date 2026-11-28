@@ -7,7 +7,7 @@ flowchart RL
   me["اختبار جماعي"]
   style me stroke-width:3px
   in0(["الاختبارات"]) --> me
-  me -- "…" --> out0["غرفة الاختبار الجماعي"]
+  me -- "ابدأ" --> out0["غرفة الاختبار الجماعي"]
 ```
 
 ## Ways in
@@ -18,8 +18,8 @@ flowchart RL
 
 | Part of the screen | Label | Opens | Code |
 | --- | --- | --- | --- |
-| `PartyStart` | (start) | [غرفة الاختبار الجماعي](quiz-party-code.md) | [screens/quiz/party/index.tsx:29](../../mobile/src/screens/quiz/party/index.tsx#L29) |
-|  | (join) | [غرفة الاختبار الجماعي](quiz-party-code.md) | [screens/quiz/party/index.tsx:38](../../mobile/src/screens/quiz/party/index.tsx#L38) |
+| `PartyStart` | ابدأ | [غرفة الاختبار الجماعي](quiz-party-code.md) | [screens/quiz/party/index.tsx:29](../../mobile/src/screens/quiz/party/index.tsx#L29) |
+|  | انضم | [غرفة الاختبار الجماعي](quiz-party-code.md) | [screens/quiz/party/index.tsx:38](../../mobile/src/screens/quiz/party/index.tsx#L38) |
 
 ## Sheets
 

@@ -24,9 +24,9 @@ flowchart RL
 | --- | --- | --- | --- |
 | `ForgottenPost` | افتح صفحة الآية | [صفحة الآية](ayah.md) | [components/HomeFeed.tsx:415](../../mobile/src/components/HomeFeed.tsx#L415) |
 |  | افتح ما نسيته | [مدونتي](library.md) | [components/HomeFeed.tsx:417](../../mobile/src/components/HomeFeed.tsx#L417) |
-|  | (head) | [الاختبارات](quizzes.md) | [components/HomeFeed.tsx:417](../../mobile/src/components/HomeFeed.tsx#L417) |
+|  | افتح الاختبارات | [الاختبارات](quizzes.md) | [components/HomeFeed.tsx:417](../../mobile/src/components/HomeFeed.tsx#L417) |
 | `ReciteAction` | تسميع | [المصحف](read.md) | [components/HomeFeed.tsx:463](../../mobile/src/components/HomeFeed.tsx#L463) |
-| `QuizPost` | (open) | [الاختبارات](quizzes.md) | [components/HomeFeed.tsx:571](../../mobile/src/components/HomeFeed.tsx#L571) |
+| `QuizPost` | افتح الاختبارات | [الاختبارات](quizzes.md) | [components/HomeFeed.tsx:571](../../mobile/src/components/HomeFeed.tsx#L571) |
 |  | افتح ما يشرح الجواب | [الترجمة](person.md) | [components/HomeFeed.tsx:573](../../mobile/src/components/HomeFeed.tsx#L573) |
 |  | افتح ما يشرح الجواب | [متشابهات القرآن](branches.md) | [components/HomeFeed.tsx:573](../../mobile/src/components/HomeFeed.tsx#L573) |
 |  | افتح ما يشرح الجواب | [مقارنة السور](compare.md) | [components/HomeFeed.tsx:573](../../mobile/src/components/HomeFeed.tsx#L573) |
@@ -48,8 +48,8 @@ flowchart RL
 |  | (onPress) | [القصة](story.md) | [components/LifeTimeline.tsx:123](../../mobile/src/components/LifeTimeline.tsx#L123) |
 | `LifeSheet` | (onPress) | [الغزوة](battle.md) | [components/LifeTimeline.tsx:164](../../mobile/src/components/LifeTimeline.tsx#L164) |
 |  | (onPress) | [القصة](story.md) | [components/LifeTimeline.tsx:164](../../mobile/src/components/LifeTimeline.tsx#L164) |
-| `SurahCard` | افتح سورة ‹› في المصحف | [المصحف](read.md) | [components/OrderSurah.tsx:105](../../mobile/src/components/OrderSurah.tsx#L105) |
-| `CompareFeedback` | (open) | [مقارنة السور](compare.md) | [components/QuizCompare.tsx:135](../../mobile/src/components/QuizCompare.tsx#L135) |
+| `SurahCard` | ‹›:1 | [المصحف](read.md) | [components/OrderSurah.tsx:105](../../mobile/src/components/OrderSurah.tsx#L105) |
+| `CompareFeedback` | افتح في مقارنة السور | [مقارنة السور](compare.md) | [components/QuizCompare.tsx:135](../../mobile/src/components/QuizCompare.tsx#L135) |
 | `TreeActions` | افتح في متشابهات القرآن | [متشابهات القرآن](branches.md) | [components/QuizTree.tsx:204](../../mobile/src/components/QuizTree.tsx#L204) |
 | `TermChips` | أمثلته في مصطلحات البلاغة | [المصطلح](term.md) | [components/TermSheet.tsx:39](../../mobile/src/components/TermSheet.tsx#L39) |
 | `People` | (onPress) | [الترجمة](person.md) | [components/battles/BattleParts.tsx:130](../../mobile/src/components/battles/BattleParts.tsx#L130) |

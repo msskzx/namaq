@@ -20,10 +20,10 @@ const where = item => `[${item.file}:${item.line}](../../mobile/src/${item.file}
 const linkTo = screen => `[${screen.name}](${pageOf(screen)}.md)`;
 
 export function mapData() {
-  const { links, sheets } = extractLinks();
+  const { links, sheets, uses } = extractLinks();
   const shared = item => item.everywhere || item.screens.length >= SHARED_ACROSS;
   const named = item => ({ ...item, target: item.route ? screenOfRoute(item.route) : null, in: item.screens.map(file => byFile.get(file)).filter(Boolean) });
-  return { links: links.map(named), sheets: sheets.map(named), shared };
+  return { links: links.map(named), sheets: sheets.map(named), shared, uses };
 }
 
 function screenDiagram(screen, inbound, outbound, sheets) {

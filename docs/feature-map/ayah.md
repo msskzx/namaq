@@ -17,7 +17,7 @@ flowchart RL
   me -- "افتح «‹›» في فواتح السور" --> out3["فواتح السور"]
   me -- "افتح ‹› في الأقسام" --> out4["الأقسام"]
   me -- "افتح ‹› في القصة" --> out5["قصة النبي"]
-  me -- "…" --> out6["القصة"]
+  me -- "افتح ‹›" --> out6["القصة"]
   me -- "…" --> out7["حديث الصحيح"]
   me -.-> sheet0{{"AyahPreviewSheet"}}
   me -.-> sheet1{{"BalaghaSheet"}}
@@ -47,7 +47,7 @@ flowchart RL
 | `SectionPart` | افتح «‹›» في فواتح السور | [فواتح السور](openings.md) | [screens/ayah.tsx:250](../../mobile/src/screens/ayah.tsx#L250) |
 |  | افتح ‹› في الأقسام | [الأقسام](oaths.md) | [screens/ayah.tsx:258](../../mobile/src/screens/ayah.tsx#L258) |
 |  | افتح ‹› في القصة | [قصة النبي](prophets-slug.md) | [screens/ayah.tsx:269](../../mobile/src/screens/ayah.tsx#L269) |
-|  | (openStory) | [القصة](story.md) | [screens/ayah.tsx:278](../../mobile/src/screens/ayah.tsx#L278) |
+|  | افتح ‹› | [القصة](story.md) | [screens/ayah.tsx:278](../../mobile/src/screens/ayah.tsx#L278) |
 |  | (onPress) | [حديث الصحيح](hadith-sahih.md) | [screens/ayah.tsx:290](../../mobile/src/screens/ayah.tsx#L290) |
 |  | افتح ‹› | [الترجمة](person.md) | [screens/ayah.tsx:309](../../mobile/src/screens/ayah.tsx#L309) |
 

@@ -10,8 +10,8 @@ flowchart RL
   in1(["الاختبارات"]) --> me
   me -- "…" --> out0["الغزوة"]
   me -- "…" --> out1["القصة"]
-  me -- "افتح سورة ‹› في المصحف" --> out2["المصحف"]
-  me -- "…" --> out3["مقارنة السور"]
+  me -- "…" --> out2["المصحف"]
+  me -- "افتح في مقارنة السور" --> out3["مقارنة السور"]
   me -- "افتح في متشابهات القرآن" --> out4["متشابهات القرآن"]
   me -- "أمثلته في مصطلحات البلاغة" --> out5["المصطلح"]
   me -- "…" --> out6["الترجمة"]
@@ -33,8 +33,8 @@ flowchart RL
 |  | (onPress) | [القصة](story.md) | [components/LifeTimeline.tsx:123](../../mobile/src/components/LifeTimeline.tsx#L123) |
 | `LifeSheet` | (onPress) | [الغزوة](battle.md) | [components/LifeTimeline.tsx:164](../../mobile/src/components/LifeTimeline.tsx#L164) |
 |  | (onPress) | [القصة](story.md) | [components/LifeTimeline.tsx:164](../../mobile/src/components/LifeTimeline.tsx#L164) |
-| `SurahCard` | افتح سورة ‹› في المصحف | [المصحف](read.md) | [components/OrderSurah.tsx:105](../../mobile/src/components/OrderSurah.tsx#L105) |
-| `CompareFeedback` | (open) | [مقارنة السور](compare.md) | [components/QuizCompare.tsx:135](../../mobile/src/components/QuizCompare.tsx#L135) |
+| `SurahCard` | ‹›:1 | [المصحف](read.md) | [components/OrderSurah.tsx:105](../../mobile/src/components/OrderSurah.tsx#L105) |
+| `CompareFeedback` | افتح في مقارنة السور | [مقارنة السور](compare.md) | [components/QuizCompare.tsx:135](../../mobile/src/components/QuizCompare.tsx#L135) |
 | `TreeActions` | افتح في متشابهات القرآن | [متشابهات القرآن](branches.md) | [components/QuizTree.tsx:204](../../mobile/src/components/QuizTree.tsx#L204) |
 | `TermChips` | أمثلته في مصطلحات البلاغة | [المصطلح](term.md) | [components/TermSheet.tsx:39](../../mobile/src/components/TermSheet.tsx#L39) |
 | `People` | (onPress) | [الترجمة](person.md) | [components/battles/BattleParts.tsx:130](../../mobile/src/components/battles/BattleParts.tsx#L130) |

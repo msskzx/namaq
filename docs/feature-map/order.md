@@ -10,7 +10,7 @@ flowchart RL
   in1(["الاختبارات"]) --> me
   in2(["مدونتي"]) --> me
   in3(["القرآن"]) --> me
-  me -- "افتح سورة ‹› في المصحف" --> out0["المصحف"]
+  me -- "…" --> out0["المصحف"]
   me -.-> sheet0{{"HelpSheet"}}
   me -.-> sheet1{{"SurahSheet"}}
 ```
@@ -26,7 +26,7 @@ flowchart RL
 
 | Part of the screen | Label | Opens | Code |
 | --- | --- | --- | --- |
-| `SurahCard` | افتح سورة ‹› في المصحف | [المصحف](read.md) | [components/OrderSurah.tsx:105](../../mobile/src/components/OrderSurah.tsx#L105) |
+| `SurahCard` | ‹›:1 | [المصحف](read.md) | [components/OrderSurah.tsx:105](../../mobile/src/components/OrderSurah.tsx#L105) |
 
 ## Sheets
 

@@ -10,7 +10,7 @@ flowchart RL
   in1(["مدونتي"]) --> me
   in2(["قصة النبي"]) --> me
   in3(["القرآن"]) --> me
-  me -- "افتح ‹› في المصحف" --> out0["المصحف"]
+  me -- "…" --> out0["المصحف"]
   me -- "قارن ‹›" --> out1["مقارنة السور"]
   me -.-> sheet0{{"CompareTargetsSheet"}}
   me -.-> sheet1{{"HelpSheet"}}
@@ -27,7 +27,7 @@ flowchart RL
 
 | Part of the screen | Label | Opens | Code |
 | --- | --- | --- | --- |
-| `EventPlaces` | افتح ‹› في المصحف | [المصحف](read.md) | [components/EventPlaces.tsx:101](../../mobile/src/components/EventPlaces.tsx#L101) |
+| `EventPlaces` | ‹›:‹› | [المصحف](read.md) | [components/EventPlaces.tsx:101](../../mobile/src/components/EventPlaces.tsx#L101) |
 |  | (onPick) | [مقارنة السور](compare.md) | [components/EventPlaces.tsx:117](../../mobile/src/components/EventPlaces.tsx#L117) |
 | `CompareButton` | قارن ‹› | [مقارنة السور](compare.md) | [components/EventPlaces.tsx:129](../../mobile/src/components/EventPlaces.tsx#L129) |
 

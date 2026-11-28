@@ -174,7 +174,9 @@ ${rules}
 whose name ends in \`Sheet\`). It gives each the label on the button around it, when the label is written there. Then it
 follows what each route file uses, function by function, to tell which screens show it. A link drawn by a piece that
 ${sharedAcross} screens or more use goes under "On almost every screen". A route that depends on what the card holds
-(\`openIntent\`) is listed once for each route it can take. \`docs/feature-map/links.json\` holds every link for agents to
+(\`openIntent\`) is listed once for each route it can take, and each route keeps how its own call opens it: \`tab\`
+(\`toTab\`), \`push\`, \`navigate\`, \`replace\` or \`dismissTo\`. A screen whose ayat open the ayah menu on a long press
+(\`AyahMenuPress\`) counts as opening «صفحة الآية». \`docs/feature-map/links.json\` holds every link for agents to
 search.
 
 ## Adding a screen

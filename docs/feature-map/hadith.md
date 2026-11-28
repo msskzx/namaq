@@ -17,7 +17,7 @@ flowchart RL
   me -- "افتح ‹›" --> out0["حديث الصحيح"]
   me -- "…" --> out1["حديث الأربعين"]
   me -- "…" --> out2["أبواب الكتاب"]
-  me -- "…" --> out3["كتاب الحديث"]
+  me -- "forty" --> out3["كتاب الحديث"]
 ```
 
 ## Ways in
@@ -44,7 +44,7 @@ flowchart RL
 | `HadithScreen` | (onPress) | [حديث الأربعين](hadith-forty.md) | [screens/hadith.tsx:151](../../mobile/src/screens/hadith.tsx#L151) |
 |  | (onOpenBook) | [كتاب الحديث](hadith-book.md) | [screens/hadith.tsx:166](../../mobile/src/screens/hadith.tsx#L166) |
 |  | (onOpenKitab) | [أبواب الكتاب](hadith-kitab.md) | [screens/hadith.tsx:166](../../mobile/src/screens/hadith.tsx#L166) |
-|  | (onOpenBook) | [كتاب الحديث](hadith-book.md) | [screens/hadith.tsx:170](../../mobile/src/screens/hadith.tsx#L170) |
+|  | forty | [كتاب الحديث](hadith-book.md) | [screens/hadith.tsx:170](../../mobile/src/screens/hadith.tsx#L170) |
 
 ## Sheets
 

@@ -12,7 +12,7 @@ flowchart RL
   in3(["البحث"]) --> me
   in4(["القرآن"]) --> me
   in5(["صفحة الآية"]) --> me
-  me -- "افتح ‹› في المصحف" --> out0["المصحف"]
+  me -- "…" --> out0["المصحف"]
   me -- "قارن ‹›" --> out1["مقارنة السور"]
   me -- "…" --> out2["قصص الأنبياء"]
   me -.-> sheet0{{"CompareTargetsSheet"}}
@@ -32,7 +32,7 @@ flowchart RL
 
 | Part of the screen | Label | Opens | Code |
 | --- | --- | --- | --- |
-| `EventPlaces` | افتح ‹› في المصحف | [المصحف](read.md) | [components/EventPlaces.tsx:101](../../mobile/src/components/EventPlaces.tsx#L101) |
+| `EventPlaces` | ‹›:‹› | [المصحف](read.md) | [components/EventPlaces.tsx:101](../../mobile/src/components/EventPlaces.tsx#L101) |
 |  | (onPick) | [مقارنة السور](compare.md) | [components/EventPlaces.tsx:117](../../mobile/src/components/EventPlaces.tsx#L117) |
 | `CompareButton` | قارن ‹› | [مقارنة السور](compare.md) | [components/EventPlaces.tsx:129](../../mobile/src/components/EventPlaces.tsx#L129) |
 | `ProphetScreen` | (back) | [قصص الأنبياء](prophets.md) | [screens/prophets/slug.tsx:9](../../mobile/src/screens/prophets/slug.tsx#L9) |

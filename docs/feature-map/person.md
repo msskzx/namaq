@@ -9,7 +9,7 @@ flowchart RL
   me -- "…" --> out0["الغزوة"]
   me -- "…" --> out1["القصة"]
   me -- "…" --> out2["التراجم"]
-  me -- "…" --> out3["النسب"]
+  me -- "شجرة النسب" --> out3["النسب"]
   me -- "…" --> out4["كل التراجم"]
   me -- "قارن حياته بغيره" --> out5["حياتهم جنبًا إلى جنب"]
   me -- "تنقّل في صلاته" --> out6["الصلات"]
@@ -49,7 +49,7 @@ flowchart RL
 | `Names` | (onPress) | [الترجمة](person.md) | [screens/person.tsx:268](../../mobile/src/screens/person.tsx#L268) |
 | `PersonScreen` | (showBattle) | [الغزوة](battle.md) | [screens/person.tsx:314](../../mobile/src/screens/person.tsx#L314) |
 |  | (back) | [التراجم](tarajim.md) | [screens/person.tsx:323](../../mobile/src/screens/person.tsx#L323) |
-|  | (tree) | [النسب](nasab.md) | [screens/person.tsx:326](../../mobile/src/screens/person.tsx#L326) |
+|  | شجرة النسب | [النسب](nasab.md) | [screens/person.tsx:326](../../mobile/src/screens/person.tsx#L326) |
 |  | (onPress) | [كل التراجم](people.md) | [screens/person.tsx:370](../../mobile/src/screens/person.tsx#L370) |
 |  | قارن حياته بغيره | [حياتهم جنبًا إلى جنب](life.md) | [screens/person.tsx:392](../../mobile/src/screens/person.tsx#L392) |
 |  | (onPin) | [الغزوة](battle.md) | [screens/person.tsx:403](../../mobile/src/screens/person.tsx#L403) |

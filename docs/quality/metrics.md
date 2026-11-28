@@ -38,5 +38,5 @@ Counts are of product code: test files are left out. "Empty catch blocks" counts
 | 2026-11-28 | 3 feature map | app | sheets and menus found | 0 | 62 | 27 kinds |
 | 2026-11-28 | 3 feature map | app | screens whose ayah menu has no «صفحة الآية» | 1 | | the mushaf; rule agreed by the owner |
 | 2026-11-28 | 3 feature map | app | page searches that leave their page | 0 | | the tarajim search did before #1225; now a test fails if one does |
-| 2026-11-28 | 3 feature map | app | single-thing pages linked one way only | 3 | | hadith → person, ayah → story, ayah → prophet story |
-| 2026-11-28 | 3 feature map | app | links into another tab without its first page under it | 60 | | `router.push` instead of `toTab`, mostly home feed cards into the tarajim tab |
+| 2026-11-28 | 3 feature map | app | single-thing pages linked one way only | 1 | | hadith → person (a long press on an ayah counts as a way to its page) |
+| 2026-11-28 | 3 feature map | app | links into another tab without its first page under it | 79 | | `router.push` or `router.navigate` instead of `toTab`, mostly home feed and quiz cards into the tarajim tab |

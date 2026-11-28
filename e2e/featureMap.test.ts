@@ -62,6 +62,11 @@ describe('the feature map', () => {
     expect(links.filter(link => !link.target).map(link => `${link.route} at ${link.file}:${link.line}`)).toEqual([]);
   });
 
+  it('draws every link and sheet on a screen, or on every screen', () => {
+    const { links, sheets } = mapData();
+    expect([...links, ...sheets].filter(item => !item.everywhere && !item.in.length).map(item => `${item.file}:${item.line}`)).toEqual([]);
+  });
+
   it('finds in the code a way into every screen the tab bar does not open', () => {
     const opened = new Set(mapData().links.map(link => link.target?.name));
     expect(SCREENS.filter(screen => !screen.tabBar && !screen.unlinked && !opened.has(screen.name)).map(screen => screen.name)).toEqual([]);
