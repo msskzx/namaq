@@ -41,7 +41,7 @@ flowchart RL
 | `QuestionStage` | (onOpen) | [المصحف](read.md) | [screens/quiz/party/code.tsx:357](../../mobile/src/screens/quiz/party/code.tsx#L357) |
 |  | (onOpen) | [المصحف](read.md) | [screens/quiz/party/code.tsx:397](../../mobile/src/screens/quiz/party/code.tsx#L397) |
 | `FinalResults` | (onOpen) | [المصحف](read.md) | [screens/quiz/party/code.tsx:431](../../mobile/src/screens/quiz/party/code.tsx#L431) |
-| `HadithOpen` | افتح ‹› | [حديث الصحيح](hadith-sahih.md) | [screens/story.tsx:68](../../mobile/src/screens/story.tsx#L68) |
+| `HadithOpen` | افتح ‹› | [حديث الصحيح](hadith-sahih.md) | [screens/story.tsx:67](../../mobile/src/screens/story.tsx#L67) |
 
 ## Sheets
 

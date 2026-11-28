@@ -41,7 +41,6 @@ describe('his paragraphs', () => {
 });
 
 describe('placing his quotes', () => {
-  // Two surahs: «الحمد لله» stands in both, «رب العالمين» only in the first.
   const words = [[1, 1, 'الحمد لله رب العالمين'], [1, 2, 'الرحمن الرحيم'], [2, 1, 'الحمد لله الذي'], [2, 2, 'الحمد لله الذي']] as const;
   const mushaf: MushafWord[] = words.flatMap(([surah, ayah, text]) => text.split(' ').map((word, at) => ({ surah, ayah, at, skeleton: skeleton(word) })));
   const first = firstWords(mushaf);

@@ -1,5 +1,4 @@
-// docs/plans/surah-topics.md: reads one surah's «موضوعاتها» note from Quranpedia's surahs dump into headings and ayah
-// ranges, keeping the wording. Only notes that cite al-Tafsir al-Mawdu'i (University of Sharjah) are used.
+// see docs/plans/surah-topics.md
 
 export type Section = { title: string; from?: number; to?: number; parts?: Section[] };
 export type SurahTopics = { volume: number; page: number; sections: Section[] };
@@ -9,7 +8,6 @@ const latin = (arabic: string) => Number([...arabic].map(c => DIGITS.indexOf(c))
 const RANGE = /\(\s*([٠-٩]+)\s*(?:[-–]\s*([٠-٩]+)\s*)?\)\s*\.?/;
 const CITATION = /ينظر:?\s*"التفسير الموضوعي[^"]*"\s*لمجموعة من العلماء\s*\((\d+)\s*\/\s*(\d+)\)/;
 
-/** The note's HTML as lines of text. */
 export const noteLines = (html: string) => html
   .replace(/<\/p>|<br\s*\/?>/g, '\n').replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ')
   .split('\n').map(line => line.replace(/\s+/g, ' ').trim()).filter(Boolean);
@@ -33,10 +31,6 @@ function item(text: string, from?: number, to?: number): Item {
   return from === undefined ? { title, group } : { title, from, to, group };
 }
 
-/**
- * Null when the note does not cite the Sharjah book. Headings keep their words; a heading whose range holds others'
- * becomes their parent, a "*" line heads the items under it, and an item with no range belongs to the ranged one before.
- */
 export function parseSurahTopics(html: string): SurahTopics | null {
   const lines = noteLines(html);
   const at = lines.findIndex(line => CITATION.test(line));
@@ -44,13 +38,11 @@ export function parseSurahTopics(html: string): SurahTopics | null {
   const [before, ...cited] = lines[at].split(/ينظر:?/);
   const [, volume, page] = CITATION.exec(`ينظر:${cited.join('ينظر:')}`)!;
   const body = [...lines.slice(0, at), before].map(line => line.trim()).filter(Boolean);
-  // A range alone on its line closes the heading above it.
   const joined: string[] = [];
   for (const line of body) {
     if (/^\(\s*[٠-٩]/.test(line) && joined.length) joined[joined.length - 1] += ` ${line}`;
     else joined.push(line);
   }
-  // The opening sentence ("جاءت موضوعات السورة كما يلي:") introduces the list.
   while (joined.length && !RANGE.test(joined[0]) && !/^\s*[*\d]/.test(joined[0])) joined.shift();
 
   const all = joined.flatMap(items);
@@ -70,7 +62,6 @@ export function parseSurahTopics(html: string): SurahTopics | null {
 const inside = (a: Section, b: Section) =>
   a !== b && a.from !== undefined && b.from !== undefined && b.from <= a.from && a.to! <= b.to! && (a.from !== b.from || a.to !== b.to);
 
-/** Ranged headings inside another heading's range become its parts, in ayah order; a list's order is otherwise kept. */
 function nest(list: Section[]): Section[] {
   const top = list.filter(s => !list.some(other => inside(s, other)));
   for (const parent of top) {
@@ -81,10 +72,6 @@ function nest(list: Section[]): Section[] {
   return top;
 }
 
-/**
- * Where a list's ranges leave ayat out or cover them twice, for the owner to check against the book; parts are checked
- * inside their parent's range. Headings that share one range (13:14–29 has four) count once.
- */
 export function rangeGaps(sections: Section[], from: number, to: number, at = ''): string[] {
   const ranged = sections.filter(s => s.from !== undefined)
     .filter((s, i, all) => all.findIndex(o => o.from === s.from && o.to === s.to) === i)

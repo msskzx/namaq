@@ -6,13 +6,9 @@ import { execFileSync } from 'node:child_process';
 import { chaptersOf, type TurathPage } from './mutashabihBooks';
 import type { MutashabihBookData } from '../../shared/readerBooks';
 
-// The three books of mutashabih whole, for the book reader: Turath's exports of the editions the branches' citations quote
-// (shared/sources.ts), pinned by hash like scripts/quran/buildGharib.ts.
 const OUT = join(__dirname, '../../shared/data/quran');
 const BOOKS = [
   { id: 'kirmani', turath: 3580, sha: '7283591e943c74a82f6ffba22691bcb8229b7fde8a3c41d989b2c4554a89fe9a', from: [1, 0] },
-  // Aydin's edition is his doctoral thesis: his study fills volume 1 up to the author's text on page 215.
-  // Two pages of his notes sit among the author's: vol. 1 p. 404, before al-Nisa's heading, and p. 467.
   { id: 'iskafi', turath: 1340, sha: 'fa4e85be5a16f073b1131e6ed3ae7d6b3fca0b60483e2cddf829f5194c727628', from: [1, 215], notes: ['1:404', '1:467'] },
   { id: 'zubayr', turath: 1419, sha: 'da6eac6d6c79ac3e19ff3005e2fe9564e2ffacba6edcf775cb81797a620e11ce', from: [1, 0] },
 ] as const;

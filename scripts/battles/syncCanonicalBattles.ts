@@ -41,15 +41,7 @@ const battleUpsertQuery = `
     SET node.locationEn = battle.locationEn)
 `;
 
-// MATCH (not MERGE) on person/battle: this only links people and battles that
-// already have a synced node. A participation whose person or battle node is
-// missing is silently skipped here and stays reported as postgresOnly until
-// that node exists (via people:sync or a battles:sync re-run).
-//
-// One query per relationship type, because Cypher cannot parameterize one. This
-// still only ever MERGEs: a row that moved between the two types leaves its old
-// edge in place, reported as a relation mismatch and removed by hand (see
-// docs/battle-participation-model.md).
+// see docs/battle-participation-model.md
 const participationUpsertQuery = (relation: string) => `
   UNWIND $participations AS p
   MATCH (person:Person {slug: p.personSlug}), (battle:Battle {slug: p.battleSlug})
@@ -93,9 +85,6 @@ async function main() {
   });
 
   try {
-    // Sequential, not Promise.all: a single session can't run two queries
-    // concurrently (the driver throws "Queries cannot be run directly on a
-    // session with an open transaction").
     const battleResult = await session.run(battleGraphQuery);
     const participationResult = await session.run(participationGraphQuery);
     const graphBattles: CanonicalBattle[] = battleResult.records.map((record) => ({
@@ -156,9 +145,6 @@ async function main() {
         defaultAccessMode: neo4j.session.WRITE,
       });
       try {
-        // PostgreSQL is authoritative for battle rosters. These MERGEs only
-        // create missing nodes/relationships or update shared properties;
-        // they never delete nodes, relationships, or Neo4j-only properties.
         await writeSession.executeWrite(async (transaction) => {
           await transaction.run(battleUpsertQuery, { battles: postgresBattles });
           for (const relation of ['PARTICIPATED_IN', 'ABSENT_FROM']) {
@@ -188,7 +174,4 @@ main()
     console.error('Canonical battles reconciliation failed:', error);
     process.exitCode = 1;
   })
-  // The Neo4j driver's connection pool keeps the event loop alive, so the
-  // process won't exit on its own once main() resolves (see the same
-  // process.exit() pattern in neo4j/graphSeed.ts).
   .finally(() => process.exit(process.exitCode ?? 0));

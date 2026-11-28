@@ -7,13 +7,10 @@ import { skeleton } from './irabUkbari';
 import { entryOf, firstWords, placeQuotes, readParagraphs, type MushafWord, type TurathPage } from './itqanBalagha';
 import type { ItqanData } from '../../shared/quran/itqanBalagha';
 
-// docs/plans/balagha.md: al-Itqan's chapters on balagha for the reader's balagha sheet, built into the app. Turath's
-// export of Shamela 11728 (Abu al-Fadl Ibrahim's edition), pinned by its hash like scripts/quran/verifyOrderQuotes.ts.
+// see docs/plans/balagha.md
 const BOOK = 11728;
 const SHA = '56e52b86c23a0d363a6e51d8fee677eec4f582ceb580e14d2beb8c851400d9f9';
 const OUT = join(__dirname, '../../shared/data/quran');
-// Shamela pages 884 to 1095: kind 52 (al-haqiqa wa-l-majaz, 3/120) to the end of kind 58 (bada'i', 3/331). Page 942 is
-// left out: a stray piece under a second title of kind 55, numbered 3/68, whose text the export cut («...»).
 const FIRST = 884;
 const LAST = 1095;
 const STRAY = 942;

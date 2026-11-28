@@ -1,9 +1,3 @@
-// Writes docs/records as Distillate MDX files, and the usage data Distillate's
-// stats are built from (content/usage/namaq.json). Records Distillate already
-// holds unchanged (same meta and body) are skipped, and Distillate files with
-// no record here any more are removed. Usage needs the gh CLI
-// signed in, or --prs <file> with gh's JSON; --no-usage skips it.
-// Usage: npm run records:export [-- <distillate root>] [--prs prs.json] [--limit 9000] [--no-usage]
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { isDeepStrictEqual } from 'node:util';
 import path from 'node:path';
@@ -16,8 +10,6 @@ const root = path.resolve(args.find((a, i) => !a.startsWith('--') && !['--prs', 
 const out = path.join(root, 'content/records/namaq');
 mkdirSync(out, { recursive: true });
 
-// An MDX record as Distillate's loader reads it: the meta object (empty lists
-// dropped, as they mean the same as none) and the body.
 function readMdx(text: string) {
   const block = /^export const meta = (\{[\s\S]*?\n\});?[ \t]*(?:\n|$)/m.exec(text);
   if (!block) return null;
@@ -35,7 +27,6 @@ for (const f of files) {
   writeFileSync(target, mdx);
   written++;
 }
-// A record renamed or removed here goes from Distillate too.
 const kept = new Set(files.map((f) => `${f.slice(0, -3)}.mdx`));
 const removed = readdirSync(out).filter((f) => f.endsWith('.mdx') && !kept.has(f));
 for (const f of removed) rmSync(path.join(out, f));

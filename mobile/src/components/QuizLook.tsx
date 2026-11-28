@@ -21,7 +21,6 @@ import terms from '@shared/data/quran/balaghaTerms';
 import { plainName, termNamed } from '@shared/quran/balaghaTerms';
 import { searchForty } from '@shared/hadith';
 import { FORTY, fortyEntry } from '@/lib/hadith';
-import { FortyCard } from '@/screens/hadith';
 import { FortyHadith } from '@/screens/hadithForty';
 import { NasabTree } from '@/screens/nasab';
 import { Virtues } from '@/screens/person';
@@ -52,6 +51,7 @@ import { personLife } from '@/lib/life';
 import { TermQuotes } from './BalaghaTerm';
 import LitAyat from './quran/text/LitAyat';
 import { ayahMushafWords } from '@/lib/mushaf';
+import { FortyCard } from '@/components/FortyCard';
 
 const FOUND = 20;
 

@@ -15,12 +15,12 @@ import { ayahMushafWords } from '@/lib/mushaf';
 import { words } from '@/lib/words';
 import type { WordPlace } from '@shared/quran/words';
 import { RAHMAN_ART, RAHMAN_PAPER as paper } from '@/lib/theme';
-import { openSahih } from '@/screens/hadith';
 import AyahFlow, { AyahWords } from '../quran/text/AyahFlow';
 import QuranWords from '../quran/text/QuranWords';
 import { tafsirRuns } from '@shared/quran/tafsirSadi';
 import { ShareBrand } from '../SharePages';
 import MercyGalaxy from './MercyGalaxy';
+import { openSahih } from '@/lib/ways';
 
 export const PAGE_W = 440;
 export const PAGE_H = 550;

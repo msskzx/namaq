@@ -17,7 +17,7 @@ import { usePalette, type Palette } from '@/lib/theme';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { toTab } from '@/lib/ways';
 import { findPerson, PEOPLE, personName, PROPHET, searchPeople } from '@/lib/tarajim';
-import { Credit } from './person';
+import { Credit } from '@/components/Credit';
 
 const LINE = 1.5;
 const MIN_SCALE = 0.5;

@@ -1,7 +1,7 @@
 import { spawnSync } from 'node:child_process';
 
-// Step order and what each one owns: README.md's "Local setup" and docs/data-pipelines.md.
-// Quiz review/approval gates: docs/quiz-question-review.md.
+// see docs/data-pipelines.md
+// see docs/quiz-question-review.md
 const steps: { label: string; args: string[] }[] = [
   { label: 'catalog:validate', args: ['run', 'catalog:validate'] },
   { label: 'catalog:project --apply', args: ['run', 'catalog:project', '--', '--apply'] },

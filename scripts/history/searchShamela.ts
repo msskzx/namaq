@@ -1,7 +1,6 @@
 import { JSDOM } from 'jsdom';
 
-// فهرس الموضوعات page ids for كتاب سير أعلام النبلاء (book 10906).
-// See docs/plans/unfinished-worktree-work.md.
+// see docs/plans/unfinished-worktree-work.md
 const tocPages = [1431, 1985, 2300, 2614, 2806, 2849, 3084, 3158];
 
 const userAgent =

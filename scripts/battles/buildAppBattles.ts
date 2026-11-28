@@ -1,5 +1,3 @@
-// Writes the phone app's places, battles, sira stories, each person's «حياته» and every link both ways (src/lib/catalog/appBattles.ts,
-// appStories.ts, appLinks.ts). Run after any catalog change: npm run battles:app
 import { writeFileSync } from 'node:fs';
 import { appBattles, appMoments } from '../../src/lib/catalog/appBattles';
 import { appStories } from '../../src/lib/catalog/appStories';
@@ -9,7 +7,6 @@ import { appPlaces } from '../../src/lib/catalog/appPlaces';
 import { loadCatalog } from '../../src/lib/catalog/loadCatalog';
 
 void loadCatalog().then(catalog => {
-  // A link that names no record, has no type or no source is refused: fix the record it is written on.
   const { links, problems } = appLinks(catalog);
   if (problems.length > 0) {
     for (const problem of problems) console.error(`${problem.at}: ${problem.message}`);

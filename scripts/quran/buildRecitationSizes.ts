@@ -3,17 +3,20 @@ import surahs from '../../shared/data/quran/surahs.json';
 import { JUZ_STARTS, juzOf } from '../../shared/quran/juz';
 import { ayahAudioUrl, RECITERS } from '../../shared/quran/recitation';
 
-/** Reads every reciter's ayah file sizes from the server (HEAD requests) and sums them by surah and juz. */
 const keys = surahs.flatMap(row => Array.from({ length: row.numberOfAyat }, (_, i) => `${row.number}:${i + 1}`));
 
 async function size(url: string): Promise<number> {
+  let failure: unknown = 'not ok';
   for (let attempt = 0; attempt < 4; attempt++) {
     try {
       const response = await fetch(url, { method: 'HEAD' });
       if (response.ok) return Number(response.headers.get('content-length') ?? 0);
-    } catch {}
+      failure = `HTTP ${response.status}`;
+    } catch (error) {
+      failure = error;
+    }
   }
-  throw new Error(`no size for ${url}`);
+  throw new Error(`no size for ${url}`, { cause: failure });
 }
 
 const out: Record<number, { surah: number[]; juz: number[] }> = {};

@@ -3,16 +3,6 @@ import { join } from 'node:path';
 import gharib from '../../shared/data/quran/gharib';
 import type { GharibData, GharibWord, GharibWordsData } from '../../shared/quran/gharib';
 
-/**
- * Which word each of Ibn Qutaybah's phrase entries explains (owner, 2026-11-21). Two agents marked every entry quoting more
- * than one word, blind of each other (gharibWords/passA.jsonl, passB.jsonl; their brief in gharibWords/README.md): the words
- * he explains, "phrase" when he explains it as a whole, or "unclear". A mark both gave alike is kept (phrase and unclear
- * alike, as neither puts the entry on a page). Where the two differed, a third agent marked the entry blind too
- * (gharibWords/passC.jsonl, owner 2026-11-21: "I'm not qualified to pick"), and a mark two of the three gave alike is
- * kept; with no two alike the entry stays off the word pages. The owner's answer (gharibWords/owner.json: the word ids,
- * or [] for none) decides any entry. The marks are
- * entry indexes of the gharib.js built from the book named in gharibWords/source.json.
- */
 type Mark = { at: number; mark: 'words' | 'phrase' | 'unclear'; words?: string[] };
 const DIR = join(__dirname, 'gharibWords');
 const data = gharib as GharibData;
@@ -45,8 +35,6 @@ const differ = new Set([...phrases].filter(at => !alike(a.get(at)!, b.get(at)!))
 const c = existsSync(join(DIR, 'passC.jsonl')) ? read('passC.jsonl', differ) : new Map<number, Mark>();
 
 const words: Record<string, GharibWord[]> = {};
-// Off a word's own meanings, an entry two markers called "phrase" shows under «في عبارة» on its words' pages (owner,
-// 2026-11-21): he explains the phrase as a whole, which still helps the reader of each of its words.
 const phraseOnly: number[] = [];
 let agreed = 0;
 let third = 0;

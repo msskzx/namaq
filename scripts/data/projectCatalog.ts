@@ -13,23 +13,12 @@ const prisma = new PrismaClient();
 const planned: string[] = [];
 const conflicts: string[] = [];
 
-/**
- * A person no seed file declares is the catalog's alone, so the database is
- * made to match: values are written, and a title, Qur'an link or participation
- * it holds that the catalog does not is removed. While a seed file still
- * describes someone, the catalog only adds to them and reports the difference.
- */
 let seedAuthored = new Set<string>();
 const ownedByCatalog = (slug: string) => !seedAuthored.has(slug);
 
 type Column = string | number | null;
 
-/**
- * Writes the catalog's value, whatever the column holds. The files are the
- * authority and a row is a copy of them (ADR 0010), so a database value that
- * disagrees is stale, not evidence. An overwrite is printed rather than done
- * quietly, because it is the one thing here that loses something.
- */
+// see ADR 0010
 function settle(where: string, live: Column, cited: Cited<string | number> | undefined) {
   if (!cited) return undefined;
   if (live === null || live === undefined) {
@@ -42,7 +31,6 @@ function settle(where: string, live: Column, cited: Cited<string | number> | und
   return cited.value;
 }
 
-/** Field keys are column names, so an added catalog field projects without editing this. */
 function settleFields(
   at: string,
   live: Record<string, unknown>,
@@ -58,8 +46,7 @@ function settleFields(
 
 async function projectPeople(people: Catalog['people']) {
   for (const subject of people) {
-    // Graph-only subjects project to Neo4j, never to PostgreSQL: a stale row
-    // with the same slug is left alone. See docs/plans/reviewed-quiz-bank.md.
+    // see docs/plans/reviewed-quiz-bank.md
     if (!subject.hasProfile) continue;
     let live = await prisma.person.findUnique({ where: { slug: subject.slug } });
 
@@ -97,7 +84,7 @@ async function projectPeople(people: Catalog['people']) {
   }
 }
 
-/** See docs/adr/0020-a-virtue-is-one-entry-with-one-speaker.md. */
+// see docs/adr/0020-a-virtue-is-one-entry-with-one-speaker.md
 async function projectVirtues(subject: Catalog['people'][number]) {
   const at = `people/${subject.slug}`;
   const person = await prisma.person.findUnique({ where: { slug: subject.slug }, select: { id: true } });
@@ -119,10 +106,6 @@ async function projectVirtues(subject: Catalog['people'][number]) {
   }
 }
 
-/**
- * Additive like the titles, and keyed by surah and ayah number rather than by
- * row id, since the Qur'an tables are seeded separately and own their ids.
- */
 async function projectAyat(subject: Catalog['people'][number]) {
   const declared = subject.ayat ?? [];
   if (declared.length === 0) return;
@@ -167,10 +150,6 @@ async function projectAyat(subject: Catalog['people'][number]) {
   }
 }
 
-/**
- * A participation the database holds for a catalog-owned person, in a battle
- * no catalog module puts them in, is a leftover of the seed rows they replaced.
- */
 async function retireStaleParticipations(catalog: Catalog) {
   for (const subject of catalog.people) {
     if (!ownedByCatalog(subject.slug)) continue;
@@ -196,13 +175,6 @@ async function retireStaleParticipations(catalog: Catalog) {
 
 const ensuredTitles = new Set<string>();
 
-/**
- * A title has no existence apart from the people who hold it: its name
- * travels with every assignment (CatalogTitleAssignment), so the row is
- * upserted from whatever assignment is seen first, the same operation
- * whether the row exists yet or not — there is no separate title list to
- * keep in sync with what people actually declare.
- */
 async function ensureTitle(assignment: CatalogTitleAssignment) {
   if (ensuredTitles.has(assignment.title)) return;
   ensuredTitles.add(assignment.title);
@@ -217,12 +189,6 @@ async function ensureTitle(assignment: CatalogTitleAssignment) {
   }
 }
 
-/**
- * Title assignments are additive, like every other value here: a title the
- * catalog declares is connected, and one the database holds that the catalog
- * does not is reported rather than disconnected. Dropping an assignment is a
- * deletion, and this pass does not delete.
- */
 async function projectTitles(subject: Catalog['people'][number]) {
   const live = await prisma.person.findUnique({
     where: { slug: subject.slug },
@@ -264,17 +230,12 @@ async function projectBattles(battles: Catalog['battles']) {
     const at = `battles/${battle.slug}`;
     let row = await prisma.battle.findUnique({ where: { slug: battle.slug } });
 
-    // Expeditions reach the app this way: the sira names a سرية the old seed
-    // never had, so the catalog creates the row rather than reporting it
-    // missing, the way projectEvents already does.
     if (!row) {
       planned.push(`${at}: create`);
       Object.entries(battle.fields ?? {}).forEach(([column, cited]) => {
         if (cited) planned.push(`${at}.${column}: set to ${JSON.stringify(cited.value)}`);
       });
       if (apply) {
-        // Columns come from the fields themselves, so a new one added to
-        // CatalogBattleFields reaches a created row without being listed here.
         const columns = Object.fromEntries(
           Object.entries(battle.fields ?? {})
             .filter(([, cited]) => cited)
@@ -308,9 +269,6 @@ async function projectBattles(battles: Catalog['battles']) {
       const relation = entry.relation ?? 'PARTICIPATED_IN';
       if (existing) {
         const status = [...(entry.status ?? [])];
-        // A participation is a fact about the person, so the person's authority
-        // governs it: retireStaleParticipations already deletes these for a
-        // catalog-owned subject, and a row it may delete is one it may correct.
         const owned = ownedByCatalog(entry.person);
         const differs: Record<string, string | boolean | string[]> = {};
 
@@ -330,8 +288,6 @@ async function projectBattles(battles: Catalog['battles']) {
           );
           if (owned) differs.status = status;
         }
-        // Attendance is the one thing a seeded row is most likely to have
-        // wrong, since the old shape made presence the unmarked default.
         if (existing.relation !== relation) {
           (owned ? planned : conflicts).push(
             owned
@@ -409,10 +365,6 @@ async function projectEvents(events: Catalog['events']) {
   }
 }
 
-/**
- * No seed file writes an utterance, so the catalog is its only author and the
- * row is made to match outright, the way a person no seed declares is.
- */
 async function projectUtterances(utterances: Catalog['utterances']) {
   for (const utterance of utterances) {
     const at = `utterances/${utterance.slug}`;
@@ -463,7 +415,7 @@ async function projectUtterances(utterances: Catalog['utterances']) {
   }
 }
 
-// docs/plans/time-layer.md
+// see docs/plans/time-layer.md
 async function projectDateParts(catalog: Catalog) {
   const { rows, invalid, skipped } = dateRows(catalog);
   invalid.forEach((message) => conflicts.push(message));
@@ -492,7 +444,7 @@ async function projectDateParts(catalog: Catalog) {
   }
 }
 
-// docs/adr/0028-a-stated-ordering-is-recorded-and-its-placement-is-derived.md
+// see docs/adr/0028-a-stated-ordering-is-recorded-and-its-placement-is-derived.md
 async function projectOrderings(catalog: Catalog) {
   try {
     const live = (await prisma.catalogOrdering.findMany()) as unknown as OrderingRow[];

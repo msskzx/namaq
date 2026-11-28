@@ -6,8 +6,8 @@ import EdgeBar from '@/ui/EdgeBar';
 import Folded from '@/ui/Folded';
 import SourceLine, { sourcesOf } from '@/ui/SourceLine';
 import OpenButton from '@/ui/OpenButton';
-import { openSahih } from '@/screens/hadith';
 import type { Palette } from '@/lib/theme';
+import { openSahih } from '@/lib/ways';
 
 const leadOf = (words: string) => {
   const at = words.search(/[«"“]/);

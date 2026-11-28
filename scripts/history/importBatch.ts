@@ -33,8 +33,6 @@ async function main() {
   console.log(`  ${JSON.stringify(plan)}`);
   console.log(approval.approved ? '  approval: current' : `  approval: none — ${approval.reason}`);
 
-  // A dry run is how a batch is reviewed, so it runs unapproved. Only the write
-  // requires the files to match the revision the user approved.
   if (!apply) {
     console.log('  dry run — nothing written; pass --apply once approved');
     return;

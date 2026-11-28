@@ -1,3 +1,4 @@
+import path from 'node:path';
 const POINTER = String.raw`(docs\/[\w./-]+\.md|R\d{4}|ADR[ -]?\d{3,4})`;
 const DIRECTIVE = new RegExp(String.raw`^\*?\s*(eslint-(disable|enable)(-next-line|-line)?\b|eslint\s|@ts-(expect-error|ignore|nocheck|check)\b|prettier-ignore\s*$|@vitest-environment\s+\w+\s*$)`);
 const SEE = new RegExp(String.raw`^\s*see ${POINTER}(, ${POINTER})*\s*$`);
@@ -29,6 +30,45 @@ const quality = {
               else if (!allowed(comment)) context.report({ loc: comment.loc, messageId: 'comment' });
             }
           },
+        };
+      },
+    },
+    'import-boundaries': {
+      meta: {
+        type: 'problem',
+        schema: [{ type: 'object', properties: { root: { type: 'string' }, zones: { type: 'array' } }, required: ['root', 'zones'], additionalProperties: false }],
+        messages: { crossed: '{{message}} ({{target}}). See docs/quality/imports.md.' },
+      },
+      create(context) {
+        const { root, zones } = context.options[0];
+        const file = path.relative(root, context.filename).split(path.sep).join('/');
+        const mine = zones.filter(zone => file.startsWith(zone.from) && !(zone.skip ?? []).some(pattern => new RegExp(pattern).test(file)));
+        if (!mine.length) return {};
+        const resolve = spec => {
+          if (spec.startsWith('.')) return path.relative(root, path.resolve(path.dirname(context.filename), spec)).split(path.sep).join('/');
+          if (spec.startsWith('@shared/')) return `shared/${spec.slice(8)}`;
+          if (spec.startsWith('@/') && file.startsWith('mobile/')) return `mobile/src/${spec.slice(2)}`;
+          if (spec.startsWith('@/')) return `src/${spec.slice(2)}`;
+          return null;
+        };
+        const check = (node, spec) => {
+          if (typeof spec !== 'string') return;
+          const target = resolve(spec);
+          const inside = dir => `${target}/`.startsWith(dir);
+          for (const zone of mine) {
+            const crossed = target === null
+              ? zone.packages === false && !(zone.allowPackages ?? []).includes(spec)
+              : (zone.allow ? !zone.allow.some(inside) : false)
+                || ((zone.forbid ?? []).some(inside) && !(zone.unless ?? []).some(inside));
+            if (crossed) context.report({ node, messageId: 'crossed', data: { message: zone.message, target: spec } });
+          }
+        };
+        return {
+          ImportDeclaration: node => check(node.source, node.source.value),
+          ExportNamedDeclaration: node => node.source && check(node.source, node.source.value),
+          ExportAllDeclaration: node => check(node.source, node.source.value),
+          ImportExpression: node => node.source.type === 'Literal' && check(node.source, node.source.value),
+          CallExpression: node => node.callee.type === 'Identifier' && node.callee.name === 'require' && node.arguments[0]?.type === 'Literal' && check(node.arguments[0], node.arguments[0].value),
         };
       },
     },

@@ -31,10 +31,6 @@ const titleUpsertQuery = `
     SET node.desc = title.desc)
 `;
 
-// MATCH (not MERGE) on person/title: this only links people and titles that
-// already have a synced node. A holder whose person or title node is
-// missing is silently skipped here and stays reported as postgresOnly until
-// that node exists (via people:sync or a titles:sync re-run).
 const holderUpsertQuery = `
   UNWIND $holders AS h
   MATCH (person:Person {slug: h.personSlug}), (title:Title {slug: h.titleSlug})
@@ -63,9 +59,6 @@ async function main() {
   });
 
   try {
-    // Sequential, not Promise.all: a single session can't run two queries
-    // concurrently (the driver throws "Queries cannot be run directly on a
-    // session with an open transaction").
     const titleResult = await session.run(titleGraphQuery);
     const holderResult = await session.run(holderGraphQuery);
     const graphTitles: CanonicalTitle[] = titleResult.records.map((record) => ({
@@ -116,10 +109,6 @@ async function main() {
         defaultAccessMode: neo4j.session.WRITE,
       });
       try {
-        // PostgreSQL is authoritative for titles and their holders. These
-        // MERGEs only create missing nodes/relationships or update shared
-        // properties; they never delete nodes, relationships, or Neo4j-only
-        // properties.
         await writeSession.executeWrite(async (transaction) => {
           await transaction.run(titleUpsertQuery, { titles: postgresTitles });
           await transaction.run(holderUpsertQuery, { holders: postgresHolders });
@@ -146,7 +135,4 @@ main()
     console.error('Canonical titles reconciliation failed:', error);
     process.exitCode = 1;
   })
-  // The Neo4j driver's connection pool keeps the event loop alive, so the
-  // process won't exit on its own once main() resolves (see the same
-  // process.exit() pattern in neo4j/graphSeed.ts).
   .finally(() => process.exit(process.exitCode ?? 0));

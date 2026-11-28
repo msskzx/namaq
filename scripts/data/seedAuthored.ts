@@ -1,15 +1,6 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-/**
- * Person slugs some seed file still declares, whether or not that file is
- * wired into a live seed command: a dormant file is still a second author.
- *
- * The catalog is total for a person no seed file mentions, and additive for one
- * they both describe. That is what makes the migration safe subject by subject:
- * deleting someone's seed entry is what hands the catalog authority over them,
- * so nothing has to be declared twice or remembered.
- */
 export function seedAuthoredPeople(): Set<string> {
   const slugs = new Set<string>();
 

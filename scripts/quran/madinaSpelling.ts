@@ -3,12 +3,6 @@ import { join } from 'node:path';
 import fixes from './madinaSpelling.json';
 import type { MushafPage } from '../../shared/quran/readerPage';
 
-/**
- * Build step only: writes a word of the older copies (the Quranic Corpus lemmas, Quranpedia's readings) in the Madina
- * page's spelling, so words.json, lemmas.json and qiraat.json store the forms the screens show and the app converts
- * nothing. A word the pages print is kept as it is, signs and all. madinaSpelling.json holds the words the marks alone
- * cannot settle (taken once from the old font table, 2026-11-17); every other word only swaps the older copies' marks.
- */
 const SIGNS = /[ۖ-ۜ۞۩]/g;
 const display: Record<string, string> = fixes;
 const spaced = Object.keys(display).filter(word => /\s/.test(word)).map(word => word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));

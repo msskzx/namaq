@@ -3133,7 +3133,7 @@
  },
  {
   "file": "mobile/src/screens/ayah.tsx",
-  "line": 106,
+  "line": 105,
   "owner": "AyahScreen",
   "key": "back",
   "label": null,
@@ -3146,7 +3146,7 @@
  },
  {
   "file": "mobile/src/screens/ayah.tsx",
-  "line": 109,
+  "line": 108,
   "owner": "AyahScreen",
   "key": "onPress",
   "label": "افتح ‹› في المصحف",
@@ -3159,7 +3159,7 @@
  },
  {
   "file": "mobile/src/screens/ayah.tsx",
-  "line": 111,
+  "line": 110,
   "owner": "AyahScreen",
   "key": "onPress",
   "label": "سمّع من هذه الآية",
@@ -3172,7 +3172,7 @@
  },
  {
   "file": "mobile/src/screens/ayah.tsx",
-  "line": 139,
+  "line": 138,
   "owner": "AyahScreen",
   "key": "onJump",
   "label": null,
@@ -3185,7 +3185,7 @@
  },
  {
   "file": "mobile/src/screens/ayah.tsx",
-  "line": 234,
+  "line": 233,
   "owner": "SectionPart",
   "key": "open",
   "label": "افتح «‹›» في فواتح السور",
@@ -3198,7 +3198,7 @@
  },
  {
   "file": "mobile/src/screens/ayah.tsx",
-  "line": 242,
+  "line": 241,
   "owner": "SectionPart",
   "key": "open",
   "label": "افتح ‹› في الأقسام",
@@ -3211,7 +3211,7 @@
  },
  {
   "file": "mobile/src/screens/ayah.tsx",
-  "line": 253,
+  "line": 252,
   "owner": "SectionPart",
   "key": "open",
   "label": "افتح ‹› في القصة",
@@ -3224,7 +3224,7 @@
  },
  {
   "file": "mobile/src/screens/ayah.tsx",
-  "line": 262,
+  "line": 261,
   "owner": "SectionPart",
   "key": "openStory",
   "label": "افتح ‹›",
@@ -3237,7 +3237,7 @@
  },
  {
   "file": "mobile/src/screens/ayah.tsx",
-  "line": 271,
+  "line": 270,
   "owner": "SectionPart",
   "key": "onPress",
   "label": null,
@@ -3250,7 +3250,7 @@
  },
  {
   "file": "mobile/src/screens/ayah.tsx",
-  "line": 289,
+  "line": 288,
   "owner": "SectionPart",
   "key": "open",
   "label": "افتح ‹›",
@@ -3369,7 +3369,7 @@
  },
  {
   "file": "mobile/src/screens/hadith.tsx",
-  "line": 54,
+  "line": 34,
   "owner": "ContinueCard",
   "key": "onPress",
   "label": "افتح ‹›",
@@ -3382,7 +3382,7 @@
  },
  {
   "file": "mobile/src/screens/hadith.tsx",
-  "line": 72,
+  "line": 52,
   "owner": "FortyShape",
   "key": "onOpen",
   "label": null,
@@ -3395,7 +3395,7 @@
  },
  {
   "file": "mobile/src/screens/hadith.tsx",
-  "line": 87,
+  "line": 67,
   "owner": "Hit",
   "key": "onPress",
   "label": null,
@@ -3408,7 +3408,7 @@
  },
  {
   "file": "mobile/src/screens/hadith.tsx",
-  "line": 87,
+  "line": 67,
   "owner": "Hit",
   "key": "onPress",
   "label": null,
@@ -3421,7 +3421,7 @@
  },
  {
   "file": "mobile/src/screens/hadith.tsx",
-  "line": 87,
+  "line": 67,
   "owner": "Hit",
   "key": "onPress",
   "label": null,
@@ -3434,7 +3434,7 @@
  },
  {
   "file": "mobile/src/screens/hadith.tsx",
-  "line": 135,
+  "line": 115,
   "owner": "HadithScreen",
   "key": "onPress",
   "label": null,
@@ -3447,7 +3447,7 @@
  },
  {
   "file": "mobile/src/screens/hadith.tsx",
-  "line": 149,
+  "line": 129,
   "owner": "HadithScreen",
   "key": "onOpenBook",
   "label": null,
@@ -3460,7 +3460,7 @@
  },
  {
   "file": "mobile/src/screens/hadith.tsx",
-  "line": 149,
+  "line": 129,
   "owner": "HadithScreen",
   "key": "onOpenKitab",
   "label": null,
@@ -3473,7 +3473,7 @@
  },
  {
   "file": "mobile/src/screens/hadith.tsx",
-  "line": 153,
+  "line": 133,
   "owner": "HadithScreen",
   "key": "onOpenBook",
   "label": null,
@@ -3577,7 +3577,7 @@
  },
  {
   "file": "mobile/src/screens/hadithKitab.tsx",
-  "line": 37,
+  "line": 36,
   "owner": "BabRow",
   "key": "onPress",
   "label": null,
@@ -3590,8 +3590,21 @@
  },
  {
   "file": "mobile/src/screens/hadithKitab.tsx",
-  "line": 59,
+  "line": 58,
   "owner": "KitabIndex",
+  "key": "back",
+  "label": null,
+  "how": "tab",
+  "route": "/hadith",
+  "opens": "الحديث",
+  "on": [
+   "أبواب الكتاب"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/hadithKitab.tsx",
+  "line": 92,
+  "owner": "BabPage",
   "key": "back",
   "label": null,
   "how": "tab",
@@ -3605,19 +3618,6 @@
   "file": "mobile/src/screens/hadithKitab.tsx",
   "line": 93,
   "owner": "BabPage",
-  "key": "back",
-  "label": null,
-  "how": "tab",
-  "route": "/hadith",
-  "opens": "الحديث",
-  "on": [
-   "أبواب الكتاب"
-  ]
- },
- {
-  "file": "mobile/src/screens/hadithKitab.tsx",
-  "line": 94,
-  "owner": "BabPage",
   "key": "go",
   "label": null,
   "how": "replace",
@@ -3629,7 +3629,7 @@
  },
  {
   "file": "mobile/src/screens/hadithKitab.tsx",
-  "line": 104,
+  "line": 103,
   "owner": "BabPage",
   "key": "onPress",
   "label": "‹›‹›",
@@ -3642,7 +3642,7 @@
  },
  {
   "file": "mobile/src/screens/hadithKitab.tsx",
-  "line": 117,
+  "line": 116,
   "owner": "BabPage",
   "key": "onPress",
   "label": null,
@@ -3655,7 +3655,7 @@
  },
  {
   "file": "mobile/src/screens/hadithKitab.tsx",
-  "line": 133,
+  "line": 132,
   "owner": "HadithKitabScreen",
   "key": "back",
   "label": null,
@@ -3668,7 +3668,7 @@
  },
  {
   "file": "mobile/src/screens/hadithSahih.tsx",
-  "line": 43,
+  "line": 42,
   "owner": "SahihPage",
   "key": "onPress",
   "label": "‹›‹›",
@@ -3681,7 +3681,7 @@
  },
  {
   "file": "mobile/src/screens/hadithSahih.tsx",
-  "line": 43,
+  "line": 42,
   "owner": "SahihPage",
   "key": "onPress",
   "label": "‹›‹›",
@@ -3694,7 +3694,7 @@
  },
  {
   "file": "mobile/src/screens/hadithSahih.tsx",
-  "line": 54,
+  "line": 53,
   "owner": "SahihPage",
   "key": "onOpen",
   "label": null,
@@ -3707,7 +3707,7 @@
  },
  {
   "file": "mobile/src/screens/hadithSahih.tsx",
-  "line": 56,
+  "line": 55,
   "owner": "SahihPage",
   "key": "onPress",
   "label": null,
@@ -3720,7 +3720,7 @@
  },
  {
   "file": "mobile/src/screens/hadithSahih.tsx",
-  "line": 77,
+  "line": 76,
   "owner": "InHadith",
   "key": "onPress",
   "label": "‹› · ‹›",
@@ -3733,7 +3733,7 @@
  },
  {
   "file": "mobile/src/screens/hadithSahih.tsx",
-  "line": 108,
+  "line": 107,
   "owner": "HadithSahihScreen",
   "key": "back",
   "label": null,
@@ -3978,7 +3978,7 @@
  },
  {
   "file": "mobile/src/screens/person.tsx",
-  "line": 214,
+  "line": 210,
   "owner": "Names",
   "key": "onPress",
   "label": null,
@@ -3991,7 +3991,7 @@
  },
  {
   "file": "mobile/src/screens/person.tsx",
-  "line": 251,
+  "line": 247,
   "owner": "PersonScreen",
   "key": "showBattle",
   "label": null,
@@ -4004,7 +4004,7 @@
  },
  {
   "file": "mobile/src/screens/person.tsx",
-  "line": 256,
+  "line": 252,
   "owner": "PersonScreen",
   "key": "back",
   "label": null,
@@ -4017,7 +4017,7 @@
  },
  {
   "file": "mobile/src/screens/person.tsx",
-  "line": 258,
+  "line": 254,
   "owner": "PersonScreen",
   "key": "tree",
   "label": "شجرة النسب",
@@ -4030,7 +4030,7 @@
  },
  {
   "file": "mobile/src/screens/person.tsx",
-  "line": 298,
+  "line": 294,
   "owner": "PersonScreen",
   "key": "onPress",
   "label": null,
@@ -4043,7 +4043,7 @@
  },
  {
   "file": "mobile/src/screens/person.tsx",
-  "line": 320,
+  "line": 316,
   "owner": "PersonScreen",
   "key": "onPress",
   "label": "قارن حياته بغيره",
@@ -4056,7 +4056,7 @@
  },
  {
   "file": "mobile/src/screens/person.tsx",
-  "line": 331,
+  "line": 327,
   "owner": "PersonScreen",
   "key": "onPin",
   "label": null,
@@ -4069,7 +4069,7 @@
  },
  {
   "file": "mobile/src/screens/person.tsx",
-  "line": 333,
+  "line": 329,
   "owner": "PersonScreen",
   "key": "onPress",
   "label": null,
@@ -4082,7 +4082,7 @@
  },
  {
   "file": "mobile/src/screens/person.tsx",
-  "line": 342,
+  "line": 338,
   "owner": "PersonScreen",
   "key": "onPress",
   "label": "تنقّل في صلاته",
@@ -4095,7 +4095,7 @@
  },
  {
   "file": "mobile/src/screens/person.tsx",
-  "line": 343,
+  "line": 339,
   "owner": "PersonScreen",
   "key": "onPress",
   "label": "بينه وبين…",
@@ -4108,7 +4108,7 @@
  },
  {
   "file": "mobile/src/screens/person.tsx",
-  "line": 346,
+  "line": 342,
   "owner": "PersonScreen",
   "key": "onPick",
   "label": null,
@@ -4121,7 +4121,7 @@
  },
  {
   "file": "mobile/src/screens/person.tsx",
-  "line": 365,
+  "line": 361,
   "owner": "PersonScreen",
   "key": "onPress",
   "label": "‹›‹›",
@@ -4134,7 +4134,7 @@
  },
  {
   "file": "mobile/src/screens/person.tsx",
-  "line": 374,
+  "line": 370,
   "owner": "PersonScreen",
   "key": "onPress",
   "label": null,
@@ -4498,7 +4498,7 @@
  },
  {
   "file": "mobile/src/screens/story.tsx",
-  "line": 68,
+  "line": 67,
   "owner": "HadithOpen",
   "key": "onPress",
   "label": "افتح ‹›",

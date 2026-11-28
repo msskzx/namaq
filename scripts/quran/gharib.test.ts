@@ -6,8 +6,6 @@ import { authorText, firstWords, headingsFor, letters, meaningOf, meaningPicks, 
 const page = (id: number, text: string, at = id) => ({ id, text, vol: '1', page: at });
 
 describe("placing Ibn Qutaybah's entries", () => {
-  // Al-Baqara 265 «كَمَثَلِ جَنَّةِۭ بِرَبۡوَةٍ أَصَابَهَا وَابِلٞ فَـَٔاتَتۡ أُكُلَهَا» and 275 «فَمَن جَآءَهُۥ مَوۡعِظَةٞ مِّن رَّبِّهِۦ»: in consonants alone
-  // «رَبۡوَةٍ» and «رَّبِّهِۦ» are one word (ربه), and his entry on الربوة stood on «ربه» before.
   const ayat: [number, string][] = [[265, 'كَمَثَلِ جَنَّةِۭ بِرَبۡوَةٍ أَصَابَهَا وَابِلٞ فَـَٔاتَتۡ أُكُلَهَا'], [275, 'فَمَن جَآءَهُۥ مَوۡعِظَةٞ مِّن رَّبِّهِۦ']];
   const mushaf: MushafWord[] = ayat.flatMap(([ayah, text]) => text.split(' ').map((token, at) => ({ surah: 2, ayah, at, skeleton: skeleton(token), text: token })));
   const first = firstWords(mushaf);

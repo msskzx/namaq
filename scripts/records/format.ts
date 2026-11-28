@@ -1,7 +1,4 @@
-// One record = docs/records/RNNNN-slug.md: a frontmatter block that holds
-// Distillate's record fields, one `key: <JSON value>` per line (valid YAML),
-// then the Markdown body. toDistillateMdx turns it back into the MDX file
-// Distillate keeps under content/records/namaq/, links between records included.
+// see docs/records/README.md
 
 export const FIELD_ORDER = [
   'title', 'summary', 'disclosure', 'sourceProject', 'kind', 'problem', 'approach',
@@ -14,8 +11,6 @@ export const REQUIRED = [
   'outcome', 'conditions', 'evidence', 'implication', 'date',
 ] as const;
 
-// Distillate's controlled topic list (its content/topics.json); a record whose
-// topic is not here fails Distillate's loader.
 export const TOPICS = [
   'agent-review', 'build-tooling', 'data-sync', 'evidence-model', 'graph-layout', 'graph-ui',
   'migrations', 'mobile', 'runtime-versions', 'source-extraction', 'testing', 'text-matching',
@@ -42,10 +37,6 @@ export function formatRecord(meta: Meta, body: string): string {
   return `---\n${keys.map((k) => `${k}: ${JSON.stringify(meta[k])}`).join('\n')}\n---\n\n${body.trim()}\n`;
 }
 
-// Repo links in the body are relative Markdown links (../../path) here and
-// <RepoLink> tags in Distillate. Links to other records (RNNNN-slug.md) become
-// /records/namaq/RNNNN-slug. Braces outside code are escaped, since MDX reads
-// «{١ - ٨}» as a JavaScript expression.
 export function toDistillateMdx({ meta, body }: Record_): string {
   const mdxBody = body
     .split(/(```[\s\S]*?```|`[^`\n]*`)/)

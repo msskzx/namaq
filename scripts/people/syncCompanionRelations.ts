@@ -8,13 +8,6 @@ const apply = process.argv.includes('--apply');
 const COMPANION_TITLE_SLUG = 'companion';
 const PROPHET_SLUG = 'prophet-muhammad';
 
-// Only ~13 of 256 companions are also blood/marriage relatives of the
-// Prophet (and so already have a FATHER/SON, MATERNAL_UNCLE/NEPHEW, etc.
-// edge to him) -- the other ~250 have no direct graph edge to him at all,
-// only the shared HOLDS_TITLE->Title{slug:"companion"} node. This gives
-// every companion an explicit, direct, non-family edge to the Prophet.
-// Both directions are created, matching the FATHER/SON convention used
-// elsewhere in the graph.
 const upsertQuery = `
   UNWIND $companionSlugs AS slug
   MATCH (companion:Person {slug: slug}), (prophet:Person {slug: $prophetSlug})
@@ -83,7 +76,4 @@ main()
     console.error('Companion relation sync failed:', error);
     process.exitCode = 1;
   })
-  // The Neo4j driver's connection pool keeps the event loop alive, so the
-  // process won't exit on its own once main() resolves (see the same
-  // process.exit() pattern in neo4j/graphSeed.ts).
   .finally(() => process.exit(process.exitCode ?? 0));

@@ -21,8 +21,6 @@ describe('estimateLabelRadius', () => {
   });
 
   it('never shrinks below the minimum circle for a very short label', () => {
-    // Math.max(estimatedTextWidth + fontSize, fontSize*2) / 2, fontSize=12
-    // -- floor is fontSize*2/2 = 12.
     expect(estimateLabelRadius('')).toBe(12);
   });
 });
@@ -54,7 +52,6 @@ describe('writeSubjectPropertiesToNeo4j', () => {
     expect(run).toHaveBeenCalledTimes(1);
     const [query, params] = run.mock.calls[0];
     expect(query).toContain('UNWIND $rows AS row');
-    // One statement, so a graph-only subject gets rank and position or neither.
     expect(query).toContain('SET n.graphRank = row.graphRank, n.layoutX = row.layoutX, n.layoutY = row.layoutY');
     expect(params).toEqual({ rows });
     expect(close).toHaveBeenCalledTimes(1);
@@ -64,7 +61,6 @@ describe('writeSubjectPropertiesToNeo4j', () => {
     run.mockResolvedValue({ records: [{ get: (key: string) => (key === 'matched' ? 1 : undefined) }] });
 
     await expect(writeSubjectPropertiesToNeo4j(rows)).rejects.toThrow('Matched 1 of 2 expected Neo4j subjects');
-    // Still closes the session on the error path.
     expect(close).toHaveBeenCalledTimes(1);
   });
 

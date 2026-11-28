@@ -24,6 +24,9 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   Derive the value, act in the event handler, or use a hook from `mobile/src/lib/hooks/`. Old code is
   listed in `mobile/eslint-suppressions.json`, which may only shrink: after removing a case, run
   `npx eslint src scripts --prune-suppressions` in `mobile/`. See docs/quality/effects.md.
+- Import boundaries (owner, 2026-11-28): `shared/` imports only `shared/`; the app never imports the website;
+  `mobile/src/ui/` imports no feature or page; only `app/` routes import a screen. `quality/import-boundaries`
+  enforces them, from the list in `shared/lint/importZones.mjs`. See docs/quality/imports.md.
 - Invoke the `ponytail` skill before writing or reviewing code: reuse what the
   codebase already has, reach for stdlib and native platform features before a
   dependency, and stop at the shortest diff that works. It is not vendored
