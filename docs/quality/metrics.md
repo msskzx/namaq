@@ -32,3 +32,10 @@ Counts are of product code: test files are left out. "Empty catch blocks" counts
 | 2026-11-28 | 2 errors show their cause | app + shared | failures that dropped their reason | 14 | 0 | a refused storage save, adhan scheduling and permission, book download and open, party questions, location, audio download (each ayah and the pack), video font, share and recording, home card warm-up, screen preload |
 | 2026-11-28 | 2 errors show their cause | app + shared | catches that recover without the error (judged expected) | 26 | 23 | parsing a saved value or a URL, reading storage; a failure here is an expected answer, not an error |
 | 2026-11-28 | 2 errors show their cause | website | empty catch blocks | 44 | 44 | the website is paused; its turn comes when it returns |
+| 2026-11-28 | every-word tests | shared | ayat checked word for word against a second copy (Quranic Arabic Corpus) | 0 | 6236 | 77,430 page words. Before this, no test compared the page text with a copy made apart from it |
+| 2026-11-28 | every-word tests | shared | ayat whose words differ from the corpus (dropped or added) | | 0 | |
+| 2026-11-28 | every-word tests | shared | ayat whose letters differ from the corpus | | 2 | 12:39 and 12:41, KFGQPC «يَٰصَٰحِبَيِ» against Tanzil «يَٰصَىٰحِبَىِ». Reported. The printed page settles it |
+| 2026-11-28 | every-word tests | shared | Forty records from the Sahihayn checked against the Sahih text | 0 | 93 | 1 differs: Muslim 1733 route ٧٠ runs on into the next route in data/hadith/sahih. Reported for the data week |
+| 2026-11-28 | every-word tests | shared | sira-story reports checked against their hadith | 0 | 358 | 0 differ. 256 drawn moments also checked speaker by speaker |
+| 2026-11-28 | every-word tests | shared | reader-book pages checked for every character once and in order | 0 | 6897 | six books, 0 differ |
+| 2026-11-28 | every-word tests | shared | ways a dropped word slipped past the new tests, found in review | 14 | 0 | two reviewers, then a second cycle. See examples.md |

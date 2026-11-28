@@ -15,20 +15,12 @@ const sahih = {
   bukhari: JSON.parse(readFileSync(join(__dirname, '../data/hadith/sahih/bukhari.json'), 'utf8')) as SahihText,
   muslim: JSON.parse(readFileSync(join(__dirname, '../data/hadith/sahih/muslim.json'), 'utf8')) as SahihText,
 };
-/** The words and numbers, their marks kept; only punctuation and spacing set aside, which the copies print their own ways. */
 const words = (text: string) => text.replace(/[^\p{L}\p{M}\p{Nd}ﷺ]+/gu, ' ').trim();
-/** A number as a cite writes it («٣٨٥٢»). */
 const fromArabicDigits = (digits: string) => Number([...digits].map(digit => '٠١٢٣٤٥٦٧٨٩'.indexOf(digit)).join(''));
-/** The record's own number in front of it as its book prints it («٧٠ - (١٧٣٣)», «م - »), which is not the hadith's text. */
-const printedNumber = /^(?:[\s\-()٠-٩]|م(?=[\s٠-٩]))+/;
+const printedRecordNumber = /^(?:[\s\-()٠-٩]|م(?=[\s٠-٩]))+/;
 
 describe('the Forty\'s records from the Sahihayn', () => {
-  /**
-   * Where data/hadith/sahih holds a route run on into the next one, so a whole record is the start of it, followed by the next route's first words. Reported
-   * to the owner 2026-11-28: Abd al-Baqi prints the next route under its own number; it leaves here once the Sahih text
-   * splits it from the printed page.
-   */
-  const RUN_ON: Record<string, string> = { 'muslim 1733 ٧٠': 'حدثنا محمد بن عباد' };
+  const RUNS_ON_INTO: Record<string, string> = { 'muslim 1733 ٧٠': 'حدثنا محمد بن عباد' };
 
   it('show the same words as the Sahih text, whole routes, none dropped or added', () => {
     const records = (forty as unknown as AppForty).entries.flatMap(entry => entry.records).filter(record => record.book === 'bukhari' || record.book === 'muslim');
@@ -38,8 +30,8 @@ describe('the Forty\'s records from the Sahihayn', () => {
       const printed = findHadith(sahih[record.book as 'bukhari' | 'muslim'], record.number)?.hadith.routes ?? [];
       const routes = printed.map(route => words(route.text));
       const own = record.route ? printed.findIndex(route => route.route === record.route) : -1;
-      const shown = words(record.text.replace(printedNumber, ''));
-      if (name(record) in RUN_ON) return !routes[own]?.startsWith(`${shown} ${words(RUN_ON[name(record)])} `);
+      const shown = words(record.text.replace(printedRecordNumber, ''));
+      if (name(record) in RUNS_ON_INTO) return !routes[own]?.startsWith(`${shown} ${words(RUNS_ON_INTO[name(record)])} `);
       if (record.route && own < 0) return true;
       const starts = own >= 0 ? [own] : routes.map((_, at) => at);
       return !starts.some(from => routes.some((_, to) => to >= from && routes.slice(from, to + 1).join(' ') === shown));

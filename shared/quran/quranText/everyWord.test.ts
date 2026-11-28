@@ -16,7 +16,6 @@ const keys = Object.keys(tokens);
 const startPage = mushafPages(pages);
 const surahBefore = (page: number) => surahs.findLast(row => row.page != null && row.page < page)?.number;
 
-/** The Quranic Arabic Corpus (Tanzil's Uthmani text): each ayah's words, each word's segments joined. */
 const corpus = new Map<string, string[]>();
 for (const line of readFileSync(join(ROOT, 'data/quran/quranic-corpus-morphology-0.4.txt'), 'utf8').split('\n')) {
   const match = line.match(/^\((\d+):(\d+):(\d+):\d+\)\t([^\t]+)/);
@@ -26,19 +25,10 @@ for (const line of readFileSync(join(ROOT, 'data/quran/quranic-corpus-morphology
   corpus.set(`${match[1]}:${match[2]}`, words);
 }
 
-/**
- * The letters and shaddas alone. The two copies spell a hamza, a long alif, an alif maqsura and a tatweel their own ways
- * («ٱلۡأٓخِرَةِ», «ٱلۡءَاخِرَةِ»), so those are folded; any other letter that differs, and any word dropped or added, still shows.
- * The vowels, the small letters and the signs are not compared: the two copies write them with different marks.
- */
-const letters = (text: string) => text.normalize('NFC').replace(/[^ء-يٱّ]/g, '').replace(/[ءـ]/g, '')
+const lettersAndShaddas = (text: string) => text.normalize('NFC').replace(/[^ء-يٱّ]/g, '').replace(/[ءـ]/g, '')
   .replace(/[ٱأإآ]/g, 'ا').replace(/ؤ/g, 'و').replace(/[ئى]/g, 'ي');
 
-/**
- * Where the two encodings write a word with different letters: the page's KFGQPC text and the corpus's Tanzil text.
- * Reported to the owner 2026-11-28; each stays until the printed Madina page settles it.
- */
-const LETTERS_DIFFER: Record<string, string> = {
+const KFGQPC_AND_TANZIL_DIFFER: Record<string, string> = {
   '12:39': 'the page «يَٰصَٰحِبَيِ», the corpus «يَٰصَىٰحِبَىِ»',
   '12:41': 'the page «يَٰصَٰحِبَيِ», the corpus «يَٰصَىٰحِبَىِ»',
 };
@@ -59,8 +49,8 @@ describe('every ayah against the Quranic Arabic Corpus', () => {
   });
 
   it('spells every ayah with the corpus\'s letters, except where the two copies are known to differ', () => {
-    const differ = keys.filter(key => letters(wordsOnly(tokens[key]).join('')) !== letters(corpus.get(key)!.join('')));
-    expect(differ).toEqual(Object.keys(LETTERS_DIFFER));
+    const differ = keys.filter(key => lettersAndShaddas(wordsOnly(tokens[key]).join('')) !== lettersAndShaddas(corpus.get(key)!.join('')));
+    expect(differ).toEqual(Object.keys(KFGQPC_AND_TANZIL_DIFFER));
   });
 });
 
