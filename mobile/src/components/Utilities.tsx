@@ -25,6 +25,7 @@ import { DayDial, DayLine, MonthMoons, TimeCells } from './DayView';
 import { Tap } from '@/ui/Tap';
 import TapRow from '@/ui/TapRow';
 import { FEATURE_ICON } from '@/components/featureIcons';
+import { useLoaded } from '@/lib/hooks/useLoaded';
 
 const DAY_VIEWS = [{ key: 'dial', label: 'دائرة' }, { key: 'line', label: 'خط' }] as const satisfies readonly { key: PrayerView; label: string }[];
 
@@ -158,14 +159,11 @@ function Times({ place, palette, onPlace }: { place: Place; palette: Palette; on
   const [alerts, setAlerts] = adhanAlerts.use();
   const [view, setView] = prayerView.use();
   const upcoming = { key: next ?? 'fajr', at: nextAt, left } as const;
-  const [blocked, setBlocked] = useState(false);
+  const [refused, setBlocked] = useState(false);
   const back = useForeground();
-  useEffect(() => {
-    if (!ALERTS_SUPPORTED || !anyAlert(alerts)) { setBlocked(false); return; }
-    let gone = false;
-    alertsAllowed().then(ok => { if (!gone) setBlocked(!ok); });
-    return () => { gone = true; };
-  }, [alerts, dayKey, back]);
+  const asking = ALERTS_SUPPORTED && anyAlert(alerts);
+  const allowed = useLoaded(asking ? `adhan alerts ${JSON.stringify(alerts)} ${dayKey} ${back}` : null, () => alertsAllowed());
+  const blocked = asking ? allowed === false : refused;
   const toggle = async (key: PrayerKey) => {
     buzz();
     if (alerts[key]) { setAlerts({ ...adhanAlerts.get(), [key]: false }); return; }

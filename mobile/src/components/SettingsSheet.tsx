@@ -17,10 +17,12 @@ import { MemorizedSetting } from './Memorized';
 import { InterestsSetting } from './Interests';
 import { PEN_NAMES, PenSetting } from './recite/PenSetting';
 import type { Palette } from '@/lib/theme';
+import { useLater } from '@/lib/hooks/useLater';
 
 const REPLAY_AFTER = 400;
 
 export default function SettingsSheet({ open, onClose, palette }: { open: boolean; onClose: () => void; palette: Palette }) {
+  const later = useLater();
   const links = [
     { href: '/about' as const, label: 'عن نمق', icon: <Logo size={22} /> },
     { href: '/attributions' as const, label: 'المصادر والتراخيص', icon: <BookOpen size={20} color={palette.ink} /> },
@@ -67,7 +69,7 @@ export default function SettingsSheet({ open, onClose, palette }: { open: boolea
           <HapticsSetting palette={palette} />
         </Card>
         <Card palette={palette} pad={[0, 14]}>
-          <Pressable onPress={() => { onClose(); setTimeout(() => { hintsSeen.set([]); tourSeen.set(false); }, REPLAY_AFTER); }} accessibilityRole="button" accessibilityLabel="الجولة التعريفية"
+          <Pressable onPress={() => { onClose(); later.after(REPLAY_AFTER, () => { hintsSeen.set([]); tourSeen.set(false); }); }} accessibilityRole="button" accessibilityLabel="الجولة التعريفية"
             style={({ pressed }) => ({ flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 14, borderBottomWidth: 1, borderColor: `${palette.rule}55`, opacity: pressed ? 0.6 : 1 })}>
             <Play size={20} color={palette.ink} />
             <Text style={{ flex: 1, color: palette.ink, fontSize: 16 }}>الجولة التعريفية</Text>

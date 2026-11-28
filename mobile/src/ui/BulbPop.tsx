@@ -1,8 +1,8 @@
-import { useEffect } from 'react';
 import { StyleSheet } from 'react-native';
 import Svg, { Line, Path } from 'react-native-svg';
 import Animated, { Easing, interpolate, useAnimatedProps, useAnimatedStyle, useReducedMotion, useSharedValue, withTiming, type SharedValue } from 'react-native-reanimated';
 import type { Palette } from '@/lib/theme';
+import { useOnChange } from '@/lib/hooks/useOnChange';
 
 export type Pop = { id: number; x: number; y: number; kind: 'forgot' | 'save'; on: boolean };
 
@@ -36,7 +36,7 @@ export default function BulbPop({ pop, palette }: { pop: Pop | null; palette: Pa
   const progress = useSharedValue(1);
   const turned = useSharedValue(0);
   const drawn = useSharedValue(0);
-  useEffect(() => {
+  useOnChange([pop?.id], () => {
     if (!pop || reduced) return;
     progress.value = 0;
     progress.value = withTiming(1, { duration: DURATION, easing: Easing.out(Easing.quad) });
@@ -44,7 +44,7 @@ export default function BulbPop({ pop, palette }: { pop: Pop | null; palette: Pa
     turned.value = withTiming(1, { duration: DURATION / 2 });
     drawn.value = pop.on ? 0 : 1;
     drawn.value = withTiming(pop.on ? 1 : 0, { duration: DURATION / 2 });
-  }, [pop?.id]); // eslint-disable-line react-hooks/exhaustive-deps
+  });
   const box = useAnimatedStyle(() => ({
     opacity: interpolate(progress.value, [0, 0.5, 1], [1, 1, 0]),
     transform: [{ scale: interpolate(progress.value, [0, 0.25, 1], [0.7, 1, 1.05]) }],

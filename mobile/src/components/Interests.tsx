@@ -1,5 +1,5 @@
 import RowScroll from '@/ui/RowScroll';
-import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
+import { useRef, useState, useSyncExternalStore } from 'react';
 import { ScrollView, View } from 'react-native';
 import { Check, Pencil, Sparkles } from 'lucide-react-native';
 import { newVisit } from '@shared/feedSeen';
@@ -11,6 +11,7 @@ import Sheet from '@/ui/Sheet';
 import Button from '@/ui/Button';
 import SettingRow from '@/ui/SettingRow';
 import type { Palette } from '@/lib/theme';
+import { useOnLeave } from '@/lib/hooks/useOnLeave';
 
 export const usePicked = () => useSyncExternalStore(pickedInterests.subscribe, pickedInterests.read, pickedInterests.server);
 
@@ -64,7 +65,7 @@ export function InterestsSetting({ palette }: { palette: Palette }) {
   const read = () => JSON.stringify(pickedInterests.read());
   const shown = useRef(read());
   const refresh = () => { if (shown.current !== read()) { shown.current = read(); newVisit(); } };
-  useEffect(() => refresh, []); // eslint-disable-line react-hooks/exhaustive-deps -- on leaving settings
+  useOnLeave(refresh);
   return (
     <View style={{ gap: 6 }}>
       <SettingRow Icon={Sparkles} title="اهتماماتي" value={interestsLabel(picked)} onFold={open => { if (open) shown.current = read(); else refresh(); }} palette={palette}>

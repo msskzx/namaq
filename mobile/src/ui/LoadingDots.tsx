@@ -1,13 +1,13 @@
-import { useEffect } from 'react';
 import { View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withDelay, withRepeat, withSequence, withTiming } from 'react-native-reanimated';
 import { usePalette } from '@/lib/theme';
+import { useOnChange } from '@/lib/hooks/useOnChange';
 
 function Dot({ delay, color }: { delay: number; color: string }) {
   const opacity = useSharedValue(0.25);
-  useEffect(() => {
+  useOnChange([delay, opacity], () => {
     opacity.value = withDelay(delay, withRepeat(withSequence(withTiming(1, { duration: 400 }), withTiming(0.25, { duration: 400 })), -1));
-  }, [delay, opacity]);
+  });
   const style = useAnimatedStyle(() => ({ opacity: opacity.value }));
   return <Animated.View style={[{ width: 9, height: 9, borderRadius: 5, backgroundColor: color }, style]} />;
 }

@@ -1,13 +1,9 @@
-import { useEffect, useState, type ComponentProps } from 'react';
+import { lazy, Suspense, type ComponentProps } from 'react';
 import { LoadSkiaWeb } from '@shopify/react-native-skia/lib/module/web';
 import type SeaSkia from './SeaSkia';
 
+const Drawing = lazy(() => LoadSkiaWeb({ locateFile: file => `/${file}` }).then((): { default: typeof SeaSkia } => require('./SeaSkia')));
+
 export default function SeaArt(props: ComponentProps<typeof SeaSkia>) {
-  const [Drawing, setDrawing] = useState<typeof SeaSkia | null>(null);
-  useEffect(() => {
-    let live = true;
-    LoadSkiaWeb({ locateFile: file => `/${file}` }).then(() => { if (live) setDrawing(() => require('./SeaSkia').default); });
-    return () => { live = false; };
-  }, []);
-  return Drawing ? <Drawing {...props} /> : null;
+  return <Suspense fallback={null}><Drawing {...props} /></Suspense>;
 }

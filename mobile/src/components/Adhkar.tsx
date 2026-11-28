@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { View } from 'react-native';
 import { Bed, Bell, BellOff, ChevronLeft, ChevronRight, Circle, CircleCheck, Moon, Mosque, Sun, Sunrise } from 'lucide-react-native';
 import { ADHKAR, adhkarFor, type AdhkarOccasion, type Dhikr } from '@shared/adhkar';
@@ -20,6 +20,7 @@ import { openDhikr, showAdhkar, useAdhkarPlace, useSaidToday } from '@/lib/adhka
 import { saidDone, saidKey, type SaidToday } from '@shared/adhkarCount';
 import { adhkarAlerts, prayerPlace } from '@/lib/settings';
 import type { Palette } from '@/lib/theme';
+import { useLoaded } from '@/lib/hooks/useLoaded';
 
 export const ADHKAR_ICONS = { morning: Sun, evening: Moon, sleep: Bed, waking: Sunrise, 'after-prayer': Mosque } as const;
 const GAP = 16;
@@ -55,15 +56,11 @@ export function DhikrBody({ item, palette }: { item: Dhikr; palette: Palette }) 
 function useReminder(time: AdhkarTime | undefined, onPlace: () => void) {
   const [alerts, setAlerts] = adhkarAlerts.use();
   const [place] = prayerPlace.use();
-  const [blocked, setBlocked] = useState(false);
+  const [refused, setBlocked] = useState(false);
   const back = useForeground();
   const on = !!time && alerts[time];
-  useEffect(() => {
-    if (!on) { setBlocked(false); return; }
-    let gone = false;
-    alertsAllowed().then(ok => { if (!gone) setBlocked(!ok); });
-    return () => { gone = true; };
-  }, [on, back]);
+  const allowed = useLoaded(on ? `adhkar alerts ${back}` : null, () => alertsAllowed());
+  const blocked = on ? allowed === false : refused;
   const toggle = async () => {
     if (!time) return;
     buzz();

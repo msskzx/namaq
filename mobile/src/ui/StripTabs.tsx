@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState, type ComponentRef } from 'react';
+import { useRef, useState, type ComponentRef } from 'react';
 import { ScrollView, View } from 'react-native';
 import { Text } from '@/ui/Text';
 import { Tap } from '@/ui/Tap';
 import { MIN_TAP } from '@/ui/tapSize';
 import type { Palette } from '@/lib/theme';
+import { useOnChange } from '@/lib/hooks/useOnChange';
 
 export default function StripTabs({ labels, names, at, onPick, progress = false, palette }: {
   labels: string[];
@@ -17,7 +18,7 @@ export default function StripTabs({ labels, names, at, onPick, progress = false,
     const x = centres.current[i];
     if (x !== undefined && width) row.current?.scrollTo({ x: Math.max(0, x - width / 2), animated });
   };
-  useEffect(() => show(at), [at, width]); // eslint-disable-line react-hooks/exhaustive-deps
+  useOnChange([at, width], () => show(at));
   return (
     <View accessibilityRole="tablist" style={{ direction: 'ltr', borderBottomWidth: 1, borderColor: palette.rule }} onLayout={event => setWidth(event.nativeEvent.layout.width)}>
       <ScrollView ref={row} horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ flexDirection: 'row-reverse', flexGrow: 1, paddingHorizontal: 8 }}>

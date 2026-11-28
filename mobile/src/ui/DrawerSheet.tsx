@@ -1,7 +1,8 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { Animated, PanResponder, ScrollView, View } from 'react-native';
 import { Tap } from '@/ui/Tap';
 import { CARD, type Palette } from '@/lib/theme';
+import { useOnChange } from '@/lib/hooks/useOnChange';
 
 export default function DrawerSheet({ low, high, bottom = 0, lower = 0, raised = false, palette, children }: {
   low: number; high: number;
@@ -13,14 +14,14 @@ export default function DrawerSheet({ low, high, bottom = 0, lower = 0, raised =
   const y = useRef(new Animated.Value(travel)).current;
   const [up, setUp] = useState(false);
   const at = useRef(travel);
-  useEffect(() => { y.setValue(up ? 0 : travel); at.current = up ? 0 : travel; }, [travel]); // eslint-disable-line react-hooks/exhaustive-deps
+  useOnChange([travel], () => { y.setValue(up ? 0 : travel); at.current = up ? 0 : travel; });
   const settle = (raised: boolean) => {
     at.current = raised ? 0 : travel;
     setUp(raised);
     Animated.timing(y, { toValue: at.current, duration: 260, useNativeDriver: false }).start();
   };
-  useEffect(() => { if (lower) settle(false); }, [lower]); // eslint-disable-line react-hooks/exhaustive-deps
-  useEffect(() => { if (raised) settle(true); else if (up) settle(false); }, [raised]); // eslint-disable-line react-hooks/exhaustive-deps
+  useOnChange([lower], () => { if (lower) settle(false); });
+  useOnChange([raised], () => { if (raised) settle(true); else if (up) settle(false); });
   const pan = useMemo(() => PanResponder.create({
     onMoveShouldSetPanResponder: (_, move) => Math.abs(move.dy) > 6,
     onPanResponderMove: (_, move) => y.setValue(Math.min(travel, Math.max(0, at.current + move.dy))),

@@ -6,9 +6,12 @@ import { useAfter } from './useAfter';
 import { useDebounced } from './useDebounced';
 import { useDelayedFlag } from './useDelayedFlag';
 import { useLater } from './useLater';
+import { useLiftInto } from './useLiftInto';
 import { useLoaded } from './useLoaded';
 import { useNow } from './useNow';
 import { useOnChange } from './useOnChange';
+import { useOnLeave } from './useOnLeave';
+import { useWindowEvent } from './useWindowEvent';
 import { SCROLL_QUIET_MS, useWebScrollEnd } from './useWebScrollEnd';
 
 const platform = vi.hoisted(() => ({ OS: 'web' }));
@@ -242,11 +245,13 @@ describe('useLater', () => {
     const view = mount(() => useLater(), {});
     const later = view.seen.current;
     later.nextFrame(() => later.nextFrame(run));
+    wait(100);
+    expect(run).toHaveBeenCalledTimes(1);
+    later.after(10, () => later.after(50, run));
     wait(20);
-    expect(run).not.toHaveBeenCalled();
     view.unmount();
     wait(100);
-    expect(run).not.toHaveBeenCalled();
+    expect(run).toHaveBeenCalledTimes(1);
     expect(vi.getTimerCount()).toBe(0);
   });
 
@@ -294,5 +299,59 @@ describe('useLoaded', () => {
     await act(async () => {});
     expect(reported).toEqual(['load kashshaf']);
     view.unmount();
+  });
+});
+
+describe('useLiftInto', () => {
+  it('keeps the parent slot holding the latest value and empties it when the child leaves', () => {
+    const held = new Map<string, string | null>();
+    const slot = { set: (id: string, value: string | null) => { held.set(id, value); } };
+    const view = mount(({ value }: { value: string }) => useLiftInto(slot, value), { value: 'first' });
+    view.rerender({ value: 'second' });
+    expect([...held.values()]).toEqual(['second']);
+    view.unmount();
+    expect([...held.values()]).toEqual([null]);
+  });
+});
+
+describe('useLoaded races', () => {
+  it('drops a read of the same key that lands after the key was turned off and on', async () => {
+    const waiting: ((value: string) => void)[] = [];
+    const load = () => new Promise<string>(resolve => waiting.push(resolve));
+    const view = mount(({ id }: { id: string | null }) => useLoaded(id, load), { id: 'a' as string | null });
+    view.rerender({ id: null });
+    view.rerender({ id: 'a' });
+    await act(async () => { waiting[0]('late'); });
+    expect(view.seen.current).toBeNull();
+    await act(async () => { waiting[1]('fresh'); });
+    expect(view.seen.current).toBe('fresh');
+  });
+});
+
+describe('useOnLeave', () => {
+  it('runs the latest callback once, when the screen closes', () => {
+    const early = vi.fn();
+    const late = vi.fn();
+    const view = mount(({ leave }: { leave: () => void }) => useOnLeave(leave), { leave: early });
+    view.rerender({ leave: late });
+    expect(late).not.toHaveBeenCalled();
+    view.unmount();
+    expect(early).not.toHaveBeenCalled();
+    expect(late).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('useWindowEvent', () => {
+  it('hears the event with the latest listener and stops hearing it after unmount', () => {
+    const early = vi.fn();
+    const late = vi.fn();
+    const view = mount(({ listen }: { listen: () => void }) => useWindowEvent('message', listen), { listen: early });
+    view.rerender({ listen: late });
+    window.dispatchEvent(new MessageEvent('message', { data: 'x' }));
+    expect(early).not.toHaveBeenCalled();
+    expect(late).toHaveBeenCalledTimes(1);
+    view.unmount();
+    window.dispatchEvent(new MessageEvent('message', { data: 'y' }));
+    expect(late).toHaveBeenCalledTimes(1);
   });
 });
