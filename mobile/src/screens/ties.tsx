@@ -15,8 +15,8 @@ import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { toTab } from '@/lib/ways';
 import { battleOf } from '@/lib/battles';
 import { findPerson, personName, unvowelled } from '@/lib/tarajim';
-import { Credit } from './person';
 import TiesRing, { TieSheet, tiesOf } from '@/components/TiesRing';
+import { Credit } from '@/components/Credit';
 
 export default function TiesScreen() {
   const palette = usePalette();

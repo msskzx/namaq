@@ -16,10 +16,9 @@ import LoadingDots from '@/ui/LoadingDots';
 import { usePalette, type Palette } from '@/lib/theme';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
-import { toTab } from '@/lib/ways';
+import { toTab, openBab, openSahih } from '@/lib/ways';
 import { SAHIH, isSahihSlug, useSahihText } from '@/lib/sahih';
 import { SahihDownload, SahihHadithCard } from '@/components/Sahih';
-import { openBab, openSahih } from './hadith';
 
 const babNumber = (kitab: SahihKitab, at: number) => kitab.babs.slice(0, at + 1).filter(bab => bab.title).length;
 

@@ -2,11 +2,6 @@ import { countLemmas, countPairs, lemmaPlaces, wordLemmas, type LemmaCount } fro
 import { OPPOSITES } from '../../src/lib/quran/opposites';
 import { madinaSpelling } from './madinaSpelling';
 
-/**
- * What buildLemmas writes from the Corpus morphology: the website's lemma counts and opposites (lemmas.json), each
- * lemma's places (places.json) and the app's lemmas of each word (words.json). Every lemma is stored in the Madina
- * page's spelling, the form the screens show (madinaSpelling.ts).
- */
 export function lemmaFiles(morphology: string) {
   const notice = morphology.split(/\r?\n/).filter(line => line.startsWith('#')).join('\n');
   const spelled = (lemmas: LemmaCount[]) => lemmas.map(([lemma, ...rest]): LemmaCount => [madinaSpelling(lemma), ...rest]);

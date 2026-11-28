@@ -5,8 +5,7 @@ import { execFileSync } from 'node:child_process';
 import { FIRST_PAGE, LAST_PAGE, cleanPiece, joinPieces } from './sadiClean';
 import { audit, fillGaps, indexShamela, loadShamela } from './sadiShamela';
 
-// docs/plans/sadi-tafsir.md: al-Sa'di's Taysir al-Karim al-Rahman from Quranpedia's tafsir dump, one passage per group
-// of ayat, written to shared/data/quran/tafsirSadi.json.
+// see docs/plans/sadi-tafsir.md
 const VERSION = '2026-08-10';
 const URL = 'https://quranpedia.net/dumps/tafsir-book-3.json.gz';
 const OUT = join(__dirname, '../../shared/data/quran/tafsirSadi.json');
@@ -21,16 +20,12 @@ const dump = JSON.parse(readFileSync(dumpPath, 'utf8')) as {
 if (dump.license.version !== VERSION) throw new Error(`dump version ${dump.license.version}, expected ${VERSION}`);
 if (dump.book.id !== 3) throw new Error('expected book 3, al-Sa\'di');
 
-// The dump gives each ayah the page pieces its passage touches; early on a piece is a whole page, later a page is cut
-// at the passages. So the pieces are laid end to end in page order, the book read through once, and cut again at the
-// book's own range markers ("{١ - ٧}", "﴿١٣، ١٤﴾"). A range that starts again at 1 opens the next surah.
 const MARKER = /[{﴿]\s*([٠-٩]+)((?:\s*[-–،,]\s*[٠-٩]+)*)\s*[}﴾]/g;
 const latin = (arabic: string) => Number([...arabic].map(c => '٠١٢٣٤٥٦٧٨٩'.indexOf(c)).join(''));
 
 const pieces = new Map<string, { page: number; owner: number; text: string }>();
 for (const row of dump.ayahs) {
   for (const c of row.content) {
-    // Al-Humaza's pieces have no page: they repeat, ayah by ayah, the passage page 934 already holds.
     const page = c.page;
     if (page === null || page < FIRST_PAGE || page > LAST_PAGE) continue;
     const owner = row.surah * 1000 + row.ayah;
@@ -60,10 +55,7 @@ for (const piece of book) {
     const previous = passages[passages.length - 1];
     const before = text.slice(at, m.index).trim();
     at = m.index + m[0].length;
-    // Ranges climb through a surah, sharing an ayah where al-Sa'di splits one; a range that starts lower, or
-    // starts at 1 with the basmala, begins the next surah (al-Sharh and al-Tin are each one passage, 1–8).
     const opensSurah = !previous || from < previous.from || (from === 1 && /^\s*﴿بسم الله/.test(text.slice(m.index + m[0].length).replace(/[\u064B-\u0652]/g, '')));
-    // What a new surah's first marker follows is its heading ("وهي مكية"), not the end of the surah before.
     if (before && !(opensSurah && before.length < 80 && /مكية|مدنية|تفسير سورة/.test(before))) previous?.parts.push(before);
     if (opensSurah) surah++;
     passages.push({ surah, from, to, pages: [piece.page, piece.page], parts: [] });
@@ -74,19 +66,11 @@ for (const piece of book) {
 }
 if (surah !== 114) throw new Error(`found ${surah} surahs, expected 114`);
 
-// Every ayah of every surah sits in a passage.
 const counts = JSON.parse(readFileSync(join(__dirname, '../../shared/data/quran/surahs.json'), 'utf8')) as { number: number; numberOfAyat: number }[];
-// Al-Sa'di takes some ayat inside a passage without a marker of their own ("ثم قال: ﴿…﴾"): a passage runs to the ayah
-// before the next marker, or to the end of its surah.
-// Where a passage's marker ends on the ayah the next marker starts on, read by hand (2026-11-15): does al-Sa'di explain
-// that ayah's words in this passage too (it gets both passages), or only quote it up front and stop before it?
 const SPLIT_EXPLAINED = ['2:219', '4:77', '18:32', '30:11', '38:16', '38:48'];
 const SPLIT_QUOTED_ONLY = ['4:29', '9:79', '9:86', '10:94', '10:104', '13:8', '18:37', '72:1', '83:18'];
 passages.forEach((p, i) => {
   const next = passages[i + 1];
-  // A marker that starts inside the passage's own range cuts it there (al-Qasas: «{١ - ٥١}» then «{٣٠ - ٥١}»), except
-  // where the passage's own marker ends on the ayah the next one starts on: al-Sa'di splits that ayah between them, so
-  // both keep it (2:219: «{٢١٩}», then «{٢١٩ - ٢٢٠}» on «في الدنيا والآخرة», then «{٢٢٠}»).
   const touches = next?.surah === p.surah && p.to === next.from && next.from > p.from;
   const key = `${p.surah}:${p.from}`;
   if (touches && !SPLIT_EXPLAINED.includes(key) && !SPLIT_QUOTED_ONLY.includes(key)) throw new Error(`${key}-${p.to} ends on the ayah the next passage starts on: read it and add it to SPLIT_EXPLAINED or SPLIT_QUOTED_ONLY`);
@@ -97,18 +81,14 @@ const problems: string[] = [];
 for (const { number, numberOfAyat } of counts) {
   const seen = new Array<number>(numberOfAyat + 1).fill(0);
   for (const p of passages.filter(p => p.surah === number)) for (let a = p.from; a <= p.to; a++) seen[a]++;
-  // Two passages share an ayah only where one ends on it and the next begins on it.
   const own = passages.filter(p => p.surah === number);
   for (let a = 1; a <= numberOfAyat; a++) if (seen[a] !== 1 && !(seen[a] === 2 && own.some((p, i) => p.to === a && own[i + 1]?.from === a))) problems.push(`${number}:${a} in ${seen[a]} passages`);
   if (seen.length > numberOfAyat + 1) problems.push(`${number}: range past the end`);
 }
 if (problems.length) throw new Error(`passages do not tile the surahs:\n${problems.join('\n')}`);
 
-// A full stop left over from the passage before, the title page of the next manuscript volume ("المجلد الثاني من تيسير
-// الكريم …"), and one next-surah heading the cleaner can't see ("… سورة فصلت / مكية").
 const tidy = (text: string) => text.replace(/^[.\s]+/, '').replace(/(?:^|\n|\s)المجلد \S+ من [\s\S]*$/, '').replace(/\s*سورة [^\n]{1,30}\n(?:\[?وهي\]? ?)?(?:مكية|مدنية)[^\n]{0,20}$/, '');
 
-// Where a piece breaks off ("[…]"), Shamela's copy of the same edition gives the missing words (sadiShamela.ts).
 const shamela = indexShamela(loadShamela());
 const texts = passages.map(p => tidy(joinPieces(p.parts)));
 const fills: string[] = [];
@@ -121,8 +101,6 @@ const filledTexts = texts.map((text, i) => {
   return tidy(whole);
 });
 
-// Audit: anything Shamela has that the passages still lack.
-// The manuscript volumes' title pages and the copyist's colophon after al-Fath are left out on purpose.
 const short = audit(filledTexts, shamela).filter(({ from, to }) => !/المجلد \S+ من/.test(shamela.text.slice(from, to))).map(({ index, missing, where, from, to }) =>
   `${passages[index].surah}:${passages[index].from}-${passages[index].to} lacks ~${missing} letters ${where}: «${shamela.text.slice(from, to).replace(/\s+/g, ' ')}»`);
 

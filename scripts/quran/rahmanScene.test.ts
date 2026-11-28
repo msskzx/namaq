@@ -91,7 +91,6 @@ describe('the «الرحمن» scene', () => {
       const words = plain(tikrarWords(run));
       const at = quote.indexOf(words, from);
       expect(at, words).toBeGreaterThan(from - 1);
-      // His count for the run is the number word nearest before or after its words.
       const near = quote.slice(Math.max(0, at - 40), at + words.length + 40);
       expect(near, words).toContain(NUMBER[run.count]);
       from = at;
@@ -105,7 +104,6 @@ describe('the «الرحمن» scene', () => {
     const keysOf = (intro: boolean) => new Set(sections.filter(section => !!section.intro === intro).flatMap(section => section.blocks.flatMap(block =>
       block.kind === 'ayah' ? [block.key] : block.kind === 'run' ? block.keys : [])));
     const inScene = keysOf(false);
-    // al-Fatiha 2 stands between its 1 and 3 on the second page only so the surah reads whole (owner, 2026-11-25).
     const introKeys = [...keysOf(true)].filter(key => named.has(key));
     expect(introKeys.length).toBeGreaterThan(0);
     expect(introKeys.filter(key => !inScene.has(key))).toEqual([]);

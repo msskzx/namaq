@@ -48,19 +48,19 @@ flowchart RL
 |  | (onPress) | [القصة](story.md) | [components/LifeTimeline.tsx:145](../../mobile/src/components/LifeTimeline.tsx#L145) |
 | `SahihSaying` | افتح ‹› | [حديث الصحيح](hadith-sahih.md) | [components/SahihSaying.tsx:43](../../mobile/src/components/SahihSaying.tsx#L43) |
 | `StoryLinkRow` | (onPress) | [القصة](story.md) | [components/stories/StoryParts.tsx:131](../../mobile/src/components/stories/StoryParts.tsx#L131) |
-| `Names` | (onPress) | [الترجمة](person.md) | [screens/person.tsx:214](../../mobile/src/screens/person.tsx#L214) |
-| `PersonScreen` | (showBattle) | [الغزوة](battle.md) | [screens/person.tsx:251](../../mobile/src/screens/person.tsx#L251) |
-|  | (back) | [التراجم](tarajim.md) | [screens/person.tsx:256](../../mobile/src/screens/person.tsx#L256) |
-|  | شجرة النسب | [النسب](nasab.md) | [screens/person.tsx:258](../../mobile/src/screens/person.tsx#L258) |
-|  | (onPress) | [كل التراجم](people.md) | [screens/person.tsx:298](../../mobile/src/screens/person.tsx#L298) |
-|  | قارن حياته بغيره | [حياتهم جنبًا إلى جنب](life.md) | [screens/person.tsx:320](../../mobile/src/screens/person.tsx#L320) |
-|  | (onPin) | [الغزوة](battle.md) | [screens/person.tsx:331](../../mobile/src/screens/person.tsx#L331) |
-|  | (onPress) | [الغزوة](battle.md) | [screens/person.tsx:333](../../mobile/src/screens/person.tsx#L333) |
-|  | تنقّل في صلاته | [الصلات](ties.md) | [screens/person.tsx:342](../../mobile/src/screens/person.tsx#L342) |
-|  | بينه وبين… | [بين عدة أشخاص](between.md) | [screens/person.tsx:343](../../mobile/src/screens/person.tsx#L343) |
-|  | (onPick) | [الترجمة](person.md) | [screens/person.tsx:346](../../mobile/src/screens/person.tsx#L346) |
-|  | ‹›‹› | [صفحة الآية](ayah.md) | [screens/person.tsx:365](../../mobile/src/screens/person.tsx#L365) |
-|  | (onPress) | [صفحة الآية](ayah.md) | [screens/person.tsx:374](../../mobile/src/screens/person.tsx#L374) |
+| `Names` | (onPress) | [الترجمة](person.md) | [screens/person.tsx:210](../../mobile/src/screens/person.tsx#L210) |
+| `PersonScreen` | (showBattle) | [الغزوة](battle.md) | [screens/person.tsx:247](../../mobile/src/screens/person.tsx#L247) |
+|  | (back) | [التراجم](tarajim.md) | [screens/person.tsx:252](../../mobile/src/screens/person.tsx#L252) |
+|  | شجرة النسب | [النسب](nasab.md) | [screens/person.tsx:254](../../mobile/src/screens/person.tsx#L254) |
+|  | (onPress) | [كل التراجم](people.md) | [screens/person.tsx:294](../../mobile/src/screens/person.tsx#L294) |
+|  | قارن حياته بغيره | [حياتهم جنبًا إلى جنب](life.md) | [screens/person.tsx:316](../../mobile/src/screens/person.tsx#L316) |
+|  | (onPin) | [الغزوة](battle.md) | [screens/person.tsx:327](../../mobile/src/screens/person.tsx#L327) |
+|  | (onPress) | [الغزوة](battle.md) | [screens/person.tsx:329](../../mobile/src/screens/person.tsx#L329) |
+|  | تنقّل في صلاته | [الصلات](ties.md) | [screens/person.tsx:338](../../mobile/src/screens/person.tsx#L338) |
+|  | بينه وبين… | [بين عدة أشخاص](between.md) | [screens/person.tsx:339](../../mobile/src/screens/person.tsx#L339) |
+|  | (onPick) | [الترجمة](person.md) | [screens/person.tsx:342](../../mobile/src/screens/person.tsx#L342) |
+|  | ‹›‹› | [صفحة الآية](ayah.md) | [screens/person.tsx:361](../../mobile/src/screens/person.tsx#L361) |
+|  | (onPress) | [صفحة الآية](ayah.md) | [screens/person.tsx:370](../../mobile/src/screens/person.tsx#L370) |
 
 ## Sheets
 

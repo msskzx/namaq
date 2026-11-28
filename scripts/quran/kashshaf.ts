@@ -1,6 +1,5 @@
-// docs/plans/balagha.md: al-Zamakhshari's al-Kashshaf, from Quranpedia's dump (book 346), cut into his passages, with the
-// sentences where he names a device of balagha lit. Like al-Sa'di's dump (docs/records/R0034), each ayah carries
-// printed pages, so the book is laid end to end in page order and cut at its own «[سورة … : آية …]» headings.
+// see docs/plans/balagha.md
+// see R0034
 import { matchHeading, skeleton } from './irabUkbari';
 import { BALAGHA_DEVICES, type KashshafEntry, type KashshafLit } from '../../shared/quran/kashshaf';
 
@@ -12,11 +11,6 @@ const latin = (digits: string) => Number([...digits].map(c => ARABIC_DIGITS.inde
 const arabic = (n: number) => String(n).replace(/\d/g, d => ARABIC_DIGITS[Number(d)]);
 const POEM_GAP = '  ';
 
-/**
- * One printed page as plain text. The footnotes are the edition's marginal works (Ibn al-Munayyir's al-Intisaf,
- * Ibn Hajar's takhrij and others), not al-Zamakhshari, so they go, with their «١» marks in his text. A verse of
- * poetry becomes its own line, its two halves apart.
- */
 export function cleanPage(html: string): string {
   return html
     .replace(/<div class="foot-notes">[\s\S]*?<\/div>/g, '')
@@ -30,19 +24,11 @@ export function cleanPage(html: string): string {
 }
 
 const HEADING = /\[سورة [^(\]]+\(([٠-٩]+)\) : (?:آية ([٠-٩]+)|الآيات ([٠-٩]+) الى ([٠-٩]+))\]/g;
-// A line that only opens a volume or names the next surah before its heading.
 const VOLUME = /^الجزء [^\n]{2,14}$/gm;
 const SURAH_TITLE = /\n(سورة [^\n]{2,30})\n/;
 
 export type RawPassage = { surah: number; from: number; to: number; part: number; first: number; last: number; text: string };
 
-/**
- * The book's passages: the text under each heading up to the next, its first and last printed page. The surah's
- * opening words (where it was revealed, its count of ayat) open its first passage. The ayat the heading quotes, which
- * the reader already shows, are dropped from the passage's start. A heading sometimes names fewer ayat than its
- * passage explains («الآيات ٤٣ الى ٤٧» runs on to 44:50), so a passage runs to the ayah before the next heading, or
- * to the surah's end (`ayatIn`).
- */
 export function readPassages(dump: Dump, ayatIn: (surah: number) => number): RawPassage[] {
   const seen = new Set<string>();
   const pages: { part: number; page: number; text: string }[] = [];
@@ -93,9 +79,6 @@ export function readPassages(dump: Dump, ayatIn: (surah: number) => number): Raw
     const first = pageAt(head.at);
     passages.push({ surah: head.surah, from: head.from, to: head.to, part: first.part, first: first.page, last: pageAt(Math.max(head.end, stop - 1)).page, text: body });
   });
-  // A heading that names an ayah the one before already named (printed again over the next page, or a range that
-  // overlaps it: «الآيات ٣٨ الى ٤٧» after «٣٦ الى ٤٠») continues that passage, so the text under both is one passage
-  // and no ayah has two.
   const merged = passages.reduce<RawPassage[]>((out, passage) => {
     const last = out.at(-1);
     if (last?.surah === passage.surah && passage.from <= last.to) {
@@ -110,24 +93,15 @@ export function readPassages(dump: Dump, ayatIn: (surah: number) => number): Raw
   return merged;
 }
 
-// The printed lines break mid-sentence, so lines of prose join; a line of poetry stays its own line, and each of his
-// «فإن قلت» questions opens a paragraph.
 const tidy = (text: string) => text.replace(VOLUME, '').split('\n').map(line => line.trim()).filter(Boolean)
   .reduce((out, line, i, lines) => out + (i === 0 ? '' : line.includes(POEM_GAP) || lines[i - 1].includes(POEM_GAP) ? '\n' : ' ') + line, '')
   .replace(/[ ]{2,}/g, ' ')
   .replace(/ (فإن قلت)/g, '\n$1');
 
-// A vowel mark other than shadda. Al-Zamakhshari's prose is bare but for a shadda here and there; the Quran he quotes
-// is vocalized.
 const VOWELS = /[\u064B-\u0650\u0652]/g;
 const marks = (text: string) => text.match(VOWELS)?.length ?? 0;
 const arabicWords = (text: string) => text.replace(/[^\u0621-\u06ED\s]/g, ' ').split(/\s+/).filter(Boolean);
 
-/**
- * Wraps the Quran he quotes in ﴿…﴾ (shared/quran/tafsirSadi.ts tafsirRuns): a vocalized parenthesis, then any run of
- * vocalized words with two marks or more, when every word of it is a word of the Quran, so a vocalized proverb stays
- * prose. Lines of poetry are left alone.
- */
 export function markQuran(text: string, quranWords: Set<string>): string {
   const quran = (words: string[]) => words.length > 0 && words.every(word => quranWords.has(skeleton(word)));
   return text.split('\n').map(line => {
@@ -153,7 +127,6 @@ export function markQuran(text: string, quranWords: Set<string>): string {
   }).join('\n');
 }
 
-// His words for the devices, each found where it starts a word (after و، ف، ب، ل، ك or ال at most).
 const DEVICE_WORDS: [device: (typeof BALAGHA_DEVICES)[number], pattern: RegExp][] = [
   ['الاستعارة', /(?:^|[^ء-ي])(?:[وفبلك]?(?:ال)?)(?:استعار|مستعار|استعير|يستعار)/],
   ['التشبيه', /(?:^|[^ء-ي])(?:[وفبلك]?(?:ال)?)(?:تشبيه|شبّه|(?:شبه|شبهت|شبهه|شبهها|يشبه)\s+(?:\S+\s+){0,5}ب)/],
@@ -165,10 +138,8 @@ const DEVICE_WORDS: [device: (typeof BALAGHA_DEVICES)[number], pattern: RegExp][
   ['التكرير', /(?:^|[^ء-ي])(?:[وفبلك]?(?:ال)?)(?:تكرير|تكرار|كرّر)/],
 ];
 
-// Grammar's names that hold a device word without speaking of the device: the particle of likeness, «كاف التشبيه».
 const NOT_DEVICE = /(?:كاف|حرف|حروف|أداة|أدوات)\s+(?:ال)?تشبيه/g;
 
-/** Sentence ends: his full stops and question marks, and line breaks (poetry); never inside a Quran quote. */
 export function sentences(text: string): [number, number][] {
   const spans: [number, number][] = [];
   let start = 0;
@@ -188,13 +159,8 @@ const trim = (text: string, start: number, end: number): [number, number] => {
   return [start, end];
 };
 
-/** A sentence left unlit though a device word is in it: the word is used in another sense there (data file, by hand). */
 export type Exclusion = { key: string; contains: string; why: string };
 
-/**
- * The lit sentences of a passage: each that holds one of his device words, the device, and the ayah words it quotes:
- * the first of its Quran quotes found among the passage's ayat. A quote shorter than three letters places nothing.
- */
 export function litSentences(passage: { surah: number; from: number; to: number; text: string }, words: (key: string) => string[], exclusions: Exclusion[] = []): KashshafLit[] {
   const lits: KashshafLit[] = [];
   const key = `${passage.surah}:${passage.from}`;

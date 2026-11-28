@@ -1,6 +1,3 @@
-// Reads the "Records used:" line of merged PRs and resolves each mention to a
-// record id. Shared by records:used (prints counts) and records:export (writes
-// Distillate's content/usage/namaq.json, from which Distillate builds its stats).
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 
@@ -21,27 +18,18 @@ export function usedLine(body: string | null): string | null {
   return m ? m[1].trim() : null;
 }
 
-// Record ids are RNNNN since 2026-11-16. Before that they were bare numbers,
-// and these four numbers were given twice; the second record of each pair moved.
 export const RENUMBERED: Record<string, string> = { R0044: '0029', R0045: '0031', R0046: '0032', R0047: '0038' };
 
-// The slug a record had before the R ids: R0045-a-scaled-… was 0031-a-scaled-….
+// see R0045
 export const oldSlug = (slug: string) => `${RENUMBERED[slug.slice(0, 5)] ?? slug.slice(1, 5)}${slug.slice(5)}`;
 
-// "project/id" not inside a path, so docs/records/R0020-….md names no project.
+// see R0020
 const otherProject = /(?<![\w/.-])([a-z]+)\/(R?\d{4}(?:-[a-z0-9-]*[a-z0-9])?)/g;
 
-// A line with an R id counts every R id on it and nothing else of this
-// project's, so prose around the ids cannot be misread:
-//   "R0008, R0027 (new record R0048 is elsewhere)" → R0008, R0027, R0048
-// (so new records belong elsewhere in the description). Other projects' records
-// count when named with their project: "distillate/R0005-a-mock-router-…"
-// (an old "distillate/0005-…" is read as R0005; Distillate never shared a number).
-// A line with no R id was written before them and is read the old way: ids
-// before the first sentence end, outside parentheses, not in or after an ADR
-// item, nothing after "none". A bare old number two records shared, or one
-// after an ADR item ("ADR 0035 and 0036, 0037" may mean ADR 0037), is
-// reported, not guessed.
+// see R0008, R0027, R0048
+// see R0005
+// see R0005
+// see ADR 0035, ADR 0037
 export function parseUsedLine(line: string, slugs: string[], project = 'namaq'): UsedLine {
   const used: string[] = [];
   const unresolved: Unresolved[] = [];
@@ -82,8 +70,6 @@ export function parseUsedLine(line: string, slugs: string[], project = 'namaq'):
   return { used: [...new Set(used)], unresolved };
 }
 
-// Merged PRs from gh, or from a JSON file of the same shape (--prs <file>).
-// Fails when gh returns as many PRs as the limit, since older ones were cut.
 export function mergedPrs(argv: string[]): MergedPr[] {
   const file = argv.indexOf('--prs');
   if (file > -1) return JSON.parse(readFileSync(argv[file + 1], 'utf8'));
@@ -99,8 +85,6 @@ export function mergedPrs(argv: string[]): MergedPr[] {
   return prs;
 }
 
-// The PR that first added a record file: the "(#N)" of a squash commit, or the
-// first "Merge pull request #N" that brought the commit into HEAD.
 export function createdIn(file: string, cwd: string): number | null {
   const git = (...args: string[]) => execFileSync('git', args, { cwd, encoding: 'utf8' }).trim();
   const added = git('log', '--follow', '--diff-filter=A', '--format=%H%x09%s', '--', file).split('\n').pop();

@@ -7,9 +7,6 @@ import { checklistContentItems, type ChecklistContentItem } from '../../src/lib/
 
 const BATCHES_ROOT = 'data/history/batches';
 
-// Mirrors the "parent"/"child"/"sibling"/"spouse" groupings in
-// src/lib/relationship/categories.ts's CATEGORY_BY_TYPE (private to that
-// module), narrowed to the four categories this checklist cares about.
 const PARENT_OR_CHILD_TYPES = new Set([
   'FATHER', 'MOTHER', 'STEP_FATHER', 'STEP_MOTHER',
   'SON', 'DAUGHTER', 'STEP_SON', 'STEP_DAUGHTER',
@@ -19,14 +16,7 @@ const SIBLING_TYPES = new Set([
 ]);
 const SPOUSE_TYPES = new Set(['HUSBAND', 'WIFE']);
 
-/**
- * docs/extraction-checklist.md, "verification": does this subject's *final
- * catalog entry* — not the raw batch — account for each of the seven content
- * items a source could plausibly have stated? A batch that read the source
- * correctly but never carried a value into the catalog (as happened with
- * Hamzah's nasab) still leaves a broken profile, so the catalog entry is what
- * this checks against, not batch.json.
- */
+// see docs/extraction-checklist.md
 function slugArg(): string {
   const slug = process.argv[2];
   if (!slug || slug.startsWith('--')) {
@@ -36,7 +26,6 @@ function slugArg(): string {
   return slug;
 }
 
-/** Every account any batch declares for this subject, notInSource unioned across all of them. */
 function notInSourceFor(slug: string): Set<ChecklistContentItem> {
   const declared = new Set<ChecklistContentItem>();
   for (const dir of readdirSync(BATCHES_ROOT)) {
@@ -54,7 +43,6 @@ function hasRelation(person: CatalogPerson, types: Set<string>): boolean {
   return person.relations.some((relation) => types.has(relation.type));
 }
 
-/** Found in the catalog entry, per checklist item. nasab/wives/siblings read relations; the rest read fields. */
 function foundIn(person: CatalogPerson): Record<ChecklistContentItem, boolean> {
   return {
     fullName: person.fields.fullName !== undefined,

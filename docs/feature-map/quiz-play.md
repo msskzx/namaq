@@ -42,7 +42,7 @@ flowchart RL
 | `Box` | (onPress) | [الترجمة](person.md) | [screens/nasab.tsx:31](../../mobile/src/screens/nasab.tsx#L31) |
 | `Results` | (onOpen) | [المصحف](read.md) | [screens/quiz/play.tsx:48](../../mobile/src/screens/quiz/play.tsx#L48) |
 | `QuizPlay` | (onOpen) | [المصحف](read.md) | [screens/quiz/play.tsx:107](../../mobile/src/screens/quiz/play.tsx#L107) |
-| `HadithOpen` | افتح ‹› | [حديث الصحيح](hadith-sahih.md) | [screens/story.tsx:68](../../mobile/src/screens/story.tsx#L68) |
+| `HadithOpen` | افتح ‹› | [حديث الصحيح](hadith-sahih.md) | [screens/story.tsx:67](../../mobile/src/screens/story.tsx#L67) |
 
 ## Sheets
 

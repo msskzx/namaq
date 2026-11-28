@@ -10,7 +10,7 @@ import { usePalette, type Palette } from '@/lib/theme';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { useTabRetap } from '@/lib/tabRetap';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
-import { back } from '@/lib/ways';
+import { back, openSahih } from '@/lib/ways';
 import { storyOf } from '@/lib/stories';
 import type { AppReport, AppStory } from '@shared/stories/story';
 import { People } from '@/components/battles/BattleParts';
@@ -19,7 +19,6 @@ import { Report, ReportScene, reportSource, StoryAyat, StoryShare, Tags } from '
 import Tabs from '@/ui/Tabs';
 import { drawnReport, reportHadith, reportLines, reportSlots } from '@shared/stories/story';
 import OpenButton from '@/ui/OpenButton';
-import { openSahih } from './hadith';
 import { DRAW_MODES, type DrawMode } from '@shared/hadith';
 
 

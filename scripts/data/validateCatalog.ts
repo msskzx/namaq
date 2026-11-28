@@ -8,11 +8,6 @@ import { loadModel } from '../../src/lib/model/load';
 
 const batchesRoot = 'data/history/batches';
 
-/**
- * Only an approved batch qualifies: an unapproved one may still change, and so
- * may one whose files moved since approval. An approval covers a revision, not
- * a directory, so it is checked the same way the importer checks it.
- */
 function approvedClaimKeys() {
   const keys = new Set<string>();
   const sources = new Map<string, string[]>();

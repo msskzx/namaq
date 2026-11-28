@@ -8,13 +8,10 @@ const write = (cards: object) => writeFileSync(file, `export default JSON.parse(
 async function main() {
   const cards = buildCompareCards();
   write(cards);
-  // The surah-order books' cards that grow a tree, and its trunk on each side: compare and branches read it.
   writeFileSync(join(__dirname, '../../shared/data/quran/tanasubTrees.json'), `${JSON.stringify({ trees: tanasubTrees() }, null, 1)}\n`);
-  // Story parts are built from the engine cards just written, so the compare page is loaded only after them.
   const { storyCards } = await import('../../src/app/quran/compare/pairCards');
   const stories = storyCards();
   write({ ...cards, stories });
-  // Twins are written last: a branches card of two ayat takes its compare pair's verdict.
   const { buildTwinVerdicts } = await import('../../src/app/quran/compare/twins');
   const twins = buildTwinVerdicts();
   writeFileSync(join(__dirname, '../../shared/data/quran/twinVerdicts.json'), `${JSON.stringify({ twins }, null, 1)}\n`);

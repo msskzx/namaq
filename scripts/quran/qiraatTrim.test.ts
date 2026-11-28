@@ -38,7 +38,6 @@ describe('trimShared: only the words the readers differ on (owner, 2026-11-19)',
         if (shared(0) || shared(words[0].length - 1)) untrimmed.push(`${key}:${word.at[0]}`);
       }
     }
-    // 24:43 names one reading twice and 30:54 differs only in how its tanween is written: both wait for a source.
     expect(untrimmed).toEqual(['24:43:36', '30:54:17']);
   });
 });

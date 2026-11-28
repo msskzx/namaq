@@ -1,5 +1,3 @@
-// A sira story with its words: the catalog file keeps only where they are in the Sahih (sahih('bukhari', 3854, 161, 346)),
-// so a reviewer reads it here. npm run catalog:story -- <event slug>
 import { loadCatalog } from "../../src/lib/catalog/loadCatalog";
 
 const slug = process.argv[2];

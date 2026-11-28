@@ -19,7 +19,6 @@ import { openAyahPage, toTab } from '@/lib/ways';
 import { placeSources } from '@shared/drawingCards';
 import type { AppBattle } from '@shared/battles/battle';
 import IconButton from '@/ui/IconButton';
-import Reference from '@/ui/Reference';
 import SourceLine, { sourcesOf } from '@/ui/SourceLine';
 import { usePalette, type Palette } from '@/lib/theme';
 import { useShrinkOnScroll } from '@/lib/chrome';
@@ -47,6 +46,7 @@ import type { QuizSource } from '@shared/quiz/sources';
 import TiesRing, { TieSheet } from '@/components/TiesRing';
 import type { Tie } from '@shared/tarajimGraph';
 import { settledTies } from '@shared/peopleCards';
+import { Credit } from '@/components/Credit';
 
 const siyar = sourceById('siyar')!;
 const STORIES_SHOWN = 3;
@@ -69,10 +69,6 @@ function Part({ n, title, palette, children, above, row, source, head, pad, gap 
         shareHead={<>{head}<Text style={{ color: palette.accent, fontSize: 15, textAlign: 'right', paddingHorizontal: 8 }}>{title}</Text></>}>{children}</SharedCard>
     </View>
   );
-}
-
-export function Credit({ facts, palette, quotes = false }: { facts: PersonFact[]; palette: Palette; quotes?: boolean }) {
-  return <>{sourcesOf(factSources(facts, quotes)).map(book => <Reference key={book.line} title={book.line} quotes={book.quotes} links={book.links} places={book.places} editions={book.editions} palette={palette} />)}</>;
 }
 
 const sayerOf = (fact: PersonFact, many = false) => (fact.anonymous ? 'قيل:' : many ? sayerAt(fact) : saidBy(fact));
@@ -385,7 +381,6 @@ export default function PersonScreen() {
 }
 
 const openBattle = (slug: string) => toTab({ pathname: '/battle', params: { slug } });
-
 
 function heroSources(person: AppPerson) {
   const { book, part } = volumeLabel(person.entry.volume);

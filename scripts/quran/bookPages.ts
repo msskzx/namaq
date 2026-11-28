@@ -1,25 +1,14 @@
-// docs/plans/book-reader.md: where each printed page starts inside a book's passages. The builders cut a book at its
-// own headings and tidy the text, so a page break is found again by its letters: the first letters of each printed
-// page, looked for in the passages' letters after the page before it.
+// see docs/plans/book-reader.md
 
-/** One printed page as the dump gives it, cleaned the way its book's builder cleans it. */
 export type RawPage = { part: number; page: number; text: string };
-/** [passage, offset in its text, part, page]: the page starts there. */
 export type PageBreak = [number, number, number, number];
 
 const letters = (text: string) => text.replace(/[ىی]/g, 'ي').replace(/ة/g, 'ه').replace(/[أإآٱ]/g, 'ا').replace(/[^ء-غف-ي]/g, '');
 
 const KEY = 24;
 const SHIFTS = 30;
-// How far past the page before a page may start: what the builder dropped between them (footnotes, a heading, the
-// pages it found no place for) is a few pages at most (al-Sa'di's dump lacks some pieces, filled from Shamela).
 const SLACK = 20_000;
 
-/**
- * The page breaks of a book whose passages run in page order. A page whose first letters the builder dropped (a
- * heading, a volume's title) starts at the first of its letters found; a page none of whose letters are found
- * (dropped whole) has no break and joins the page before. Breaks fall at the start of a word.
- */
 export function pageBreaks(texts: string[], pages: RawPage[]): { breaks: PageBreak[]; lost: RawPage[] } {
   const where: [number, number][] = [];
   let stream = '';

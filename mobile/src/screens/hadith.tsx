@@ -1,14 +1,13 @@
 import { useCallback, useDeferredValue, useMemo, useRef, useState, type ComponentRef } from 'react';
 import { ScrollView, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
-import { toTab } from '@/lib/ways';
-import { fromCompanion, sayingStart, searchForty, type FortyEntry } from '@shared/hadith';
-import { placeOf, searchSahih, type SahihHit, type SahihSlug } from '@shared/sahih';
+import { openBab, openBook, openKitab, openSahih } from '@/lib/ways';
+import { searchForty } from '@shared/hadith';
+import { placeOf, searchSahih, type SahihHit } from '@shared/sahih';
 import { num } from '@shared/quran/arabicNumber';
 import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
 import Card, { CardWithRow } from '@/ui/Card';
-import Chip from '@/ui/Chip';
 import Tabs from '@/ui/Tabs';
 import Empty from '@/ui/Empty';
 import LoadingDots from '@/ui/LoadingDots';
@@ -25,26 +24,7 @@ import OpenButton from '@/ui/OpenButton';
 import QuoteBar from '@/ui/QuoteBar';
 import TapRow from '@/ui/TapRow';
 import NumberGrid from '@/ui/NumberGrid';
-
-export function FortyCard({ entry, palette, onPress }: { entry: FortyEntry; palette: Palette; onPress: () => void }) {
-  return (
-    <Card palette={palette} pad={[10, 14]} gap={4} accessibilityRole="link" accessibilityLabel={`${entry.heading}، ${fromCompanion(entry.companion)}`} onPress={onPress}>
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between', gap: 8 }}>
-        <Text style={{ color: palette.accent, fontSize: 15 }}>{entry.heading}</Text>
-        <Text style={{ flexShrink: 1, color: palette.muted, fontSize: 14, textAlign: 'right' }}>{entry.companion}</Text>
-      </View>
-      <Text numberOfLines={3} style={{ color: palette.ink, fontSize: 17, lineHeight: 30, textAlign: 'right' }}>{sayingStart(entry.text)}</Text>
-      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>
-        {entry.named.map(book => <Chip key={book} label={book} on={false} small role="text" palette={palette} />)}
-      </View>
-    </Card>
-  );
-}
-
-export const openBook = (book: SahihSlug | 'forty') => router.push({ pathname: '/hadith-book', params: { book } });
-export const openKitab = (book: SahihSlug, kitab: number) => router.push({ pathname: '/hadith-kitab', params: { book, kitab: String(kitab) } });
-export const openBab = (book: SahihSlug, kitab: number, bab: number) => router.push({ pathname: '/hadith-kitab', params: { book, kitab: String(kitab), bab: String(bab) } });
-export const openSahih = (book: SahihSlug, n: number) => toTab({ pathname: '/hadith-sahih', params: { book, n: String(n) } });
+import { FortyCard } from '@/components/FortyCard';
 
 function ContinueCard({ read, palette }: { read: LastRead; palette: Palette }) {
   const book = SAHIH[read.slug];

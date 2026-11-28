@@ -1,13 +1,9 @@
-// The «الرحمن» scene's hadith words (shared/quran/scenes/rahman.ts), read from the one Sahih text (data/hadith/sahih) and
-// written by buildRahmanScene.ts to shared/data/quran/rahmanHadith.json, which the phone ships. rahmanScene.test.ts fails
-// when that file lags the text or the scene.
 import { readFileSync } from 'node:fs';
 import { findHadith, type SahihText } from '@shared/sahih';
 import { FATIHA_HADITH, FATIHA_PART, MERCY_HADITH, SCENE_HADITH, isName, type BuiltHadith, type SahihBookSlug, type SceneHadith } from '@shared/quran/scenes/rahman';
 
 export const OUT = 'shared/data/quran/rahmanHadith.json';
 
-/** About how many letters a part of a long hadith keeps around the name: what a 4:5 page holds under its title. */
 const PART = 480;
 
 const books = new Map<SahihBookSlug, SahihText>();
@@ -16,7 +12,6 @@ export const sahihBook = (name: SahihBookSlug) => {
   return books.get(name)!;
 };
 
-/** A hadith's words as the scene shows them, with their place in its whole text (its routes joined by one space). */
 export function builtHadith(hadith: SceneHadith): BuiltHadith {
   const found = findHadith(sahihBook(hadith.book), hadith.n);
   if (!found) throw new Error(`no ${hadith.book} ${hadith.n} in data/hadith/sahih`);
@@ -51,7 +46,6 @@ export function builtHadith(hadith: SceneHadith): BuiltHadith {
   return { book: hadith.book, n: hadith.n, from: offset + start, to: offset + end, text: text.slice(start, end), cutBefore, cutAfter, ...(narrator ? { narrator } : {}) };
 }
 
-/** Where `words` last stand in `text` before `before`, matched without their vowel marks (the edition marks them unevenly). */
 function lastPlainIndex(text: string, words: string, before: number): number {
   const mark = /[\u064b-\u0652\u0670]/;
   const at: number[] = [];
@@ -61,7 +55,6 @@ function lastPlainIndex(text: string, words: string, before: number): number {
   return found < 0 ? -1 : at[found];
 }
 
-/** Whole words around the first naming of «الرحمن» between `start` and `end`, about PART letters, a third of them before it. */
 function partAround(text: string, start: number, end: number): [number, number, boolean, boolean] {
   const spaces = [start - 1];
   for (let i = start; i < end; i++) if (text[i] === ' ') spaces.push(i);
@@ -76,6 +69,5 @@ function partAround(text: string, start: number, end: number): [number, number, 
   return [words[first][0], words[last][1], first > 0, last < words.length - 1];
 }
 
-/** Every hadith the scene shows, by its id. */
 export const buildRahmanHadith = (): Record<string, BuiltHadith> =>
   Object.fromEntries([FATIHA_HADITH, FATIHA_PART, ...SCENE_HADITH, MERCY_HADITH].map(hadith => [hadith.id, builtHadith(hadith)]));

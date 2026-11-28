@@ -6,7 +6,6 @@ import type { AccountRecord, HistoryBatch, PageRecord, SubjectKind } from '../..
 import { batchDefinitionFile } from '../../src/lib/history/loadBatch';
 import { sourcesRoot } from '../../src/lib/history/sourceStore';
 
-// Shamela serves the reading pages only to a browser-shaped request.
 const userAgent =
   'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0 Safari/537.36';
 
@@ -41,8 +40,6 @@ async function main() {
   const notesStartMarker = option('notes-start-marker');
   const notesEndMarker = option('notes-end-marker');
   const accessedAt = option('accessed-at') ?? new Date().toISOString().slice(0, 10);
-  // An account that crosses a volume sees printed numbering restart.
-  // --volume bumps on each restart, matching the source manifest's own volumes.
   const startVolume = Number(required('volume'));
 
   const pages: PageRecord[] = [];

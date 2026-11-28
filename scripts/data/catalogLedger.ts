@@ -7,13 +7,8 @@ function option(name: string) {
   return index === -1 ? undefined : process.argv[index + 1];
 }
 
-/**
- * Every subject a batch speaks about, its claims' related subjects included: a
- * batch that cites Yarmuk touched Yarmuk and could have dated it.
- */
 function batchSubjects(dir: string) {
   const { batch } = loadBatch(dir);
-  // The catalog's directory names, which are not the plural of every kind.
   const directory: Record<string, string> = { PERSON: 'people', BATTLE: 'battles', EVENT: 'events', TITLE: 'titles' };
   return new Set([
     ...batch.accounts.map((account) => `${directory[account.subjectKind]}/${account.subjectSlug}`),
@@ -31,8 +26,6 @@ async function main() {
 
   const batchDir = option('batch');
   if (batchDir) {
-    // Scoped to one batch, the ledger answers what that batch walked past:
-    // a legacy value on a subject it covers is one it did not resolve.
     const subjects = batchSubjects(batchDir);
     owed = owed.filter((value) => subjects.has(value.subject));
     console.log(`${batchDir} covers ${[...subjects].join(', ')}`);

@@ -7,7 +7,7 @@ import type { MushafPage } from '../../shared/quran/readerPage';
 import { buildTreeGroups, phrasePieces } from '../../shared/quran/phraseTrees';
 import { buildSubtrees } from '../../shared/quran/subtrees';
 
-// docs/plans/quran-shared-openings.md
+// see docs/plans/quran-shared-openings.md
 const MUSHAF = join(__dirname, '../../shared/data/quran/mushaf');
 const MORPHOLOGY = join(__dirname, '../../data/quran/quranic-corpus-morphology-0.4.txt');
 const OUT = join(__dirname, '../../shared/data/quran/trees.json');
@@ -24,7 +24,6 @@ const continuations = withNext(new Map([
 const continued = new Map(continuations.map(ayah => [ayah.key, ayah]));
 const ayat = read.map(ayah => continued.get(ayah.key) ?? ayah);
 const { trees, subtrees } = buildSubtrees(buildTreeGroups(ayat), ayat);
-// The words stay on the pages: shared/quran/quranText/corpus.ts reads them back (owner 2026-11-17).
 const stored = ayat.map(({ words: _words, next: _next, ...rest }) => rest);
 const titled = trees.map(tree => (tree.family ? tree : (({ text: _text, ...rest }) => rest)(tree)));
 const counted = subtrees.map(({ text, ...rest }) => ({ ...rest, length: text.split(' ').length }));

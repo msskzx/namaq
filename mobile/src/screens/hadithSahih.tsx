@@ -19,12 +19,11 @@ import LoadingDots from '@/ui/LoadingDots';
 import { usePalette, type Palette } from '@/lib/theme';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
-import { openAyahPage, toTab } from '@/lib/ways';
+import { openAyahPage, toTab, openBab, openKitab } from '@/lib/ways';
 import { SAHIH, fortyOf, isSahihSlug, rememberOpened, useSahihText } from '@/lib/sahih';
 import { SahihDownload, SahihHadithView, opening } from '@/components/Sahih';
 import HadithBooks from '@/components/HadithBooks';
 import { recordedIn, type BookBox } from '@shared/hadith';
-import { openBab, openKitab } from './hadith';
 import { useWebScrollEnd } from '@/lib/hooks/useWebScrollEnd';
 import { useOnChange } from '@/lib/hooks/useOnChange';
 

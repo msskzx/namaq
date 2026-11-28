@@ -1,4 +1,4 @@
-// docs/plans/time-layer.md
+// see docs/plans/time-layer.md
 import type { Catalog } from '../../src/lib/catalog/types';
 
 export interface DatePartRow {

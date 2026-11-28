@@ -16,7 +16,6 @@ describe('sameForm', () => {
     expect(sameForm('مَلِكِ', 'مَالِكِ')).toBe(false);
     expect(sameForm('تَعْمَلُونَ', 'يَعْمَلُونَ')).toBe(false);
     expect(sameForm('وَأَرْجُلَكُمْ', 'وَأَرْجُلِكُمْ')).toBe(false);
-    // hamza treatment, sila of the plural mim, ya' zawa'id
     expect(sameForm('يَأْتِي', 'يَاتِي')).toBe(true);
     expect(sameForm('عَلَيْهِمُ', 'عَلَيْهِمْ')).toBe(true);
     expect(sameForm('الدَّاعِ', 'الدَّاعِي')).toBe(true);

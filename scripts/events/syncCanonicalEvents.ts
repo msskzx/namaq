@@ -35,9 +35,6 @@ const eventUpsertQuery = `
     SET node.location = event.location)
 `;
 
-// MATCH (not MERGE) on person and event: this only links nodes that already
-// have a synced counterpart. A link whose person or event node is missing is
-// silently skipped and stays reported as postgresOnly until that node exists.
 const participantUpsertQuery = `
   UNWIND $participants AS p
   MATCH (person:Person {slug: p.personSlug}), (event:Event {slug: p.eventSlug})
@@ -81,9 +78,6 @@ async function main() {
   });
 
   try {
-    // Sequential, not Promise.all: a single session can't run two queries
-    // concurrently (the driver throws "Queries cannot be run directly on a
-    // session with an open transaction").
     const eventResult = await session.run(eventGraphQuery);
     const participantResult = await session.run(participantGraphQuery);
     const graphEvents: CanonicalEvent[] = eventResult.records.map((record) => ({
@@ -136,10 +130,6 @@ async function main() {
         defaultAccessMode: neo4j.session.WRITE,
       });
       try {
-        // PostgreSQL is authoritative for events and their links. These
-        // MERGEs only create missing nodes/relationships or update shared
-        // properties; they never delete nodes, relationships, or Neo4j-only
-        // properties.
         await writeSession.executeWrite(async (transaction) => {
           await transaction.run(eventUpsertQuery, { events: postgresEvents });
           await transaction.run(participantUpsertQuery, { participants: postgresParticipants });
@@ -166,7 +156,4 @@ main()
     console.error('Canonical events reconciliation failed:', error);
     process.exitCode = 1;
   })
-  // The Neo4j driver's connection pool keeps the event loop alive, so the
-  // process won't exit on its own once main() resolves (see the same
-  // process.exit() pattern in neo4j/graphSeed.ts).
   .finally(() => process.exit(process.exitCode ?? 0));

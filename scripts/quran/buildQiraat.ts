@@ -10,8 +10,7 @@ import { fullyVowelled, officialForm } from './qiraatVowels';
 import handVowels from './qiraatVowels.json';
 import { trimShared } from './qiraatTrim';
 
-// docs/plans/quran-qiraat.md: the word differences (farsh) of the ten readers per ayah, from Quranpedia's qira'at dump,
-// anchored to the words of the bundled Hafs mushaf. Writes shared/data/quran/qiraat.json and a review list.
+// see docs/plans/quran-qiraat.md
 const VERSION = '2026-11-14';
 const URL = 'https://quranpedia.net/dumps/qiraat.json.gz';
 const DATA = join(__dirname, '../../shared/data/quran');
@@ -40,16 +39,10 @@ for (let n = 1; n <= 604; n++) {
   }
 }
 
-// Two spellings of the letters: strict keeps long vowels (so يخدعون is not taken for يخادعون), loose drops them,
-// so the dump's spelling (يا أبت، تتوفاهم) still meets the mushaf's (يَٰٓأَبَتِ، تَتَوَفَّىٰهُمُ).
 const strict = (word: string) => word.normalize('NFC').replace(/\u0670/g, 'ا').replace(/[^ء-غف-ي]/g, '')
   .replace(/[أإآٱءؤئ]/g, '').replace(/ى/g, 'ي').replace(/ة/g, 'ه');
 const loose = (word: string) => strict(word).replace(/[اوي]/g, '');
 
-/**
- * Where the dump's words sit in the Hafs ayah it names, or in a neighbour (the dump files some words one or two ayat off).
- * A phrase that runs into the next ayah (the Susi merging «الرحيم مالك») belongs to the ayah where it ends.
- */
 function anchor(s: number, a: number, phrase: string): { key: string; at: [number, number]; text: string } | null {
   for (const skeleton of [strict, loose]) {
     const joined = phrase.split(/\s+/).map(skeleton).join('');
@@ -75,13 +68,11 @@ function anchor(s: number, a: number, phrase: string): { key: string; at: [numbe
   return null;
 }
 
-// The King Fahd Complex texts of seven riwayat (fawazahmed0/quran-api, public domain) settle where the dump disagrees.
 const KFGQPC: Record<number, string> = { 1: 'quranqaloon', 2: 'quranwarsh', 3: 'quranbazzi', 4: 'quranqumbul', 5: 'qurandoori', 6: 'quransoosi', 9: 'quranshouba' };
 function edition(name: string): Map<string, string[]> {
   const file = join(tmpdir(), `kfgqpc-${name}.json`);
   if (!existsSync(file)) execFileSync('curl', ['-sSfL', '-o', file, `https://raw.githubusercontent.com/fawazahmed0/quran-api/1/editions/ara-${name}.min.json`]);
   const rows = (JSON.parse(readFileSync(file, 'utf8')) as { quran: { chapter: number; verse: number; text: string }[] }).quran;
-  // These texts put a space between open tanween and its alif (هُدࣰ ى); join them back.
   return new Map(rows.map(r => [`${r.chapter}:${r.verse}`, r.text.replace(/([\u064B-\u064D\u08F0-\u08F2]\u0651?)\s+(?=[اى])/g, '$1').split(/\s+/)]));
 }
 const official = new Map(Object.entries(KFGQPC).map(([rawi, name]) => [Number(rawi), edition(name)]));
@@ -93,7 +84,6 @@ const occurs = (words: string[], form: string) => {
 type Out = { at: [number, number]; readings: { text: string; rawis: number[] }[] };
 const ayat: Record<string, Out[]> = {};
 const review: string[] = [];
-// The dump's own words on each reading (بضم الياء وفتح الكاف…), for vowelling by hand what it writes bare.
 const described = new Map<string, string[]>();
 let positions = 0;
 for (const entry of dump.data) {
@@ -114,9 +104,6 @@ for (const entry of dump.data) {
       const words = text.get(place.key);
       const own = groups.find(g => g.rawis.includes(rawi));
       if (!words || !own) continue;
-      // Only a riwaya the dump sets apart alone, and only back to Hafs. The official texts mark some readings in ways a
-      // letter comparison cannot see (Qunbul's سراط by a small sin, tashil by a dot, Ibn Kathir's doubled ta), so they
-      // never move a group, nor al-Bazzi or Qunbul.
       const hits = groups.filter(g => occurs(words, g.text));
       if (rawi === 3 || rawi === 4 || own.rawis.length !== 1 || hits.includes(own) || hits.length !== 1 || hits[0] !== groups[0]) continue;
       own.rawis = own.rawis.filter(r => r !== rawi);
@@ -125,8 +112,6 @@ for (const entry of dump.data) {
     }
     groups = groups.filter(g => g.rawis.length);
     if (groups.length < 2) continue;
-    // A riwaya may read a word two ways (Ibn Dhakwan's إبراهيم and إبراهام), but a reading named for all twenty means
-    // the other is a neighbouring word or a pronunciation note the dump filed here (7:6 «عليهم» under إليهم).
     if (groups.some(g => g.rawis.length === 20)) { review.push(`- ${place.key} «${hafsText}»: one reading names all twenty riwayat, left out`); continue; }
     const named = new Set(groups.flatMap(g => g.rawis));
     if (named.size < 20) review.push(`- ${place.key} «${hafsText}»: riwayat ${Array.from({ length: 20 }, (_, i) => i + 1).filter(r => !named.has(r)).join(', ')} not named`);
@@ -139,7 +124,6 @@ for (const entry of dump.data) {
   }
 }
 
-// The dump lists a few words twice; the same readings once is kept, different readings (4:11) are left out.
 for (const [key, list] of Object.entries(ayat)) {
   const same = (a: Out, b: Out) => a.at[0] === b.at[0] && a.at[1] === b.at[1];
   const unique = list.filter((w, i) => !list.slice(0, i).some(p => same(p, w) && JSON.stringify(p.readings) === JSON.stringify(w.readings)));
@@ -149,9 +133,7 @@ for (const [key, list] of Object.entries(ayat)) {
   if (!ayat[key].length) delete ayat[key];
 }
 
-// docs/audits/qiraat-source-audit.md
-// `at: null` adds a word the dump lacks, `replacement: null` drops one (a word filed under the next ayah is dropped there
-// and added to its own).
+// see docs/audits/qiraat-source-audit.md
 for (const correction of corrections as { ayah: string; at: number | null; replacement: Out | null }[]) {
   const list = (ayat[correction.ayah] ??= []);
   if (correction.at === null) {
@@ -175,11 +157,7 @@ for (const { ayah, replacement } of corrections as { ayah: string; replacement: 
   if (list.some((w, i) => i && w.at[0] <= list[i - 1].at[1])) throw new Error(`Qira'at words overlap in ${ayah}`);
 }
 
-// Every reading other than the page's own gets its full tashkeel here (qiraatVowels.ts): from the King Fahd text of a
-// riwaya in its group, or else from qiraatVowels.json, vowelled by hand and checked by a second reviewer.
 const hand: Record<string, string> = handVowels;
-// An alif never takes the sukun ۡ: a silent alif written ْ, as the page writes it, is read by madinaSpelling as a sukun.
-// The page writes آ as an alif and its madda (ا + ٓ), never as the one letter آ.
 const spell = (text: string) => madinaSpelling(text).replace(/ا\u06E1/g, 'ا\u0652').replace(/\u0622/g, 'ا\u0653');
 const unvowelled: string[] = [];
 const handUsed = new Set<string>();
@@ -188,7 +166,6 @@ const trimProblems: string[] = [];
 const moved: { key: string; word: Out }[] = [];
 for (const [key, list] of Object.entries(ayat)) {
   for (const word of list) {
-    // Each reading is stored in the Madina page's spelling, the form the screens show.
     const spelled = word.readings.map(reading => ({ ...reading, text: spell(reading.text) }));
     word.readings = spelled.map((reading, i) => {
       if (!i) return reading;
@@ -203,12 +180,8 @@ for (const [key, list] of Object.entries(ayat)) {
       unvowelled.push(JSON.stringify({ id, hafs: spelled[0].text, rawis: reading.rawis, dump: described.get(`${key}:${word.at[0]}`) ?? [] }));
       return reading;
     });
-    // Once vowelled, a reading the dump set apart only by performance (naql, sakt, a softened hamza) reads as another:
-    // its riwayat join that reading, and a word left with one reading is no difference at all.
     const merged: typeof word.readings = [];
     for (const reading of word.readings) {
-      // Pause signs aside (ۖ ۗ ۚ…); the small sin ۜ of وَيَبۡصُۜطُ is part of the reading. Two readings one riwaya both reads
-      // (Hafs's ضَعۡف and ضُعۡف at 30:54) stay apart.
       const bare = (text: string) => text.normalize('NFC').replace(/[\u06D6-\u06DB]/g, '');
       const same = merged.find(m => bare(m.text) === bare(reading.text) && !m.rawis.some(r => reading.rawis.includes(r)));
       if (!same) { merged.push(reading); continue; }
@@ -216,12 +189,7 @@ for (const [key, list] of Object.entries(ayat)) {
       review.push(`- ${key} «${reading.text}»: the same as another reading once vowelled, merged`);
     }
     word.readings = merged;
-    // Only the words the readers differ on: the context words every reading shares are trimmed (qiraatTrim.ts). A phrase
-    // quoted across the end of an ayah (anchor) starts with `lead` words of the ayah before; a difference left wholly
-    // there moves to that ayah.
     const lead = word.readings[0].text.split(/\s+/).filter(Boolean).length - (word.at[1] - word.at[0] + 1);
-    // The other readings never carry the hizb mark ۞, so Hafs's phrase is trimmed without it and its places counted back
-    // with it (18:17 «مرفقا ۞ وترى» is مرفقا of 18:16).
     const tokens = word.readings[0].text.split(/\s+/).filter(Boolean);
     const kept = tokens.flatMap((token, i) => (token === '۞' ? [] : [i]));
     const cut = trimShared(word.readings.map((r, i) => (i ? r.text : kept.map(k => tokens[k]).join(' '))));
@@ -247,8 +215,6 @@ for (const { key, word } of moved) {
   if (!clash) { list.push(word); continue; }
   if (JSON.stringify(clash) !== JSON.stringify(word)) review.push(`- ${key} «${word.readings[0].text}»: moved here but the ayah already has a difference on that word, the moved one left out`);
 }
-// Trimmed, a word the dump quoted twice (alone and with a neighbour, 36:9 «سدا») shows up twice: the same readings once
-// are kept, different ones (3:80) left out, as above.
 for (const [key, list] of Object.entries(ayat)) {
   const same = (a: Out, b: Out) => a.at[0] === b.at[0] && a.at[1] === b.at[1];
   const unique = list.filter((w, i) => !list.slice(0, i).some(p => same(p, w) && JSON.stringify(p.readings) === JSON.stringify(w.readings)));

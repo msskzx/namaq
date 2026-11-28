@@ -1,6 +1,5 @@
 import { legacyUnreviewed, type CatalogVirtue } from '../../src/lib/catalog/types';
 
-/** One `PersonVirtue` row, as projectCatalog writes it. */
 export interface VirtueRow {
   readonly position: number;
   readonly text: string;
@@ -9,11 +8,6 @@ export interface VirtueRow {
   readonly claimKey: string | null;
 }
 
-/**
- * The rows a person's entries project to, in the order the files list them.
- * The claim key is the first one cited: an entry is one virtue backed by one
- * claim, so a second is there for the reader rather than for the row.
- */
 export function virtueRows(virtues: readonly CatalogVirtue[] | undefined): VirtueRow[] {
   return (virtues ?? []).map((virtue, position) => ({
     position,
@@ -30,11 +24,6 @@ const same = (row: VirtueRow, live: VirtueRow) =>
   row.speakerSlug === live.speakerSlug &&
   row.claimKey === live.claimKey;
 
-/**
- * A person's rows are replaced rather than merged, the way the other
- * catalog-owned values are: the files are the authority, so an entry the files
- * dropped goes with the edit that dropped it.
- */
 export function planVirtues(
   at: string,
   virtues: readonly CatalogVirtue[] | undefined,

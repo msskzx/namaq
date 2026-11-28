@@ -10,17 +10,7 @@ import { fetchUnifiedGraph } from '../../src/lib/fetchUnifiedGraph';
 const apply = process.argv.includes('--apply');
 const strict = process.argv.includes('--strict');
 
-// Mirrors GraphSurface.tsx's nodeRadius formula (textWidth + fontSize,
-// floored at fontSize*2, halved) so offline collision spacing keeps the
-// *rendered* label circles from overlapping, not the coarse rank-tier
-// circles used for level-of-detail sizing elsewhere (graphLod.ts) -- those
-// are a different concern (map-style zoom thinning) and are unaffected.
-// This script has no canvas to measure real glyph widths with, so it
-// approximates: a fixed average px-per-character at the same 12px font
-// size the live renderer uses. Some crossing edges and distant related
-// subjects from this approximation are an accepted trade-off (see
-// docs/graph-layout.md) -- the goal is "accounts for label length",
-// not pixel-perfect parity with the canvas-measured live radius.
+// see docs/graph-layout.md
 const LABEL_FONT_SIZE = 12;
 const AVERAGE_CHAR_WIDTH_PX = 7;
 export function estimateLabelRadius(label: string): number {
@@ -36,15 +26,7 @@ export interface SubjectPropertyRow {
   layoutY: number;
 }
 
-// Persists the offline-computed properties on every Neo4j subject, not just
-// ones with a PostgreSQL row -- see
-// docs/adr/0006-persist-offline-computed-properties-to-neo4j.md, which also
-// covers why clusterId stays PostgreSQL-only. One UNWIND+MATCH+SET
-// statement is one Neo4j transaction (matching type by label the same way
-// /api/graph/route.ts's relationSubjects query does, since a slug is only
-// unique within its own type), and the returned match count is verified
-// against the row count so a silently-unmatched subject (typo'd slug,
-// deleted node) surfaces as an error instead of a partially-applied map.
+// see docs/adr/0006-persist-offline-computed-properties-to-neo4j.md
 export async function writeSubjectPropertiesToNeo4j(rows: SubjectPropertyRow[]): Promise<void> {
   if (rows.length === 0) return;
   const session = getDriver().session({
@@ -133,10 +115,7 @@ async function main() {
       };
     });
 
-    // Every subject needs a usable position -- see docs/graph-layout.md
-    // ("Validate complete, finite coordinates before writing"). A NaN/Infinity
-    // here would mean a bug in the layout math, not a data gap, so it aborts
-    // the whole run (dry run included) rather than writing a partial map.
+    // see docs/graph-layout.md
     const nonFinite = rows.filter((row) => !Number.isFinite(row.layoutX) || !Number.isFinite(row.layoutY));
     if (nonFinite.length > 0) {
       console.error(
@@ -171,10 +150,7 @@ async function main() {
             return prisma.event.update({ where: { slug: row.slug }, data });
         }
       });
-      // PostgreSQL and Neo4j writes are separate systems/transactions (see
-      // docs/graph-layout.md): either can fail independently, and a
-      // rerun of this same command is how you retry -- there is no combined
-      // rollback across the two databases.
+      // see docs/graph-layout.md
       await prisma.$transaction(updates);
       console.log(`Wrote graphRank/clusterId/layoutX/layoutY for ${toWrite.length} PostgreSQL rows.`);
 
@@ -196,8 +172,6 @@ async function main() {
   }
 }
 
-// Guards against running the whole CLI (real Postgres/Neo4j writes) as a side
-// effect of importing estimateLabelRadius/writeSubjectPropertiesToNeo4j for tests.
 if (import.meta.url === `file://${process.argv[1]}`) {
   main().catch((error) => {
     console.error('Unified graph rank/cluster/layout computation failed:', error);

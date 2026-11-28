@@ -8,7 +8,6 @@ import { seedAuthoredPeople } from './seedAuthored';
 
 const apply = process.argv.includes('--apply');
 
-// Mirrors neo4j/seedRelations.ts: these belong to their own sync scripts.
 const SYNC_OWNED = ['COMPANION_OF', 'ACCOMPANIED_BY', 'HOLDS_TITLE', 'PARTICIPATED_IN', 'ABSENT_FROM', 'INVOLVED_IN', 'PART_OF'];
 
 let stale: { from: string; to: string; type: string }[] = [];
@@ -18,26 +17,12 @@ const deployedQuery = `
   RETURN source.slug AS source, target.slug AS target, type(relation) AS type
 `;
 
-/**
- * MATCH, not MERGE, on the people: this links people who already have nodes,
- * which people:sync creates from their PostgreSQL rows, the node-merge below
- * creates for catalog-owned people, and the graph seeds create for everyone
- * else. A relation whose end is missing stays reported rather than inventing
- * a node with nothing but a slug.
- *
- * Cypher cannot parameterize a relationship type, so one query per type.
- */
 const upsertQuery = (type: string) => `
   UNWIND $edges AS edge
   MATCH (from:Person {slug: edge.from}), (to:Person {slug: edge.to})
   MERGE (from)-[:${type}]->(to)
 `;
 
-/**
- * Gives a catalog-owned person their node directly from the catalog, so a
- * subject with hasProfile: false -- no PostgreSQL row, so nothing for
- * people:sync to mirror -- still gets one. Mirrors people:sync's own upsert.
- */
 const upsertPersonQuery = `
   UNWIND $people AS person
   MERGE (node:Person {slug: person.slug})
@@ -50,8 +35,6 @@ const upsertPersonQuery = `
     SET node.sex = person.sex)
 `;
 
-// Only edges touching a person the catalog owns outright, and only the types
-// no sync owns: an edge between two seed-authored people is the seeds' to keep.
 const staleQuery = `
   UNWIND $slugs AS slug
   MATCH (person:Person {slug: slug})-[relation]-(other:Person)
@@ -75,8 +58,7 @@ async function main() {
   const seedAuthored = seedAuthoredPeople();
   const ownedPeople = catalog.people.filter((person) => !seedAuthored.has(person.slug));
   const owned = ownedPeople.map((person) => person.slug);
-  // Profile sex projects to PostgreSQL; only graph-only sex lands on the
-  // Neo4j node. See docs/plans/reviewed-quiz-bank.md.
+  // see docs/plans/reviewed-quiz-bank.md
   const people = ownedPeople.map((person) => ({
     slug: person.slug,
     name: person.name,
@@ -103,8 +85,6 @@ async function main() {
       type: record.get('type') as string,
     }));
 
-    // Only what the catalog declares is compared: the graph seeds author the
-    // rest, and this script is not the place to report their drift.
     const { missing } = findSeedRelationDrift(edges, deployed);
 
     const around = await session.run(staleQuery, { slugs: owned, syncOwned: [...SYNC_OWNED] });

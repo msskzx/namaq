@@ -7,14 +7,9 @@ import { readParagraphs, type TurathPage } from './itqanBalagha';
 import itqan from '../../shared/data/quran/itqanBalagha';
 import { termOf, type BalaghaTerm, type BalaghaTermsData, type TermQuote } from '../../shared/quran/balaghaTerms';
 
-// The balagha terms page (shared/quran/balaghaTerms.ts): each term's defining words, quoted whole from al-Itqan (Turath's
-// export of Shamela 11728, the edition buildItqanBalagha.ts reads) or, where al-Suyuti gives none, from al-Qazwini's
-// Talkhis al-Miftah as printed above al-Subki's commentary in 'Arus al-Afrah (Shamela 11151, Hindawi's edition). Both
-// exports are pinned by their hash. Which paragraphs define a term is read by hand: scripts/quran/balaghaTermDefinitions.json.
 const OUT = join(__dirname, '../../shared/data/quran');
 const ITQAN = { book: 11728, sha: '56e52b86c23a0d363a6e51d8fee677eec4f582ceb580e14d2beb8c851400d9f9' };
 const TALKHIS = { book: 11151, sha: '80f9cd10c22d479048ababaf4c29e7e080e8ee3e39a692c8142839b66f2013a2' };
-// The same pages as buildItqanBalagha.ts: kinds 52 to 58, without the stray page 942.
 const FIRST = 884;
 const LAST = 1095;
 const STRAY = 942;
@@ -35,10 +30,8 @@ delete (definitions as Record<string, unknown>)._note;
 const itqanBook = turath(ITQAN);
 const { paragraphs } = readParagraphs(itqanBook.pages.map((page, i) => ({ ...page, id: i + 1 })).filter(page => page.id >= FIRST && page.id <= LAST && page.id !== STRAY));
 const talkhisBook = turath(TALKHIS);
-// Al-Qazwini's text is the top of each printed page, above the rule «ــ» under which al-Subki's commentary runs.
 const matn = (id: number) => talkhisBook.pages[id - 1].text.split('ــ')[0].replace(/<[^>]+>/g, '').replace(/\s+/g, ' ');
 
-// The terms in the order of his paragraphs, each with the chapter it falls in.
 const kinds = new Map<string, number>();
 for (const [kind, heading] of itqan.entries) {
   const term = termOf(kind, heading);
@@ -51,7 +44,6 @@ if (unused.length) throw new Error(`definitions for terms the cards do not use: 
 
 const terms: BalaghaTerm[] = [...kinds].map(([name, kind]) => {
   const definition = definitions[name];
-  // His lines on one device, though they run over pages, are one quote with one credit.
   const lines = (definition.talkhis ?? []).map(([id, text]) => {
     if (!matn(id).includes(text)) throw new Error(`${name}: «${text}» is not on Talkhis page ${id}`);
     return { id, text, page: talkhisBook.pages[id - 1] };
@@ -63,7 +55,6 @@ const terms: BalaghaTerm[] = [...kinds].map(([name, kind]) => {
     const [{ part, first, last, text }] = found;
     return { book: 'itqan', part, pages: [first, last], id, text };
   });
-  // Al-Qazwini's lines come first where they are the definition; al-Suyuti's own words under the heading follow.
   return { name, kind, defines: definition.defines, quotes: [...talkhis, ...quotes] };
 });
 

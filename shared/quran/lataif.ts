@@ -20,7 +20,6 @@ export const TOPICS: Topic[] = [
   },
 ];
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const topicOf = (_view: Pick<ExampleView, 'key'>): Topic => TOPICS[0];
 
 export function exampleReference(view: Pick<ExampleView, 'key' | 'surah' | 'from' | 'to' | 'source'>, data: ItqanData): LataifReference {
