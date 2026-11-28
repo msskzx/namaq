@@ -32,8 +32,13 @@ describe('an ayah cut into the pieces a line is made of', () => {
     expect(pieces.filter(piece => ARABIC_DIGITS.includes(piece.text[0]) || piece.text.endsWith(HIZB))).toEqual([]);
   });
 
+  it('keeps a sign the books write as its own word on the word before it', () => {
+    const signs = ['\u06D6', '\u06DD', '\u06E9', '\uFD3F\u0661\uFD3E', '\u00a0\u0661'];
+    for (const sign of signs) expect(flowPieces([run('قُلۡ'), run(` ${sign}`)], () => glued)).toHaveLength(1);
+  });
+
   it('starts a new line only where the text asks for one', () => {
-    const pieces = flowPieces([run('قُلۡ هُوَ'), run('\nٱللَّهُ أَحَدٌ')], () => glued);
-    expect(pieces.map(piece => piece.newLine)).toEqual([false, false, true, false]);
+    const pieces = flowPieces([run('قُلۡ هُوَ'), run('\r\nٱللَّهُ أَحَدٌ'), run('\n١')], () => glued);
+    expect(pieces.map(piece => [piece.text, piece.newLine])).toEqual([['قُلۡ', false], ['هُوَ', false], ['ٱللَّهُ', true], ['أَحَدٌ', false], ['١', true]]);
   });
 });

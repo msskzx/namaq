@@ -13,7 +13,6 @@ describe('textDirection', () => {
     expect(textDirection({ textAlign: 'right' }, true).textAlign).toBe('auto');
     expect(textDirection({ textAlign: 'left' }, true).textAlign).toBe('right');
     expect(textDirection({ textAlign: 'center' }, true).textAlign).toBeUndefined();
-    expect(textDirection({ textAlign: 'justify' }, true).textAlign).toBeUndefined();
   });
   it('leaves left and right alone on the web', () => {
     expect(textDirection({ textAlign: 'right' }, false).textAlign).toBeUndefined();

@@ -3,9 +3,9 @@ import { HIZB } from './ayahWords';
 export type FlowRun = { text: string };
 export type FlowPiece<R extends FlowRun> = { text: string; runs: R[]; newLine: boolean };
 
-const SPACE = /([ \n]+)/;
-const JOINS_BEFORE = /^[٠-٩۰-۹ۖ-ۜ۩﴾﴿]+$/;
-const GLUE = ' ';
+const SPACE = /([ \r\n]+)/;
+const JOINS_BEFORE = /^\u00A0?[\u0660-\u0669\u06F0-\u06F9\u06D6-\u06DD\u06E9\uFD3E\uFD3F]+$/;
+const GLUE = '\u00A0';
 
 const pieceOf = <R extends FlowRun>(runs: R[], newLine: boolean): FlowPiece<R> => ({ text: runs.map(run => run.text).join(''), runs, newLine });
 

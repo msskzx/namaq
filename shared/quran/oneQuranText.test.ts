@@ -49,7 +49,7 @@ const breaks = {
   convert: code.filter(file => !inside(file.path, MODULE) && file.path !== 'shared/quran/mushafText.ts' && /\b(mushafText|MushafText)\b|lib\/quranText'/.test(file.text)).map(file => file.path).sort(),
   sized: code.filter(file => !inside(file.path, MODULE) && (QURAN_SIZED.test(file.text) || WRAP_SIZED.test(file.text))).map(file => file.path).sort(),
   copies: data.sort(),
-  justified: code.filter(file => file.path.startsWith('mobile/src/') && /textAlign:\s*['"]justify['"]/.test(file.text)).map(file => file.path).sort(),
+  justified: code.filter(file => file.path.startsWith('mobile/src/') && /['"`]justify['"`]/.test(file.text)).map(file => file.path).sort(),
 };
 
 describe('one Quran text', () => {

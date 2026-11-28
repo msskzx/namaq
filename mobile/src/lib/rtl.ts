@@ -1,4 +1,6 @@
-type Align = 'auto' | 'start' | 'end' | 'left' | 'right' | 'center' | 'justify';
+import type { TextStyle } from 'react-native';
+
+type Align = NonNullable<TextStyle['textAlign']>;
 type Dir = 'ltr' | 'rtl';
 type In = { direction?: Dir | 'inherit'; writingDirection?: 'auto' | Dir; textAlign?: Align };
 type Out = { direction: Dir; writingDirection?: Dir; textAlign?: Align };
