@@ -1,4 +1,4 @@
-import { memo, useEffect, useMemo, useRef, useState, useSyncExternalStore, type ComponentRef } from 'react';
+import { memo, useMemo, useRef, useState, useSyncExternalStore, type ComponentRef } from 'react';
 import { ScrollView, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -58,6 +58,7 @@ import SurahRoute from '@/components/SurahRoute';
 import { FEATURE_ICON } from '@/components/featureIcons';
 import QuranWords from '@/components/quran/text/QuranWords';
 import { shareAyah } from '@/components/AyahShare';
+import { useLoaded } from '@/lib/hooks/useLoaded';
 
 type Icon = React.ComponentProps<typeof PostHead>['Icon'];
 
@@ -73,13 +74,7 @@ export default function AyahScreen() {
   const [surah, number] = key.split(':').map(Number);
   useBooks();
   const kashshafOn = bookState('kashshaf') === 'on';
-  const [kashshaf, setKashshaf] = useState<KashshafData | null>(null);
-  useEffect(() => {
-    let live = true;
-    if (kashshafOn) void readBook<KashshafData>('kashshaf').then(data => { if (live) setKashshaf(data); });
-    else setKashshaf(null);
-    return () => { live = false; };
-  }, [kashshafOn]);
+  const kashshaf = useLoaded(kashshafOn ? 'kashshaf' : null, () => readBook<KashshafData>('kashshaf'));
   const sections = useMemo(() => ayahSections(key, kashshaf), [key, kashshaf]).filter(sectionOn);
   const notes = useSyncExternalStore(subscribeAyahNotes, readAyahNotes);
   const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks);

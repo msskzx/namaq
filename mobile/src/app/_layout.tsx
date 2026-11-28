@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, type ComponentType } from 'react';
+import { useCallback, useState, type ComponentType } from 'react';
 import { View, useColorScheme } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -9,6 +9,8 @@ import { QURAN_FONT, UI_FONT, UI_FONT_BOLD, usePalette } from '@/lib/theme';
 import '@/lib/storage';
 import LoadingScreen from '@/ui/LoadingScreen';
 import { loadAppData } from '@/lib/appData';
+import { useLater } from '@/lib/hooks/useLater';
+import { useOnChange } from '@/lib/hooks/useOnChange';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -33,19 +35,17 @@ export default function RootLayout() {
   });
   const fonts = fontsLoaded || !!fontError;
   const [data, setData] = useState<true | Error>();
-  useEffect(() => {
+  useOnChange([], () => {
     loadAppData().then(() => setData(true), (error: unknown) => setData(error instanceof Error ? error : new Error(String(error))));
-  }, []);
+  });
   const [App, setApp] = useState<Shell>();
   const [ready, setReady] = useState(false);
   const [loading, setLoading] = useState(true);
-  useEffect(() => {
+  const later = useLater();
+  useOnChange([fonts, data], () => {
     if (!fonts || !data) return;
-    let frame = requestAnimationFrame(() => {
-      frame = requestAnimationFrame(() => setApp(() => (data === true ? Loaded : () => <Unloaded error={data} />)));
-    });
-    return () => cancelAnimationFrame(frame);
-  }, [fonts, data]);
+    later.nextFrame(() => later.nextFrame(() => setApp(() => (data === true ? Loaded : () => <Unloaded error={data} />))));
+  });
   const onReady = useCallback(() => setReady(true), []);
   const onGone = useCallback(() => setLoading(false), []);
   return (

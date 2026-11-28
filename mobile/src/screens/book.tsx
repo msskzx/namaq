@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore, type ComponentRef } from 'react';
+import { memo, useCallback, useMemo, useRef, useState, useSyncExternalStore, type ComponentRef } from 'react';
 import QuranWords from '@/components/quran/text/QuranWords';
 import { router, useLocalSearchParams } from 'expo-router';
 import { FlatList, Pressable, ScrollView, Share, StyleSheet, View } from 'react-native';
@@ -31,6 +31,8 @@ import Tabs from '@/ui/Tabs';
 import { SearchField } from '@/ui/Field';
 import Empty from '@/ui/Empty';
 import { useDebounced } from '@/lib/hooks/useDebounced';
+import { useAdjustOn } from '@/lib/hooks/useAdjustOn';
+import { useOnChange } from '@/lib/hooks/useOnChange';
 
 // see docs/plans/book-reader.md
 export default function BookScreen() {
@@ -89,20 +91,23 @@ function BookReader({ id, book, palette, entry, at, ayah, printed }: { id: Reade
   const scroller = useRef<ComponentRef<typeof ScrollView>>(null);
   const moved = useRef(0);
 
-  useEffect(() => {
+  const linked = () => asked() !== null || askedPage() !== null;
+  useAdjustOn([entry, at, ayah, printed], () => {
     const spot = asked();
     const printedPage = askedPage();
     if (!spot && printedPage === null) return;
     setLit(spot);
     setPage(printedPage ?? pageOfSpot(pages, spot!));
-    router.setParams({ entry: undefined, at: undefined, ayah: undefined, printed: undefined });
-  }, [entry, at, ayah, printed]); // eslint-disable-line react-hooks/exhaustive-deps
+  });
+  useOnChange([entry, at, ayah, printed], () => {
+    if (linked()) router.setParams({ entry: undefined, at: undefined, ayah: undefined, printed: undefined });
+  });
 
-  useEffect(() => {
+  useOnChange([id, page, pages], () => {
     const first = pages[page]?.slices[0];
     if (first) setLastBookSpot(id, { entry: first.entry, at: first.from });
     scroller.current?.scrollTo({ y: 0, animated: false });
-  }, [id, page, pages]);
+  });
 
   const turnTo = useCallback((next: number) => { setPage(next - 1); setActions(null); }, []);
   const onMove = useCallback(() => { moved.current = Date.now(); }, []);

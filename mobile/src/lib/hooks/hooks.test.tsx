@@ -1,10 +1,14 @@
-import { act } from 'react';
+import { act, useEffect, useState } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { useAdjustOn } from './useAdjustOn';
 import { useAfter } from './useAfter';
 import { useDebounced } from './useDebounced';
 import { useDelayedFlag } from './useDelayedFlag';
+import { useLater } from './useLater';
+import { useLoaded } from './useLoaded';
 import { useNow } from './useNow';
+import { useOnChange } from './useOnChange';
 import { SCROLL_QUIET_MS, useWebScrollEnd } from './useWebScrollEnd';
 
 const platform = vi.hoisted(() => ({ OS: 'web' }));
@@ -140,5 +144,99 @@ describe('useWebScrollEnd', () => {
     view.seen.current(scroll(10));
     wait(SCROLL_QUIET_MS);
     expect(settle).not.toHaveBeenCalled();
+  });
+});
+
+describe('useAdjustOn', () => {
+  it('sets state in the same render the key changes, so no frame shows the old state', () => {
+    const committed: string[] = [];
+    const useLinked = ({ link }: { link: string }) => {
+      const [lit, setLit] = useState('none');
+      useAdjustOn([link], () => setLit(link));
+      useEffect(() => { committed.push(lit); });
+      return lit;
+    };
+    const view = mount(useLinked, { link: 'a' });
+    view.rerender({ link: 'b' });
+    expect(committed).toEqual(['a', 'b']);
+  });
+
+  it('leaves state the person changed alone while the key holds', () => {
+    let set: (value: string) => void = () => {};
+    const view = mount(({ link }: { link: string }) => {
+      const [lit, setLit] = useState('none');
+      set = setLit;
+      useAdjustOn([link], () => setLit(link));
+      return lit;
+    }, { link: 'a' });
+    act(() => set('tapped'));
+    view.rerender({ link: 'a' });
+    expect(view.seen.current).toBe('tapped');
+  });
+});
+
+describe('useOnChange', () => {
+  it('runs once on the first draw and again only when a dependency changes', () => {
+    const run = vi.fn();
+    const view = mount(({ at }: { at: number }) => useOnChange([at], () => run(at)), { at: 1 });
+    view.rerender({ at: 1 });
+    view.rerender({ at: 2 });
+    expect(run.mock.calls).toEqual([[1], [2]]);
+  });
+
+  it('calls the callback of the latest render, not a stale one', () => {
+    const seen: string[] = [];
+    const view = mount(({ at, label }: { at: number; label: string }) => useOnChange([at], () => seen.push(label)), { at: 1, label: 'first' });
+    view.rerender({ at: 1, label: 'second' });
+    view.rerender({ at: 2, label: 'third' });
+    expect(seen).toEqual(['first', 'third']);
+  });
+});
+
+describe('useLater', () => {
+  it('runs only the newest job when a second one is asked before the first', () => {
+    const first = vi.fn();
+    const second = vi.fn();
+    const view = mount(() => useLater(), {});
+    view.seen.current.after(300, first);
+    view.seen.current.after(300, second);
+    wait(300);
+    expect(first).not.toHaveBeenCalled();
+    expect(second).toHaveBeenCalledTimes(1);
+  });
+
+  it('waits for a frame and then a turn before afterPaint runs', () => {
+    const run = vi.fn();
+    const view = mount(() => useLater(), {});
+    view.seen.current.afterPaint(run);
+    expect(run).not.toHaveBeenCalled();
+    wait(100);
+    expect(run).toHaveBeenCalledTimes(1);
+  });
+
+  it('leaves no timer or frame behind after unmount', () => {
+    const run = vi.fn();
+    const view = mount(() => useLater(), {});
+    view.seen.current.afterPaint(run);
+    view.unmount();
+    wait(100);
+    expect(run).not.toHaveBeenCalled();
+    expect(vi.getTimerCount()).toBe(0);
+  });
+});
+
+describe('useLoaded', () => {
+  it('shows nothing for a key until that key has loaded, and never an older key\'s value', async () => {
+    const waiting = new Map<string, (value: string) => void>();
+    const load = (key: string) => new Promise<string>(resolve => waiting.set(key, resolve));
+    const view = mount(({ id }: { id: string | null }) => useLoaded(id, load), { id: 'a' as string | null });
+    expect(view.seen.current).toBeNull();
+    view.rerender({ id: 'b' });
+    await act(async () => { waiting.get('a')!('A'); });
+    expect(view.seen.current).toBeNull();
+    await act(async () => { waiting.get('b')!('B'); });
+    expect(view.seen.current).toBe('B');
+    view.rerender({ id: null });
+    expect(view.seen.current).toBeNull();
   });
 });

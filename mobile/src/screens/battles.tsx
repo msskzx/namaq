@@ -1,4 +1,4 @@
-import { useDeferredValue, useEffect, useMemo, useRef, useState, type ComponentRef } from 'react';
+import { useDeferredValue, useMemo, useRef, useState, type ComponentRef } from 'react';
 import { ScrollView, View } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { battleTimeline, legendKinds } from '@shared/battles/timeline';
@@ -13,6 +13,7 @@ import { back } from '@/lib/ways';
 import { BATTLES } from '@/lib/battles';
 import BattleLine from '@/components/battles/BattleLine';
 import { Legend } from '@/components/battles/BattleTimeline';
+import { useOnChange } from '@/lib/hooks/useOnChange';
 
 export default function BattlesScreen() {
   const palette = usePalette();
@@ -36,11 +37,11 @@ export default function BattlesScreen() {
     pending.current = undefined;
     scroll.current?.scrollTo({ y: lineAt.current + y, animated: true });
   };
-  useEffect(() => {
+  useOnChange([opened], () => {
     const year = opened ? Number(opened) : undefined;
     if (year === undefined) return;
     toYear(year);
-  }, [opened]);
+  });
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       <TopBar back={back} hideOnScroll

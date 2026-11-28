@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { KeyboardAvoidingView, Platform, Pressable, ScrollView, Share, View } from 'react-native';
 import { Text } from '@/ui/Text';
 import { router, useLocalSearchParams } from 'expo-router';
@@ -39,6 +39,8 @@ import { usePalette, type Palette } from '@/lib/theme';
 import Field from '@/ui/Field';
 import { reportError } from '@shared/errors';
 import { useNow } from '@/lib/hooks/useNow';
+import { useAdjustOn } from '@/lib/hooks/useAdjustOn';
+import { useOnChange } from '@/lib/hooks/useOnChange';
 type QuestionChoice = { value: string; labelArabic: string };
 
 type SendAction = (action: PlayerAction) => void;
@@ -243,11 +245,11 @@ function Lobby({ view, send, error, palette }: { view: PartyView; send: SendActi
   const others = view.players.filter(player => player.id !== view.hostId);
   const readyCount = others.filter(player => player.ready).length;
   const [confirming, setConfirming] = useState(false);
-  useEffect(() => { if (error === 'not-ready') setConfirming(true); }, [error]);
-  useEffect(() => { if (readyCount === others.length) setConfirming(false); }, [readyCount, others.length]);
+  useAdjustOn([error], () => { if (error === 'not-ready') setConfirming(true); });
+  useAdjustOn([readyCount, others.length], () => { if (readyCount === others.length) setConfirming(false); });
   const [built, setBuilt] = useState<'short' | 'failed' | null>(null);
   const settingsKey = JSON.stringify(view.settings);
-  useEffect(() => setBuilt(null), [settingsKey]);
+  useAdjustOn([settingsKey], () => setBuilt(null));
   const begin = (early?: boolean) => {
     let quiz;
     try { quiz = partyQuiz(view.settings); } catch (error) { reportError('party: build questions', error); return setBuilt('failed'); }
@@ -330,9 +332,9 @@ function QuestionStage({ view, send, offset, palette }: { view: PartyView; send:
   const last = view.index + 1 >= view.total;
   const total = (question.tree || question.compare || question.write ? view.settings.treeSeconds : view.settings.seconds) * 1000;
   const finished = useRef<string[] | null>(null);
-  useEffect(() => {
+  useOnChange([view, send], () => {
     if (finished.current && view.phase === 'question' && view.answer === null) send({ type: 'submit', answer: finished.current });
-  }, [view, send]);
+  });
   const write = (answer: string[], done: boolean) => {
     if (done) finished.current = answer;
     send({ type: done ? 'submit' : 'draft', answer });

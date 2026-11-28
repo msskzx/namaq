@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react-native';
@@ -22,6 +22,7 @@ import { useSaidToday } from '@/lib/adhkar';
 import { buzz } from '@/lib/haptics';
 import { toTab } from '@/lib/ways';
 import { usePalette, type Palette } from '@/lib/theme';
+import { useLater } from '@/lib/hooks/useLater';
 
 function DhikrPage({ item, occasion, count, onTap, onReset, height, palette }: { item: Dhikr; occasion: AdhkarOccasion; count: number; onTap: () => void; onReset: () => void; height: number; palette: Palette }
 ) {
@@ -61,16 +62,15 @@ export default function DhikrScreen() {
   const items = adhkarFor(occasion);
   const [index, setIndex] = useState(() => Math.max(0, items.findIndex(item => item.id === params.id)));
   const [count, say] = useSaidToday();
-  const next = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
-  useEffect(() => () => clearTimeout(next.current), []);
-  const go = useCallback((to: number) => { clearTimeout(next.current); setIndex(Math.min(items.length - 1, Math.max(0, to))); }, [items.length]);
+  const next = useLater();
+  const go = useCallback((to: number) => { next.cancel(); setIndex(Math.min(items.length - 1, Math.max(0, to))); }, [items.length, next]);
   const tap = (item: Dhikr, at: number) => {
     const id = saidKey(occasion, item.id);
     if (saidDone(count, id)) return;
     buzz();
     const target = item.repeat?.count ?? 1;
     say(id, target);
-    if (saidCount(count, id) + 1 >= target && at + 1 < items.length) next.current = setTimeout(() => setIndex(at + 1), 600);
+    if (saidCount(count, id) + 1 >= target && at + 1 < items.length) next.after(600, () => setIndex(at + 1));
   };
   const back = () => (router.canGoBack() ? router.back() : toTab('/utilities'));
   const said = items.filter(item => saidDone(count, saidKey(occasion, item.id))).length;

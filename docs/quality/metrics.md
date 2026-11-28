@@ -44,11 +44,9 @@ Counts are of product code: test files are left out. "Empty catch blocks" counts
 | 2026-11-28 | 4 no comments | shared | comment lines | 3511 | 62 | pointers, plus the header of each generated `.d.ts` data file |
 | 2026-11-28 | 4 no comments | app + shared | comments turned into a doc or record pointer | 0 | 87 | a removed comment that named docs/… or R00xx kept only that name |
 | 2026-11-28 | 4 no comments | website | comment lines | 4443 | 4443 | the website is paused; the rule reaches it when it returns |
-<<<<<<< HEAD
 | 2026-11-28 | 3 feature map, fixed | app | screens whose ayah menu has no «صفحة الآية» | 1 | 0 | the mushaf's long-press menu now offers it |
 | 2026-11-28 | 3 feature map, fixed | app | single-thing pages linked one way only | 1 | 0 | a person's Sahih saying now opens its hadith page |
 | 2026-11-28 | 3 feature map, fixed | app | links into another tab without its first page under it | 79 | 0 | `router.push` changed to `toTab` in the helpers and cards that open a page in another tab |
-=======
 | 2026-11-28 | 7 no raw effects or timers | app (outside lib/) | useEffect calls | 145 | 138 | the 7 removed were a search waiting for typing to stop (3), a clock, a delayed warm-up, a loading flag and a timer cleanup; the 138 left are frozen in eslint-suppressions.json |
 | 2026-11-28 | 7 no raw effects or timers | app (outside lib/) | setTimeout / setInterval / requestAnimationFrame | 51 | 40 | 5 copies of the same web scroll timer, 3 search delays, a clock, a delayed warm-up, a loading flag; the app clock in lib/prayer.ts moved to a hook too but lib/ is not counted here |
 | 2026-11-28 | 7 no raw effects or timers | app | copies of the web scroll timer without cleanup on unmount | 4 | 0 | the compare pager, the hadith pager, the stories pages and the tools pages; the 40 frozen timers were not checked for this |
@@ -56,4 +54,10 @@ Counts are of product code: test files are left out. "Empty catch blocks" counts
 | 2026-11-28 | 7 no raw effects or timers | app | React Compiler findings | 168 | 166 | now errors; the 166 left are frozen in eslint-suppressions.json (set-state-in-effect 54, immutability 53, refs 50, preserve-manual-memoization 7, purity 1, use-memo 1) |
 | 2026-11-28 | 7 no raw effects or timers | app | lint warnings | 169 | 0 | the compiler rules became errors and a type that shared its name with an icon (`Send`) was renamed |
 | 2026-11-28 | 7 no raw effects or timers | app | files on the shrink-only list | 0 | 89 | |
->>>>>>> origin/main
+| 2026-11-28 | 7, screens | app screens and routes | useEffect calls | 28 | 0 | `screens/` and `app/`; route params now go through `useAdjustOn` (state) and `useOnChange` (scroll, clearing the params) |
+| 2026-11-28 | 7, screens | app screens and routes | setTimeout / requestAnimationFrame | 13 | 0 | moved to `useLater` |
+| 2026-11-28 | 7, screens | app screens and routes | timers never cleared when the screen closed | 6 | 0 | the oaths retry and first scroll, the openings scroll, the home refresh spinner, the solo quiz build, the tree-size batches |
+| 2026-11-28 | 7, screens | app | effects on the shrink-only list | 138 | 110 | |
+| 2026-11-28 | 7, screens | app | timers on the shrink-only list | 40 | 27 | |
+| 2026-11-28 | 7, screens | app | React Compiler findings | 166 | 151 | 15 set-state-in-effect went with the effects |
+| 2026-11-28 | 7, screens | app | shared hooks | 5 | 9 | useAdjustOn, useOnChange, useLoaded, useLater, with tests |

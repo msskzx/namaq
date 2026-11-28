@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ComponentRef } from 'react';
+import { useRef, useState, type ComponentRef } from 'react';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Pressable, ScrollView, View, type LayoutChangeEvent, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
 import { Check } from 'lucide-react-native';
@@ -16,6 +16,7 @@ import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { useShrinkOnScroll } from '@/lib/chrome';
 import { useTabRetap } from '@/lib/tabRetap';
 import { usePalette, type Palette } from '@/lib/theme';
+import { useOnChange } from '@/lib/hooks/useOnChange';
 
 const poem = poemData as Poem;
 const chapters = numberVerses(poem);
@@ -55,14 +56,14 @@ export default function TuhfaScreen() {
     pending.current = undefined;
     scroll.current?.scrollTo({ y: Math.max(0, top + y - 60), animated: false });
   };
-  useEffect(() => {
+  useOnChange([verse], () => {
     const number = Number(verse);
     if (!verse || !Number.isInteger(number)) return;
     setMarked(number);
     pending.current = number;
     router.setParams({ verse: undefined });
     toVerse();
-  }, [verse]);
+  });
   useTabRetap('tuhfa', () => scroll.current?.scrollTo({ y: 0, animated: true }));
   const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     shrink(event);

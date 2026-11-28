@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
+import { useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { FlatList, View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
@@ -22,6 +22,8 @@ import { ForgottenPost, SavedFeedCard } from '@/components/HomeFeed';
 import type { SavedCard } from '@/lib/home';
 import { usePalette, type Palette } from '@/lib/theme';
 import Empty from '@/ui/Empty';
+import { useLater } from '@/lib/hooks/useLater';
+import { useOnChange } from '@/lib/hooks/useOnChange';
 
 type Tab = 'all' | 'saved' | 'forgotten' | 'notes';
 const TABS: { key: Tab; label: string }[] = [{ key: 'all', label: 'الكل' }, { key: 'saved', label: 'المحفوظات' }, { key: 'forgotten', label: 'ما نسيته' }, { key: 'notes', label: 'تأملاتي' }];
@@ -107,8 +109,8 @@ export default function LibraryScreen() {
     return { rows: journalRows(shown), byId };
   }, [cards, noteCards, forgotten, bookmarks, notes, tab, query]);
 
-  const retry = useRef<ReturnType<typeof setTimeout>>(undefined);
-  useEffect(() => () => clearTimeout(retry.current), [rows]);
+  const retry = useLater();
+  useOnChange([rows], retry.cancel);
   const toJuz = (juz: number) => {
     const index = juzRow(rows, juz);
     if (index >= 0) list.current?.scrollToIndex({ index, viewPosition: 0 });
@@ -135,8 +137,7 @@ export default function LibraryScreen() {
         contentContainerStyle={{ padding: 16, paddingBottom: bottom + 16, gap: 12 }}
         onScrollToIndexFailed={({ index, averageItemLength }) => {
           list.current?.scrollToOffset({ offset: index * averageItemLength });
-          clearTimeout(retry.current);
-          retry.current = setTimeout(() => list.current?.scrollToIndex({ index, viewPosition: 0 }), 300);
+          retry.after(300, () => list.current?.scrollToIndex({ index, viewPosition: 0 }));
         }}
         ListHeaderComponent={<View style={{ gap: 14, marginBottom: 4 }}>
           <Tabs options={TABS} value={tab} onChange={setTab} label="ما يُعرض" palette={palette} fill />
