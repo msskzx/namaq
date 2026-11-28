@@ -9,11 +9,11 @@ import { juzOf } from '@shared/quran/juz';
 import { normalizeWord, plainName } from '@shared/quran/normalize';
 import { runsLabel, sideTitle } from '@shared/quran/compareCardLook';
 import { surahName } from '@shared/quran/surahNames';
-export { braidOf, type BraidStrand, type BraidWord } from '@shared/quran/braid';
 import { sharedByAll } from '@shared/quran/ayahContext';
 import type { BranchAyah } from '@shared/quran/branches';
 import { EMPTY_LIST, type ListState } from './branchList';
 import { sharedOf, type Shared } from './branches';
+export { braidOf, type BraidStrand, type BraidWord } from '@shared/quran/braid';
 
 /** The website's compare cards, as built by `npm run quran:compare-cards`: only the cards a reader kept. */
 const stored = generated as unknown as StoredCards;

@@ -6,12 +6,12 @@ import { sahihName } from '@shared/sahih';
 import { tafsirSadiOf } from '@shared/quran/tafsirSadiData';
 import builtHadith from '@shared/data/quran/rahmanHadith.json';
 import {
-  BASMALA_AYAH, MERCY_KEPT, MERCY_PARTS, NO_BASMALA, TIKRAR_RUNS, kirmaniOn, tikrarWords, SADI_OPENING, SCENE_HADITH_BY_ID, basmalasBySurah, surahBars, hadithNumbers, mostPlaces, nameRuns, placeCount, rahmanPlaces,
+  BASMALA_AYAH, MERCY_KEPT, MERCY_PARTS, NO_BASMALA, TIKRAR_RUNS, kirmaniOn, tikrarWords, SADI_OPENING, SCENE_HADITH_BY_ID, basmalasBySurah, surahBars, hadithNumbers, nameRuns, placeCount, rahmanPlaces,
   sadiOpening, sceneHadithNumbers, type BuiltHadith, type RahmanBlock,
 } from '@shared/quran/scenes/rahman';
 import { Text } from '@/ui/Text';
 import TapRow from '@/ui/TapRow';
-import { ayahMushafWords, pageOfAyah } from '@/lib/mushaf';
+import { ayahMushafWords } from '@/lib/mushaf';
 import { words } from '@/lib/words';
 import type { WordPlace } from '@shared/quran/words';
 import { RAHMAN_ART, RAHMAN_PAPER as paper } from '@/lib/theme';

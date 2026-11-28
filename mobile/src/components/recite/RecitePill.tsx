@@ -16,7 +16,7 @@ type Icon = (props: LucideProps) => React.ReactNode;
  * handler (`onClose`), and says what the next-ayah button does once its ayat are done (`after`: the reader's next forgotten
  * ayah, or the next page) and whether there is anything after (`more`).
  */
-export default function RecitePill({ recite, writing, onWriting, onClose, onRestart, after, more = false, lead, style, palette, onFold, small = false }: {
+export default function RecitePill({ recite, writing, onWriting, onClose, onRestart, after, more = false, lead, style, onFold, small = false }: {
   recite: Recite; writing: boolean; onWriting: () => void; onClose?: () => void;
   /** The mushaf's reset: the whole page hidden again, to recite it from its start once more (owner, 2026-11-20). */
   onRestart?: () => void;

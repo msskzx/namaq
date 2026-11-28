@@ -115,6 +115,8 @@ export function Cell({ cell, at, palette, width, current, onPress, light, note, 
   onPress?: () => void; light?: Light; note?: Props['note']; still?: boolean; read?: Read;
   /** More buttons beside the read button. */
   tools?: React.ReactNode }) {
+  const wordViews = !!useContext(Words);
+  const [head, setHead] = useState(26);
   if (!cell) return <View style={{ width }} />;
   const own = cell.ayat[0];
   const first = around?.before[0] ?? own;
@@ -123,8 +125,6 @@ export function Cell({ cell, at, palette, width, current, onPress, light, note, 
   const [lastSurah, lastNumber] = last.key.split(':').map(Number);
   const range = first === last ? num(number) : `${num(number)}–${lastSurah === surah ? num(lastNumber) : `${surahNames[lastSurah]} ${num(lastNumber)}`}`;
   const muted = at !== 'ayah';
-  const wordViews = !!useContext(Words);
-  const [head, setHead] = useState(26);
   // Each ayah of a passage shows what is left of `shown` after the ayat before it.
   const shownOf = (index: number) => shown === undefined ? undefined : shown - cell.ayat.slice(0, index).reduce((sum, item) => sum + item.words.length, 0);
   // A word takes the touch from the cell, so it does the cell's tap too (double tap to save, the studio's answer…).

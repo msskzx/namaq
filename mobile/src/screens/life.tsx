@@ -11,7 +11,7 @@ import Chip from '@/ui/Chip';
 import Button from '@/ui/Button';
 import Sheet from '@/ui/Sheet';
 import { SearchField } from '@/ui/Field';
-import { usePalette, type Palette } from '@/lib/theme';
+import { usePalette } from '@/lib/theme';
 import { useTabRetap } from '@/lib/tabRetap';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { toTab } from '@/lib/ways';

@@ -20,7 +20,7 @@ import { FeedQuiz, feedRun, quizBookOn } from '@/components/HomeFeed';
 import QuizKindTree, { type TreeBranch } from '@/components/QuizKindTree';
 import { QUIZ_ICON } from '@/components/featureIcons';
 import { INTERESTS, SECTIONS, interestOf, type SectionId } from '@shared/interests';
-import { FEED_QUIZ_NAMES, seededRandom, type FeedKind, type FeedQuizKind } from '@shared/quiz/feedQuiz';
+import { FEED_QUIZ_NAMES, type FeedKind, type FeedQuizKind } from '@shared/quiz/feedQuiz';
 import { readMissed, subscribeMissed } from '@shared/quiz/missedQuestions';
 import { memorizedQuestions, readMemorized, subscribeMemorized, withMemorizedScope } from '@shared/memorized';
 import { bareName } from '@shared/tarajimLine';

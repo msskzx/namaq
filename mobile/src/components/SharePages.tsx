@@ -43,7 +43,6 @@ export default function SharePages({ paged, width, palette, onShots, onFail }: {
   onShots: (shots: Shot[]) => void; onFail: () => void }) {
   const height = Math.round((width * 5) / 4);
   const inner = width - PAD * 2;
-  const count = paged.blocks.length;
   const [sizes, setSizes] = useState<Record<string, number>>({});
   const measured = (key: string) => (event: { nativeEvent: { layout: { height: number } } }) => {
     const h = event.nativeEvent.layout.height;

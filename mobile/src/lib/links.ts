@@ -1,10 +1,10 @@
 import dataFile from '@shared/data/links.json';
 import type { Link, LinkIndex } from '@shared/links';
 import { ayatOf, type AppStory, type AppStoryAyat } from '@shared/stories/story';
-
-export { ayatOf };
 import { STORIES, storyOf } from './stories';
 import { dataOf } from '@shared/appData';
+
+export { ayatOf };
 
 const data = dataOf(dataFile);
 
