@@ -250,7 +250,7 @@ function DhikrLook({ id, shown, palette }: { id: string; shown: boolean; palette
   );
 }
 
-export const lookable = (look: QuizLook) => look.view !== 'own';
+export const lookable = (look: QuizLook | undefined): look is QuizLook => !!look && look.view !== 'own';
 
 const bleed = { marginHorizontal: -16 } as const;
 

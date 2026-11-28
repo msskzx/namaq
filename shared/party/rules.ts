@@ -88,13 +88,15 @@ export function createParty(code: string, hostId: string, hostName: string, now:
 const pick = <T,>(options: readonly T[], value: unknown, fallback: T) => options.includes(value as T) ? value as T : fallback;
 const juz = (value: unknown, fallback: number) => Number.isInteger(value) && (value as number) >= 1 && (value as number) <= 30 ? value as number : fallback;
 
+export const PARTY_MOST = 300;
+
 export function cleanSettings(settings: Partial<PartySettings>, base: PartySettings = DEFAULT_SETTINGS): PartySettings {
   const topics = Array.isArray(settings.topics) ? [...new Set(settings.topics.filter(topic => QUIZ_TOPICS.includes(topic)))] : base.topics;
   const from = juz(settings.juzFrom, base.juzFrom);
   const to = juz(settings.juzTo, base.juzTo);
   return {
     topics,
-    length: quizLength(settings.length, base.length),
+    length: Math.min(quizLength(settings.length, base.length), PARTY_MOST),
     person: typeof settings.person === 'string' ? settings.person.trim() : base.person,
     juzFrom: Math.min(from, to),
     juzTo: Math.max(from, to),

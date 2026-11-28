@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNoBackButton } from '@/lib/hooks/useNoBackButton';
 import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
 import { Text } from '@/ui/Text';
 import { router } from 'expo-router';
@@ -69,6 +70,7 @@ function Results({ run, palette }: { run: SoloRun; palette: Palette }) {
 
 export default function QuizPlay() {
   const palette = usePalette();
+  useNoBackButton();
   const insets = useSafeAreaInsets();
   const run = useRun();
   const typing = useKeyboardShown();

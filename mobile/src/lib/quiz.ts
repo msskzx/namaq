@@ -83,7 +83,7 @@ export function availability(settings: Pick<SoloSettings, 'kinds' | 'list' | 'ap
 
 const partyCounts = new Map<string, number>();
 export function partyAvailable(settings: PartySettings) {
-  const id = JSON.stringify({ ...settings, length: 0, seconds: 0, treeSeconds: 0, pen: '' });
+  const id = JSON.stringify({ topics: settings.topics, juzFrom: settings.juzFrom, juzTo: settings.juzTo, filters: settings.filters });
   const known = partyCounts.get(id);
   if (known !== undefined) return known;
   const params = new URLSearchParams(quizQuery(settings));

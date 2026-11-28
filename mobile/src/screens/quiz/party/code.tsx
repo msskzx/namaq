@@ -8,7 +8,7 @@ import { num } from '@shared/quran/arabicNumber';
 import { PEN_NAMES } from '@/components/recite/PenSetting';
 import { WRITTEN_TOPICS } from '@shared/quiz/settings';
 import type { PenRule } from '@shared/quran/writeAyah';
-import { leaderboard, NAME_MAX, QUESTION_SECONDS, TREE_SECONDS, type ActionError, type PartyQuestion, type PartySettings, type PartyView, type PlayerAction, type PlayerView } from '@shared/party/rules';
+import { leaderboard, NAME_MAX, PARTY_MOST, QUESTION_SECONDS, TREE_SECONDS, type ActionError, type PartyQuestion, type PartySettings, type PartyView, type PlayerAction, type PlayerView } from '@shared/party/rules';
 import { emptyBranchAnswers, type QuestionAnswer } from '@shared/quiz/score';
 import { RANGED_TOPICS, type QuizTopic } from '@shared/quiz/settings';
 import { CHOICE_KINDS } from '@shared/quiz/kinds';
@@ -36,6 +36,7 @@ import { scopeSummary } from '@shared/quiz/scopeSummary';
 import { partyUrl, playerId, saveName, savedName, usePartySocket, type PartyStatus } from '@/lib/party';
 import { partyAvailable, partyQuiz, type QuestionState } from '@/lib/quiz';
 import NumberPicker from '@/ui/NumberPicker';
+import { useNoBackButton } from '@/lib/hooks/useNoBackButton';
 import { usePalette, type Palette } from '@/lib/theme';
 import Field from '@/ui/Field';
 import { reportError } from '@shared/errors';
@@ -158,9 +159,14 @@ function PartyFilters({ settings, change, palette }: { settings: PartySettings; 
 }
 
 function PartyLength({ settings, change, palette }: { settings: PartySettings; change: (next: Partial<PartySettings>) => void; palette: Palette }) {
-  const available = partyAvailable(settings);
+  const available = Math.min(partyAvailable(settings), PARTY_MOST);
   if (!available) return <Label palette={palette} muted>لا أسئلة لهذا الاختيار. وسّع التصفية.</Label>;
-  return <View style={{ flexDirection: 'row' }}><NumberPicker value={Math.min(settings.length, available)} max={available} label="عدد الأسئلة" palette={palette} onChange={length => change({ length })} /></View>;
+  return (
+    <>
+      <View style={{ flexDirection: 'row' }}><NumberPicker value={Math.min(settings.length, available)} max={available} label="عدد الأسئلة" palette={palette} onChange={length => change({ length })} /></View>
+      <Label palette={palette} muted>{`حتى ${num(PARTY_MOST)} سؤالًا في الاختبار الجماعي، فهي كل ما تحمله الغرفة. إن قلّت الأسئلة المتاحة عن العدد بدأ بما وُجد.`}</Label>
+    </>
+  );
 }
 
 const PARTY_KINDS: { id: QuizTopic; name: string }[] = [{ id: 'BRANCHES', name: 'متشابهات القرآن' }, ...CHOICE_KINDS.filter(kind => kind.party)];
@@ -261,8 +267,9 @@ function Lobby({ view, send, error, palette }: { view: PartyView; send: SendActi
   const begin = (early?: boolean) => {
     let quiz;
     try { quiz = partyQuiz(view.settings); } catch (error) { reportError('party: build questions', error); return setBuilt('failed'); }
-    if (quiz.questions.length < view.settings.length) return setBuilt('short');
+    if (!quiz.questions.length) return setBuilt('short');
     setBuilt(null);
+    if (quiz.questions.length < view.settings.length) send({ type: 'settings', settings: { length: quiz.questions.length } });
     send({ type: 'start', ...(early && { early }), ...quiz });
   };
   const problem = built ?? (view.error ? (view.error === 'Not enough approved questions' ? 'short' : 'failed') : null);
@@ -463,6 +470,7 @@ function Notice({ status, palette }: { status: PartyStatus | 'started'; palette:
 
 export default function PartyRoom() {
   const palette = usePalette();
+  useNoBackButton();
   const { code = '' } = useLocalSearchParams<{ code: string }>();
   const id = useMemo(() => playerId(), []);
   const [name, setName] = useState<string | null>(() => savedName() || null);

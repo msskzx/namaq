@@ -16,6 +16,15 @@ const CHOICES = [{ value: RECITED, labelArabic: 'حفظتها' }, { value: FORGO
 let ayat: Map<string, BranchAyah> | undefined;
 const inScope = (scope: ChoiceScope) => [...filteredAyat(ayat ??= new Map((corpus.ayat as BranchAyah[]).map(ayah => [ayah.key, ayah])), scope.filters, scope.range).keys()];
 
+function openingHint(key: string): ChoiceQuestion['look'] {
+  const words = ayat!.get(key)!.words;
+  if (words.length > 1) return { view: 'prompt', key, word: words[0], first: true };
+  const [surah, number] = key.split(':').map(Number);
+  const after = ayat!.get(`${surah}:${number + 1}`)?.words;
+  const before = ayat!.get(`${surah}:${number - 1}`)?.words;
+  return { view: 'around', ...(before && { before }), ...(after && { after }) };
+}
+
 const ask = (family: string, key: string, promptArabic: string): ChoiceQuestion => ({
   key: `${family}:${key}`,
   family,
@@ -24,7 +33,7 @@ const ask = (family: string, key: string, promptArabic: string): ChoiceQuestion 
   correctAnswer: RECITED,
   ayahKey: key,
   page: { shows: 0, recite: true, title: 'shown' },
-  look: { view: 'prompt', key, word: ayat!.get(key)!.words[0], first: true },
+  look: openingHint(key),
   sources: [mushafSource(key, ayat?.get(key)?.page)],
   evidence: { claimKeys: [] },
 });
