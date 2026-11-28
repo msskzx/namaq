@@ -6,6 +6,7 @@ import trees from './quranText/corpus';
 import { pageGroups, type MushafPage } from './readerPage';
 import { corpusWords, countsBySurah, lemmasAtMushafWord, lemmasOfWord, mushafWords, placesOf, searchWords, type WordsData } from './words';
 import { corpusWordsAt } from './quranText/ayahWords';
+import { normalizeWord } from './normalize';
 
 const words = data as unknown as WordsData;
 const idOf = (name: string) => words.lemmas.findIndex(([lemma]) => lemma === name);
@@ -40,9 +41,20 @@ describe('word counts', () => {
   });
 
   it('finds a word typed with «ال» as it finds it without (owner, 2026-11-28: «الرحمن» found nothing)', () => {
-    for (const [withArticle, bare] of [['الرحمن', 'رحمن'], ['الأرض', 'أرض'], ['السماء', 'سماء']]) {
+    for (const [withArticle, bare] of [['الرحمن', 'رحمن'], ['الأرض', 'أرض'], ['السماء', 'سماء'], ['الكتاب', 'كتاب']]) {
       expect(searchWords(words, bare, 5).length).toBeGreaterThan(0);
       expect(searchWords(words, withArticle, 5)).toEqual(searchWords(words, bare, 5));
+    }
+    expect(searchWords(words, 'الكتاب', 5).map(id => words.lemmas[id][0])).toContain('كِتَٰب');
+  });
+
+  it('cuts no «ال» off a word whose «أل» is its own letters', () => {
+    for (const typed of ['ألسنة', 'ألباب', 'ألوان', 'ألواح']) {
+      const needle = normalizeWord(typed);
+      for (const id of searchWords(words, typed, 5)) {
+        const lemma = words.lemmas[id][0];
+        expect(`${normalizeWord(lemma)} ${normalizeWord(lemma.replace(/\u0670/g, 'ا'))}`).toContain(needle);
+      }
     }
   });
 

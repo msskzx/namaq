@@ -2,7 +2,7 @@ import { expect, longPress, open, readerPage, stored, test } from './fixtures';
 import { surahName as S } from '../../shared/quran/surahNames';
 
 // The reader's long-press menu on every ayah view (owner, 2026-11-22; /mnt/project-files/ayah-page/agreed.md part 4):
-// the same buttons as the mushaf's, with the mushaf (and the ayah's page, away from it) first.
+// the same buttons as the mushaf's, with the mushaf first and the ayah's page first of the tools (owner, 2026-11-28).
 test.describe('a long press on an ayah off the mushaf', () => {
   test('on the ayah page, opens the reader\'s menu: its sheets, its marks, and the mushaf at the ayah', async ({ page }) => {
     await open(page, '/ayah?key=93:3');

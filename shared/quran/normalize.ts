@@ -28,11 +28,17 @@ function normalizeUncached(token: string): string {
     .replace(/ک/g, 'ك');
 }
 
-const ARTICLE = 'ال';
+const TYPED_ARTICLE = /^[اٱ]ل/;
 const SHORTEST_WITH_ARTICLE = 5;
 
-export const holdsWord = (normalizedHay: string, normalizedTerm: string) => normalizedHay.includes(normalizedTerm)
-  || (normalizedTerm.length >= SHORTEST_WITH_ARTICLE && normalizedTerm.startsWith(ARTICLE) && normalizedHay.includes(normalizedTerm.slice(ARTICLE.length)));
+export type SearchTerm = { term: string; bare?: string };
+
+export function searchTerm(typed: string, normalized: string): SearchTerm {
+  const article = TYPED_ARTICLE.test(typed.trim()) && normalized.length >= SHORTEST_WITH_ARTICLE;
+  return article ? { term: normalized, bare: normalized.slice(2) } : { term: normalized };
+}
+
+export const holdsWord = (normalizedHay: string, { term, bare }: SearchTerm) => normalizedHay.includes(term) || (!!bare && normalizedHay.includes(bare));
 
 export type AyahWords = { display: string[]; norm: string[] };
 

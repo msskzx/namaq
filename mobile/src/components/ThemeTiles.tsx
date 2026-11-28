@@ -93,9 +93,9 @@ export function LookPreview({ palette }: { palette: Palette }) {
   const shown = markTones(mode, { exact: palette.accent, written: palette.amber, root: palette.root });
   const words = MARK_LEGEND.filter((item): item is typeof item & { kind: Likeness } => item.kind !== 'plain');
   return (
-    <Card palette={palette} pad={[10, 14]} gap={4}>
+    <Card palette={palette} pad={[10, 14]} gap={4} node>
       <Text style={{ color: palette.muted, fontSize: 13 }}>هكذا تبدو البطاقات الآن</Text>
-      <MiniQuran share={0.9}>{SAMPLE_AYAH.start} {SAMPLE_AYAH.end} <Text style={{ color: palette.accent }}>{SAMPLE_AYAH.ending}</Text></MiniQuran>
+      <MiniQuran share={0.9} look={{ color: palette.ink }}>{SAMPLE_AYAH.start} {SAMPLE_AYAH.end} <Text style={{ color: palette.accent }}>{SAMPLE_AYAH.ending}</Text></MiniQuran>
       <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 14 }}>
         {words.map(item => <MiniQuran key={item.kind} share={0.6} look={{ color: shown[item.kind] ?? palette.ink }}>{item.word}</MiniQuran>)}
       </View>
