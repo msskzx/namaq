@@ -5,10 +5,8 @@ import { penRule, quizPen } from '@/lib/settings';
 import type { PenRule } from '@shared/quran/writeAyah';
 import type { Palette } from '@/lib/theme';
 
-/** What the recite bar's pen asks to write, by rule (shared/quran/writeAyah.ts penTargets). */
 export const PEN_NAMES: Record<PenRule, string> = { ends: 'أول الآية وآخرها', whole: 'الآية كاملة' };
 
-/** The pen rule for the mushaf and the home card (owner, 2026-11-17: a setting, the whole ayah by default). */
 export function PenSetting({ palette }: { palette: Palette }) {
   const [rule, setRule] = penRule.use();
   return (
@@ -19,7 +17,6 @@ export function PenSetting({ palette }: { palette: Palette }) {
   );
 }
 
-/** A quiz's own pen rule, or the one in settings. */
 export function QuizPenSetting({ palette }: { palette: Palette }) {
   const [rule, setRule] = quizPen.use();
   return (

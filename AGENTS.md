@@ -14,8 +14,10 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   descriptions. It lives in `.claude/skills/unslop/`, so it is in the repo and
   needs no install, and it applies to every change rather than to documentation
   work alone.
-- Leave clear code uncommented. When unclear code needs context, add only a
-  reference to the relevant doc or ADR. Keep functional annotations.
+- No comments (owner, 2026-11-28). Say it in code, a test or a lint rule. When a reader
+  needs a reason the code can't show, write only `// see docs/<file>.md` or `// see R00xx`.
+  Lint directives (`eslint-disable…`, `@ts-…`, `@vitest-environment`) stay. `quality/no-comments`
+  (`shared/lint/noComments.mjs`) enforces this in `mobile/` and `shared/`.
 - Invoke the `ponytail` skill before writing or reviewing code: reuse what the
   codebase already has, reach for stdlib and native platform features before a
   dependency, and stop at the shortest diff that works. It is not vendored

@@ -21,7 +21,7 @@ flowchart RL
 | Part of the screen | Label | Opens | Code |
 | --- | --- | --- | --- |
 | `About` | (onPress) | [المصادر والتراخيص](attributions.md) | [screens/info.tsx:31](../../mobile/src/screens/info.tsx#L31) |
-| `InfoScreen` | (back) | [الرئيسية](home.md) | [screens/info.tsx:108](../../mobile/src/screens/info.tsx#L108) |
+| `InfoScreen` | (back) | [الرئيسية](home.md) | [screens/info.tsx:104](../../mobile/src/screens/info.tsx#L104) |
 
 ## Sheets
 

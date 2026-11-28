@@ -22,7 +22,7 @@ flowchart RL
 
 | Part of the screen | Label | Opens | Code |
 | --- | --- | --- | --- |
-| `Station` | (onPress) | [الغزوة](battle.md) | [components/battles/BattleLine.tsx:34](../../mobile/src/components/battles/BattleLine.tsx#L34) |
+| `Station` | (onPress) | [الغزوة](battle.md) | [components/battles/BattleLine.tsx:30](../../mobile/src/components/battles/BattleLine.tsx#L30) |
 
 ## Sheets
 

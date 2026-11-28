@@ -1,8 +1,3 @@
-/**
- * «مدونتي» in the mushaf's order (owner, 2026-11-24): everything the reader kept on an ayah (saved, forgotten, a note) under
- * its surah's name, the surahs in order, then what is kept elsewhere (hadith, tarajim, other cards), latest first.
- * Pure ordering; the cards themselves are drawn as on the homepage.
- */
 import { juzOf } from './quran/juz';
 
 export type JournalKind = 'saved' | 'forgotten' | 'note';
@@ -15,7 +10,6 @@ export type JournalRow =
 const place = (key: string) => key.split(':').map(Number);
 const KIND_ORDER: Record<JournalKind, number> = { forgotten: 0, note: 1, saved: 2 };
 
-/** The rows of the journal: a surah's header before its first entry, the entries in ayah order, then the rest under one header. */
 export function journalRows(entries: readonly JournalEntry[]): JournalRow[] {
   const onAyah = entries.filter(entry => entry.ayah).sort((a, b) => {
     const [x, y] = [place(a.ayah!), place(b.ayah!)];
@@ -34,10 +28,8 @@ export function journalRows(entries: readonly JournalEntry[]): JournalRow[] {
   return rows;
 }
 
-/** Where the strip's tap on a juz goes: the first row that falls in it (a surah's header, or an entry if the surah began in an earlier juz). */
 export function juzRow(rows: readonly JournalRow[], juz: number): number {
   return rows.findIndex(row => row.row !== 'others' && row.juz === juz);
 }
 
-/** The juz that hold anything kept, for the strip at the top. */
 export const keptJuz = (rows: readonly JournalRow[]) => new Set(rows.flatMap(row => (row.row === 'entry' && row.juz ? [row.juz] : [])));

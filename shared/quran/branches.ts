@@ -1,4 +1,4 @@
-// docs/plans/quran-shared-openings.md
+// see docs/plans/quran-shared-openings.md
 import type { BranchView } from './branchView';
 import { num } from './arabicNumber';
 import type { GroupFilters } from './mutashabih/browse';
@@ -12,14 +12,6 @@ import { ayahWordsOf, wordsOnly } from './quranText/ayahWords';
 export type WordFeatures = { gender?: string; number?: string; case?: string; pos?: string };
 
 export type BranchAyah = { features?: (WordFeatures | null)[]; key: string; page: number; words: string[]; roots?: (string | null)[]; lemmas?: (string | null)[]; conjs?: (string | null)[]; conj?: string; next?: string[]; nextRoots?: (string | null)[]; nextLemmas?: (string | null)[]; through?: string };
-/**
- * `differs`: indices of words moved here from a neighbouring node because its ayat write them differently, drawn amber.
- * `spelled`: the node's words before any moved (see `foldForms`), which a node's tree id and links are made from.
- * `rejoin`: where the children's paths meet again, drawn after them (a compare card's tree, shared/quran/braid.ts `compareTree`);
- * `via`: then the ayat whose paths run through the node, in place of those found from `ayat` and the children;
- * `holds`: the runs of ayat the box names, one per side, in place of the ayat it ends; `tones`: each word's likeness, in place of
- * matching the ayat through the node.
- */
 export type Branch = { words: string[]; ayat: string[]; children: Branch[]; forms?: Record<string, string[]>; partition?: string; through?: Record<string, string>; differs?: number[]; spelled?: string[]; rejoin?: Branch; via?: string[];
   holds?: string[][]; tones?: (Likeness | 'related' | undefined)[] };
 export type Opening = { id: string; text: string; count: number; partition?: string; textEn?: string; aliases?: string[] };
@@ -70,7 +62,6 @@ export function branchesHref(id: string, juz?: JuzRange, view: BranchesView = {}
   return `/quran/branches${params.size ? `?${params}` : ''}`;
 }
 
-/** The ayat as the Madina pages print them (the one Quran text, AGENTS.md): each ayah's words with their waqf and sajda signs, hizb marks left out. */
 export function pageAyat(pages: MushafPage[]): BranchAyah[] {
   const words = ayahWordsOf(pages);
   const pageOf = mushafPages(pages);
@@ -85,7 +76,6 @@ export function conjunctions(morphology: string): Map<string, string> {
   return found;
 }
 
-/** The corpus words a text's word `i` stands for (1-based places); the page's own splits come from quranText/ayahWords `corpusWordsAt`. */
 export type CorpusPlaces = (key: string, i: number) => number[];
 const samePlaces: CorpusPlaces = (_, i) => [i];
 
@@ -144,11 +134,9 @@ const sameWord = (a: BranchAyah, i: number, b: BranchAyah, j: number) => letters
   && (a.roots?.[i] ?? null) === (b.roots?.[j] ?? null)
   && (spellingOf(a.words[i]) === spellingOf(b.words[j]) || (a.lemmas?.[i] ?? null) === (b.lemmas?.[j] ?? null));
 
-// Grown ayat end in ﴿n﴾; runs that end on different ayah numbers still share their node.
 export const END = '۝';
 const isEnd = (word: string) => word.startsWith('﴿') || word === END;
 
-/** Whether a node's words open a phrase the page can list: nothing past an ayah end, but a letter opening's own ﴿١﴾. */
 export const linkable = (words: string[]) => words.every((word, i) => !isEnd(word) || i === 1);
 
 const wordClasses = (ayat: BranchAyah[], at: number, preserveOpenings = false) => {
@@ -205,16 +193,11 @@ export function sharedOpenings(ayat: BranchAyah[]): Map<string, BranchAyah[]> {
 
 export const searchKey = (value: string) => normalizeWord(value.normalize('NFC')).replace(/[ؤئء]/g, 'ا').trim().split(/\s+/).join(' ').replace(/(^| )يا (?=\S)/g, '$1ي').replace(/ا+/g, 'ا');
 
-/** The query, and without a leading و / ف on its first word, as the trees drop it. */
 function queryForms(wanted: SearchQuery): SearchQuery[] {
   const [head, ...rest] = wanted.strict;
   return head && /^[وف]./.test(head) ? [wanted, searchQuery([head.slice(1), ...rest].join(' '))] : [wanted];
 }
 
-/**
- * Phrases holding the query at one level (see searchText.ts): the exact phrase, then phrases whose text opens with it,
- * whose text holds it, then those an alias or the English opens with or holds; within each, the closest (shortest) phrase first.
- */
 function phrasesAt(phrases: Opening[], wanted: SearchQuery, english: string, level: Level) {
   const forms = queryForms(wanted);
   const found: { phrase: Opening; start: boolean; rank: number; length: number }[] = [];
@@ -230,10 +213,6 @@ function phrasesAt(phrases: Opening[], wanted: SearchQuery, english: string, lev
   return found.sort((a, b) => a.rank - b.rank || a.length - b.length).map(({ phrase, start }) => ({ phrase, start }));
 }
 
-/**
- * Phrases holding the query; hamza-loose matches only when nothing matches as typed. When none holds it all,
- * the longest end of the query that some phrase holds (قل أطيعوا الله وأطيعوا الرسول finds أطيعوا الله وأطيعوا الرسول).
- */
 function rankPhrases(phrases: Opening[], query: string): { phrase: Opening; start: boolean }[] {
   const wanted = searchQuery(query);
   const english = /[a-z]/i.test(query) ? query.trim().toLowerCase() : '';
@@ -248,7 +227,6 @@ function rankPhrases(phrases: Opening[], query: string): { phrase: Opening; star
 
 export const searchPhrases = (phrases: Opening[], query: string) => rankPhrases(phrases, query).map(found => found.phrase);
 
-/** Does the text hold the query anywhere at this level (a leading و / ف on the query may be dropped)? */
 export function textHolds(text: string, query: string, level: Level = 'strict'): boolean {
   const words = textKeys(text);
   const wanted = searchQuery(query);
@@ -257,7 +235,6 @@ export function textHolds(text: string, query: string, level: Level = 'strict'):
   return !!head && /^[وف]./.test(head) && !!findText(words, searchQuery([head.slice(1), ...rest].join(' ')), level);
 }
 
-/** Is the text exactly the query, word for word? */
 export function textIs(text: string, query: string): boolean {
   const words = textKeys(text);
   const wanted = searchQuery(query);
@@ -274,10 +251,6 @@ const twinned = (ayah: BranchAyah, ayat: readonly BranchAyah[]) => ayat.some(oth
 
 const ayahEnd = (key: string) => `﴿${num(Number(key.split(':')[1]))}﴾`;
 
-/**
- * The ayat whose first word reads as `ayah`'s does: only they can hold its words at their start (sameWord compares the
- * letters first), so continues and twinned look there instead of through all 6,236 ayat for each one.
- */
 const byFirstWord = (ayat: BranchAyah[]) => {
   const groups = new Map<string, BranchAyah[]>();
   for (const ayah of ayat) {
@@ -296,10 +269,6 @@ export const grown = (ayat: BranchAyah[]) => {
 
 type RunOn = Pick<BranchAyah, 'words' | 'roots' | 'lemmas'>;
 
-/**
- * The words read after `from` when the reading runs on into `next`. When `next` opens another surah, its
- * basmala is read first (al-Fatiha's is its own first ayah; at-Tawbah has none), so it is put before the ayah.
- */
 export function runOn(from: string, next: Pick<BranchAyah, 'key' | 'words' | 'roots' | 'lemmas'>, basmala: RunOn | undefined): RunOn {
   const [surah, ayah] = next.key.split(':').map(Number);
   if (!basmala || ayah !== 1 || surah === 1 || surah === 9 || from.split(':')[0] === String(surah)) return next;
@@ -314,12 +283,10 @@ export function runOn(from: string, next: Pick<BranchAyah, 'key' | 'words' | 'ro
 const runParts = (from: string, run: BranchAyah[], basmala: RunOn | undefined) => run.map((next, j) => runOn(j ? run[j - 1].key : from, next, basmala));
 const runWords = (run: BranchAyah[], parts: RunOn[]) => parts.flatMap((next, j) => [...(j ? [ayahEnd(run[j - 1].key)] : []), ...next.words]);
 
-/** The words an ayah runs on with (`next`): the ayat after it up to `through`, a basmala before a new surah, ayah ends between. */
 export function nextWords(from: string, run: BranchAyah[], basmala: RunOn | undefined): string[] {
   return runWords(run, runParts(from, run, basmala));
 }
 
-/** The ayat that follow, in mushaf order and across surahs, until this ayah's run parts from every identical twin's. */
 function following(ayah: BranchAyah, twins: BranchAyah[], after: (key: string) => BranchAyah | undefined): BranchAyah[] {
   const run = (from: BranchAyah, length: number) => {
     const found: BranchAyah[] = [];
@@ -356,7 +323,6 @@ export function withNext(groups: Map<string, BranchAyah[]>, all: BranchAyah[]): 
       };
     });
   });
-  // An ayah can sit in an opening group and a chapter family; the copy that runs on wins.
   const byKey = new Map<string, BranchAyah>();
   selected.forEach(ayah => { if (!byKey.get(ayah.key)?.next || ayah.next) byKey.set(ayah.key, ayah); });
   return [...byKey.values()];
@@ -371,42 +337,27 @@ export const PIECE_MAX = 6;
 
 const isAyahEnd = (word: string) => word === '۝' || word.startsWith('﴿');
 
-/**
- * The ayat a node's label names, for each ayah ending at the node: that ayah and, when the node's words run on past
- * its end, the ayah its last word is in. A grown branch can end in another surah (al-Saffat 182 runs on into the
- * basmala and Sad 1), so the label names both rather than the first alone.
- */
 export function shownAyat(node: Branch, path: string[] = []): Record<string, string[]> {
   const words = [...path, ...node.words];
   const ends = ayahEnds({ ...node, children: [] }, path);
-  // The ayat ending here end at this node, so its last word is in the last ayah of their run (`ayahEnds`).
   const runsOn = words.slice(0, words.findLastIndex(word => !isAyahEnd(word))).some(isAyahEnd);
   return Object.fromEntries(node.ayat.map(key => [key, runsOn && ends[key] !== key ? [key, ends[key]] : [key]]));
 }
 
-/** The ayah-end sign a box closes with: ﴿n﴾ for the ayah it ends (owner, 2026-11-14: every box that ends an ayah shows it), the bare ۝ when ayat with different numbers end there, nothing when none does. */
 export function endSign(ayat: string[]) {
   const numbers = [...new Set(ayat.map(key => Number(key.split(':')[1])))];
   return numbers.length === 0 ? [] : numbers.length === 1 ? [`﴿${num(numbers[0])}﴾`] : [END];
 }
 
-/** Whether a word is an ayah-end sign already (﴿n﴾ or the bare ۝). */
 export const isEndSign = (word: string) => word === END || word.startsWith('﴿');
 
-/**
- * The sign a tree box closes with, after `words` (the words the box shows), for the ayat that end in it: every box that
- * ends an ayah shows it, as the mushaf writes it (owner, 2026-11-14), unless its words already end with one. Both tree
- * drawers call this, for the tree's boxes and the dashed neighbour boxes alike (guard proposal 4).
- */
 export const closingSign = (words: string[], ended: string[]) => (isEndSign(words[words.length - 1] ?? '') ? [] : endSign(ended));
 
-/** The ayat that end in a tree box: each of the node's ayat, as the last of the run `shownAyat` gives it. */
 export function endedIn(node: Branch, path: string[] = []) {
   const runs = shownAyat(node, path);
   return node.ayat.map(key => runs[key][runs[key].length - 1]);
 }
 
-/** A label for the ayat `shownAyat` gives: «البقرة ٣», «البقرة ٣–٤», or «الصافات ١٨٢ ثم ص ١» into another surah. */
 export function ayatLabel(ayat: string[], names: Record<number, string>) {
   const [surah, ayah] = ayat[0].split(':').map(Number);
   const named = (s: number, a: number) => names[s] ? `${names[s]} ${num(a)}` : `${num(s)}:${num(a)}`;
@@ -415,10 +366,6 @@ export function ayatLabel(ayat: string[], names: Record<number, string>) {
   return lastSurah === surah ? `${named(surah, ayah)}–${num(lastAyah)}` : `${named(surah, ayah)} ثم ${named(lastSurah, lastAyah)}`;
 }
 
-/**
- * A label for any ayat, each surah once with its runs of following ayat: «المسد ١، ٤–٥», «الأنفال ٢، القصص ٤، غافر ٣٦».
- * `ayatLabel` is for one run read on through.
- */
 export function placesLabel(ayat: string[], names: Record<number, string>) {
   const bySurah = new Map<number, number[]>();
   for (const key of ayat) {
@@ -436,13 +383,10 @@ export function placesLabel(ayat: string[], names: Record<number, string>) {
   }).join('، ');
 }
 
-/** Each ayah's own end, for a card kept to its own ayat (ownAyatOnly): every ayah of the tree ends on itself. */
-/** A tree the owner keeps to its own ayat (branchVerdicts `ayat: 'own'`): no ayah reads on into the one after it. */
 export const ownAyat = (node: Branch): Branch => ({ ...node, through: undefined, children: node.children.map(ownAyat), ...(node.rejoin ? { rejoin: ownAyat(node.rejoin) } : {}) });
 
 export const ownEnds = (node: Branch): Record<string, string> => Object.fromEntries(keys(node).map(key => [key, key]));
 
-/** Each ayah's end one ayah on, for a card kept two ayat deep (twoAyat); `has` says which ayat exist, so a surah's last ayah ends on itself. */
 export const twoEnds = (node: Branch, has: (key: string) => boolean): Record<string, string> => Object.fromEntries(keys(node).map(key => {
   const [surah, ayah] = key.split(':').map(Number);
   const next = `${surah}:${ayah + 1}`;
@@ -460,10 +404,6 @@ export function ayahEnds(node: Branch, path: string[] = []): Record<string, stri
 }
 
 
-/**
- * The words before a tree's trunk, with an empty entry for the ayat that open with the trunk when other ayat have words before
- * it, so a tree drawn from a list that dropped those ayat (the quiz's) still draws what comes before them.
- */
 export function withStarts(prefixes: Variant[], ayahKeys: string[]): Variant[] {
   if (!prefixes.some(prefix => prefix.word)) return prefixes;
   const covered = new Set(prefixes.flatMap(prefix => prefix.keys));
@@ -471,10 +411,6 @@ export function withStarts(prefixes: Variant[], ayahKeys: string[]): Variant[] {
   return missing.length ? [...prefixes, { word: '', words: [], conj: '', keys: missing, id: prefixes[0].id }] : prefixes;
 }
 
-/**
- * The rows a matrix draws, by index: a row whose ayat all show inside another row's passage is left out, so an ayah is not drawn
- * twice (al-Zumar 36 reads on into 37, which is a row of its own: one row, «الزمر ٣٦–٣٧»; owner, 2026-11-20).
- */
 export function uncoveredRows(passages: readonly (readonly string[])[]): number[] {
   const covers = (j: number, i: number) => j !== i && (passages[j].length > passages[i].length || passages[j].length === passages[i].length && j < i) && passages[i].every(key => passages[j].includes(key));
   return passages.flatMap((_, i) => passages.some((__, j) => covers(j, i)) ? [] : [i]);

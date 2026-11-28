@@ -18,9 +18,7 @@ describe('quiz difficulty', () => {
   });
 
   it('calls nearly the same ayat hard and ayat that part at once easy', () => {
-    // البقرة ٥٨ والأعراف ١٦١: the same story, word for word but a few.
     expect(levelOf(treeScore([words('2:58'), words('7:161')]))).toBe('hard');
-    // Ayat sharing only an opening phrase.
     expect(levelOf(treeScore([words('2:21'), words('4:1')]))).toBe('easy');
   });
 

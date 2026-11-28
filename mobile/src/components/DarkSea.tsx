@@ -32,29 +32,24 @@ import { FEATURE_ICON } from '@/components/featureIcons';
 
 const PAGES = DARK_SEA_STEPS;
 const LAST = PAGES.length - 1;
-/** The page whose saying comes in pieces as the darknesses go out. */
 const DARK = PAGES.findIndex(page => page.parts);
 const END = PAGES.findIndex(page => page.layer === 'end');
-/** The picture each page shows (components/scenes/SeaArt). */
 const LOOK: Record<Layer, number> = { surface: 0, sea: 1, wave: 2, wave2: 3, cloud: 4, night: 5, hand: 6, end: 7 };
 const LOOKS = PAGES.map(page => LOOK[page.layer]);
 const SHOTS = darkSeaShots();
 
 export const darkSeaName = () => darkSeaTitle(surahName(Number(DARK_SEA_KEY.split(':')[0])));
 export const darkSeaSourceList = () => sourcesOf(darkSeaSources());
-/** The scene on its own page, over the tabs (owner, 2026-11-22: a card's «افتح» opens the scene itself). */
 export const openDarkSea = () => router.push({ pathname: '/scene', params: { id: DARK_SEA_KEY } });
 
 const clamp = (v: number) => { 'worklet'; return Math.max(0, Math.min(1, v)); };
 
-/** How long a page rests in the scene played by itself: long enough to be read, about two and a half words a second. */
 function restOf(page: number) {
   const step = PAGES[page];
   const words = step.sayings.reduce((n, saying) => n + saying.text.split(' ').length, 0) + (page === 0 ? 30 : 6);
   return Math.max(3200, (words / 2.5) * 1000 + 1200);
 }
 
-/** A saying in the middle of the scene: who said it, his words, and his book's name. */
 function Quote({ saying, parts }: { saying: SceneSaying; parts?: React.ReactNode }) {
   return (
     <Saying by={`قال ${saying.by}:`} palette={dark} size={15} center>
@@ -64,7 +59,6 @@ function Quote({ saying, parts }: { saying: SceneSaying; parts?: React.ReactNode
   );
 }
 
-/** One piece of al-Sa'di's darknesses: it comes as its layer goes out. */
 function Part({ text, index, count, look }: { text: string; index: number; count: number; look: { value: number } }) {
   const style = useAnimatedStyle(() => ({ opacity: withTiming(clamp(look.value - 4) * 4 >= index + 0.55 ? 1 : 0, { duration: 900 }) }));
   return (
@@ -74,13 +68,6 @@ function Part({ text, index, count, look }: { text: string; index: number; count
   );
 }
 
-/**
- * «ظلمات بعضها فوق بعض» (an-Nur 40) as a full-screen scene (owner, 2026-11-22; prototype and its prompt in
- * /mnt/project-files/mashahid/): a finger moved anywhere goes a page down or up. The ayah alone opens it; then each layer
- * comes with its words at the top and one saying in the middle (others on the next page of the shot); the darknesses go out
- * one over another as al-Sa'di's words come piece by piece; the hand's words darker still; the ayah's last words alone in
- * the black; then what the parable and its darknesses are. «شغّل» plays it by itself, each page long enough to read.
- */
 export default function DarkSea() {
   const palette = dark;
   const reduced = useReducedMotion();
@@ -96,14 +83,10 @@ export default function DarkSea() {
     const i = Math.min(LAST - 1, Math.floor(pos.value)), f = clamp(pos.value - i);
     return LOOKS[i] + (LOOKS[i + 1] - LOOKS[i]) * f;
   });
-  // The darknesses' page comes as soon as the first layer starts to go out, so al-Sa'di's first piece comes with it.
   useAnimatedReaction(() => (pos.value > DARK - 0.98 && pos.value < DARK ? DARK : Math.round(pos.value)), (now, before) => { if (now !== before) scheduleOnRN(setPage, now); });
 
-  /** To a page: into the darknesses each layer goes out with a rest after it; elsewhere a slow glide. */
   const goTo = (target: number, at?: number) => {
     'worklet';
-    // Read here, not as a default parameter: a worklet's closure leaves out what a default reads, so on the UI thread (a
-    // swipe's end) `pos` was missing, the error aborted the app, and every swipe closed it (owner, 2026-11-23).
     const from = at ?? pos.value;
     const to = Math.max(0, Math.min(LAST, target));
     if (reduced) { pos.value = to; return; }
@@ -115,7 +98,6 @@ export default function DarkSea() {
   const stop = () => { clearTimeout(timer.current); setPlaying(false); };
   const pan = Gesture.Pan()
     .activeOffsetY([-12, 12])
-    // On start, not on touch: a tap on a button never stops the play or holds the scene mid-glide.
     .onStart(() => { cancelAnimation(pos); start.value = pos.value; scheduleOnRN(stop); })
     .onUpdate(event => { pos.value = Math.min(LAST, Math.max(0, start.value - event.translationY / (height * 0.45))); })
     .onEnd(event => {
@@ -124,7 +106,6 @@ export default function DarkSea() {
       goTo(target);
     });
 
-  // Played by itself: each page rests, then the next comes (the darknesses take their own time).
   useEffect(() => {
     if (!playing) return;
     if (page >= LAST) { setPlaying(false); return; }
@@ -134,7 +115,6 @@ export default function DarkSea() {
   }, [playing, page]);
   const play = () => { if (playing) return stop(); if (page >= LAST) { pos.value = 0; setPage(0); } setPlaying(true); };
 
-  // The words at the top wait while the darknesses go out, and leave for the last words alone in the black.
   const top = useAnimatedStyle(() => {
     const dimming = pos.value > DARK - 1 + 0.02 && pos.value < DARK - 0.03;
     return { opacity: withTiming(dimming || look.value > 6.3 ? 0 : 1, { duration: 600 }) };
@@ -151,11 +131,9 @@ export default function DarkSea() {
     <ForcePalette value={dark}>
     <GestureDetector gesture={pan}>
       <View style={{ flex: 1, backgroundColor: SEA_ART.black }} accessibilityLabel={`${name}: ${step.name}`}
-        // A screen reader cannot drag: it turns the pages up and down, every page included.
         accessibilityRole="adjustable" accessibilityActions={[{ name: 'increment' }, { name: 'decrement' }]}
         onAccessibilityAction={({ nativeEvent }) => { stop(); goTo(page + (nativeEvent.actionName === 'increment' ? 1 : -1), page); }}>
         <SeaArt look={look} width={width} height={height} />
-        {/* The bar: back on the right; play and share on the left. */}
         <View style={{ position: 'absolute', top: insets.top + 6, right: 12, left: 12, flexDirection: 'row', alignItems: 'center', gap: 8, zIndex: 2 }}>
           <IconButton Icon={ChevronRight} label="رجوع" tone="ink" onPress={() => (router.canGoBack() ? router.back() : toTab('/lataif'))} />
           <View style={{ flex: 1 }} />
@@ -193,7 +171,6 @@ export default function DarkSea() {
                 <View style={{ flex: 1.15 }} />
               </>}
         </View>
-        {/* The last words alone, in the middle of the black. */}
         <Animated.View pointerEvents="none" style={[{ position: 'absolute', left: 32, right: 32, top: 0, bottom: 0, justifyContent: 'center' }, last]}>
           <AyahFlow menu={DARK_SEA_KEY} color={SEA_ART.gold} center>
             {endWords.map((word, i) => <AyahWords key={i}>{`${i ? ' ' : ''}${word.text}`}</AyahWords>)}
@@ -208,9 +185,7 @@ export default function DarkSea() {
   );
 }
 
-/** The scene's card: its picture, then its title (the ayah's opening words), the surah and ayah, and the books. */
 export function DarkSeaCard({ palette, onPress, cover = false }: { palette: Palette; onPress?: () => void;
-  /** The «مشاهد» list's tall cover with two lines under it (owner, 2026-11-24); the feed and the share keep the wide still. */
   cover?: boolean }) {
   const title = useSceneWords('sea');
   const [surah, ayah] = DARK_SEA_KEY.split(':').map(Number);
@@ -247,9 +222,7 @@ const shareDarkSea = (palette: Palette) => shareCard({ content: width => (
   <View style={{ width, padding: 16, backgroundColor: palette.paper }}><DarkSeaCard palette={palette} /></View>
 ) });
 
-/** The scene's buttons in a card's row: on a home card the one open button to the scene; elsewhere its mushaf; and share. */
 export function DarkSeaActions({ palette, only, feed = false }: { palette: Palette; only?: 'open' | 'share';
-  /** On its home card: the feed's one open button (ui/OpenButton), to the scene itself (owner, 2026-11-22). */
   feed?: boolean }) {
   const name = darkSeaName();
   return <>

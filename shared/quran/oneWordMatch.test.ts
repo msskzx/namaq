@@ -1,18 +1,11 @@
-// Guard (owner sign-off 2026-11-19, docs/plans/guard-proposals.md no. 23): the tree, the matrix and the compare cards colour
-// alike words by one rule (shared/quran/wordMatch.ts, through ayahContext's `sharedByAll` and mobile/src/lib/marks.ts). A
-// screen that strips marks or letters itself to compare words would colour them by a rule of its own.
+// see docs/plans/guard-proposals.md
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 const ROOT = join(__dirname, '../..');
 const SCREENS = ['mobile/src', 'src', 'shared'];
-/** shared/quran holds the one rule; the built data files are not code. */
 const RULE = /^shared\/(quran|data)\//;
-/**
- * Files outside shared/quran with letter code of their own when the guard came, each with why. The list only shrinks:
- * a file that comes to compare Quran words moves its code into shared/quran.
- */
 const ALLOWED: Record<string, string> = {
   'shared/tarajimGroups.ts': 'people\'s names in the tarajim lists, not Quran words',
   'src/lib/graphIntegrity.ts': 'people\'s names in the graph checks',
@@ -52,7 +45,6 @@ function walk(dir: string): string[] {
   });
 }
 
-/** Own letter code: a range of Arabic marks or letters by code point, a class of two or more marks, or a Unicode normalize. */
 export const ownLetterCode = (source: string) =>
   /\\u06[4-6][0-9A-Fa-f]|\\u061[0-9A]|\\u0670|\\p\{M|\.normalize\(|\[[^\]\n]*[\u0610-\u061A\u064B-\u065F\u0670]-|\[[\u0610-\u061A\u064B-\u065F\u0670]{2,}|\[[\u0610-\u061A\u064B-\u065F\u0670]\]/u.test(source);
 

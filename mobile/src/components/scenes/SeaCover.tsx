@@ -10,14 +10,8 @@ import AyahFlow, { AyahWords } from '../quran/text/AyahFlow';
 import SeaArt from './SeaArt';
 import { useSceneWords } from './SeaThumb';
 
-/** The scene's look the cover stops at: the clouds come over the two waves, just before the darknesses. */
 const COVER_LOOK = 4;
 
-/**
- * The scene's cover in the «مشاهد» list (owner, 2026-11-24): a real frame of the scene itself, held still at its best
- * moment, four wide to five tall, about half the screen so the reader still wants to tap; «ظلمات بعضها فوق بعض» in gold on
- * it, the place in the corner and a play mark.
- */
 export default function SeaCover({ place }: { place: string }) {
   const words = useSceneWords('night');
   const look = useSharedValue(COVER_LOOK);
@@ -25,7 +19,6 @@ export default function SeaCover({ place }: { place: string }) {
   return (
     <View onLayout={event => { const { width, height } = event.nativeEvent.layout; setSize(was => (Math.round(was.width) === Math.round(width) && Math.round(was.height) === Math.round(height) ? was : { width, height })); }}
       style={{ aspectRatio: 4 / 5, width: '100%', overflow: 'hidden', backgroundColor: SEA_ART.black }}>
-      {/* Drawn again from scratch at a new size: the drawing's paths are made for the size it first had. */}
       {size.width > 0 && <SeaArt key={`${size.width}x${size.height}`} look={look} width={size.width} height={size.height} still />}
       <Svg width={size.width} height={size.height} style={StyleSheet.absoluteFill} pointerEvents="none">
         <Defs>

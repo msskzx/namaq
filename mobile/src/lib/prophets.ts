@@ -7,7 +7,6 @@ import { quranStoryText } from '@shared/quran/prophets/storyText';
 export type ProphetStory = { slug: string; name: string; title: string; story: Story; events: EventView[] };
 const built = new Map<string, ProphetStory>();
 
-/** A prophet's story with its ayat read from the Quran the app bundles; undefined for an unknown slug. */
 export function prophetStory(slug: string): ProphetStory | undefined {
   const prophet = findProphet(slug);
   if (!prophet) return undefined;

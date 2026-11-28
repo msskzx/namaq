@@ -8,11 +8,6 @@ import { dataOf } from '../../appData';
 
 const data = dataOf(dataFile);
 
-/**
- * The trees' data with every ayah's words read from the Madina pages (owner 2026-11-17: the pages are the only stored Quran text).
- * trees.json keeps what is built ahead of time (keys, pages, roots, lemmas, groups, positions); the words come from here, the
- * same on the website, in the app and in the scripts.
- */
 type Stored = Omit<BranchAyah, 'words' | 'next'>;
 
 function withWords(stored: Stored[]): BranchAyah[] {
@@ -28,7 +23,6 @@ const byKey = new Map(grown(ayat).map(ayah => [ayah.key, ayah]));
 const after = new Map(ayat.slice(0, -1).map((ayah, i) => [ayah.key, ayat[i + 1]]));
 const basmala = ayat.find(ayah => ayah.key === '1:1');
 
-/** An ayah's words from `start`, run on past its end («۝») into the ayat after it until `length` words are read. */
 function runningWords(key: string, start: number, length: number): string[] {
   const words = byKey.get(key)!.words.slice(start);
   for (let from = key; words.length < length && after.has(from);) {
@@ -39,7 +33,6 @@ function runningWords(key: string, start: number, length: number): string[] {
   return words.slice(0, length);
 }
 
-/** Words of an ayah from `start` on the page, the leading و / ف left out: how a tree or a subtree is titled. */
 function titleAt(key: string, start: number, end: number) {
   const ayah = byKey.get(key)!;
   const words = ayah.words.slice(start, end);
@@ -47,14 +40,12 @@ function titleAt(key: string, start: number, end: number) {
   return words.join(' ');
 }
 
-/** A tree's title: its first place's words (a chapter family keeps its own name). */
 const trees: TreeGroup[] = (data.trees as Omit<TreeGroup, 'text'>[]).map(tree => {
   if ('text' in tree && typeof tree.text === 'string') return tree as TreeGroup;
   const { key, start, end } = tree.occurrences[0];
   return { ...tree, text: titleAt(key, start, end) };
 });
 
-/** A subtree's title: its first ayah's words from where its tree starts in it, as many as the subtree's path holds, across an ayah end when the path runs on. */
 const treeById = new Map(trees.map(tree => [tree.id, tree]));
 const subtrees: Subtree[] = (data.subtrees as (Omit<Subtree, 'text'> & { length: number })[]).map(({ length, ...subtree }) => {
   const { start } = treeById.get(subtree.parent)!.occurrences.find(occurrence => occurrence.key === subtree.keys[0])!;

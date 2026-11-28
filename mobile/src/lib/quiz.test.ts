@@ -14,7 +14,6 @@ import type { AskedBranchQuestion } from '@shared/quiz/branchQuestions';
 
 const seeded = (seed: number) => () => (seed = (seed * 16807) % 2147483647) / 2147483647;
 
-/** Types the right words (in ordinary spelling) into every asked node of the current question. */
 function typeRight(run: SoloRun) {
   const question = run.questions[run.current] as AskedBranchQuestion;
   return branchNodes(question.tree).reduce((next, node, index) =>
@@ -32,8 +31,6 @@ describe('solo quiz on the phone', () => {
 
   it('counts the questions the filters hold, as the website does', () => {
     for (const list of [{ ...DEFAULT_LIST, range: { from: 30, to: 30 } }, { ...DEFAULT_LIST, filters: { categories: 'mutashabeh', surahs: '2,36' } }]) {
-      // The phone counts the website's candidate trees without building each (too slow on a phone); a candidate whose tree
-      // turns out unaskable (e.g. al-Qadr 1-3, «ليلة القدر» thrice, where an ayah ends on the trunk) is counted but never asked.
       const trees = quizTrees(list.range, { filters: list.filters });
       const available = availability({ kinds: ['BRANCHES'], list }, []).available;
       expect(available).toBe(branchQuestionPool(corpus.ayat as BranchAyah[], list.range, trees).candidates.length);

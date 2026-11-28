@@ -14,16 +14,13 @@ import { holdsTerms, type AdhkarItem, type CompareItem, type EventItem, type Sea
 import { SURAH_NAMES } from './surahNames';
 import { ADHKAR } from '../adhkar';
 
-/** Results a group lists at most when opened in full; the finders return one more, so a page can say there are more. */
 export const GROUP_MAX = 100;
 const FIND = GROUP_MAX + 1;
 
 const words = wordsData as unknown as WordsData;
 const names: Record<number, string> = SURAH_NAMES;
-/** A compare page's name, as the compare pages title it. */
 export const pairName = (a: number, b: number) => (a === b ? `سورة ${names[a]} مع نفسها` : `سورة ${names[a]} وسورة ${names[b]}`);
 
-/** Builds the ayah index ahead of the first search, so typing does not wait for it. */
 export const warmSearch = () => warmCorpusIndex();
 
 let lists: { compare: CompareItem[]; events: EventItem[]; tuhfa: TuhfaItem[] } | undefined;
@@ -38,17 +35,13 @@ function staticLists(pairs: { a: number; b: number }[]) {
   });
 }
 
-/**
- * Everything the app bundles, for the one search: the Quran's ayat and words, the default trees list, the listed compare pages,
- * the prophets' events and the Tuhfa. The reader's notes live on the device, so each side adds its own. docs/plans/search-everything.md
- */
+// see docs/plans/search-everything.md
 export function bundledSources(pairs: { a: number; b: number }[]): SearchSources {
   return {
     surahs: surahRows,
     ayat: query => searchAyat(ayahIndex(), query, FIND).hits.map(hit => ({ kind: 'ayah', key: hit.key, words: hit.words, from: hit.from, to: hit.to })),
     words: query => searchWords(words, query, FIND).map(id => ({ kind: 'word', id, name: words.lemmas[id][0], count: words.lemmas[id][1] })),
     trees: query => {
-      // The trees page forgives a leading و/ف («فرعون» finds «راعون»); here the trees that hold the words as typed come alone when there are any.
       const found = distinctBranchPieces(searchSharedPhrases(branchInventory({}, null), query));
       const typed = found.filter(piece => holdsTerms(piece.text, query));
       return (typed.length ? typed : found).slice(0, FIND).map(piece => ({ kind: 'tree', id: piece.id, text: piece.text }));
@@ -57,5 +50,4 @@ export function bundledSources(pairs: { a: number; b: number }[]): SearchSources
   };
 }
 
-/** The adhkar's own words, each opening its card on its first occasion's tab. The Quran selection is found among the ayat. */
 export const ADHKAR_ITEMS: AdhkarItem[] = ADHKAR.flatMap(item => (item.content.kind === 'text' ? [{ id: item.id, occasion: item.occasions[0], text: item.content.text }] : []));

@@ -4,10 +4,7 @@ import { Text } from '@/ui/Text';
 import { Tap } from '@/ui/Tap';
 import type { Palette } from '@/lib/theme';
 
-/** A feed card's head: a round icon, a title and a line under it, like a post's author. */
 export default function PostHead({ Icon, title, sub, palette, open }: { Icon: (props: LucideProps) => React.ReactNode; title: string; sub?: string; palette: Palette;
-  /** A tap on the head opens the card's general topic, as a post's name opens its account (owner, 2026-11-22); the row's open
-   *  button opens this card's own place. `label` names it for a screen reader. */
   open?: { onPress: () => void; label: string } }) {
   const head = (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10, paddingHorizontal: 12, paddingTop: 10, paddingBottom: 6 }}>

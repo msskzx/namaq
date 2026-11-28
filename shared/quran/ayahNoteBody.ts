@@ -9,14 +9,8 @@ import { corpusWords } from './words';
 import { irabSources, itqanSource, qiraatSources, sadiSource } from '../quiz/bookSources';
 import type { QuizSource } from '../quiz/sources';
 
-/** What an ayah card shows under the ayah: a book's words, one word's i'rab, or the readings; with the books it stands on. */
 export type NoteBody = { key: string; sources: QuizSource[] } & ({ text: string; heading?: string } | { word: number; shown: string; role: string; morph: string } | { readings: WordDifference[] });
 
-/**
- * The feed's ayah card body (app and website, owner 2026-11-18): al-Sa'di on an ayah he explains alone, al-Suyuti's balagha
- * paragraph on an ayah he surely names, a word's i'rab (the day picks the word: one with a role, a noun or verb before a lone
- * particle), or the readings. `words` are the ayah's mushaf words, needed for the i'rab. Null when the book says nothing there.
- */
 export function noteBody(kind: AyahNote, key: string, day: number, words: readonly string[]): NoteBody | null {
   if (kind === 'tafsir') { const passage = tafsirSadiOf(key); return passage ? { key, text: withoutOpeningQuote(passage.text), sources: [sadiSource(passage)] } : null; }
   if (kind === 'balagha') {

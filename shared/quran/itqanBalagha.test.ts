@@ -19,7 +19,6 @@ describe("al-Itqan's balagha", () => {
     expect(itqanAt(tiny, '9:9')).toEqual([]);
     const two: ItqanData = { ...tiny, entries: [[58, '', 3, 5, 5, 900, 'text', [[17, 1, 12, 20, 1, 0], [17, 1, 0, 3, 3, 1]]]] };
     expect(itqanAt(two, '17:1')[0]).toMatchObject({ words: [[0, 3], [12, 20]], places: 1, matches: [] });
-    // Two quotes that name no ayah: the list under one ayah holds only its own quote's ayat.
     const unnamed: ItqanData = { ...tiny, entries: [[58, '', 3, 5, 5, 900, 'text', [[5, 1, 0, 1, 2, 0], [2, 3, 4, 5, 2, 0], [7, 1, 0, 0, 2, 1], [8, 1, 0, 0, 2, 1]]]] };
     expect(itqanAt(unnamed, '5:1')[0].matches).toEqual(['2:3', '5:1']);
     expect(itqanAt(unnamed, '8:1')[0].matches).toEqual(['7:1', '8:1']);

@@ -15,10 +15,6 @@ import itqan from '@shared/data/quran/itqanBalagha';
 import { num } from '@shared/quran/arabicNumber';
 import { chapterTitle, plainName, examplesOf, termNamed } from '@shared/quran/balaghaTerms';
 
-/**
- * A balagha term's page (owner, 2026-11-18): its definition in the scholars' words, each quote whole with its page, then
- * every paragraph of al-Suyuti's under it that quotes an ayah, the quoted words lit and the ayat a tap from the mushaf.
- */
 export default function BalaghaTermScreen() {
   const palette = usePalette();
   const onScroll = useShrinkOnScroll();

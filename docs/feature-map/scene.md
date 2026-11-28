@@ -23,9 +23,9 @@ flowchart RL
 
 | Part of the screen | Label | Opens | Code |
 | --- | --- | --- | --- |
-| `DarkSea` | رجوع | [مشاهد](lataif.md) | [components/DarkSea.tsx:160](../../mobile/src/components/DarkSea.tsx#L160) |
-| `RahmanScene` | رجوع | [مشاهد](lataif.md) | [components/RahmanScene.tsx:140](../../mobile/src/components/RahmanScene.tsx#L140) |
-| `Hadith` | افتح الحديث كاملًا: ‹› | [حديث الصحيح](hadith-sahih.md) | [components/scenes/RahmanPage.tsx:143](../../mobile/src/components/scenes/RahmanPage.tsx#L143) |
+| `DarkSea` | رجوع | [مشاهد](lataif.md) | [components/DarkSea.tsx:138](../../mobile/src/components/DarkSea.tsx#L138) |
+| `RahmanScene` | رجوع | [مشاهد](lataif.md) | [components/RahmanScene.tsx:121](../../mobile/src/components/RahmanScene.tsx#L121) |
+| `Hadith` | افتح الحديث كاملًا: ‹› | [حديث الصحيح](hadith-sahih.md) | [components/scenes/RahmanPage.tsx:119](../../mobile/src/components/scenes/RahmanPage.tsx#L119) |
 
 ## Sheets
 

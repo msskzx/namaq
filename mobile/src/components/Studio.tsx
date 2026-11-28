@@ -18,8 +18,6 @@ function Chip({ label, text, onPress, palette, active }: { label: string; text: 
 
 const next = <T,>(list: T[], value: T) => list[(list.indexOf(value) + 1) % list.length];
 
-/** The studio button outside the studio; inside it, in place of save and share, the website's controls. */
-/** Each studio's words: its button, its play button before the first play, its ask mode, and a progress bar's start. */
 const LABELS: Record<StudioKind, { studio: string; watch: string; ask: string; from: string }> = {
   tree: { studio: 'استوديو النمو', watch: 'شاهد الشجرة تنمو', ask: 'اكمل الآيات', from: 'من الآية' },
   matrix: { studio: 'استوديو الروابط', watch: 'شاهد الروابط', ask: 'تذكّر الرابط', from: 'من الرابط' },
@@ -33,14 +31,12 @@ export function StudioButton(_: { palette: Palette }) {
 }
 
 export function StudioControls({ palette, onVideo, choice }: { palette: Palette; onVideo?: () => void;
-  /** A book matrix plays its connections or the read-along: on = connections. */
   choice?: { connections: boolean; toggle: () => void } }) {
   const growth = useGrowth();
   const active = growth.status === 'playing' || growth.status === 'paused';
   const playing = growth.status === 'playing';
   const labels = LABELS[growth.kind];
   const label = playing ? 'إيقاف مؤقت' : growth.status === 'paused' ? 'متابعة' : growth.status === 'done' ? 'إعادة' : labels.watch;
-  // The read-along has no ask mode, as on the compare tab.
   const askable = growth.kind !== 'read';
   const ask = askable && growth.mode === 'ask';
   return (
@@ -58,7 +54,6 @@ export function StudioControls({ palette, onVideo, choice }: { palette: Palette;
   );
 }
 
-/** A bar per ayah; a tap starts the growth from that ayah. */
 export function StudioProgress({ palette }: { palette: Palette }) {
   const growth = useGrowth();
   if (!growth.studio || !growth.total) return null;

@@ -14,10 +14,8 @@ import { onLeave } from '@/lib/storage';
 import { surahName } from '@shared/quran/surahNames';
 import Field from '@/ui/Field';
 
-/** How long typing rests before the note is kept, so the reader behind the sheet is not redrawn on every key. */
 const SAVE_MS = 400;
 
-/** The reader's own note on an ayah, kept on this phone. It saves while typing and on closing; emptying it or the bin removes it. */
 export default function NoteSheet({ ayah, onClose, palette }: { ayah: string | null; onClose: () => void; palette: Palette }) {
   const [text, setText] = useState('');
   const [shown, setShown] = useState(ayah);
@@ -34,7 +32,6 @@ export default function NoteSheet({ ayah, onClose, palette }: { ayah: string | n
   const edit = (next: string, now = false) => {
     setText(next);
     if (!shown) return;
-    // A note still waiting on another ayah is saved first, not replaced.
     if (pending.current && pending.current.key !== shown) flush();
     if (pending.current) clearTimeout(pending.current.timer);
     pending.current = { key: shown, text: next, timer: setTimeout(flush, SAVE_MS) };

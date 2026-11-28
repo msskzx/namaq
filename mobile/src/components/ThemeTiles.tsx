@@ -9,7 +9,6 @@ import Card from '@/ui/Card';
 import { MiniQuran } from './quran/text/AyahFlow';
 import { SAMPLE_AYAH, TILE_SHARE } from '@shared/viewPreview';
 
-/** A small page with a card on it: the tile's page colour, card tint and the sample ayah, its ending in the accent. */
 function Mini({ mode, tint, small }: { mode: CardMode; tint: string; small?: boolean }) {
   const colours = MODE_PREVIEW[mode];
   const card = cardColour(mode, tint);
@@ -24,7 +23,6 @@ function Mini({ mode, tint, small }: { mode: CardMode; tint: string; small?: boo
   );
 }
 
-/** One preview tile: a small picture with a check when chosen, and its name under it. */
 function Tile({ name, on, onPress, palette, children }: { name: string; on: boolean; onPress: () => void; palette: Palette; children: React.ReactNode }) {
   return (
     <Pressable onPress={onPress} accessibilityRole="radio" accessibilityState={{ checked: on }} accessibilityLabel={name}
@@ -40,7 +38,6 @@ function Tile({ name, on, onPress, palette, children }: { name: string; on: bool
   );
 }
 
-/** The look as preview tiles, as on the website: light paper or lighter, device, dark or black. */
 export default function ThemeTiles({ palette }: { palette: Palette }) {
   const [theme, setTheme] = themeChoice.use();
   const [tints, setTints] = cardTints.use();
@@ -68,7 +65,6 @@ export default function ThemeTiles({ palette }: { palette: Palette }) {
   );
 }
 
-/** How words the ayat share are coloured: each tile draws the legend's words as that choice colours them. */
 export function MarkTiles({ palette }: { palette: Palette }) {
   const [mode, setMode] = markMode.use();
   const tones = { exact: palette.accent, written: palette.amber, root: palette.root };
@@ -92,10 +88,6 @@ export function MarkTiles({ palette }: { palette: Palette }) {
   );
 }
 
-/**
- * The settings' preview (owner, 2026-11-24): a card as the app draws it now, in the chosen look, with the sample ayah and
- * the shared words in the chosen colours; it stays at the top of the settings while they change under it.
- */
 export function LookPreview({ palette }: { palette: Palette }) {
   const [mode] = markMode.use();
   const shown = markTones(mode, { exact: palette.accent, written: palette.amber, root: palette.root });

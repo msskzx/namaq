@@ -22,7 +22,7 @@ flowchart RL
 
 | Part of the screen | Label | Opens | Code |
 | --- | --- | --- | --- |
-| `WordsScreen` | ‹›، ‹› مرة | [الكلمة](word.md) | [screens/words.tsx:57](../../mobile/src/screens/words.tsx#L57) |
+| `WordsScreen` | ‹›، ‹› مرة | [الكلمة](word.md) | [screens/words.tsx:49](../../mobile/src/screens/words.tsx#L49) |
 
 ## Sheets
 

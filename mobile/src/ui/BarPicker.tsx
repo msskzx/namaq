@@ -4,18 +4,11 @@ import { usePalette } from '@/lib/theme';
 import { Text } from '@/ui/Text';
 import { Tap } from '@/ui/Tap';
 
-/**
- * A top bar's dropdown: what is open, with a chevron, opening the page's list (the timeline's prophet, the saved lists, the
- * compare pair, the poem's chapter). No border: in a top bar the chevron says it opens (owner, 2026-11-17).
- */
 export default function BarPicker({ text, label, onPress, Icon, count }: {
   text: string;
-  /** Read out: what the picker picks and what is open. */
   label: string;
   onPress: () => void;
-  /** An icon before the text (the compare pair's arrows). */
   Icon?: (props: LucideProps) => React.ReactNode;
-  /** A count after the text, in the accent (the compare pair's cards). */
   count?: string;
 }) {
   const palette = usePalette();

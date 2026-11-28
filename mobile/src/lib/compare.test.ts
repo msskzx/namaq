@@ -115,8 +115,6 @@ describe('the filter sheet shared with the branches tab', () => {
 });
 
 describe('the tree icon on a compare card', () => {
-  // A tree outside the default list is looked for among every kind of tree, a list built once and kept. That takes seconds
-  // on a slow CI runner, so build it here instead of inside the first test that looks.
   beforeAll(() => { branchList(EMPTY_LIST); branchList(ALL_KINDS_LIST); }, 60000);
   it('opens a tree on the branches tab for every card that names one', () => {
     for (const pair of listedPairs) for (const card of cardsFor(pair.a, pair.b)) {
@@ -191,14 +189,11 @@ describe('compare card views', () => {
         const picked: string[] = [];
         const lit = new Set([key]);
         const walk = (node: Branch) => {
-          // A box with a braid names its writings by the braid's ayah, not by the path (its strands carry the labels).
           const braided = node.words.some((word, i) => !!node.forms && writtenForms(node, i, word).length > 1);
           node.words.forEach((word, i) => {
             if (isSign(word)) return;
-            // What the box draws in full for every side: a braid (two writings) is left to its strands.
             const forms = node.forms ? writtenForms(node, i, word) : [{ word }];
             shown.push(forms.length > 1 ? '' : forms[0].word);
-            // And once this side's path is picked: a word only its signs set apart shows this side's signs in full.
             picked.push(braided || !node.forms ? '' : writtenForms(node, i, word, lit)[0].word);
           });
           node.children.filter(child => child.via?.includes(key)).forEach(walk);

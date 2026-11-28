@@ -3,17 +3,13 @@ import { setBookmarkStorage } from '@shared/bookmarks';
 import { keepingStorage, setKeyStorage } from '@shared/storage';
 import { deviceStorage } from './deviceStorage';
 
-/** Every write on the phone goes through one store that keeps what the device refused and saves it again (shared/storage.ts). */
 const kept = keepingStorage(deviceStorage);
 export const device = kept.storage;
 
 const leaving = new Set<() => void>();
-/** Runs `flush` when the app goes to the background, so an edit still waiting on a typing pause is saved before the phone may close the app. */
 export function onLeave(flush: () => void) { leaving.add(flush); return () => { leaving.delete(flush); }; }
-/** The app went to the background (AppShell): pending edits are written, and writes the device refused are tried again. */
 export function leave() { leaving.forEach(flush => flush()); kept.retry(); }
 
-// While the device refuses a write (its storage full), it is tried again every half minute, and the notice stays until it is saved.
 const RETRY_EVERY = 30_000;
 let retrying: ReturnType<typeof setInterval> | null = null;
 kept.watch(() => {
@@ -21,10 +17,8 @@ kept.watch(() => {
   if (kept.unsaved() === 0 && retrying) { clearInterval(retrying); retrying = null; }
 });
 const unsavedNow = () => kept.unsaved() > 0;
-/** Whether an edit the device refused is still waiting to be saved (SaveNotice). */
 export const useUnsaved = () => useSyncExternalStore(kept.watch, unsavedNow, () => false);
 
-/** What a value read back from the phone must be before a screen uses it: valid JSON of another shape counts as nothing saved. */
 export type Check<T> = (value: unknown) => value is T;
 export const isRecord = (value: unknown): value is Record<string, unknown> => !!value && typeof value === 'object' && !Array.isArray(value);
 export const isBoolean = (value: unknown): value is boolean => typeof value === 'boolean';

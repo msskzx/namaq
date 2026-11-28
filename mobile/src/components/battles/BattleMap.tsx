@@ -9,40 +9,22 @@ import TapRow from '@/ui/TapRow';
 import { MIN_TAP } from '@/ui/tapSize';
 import { num } from '@shared/quran/arabicNumber';
 
-/** A battle map's height over its width, so a page can keep its room before it is drawn. */
 export const MAP_ASPECT = 0.85;
 const ASPECT = MAP_ASPECT;
-/** How far from a battle (in degrees) a well-known city still shows beside it. */
 const NEAR = 7;
 
-/**
- * How a pin is drawn: `lit` in the accent with its name (the default), `quiet` a small muted dot with no name (the atlas's
- * earlier years), `choice` an ink dot with no name (a «أين كانت؟» question before its answer), `selected` that dot framed,
- * `right` green and named, `wrong` the accent framed and named (a question once answered).
- */
 export type PinLook = 'lit' | 'quiet' | 'choice' | 'selected' | 'right' | 'wrong';
-/** How far each pin's drawing reaches, its halo included, so no name is laid over it. */
 const HALO: Record<PinLook, number> = { lit: 16, right: 16, selected: 15, wrong: 15, choice: 8, quiet: 6 };
 export type MapPlace = { name: string; at: LonLat; look?: PinLook };
 
-/**
- * A battle's place on a still map in the app's colours (owner, 2026-11-18: no map service). The well-known cities near
- * it (Madinah and Makkah in the Hijaz, Damascus and Jerusalem in al-Sham) stay on the map, so the reader can tell where it was.
- * With several `places` (owner, 2026-11-22: a year's battles on one map) each gets a pin, and places too close to tell apart
- * share one (`pinsOf`); the names are laid out so none covers another or a pin (owner, 2026-11-23; `placeLabels`).
- * The atlas gives a fixed `box`, so the map stays still while its pins change, and `onPin` for a tap on a pin, with the
- * names that pin holds.
- */
 export default function BattleMap({ places: given, palette, box: fixed, onPin }: {
   places: readonly MapPlace[]; palette: Palette; box?: Box; onPin?: (names: string[]) => void;
 }) {
   const [width, setWidth] = useState(0);
-  // A caller's new array of the same places keeps the drawing.
   const key = given.map(place => `${place.name}@${place.at.join(',')}@${place.look ?? ''}`).join('|');
   const places = useMemo(() => given, [key]); // eslint-disable-line react-hooks/exhaustive-deps
   const cities = useMemo(() => {
     const near = (city: { at: LonLat }) => places.some(place => Math.hypot(place.at[0] - city.at[0], place.at[1] - city.at[1]) < NEAR);
-    // A city a lit pin names is that pin; one a quiet pin names stays a city with its name, the quiet dot on it.
     const pinned = (city: { name: string }) => places.some(place => place.name === city.name && place.look !== 'quiet');
     return LANDMARKS.map(key => PLACES[key]).filter(city => !pinned(city) && near(city));
   }, [places]);
@@ -51,11 +33,9 @@ export default function BattleMap({ places: given, palette, box: fixed, onPin }:
     if (!width) return null;
     const box = fixed ?? frameOf([...places.map(place => place.at), ...cities.map(city => city.at)], ASPECT);
     const { height, at } = projector(box, width);
-    // Pins of one look join; a lit pin never takes a quiet one's name. The lit and answered come first, so their names get the room.
     const order: PinLook[] = ['right', 'wrong', 'lit', 'selected', 'choice', 'quiet'];
     const pins = order.flatMap(look => pinsOf(places.filter(place => (place.look ?? 'lit') === look)
       .map(place => { const [x, y] = at(place.at); return { name: place.name, x, y }; }), PIN_JOIN).map(pin => ({ ...pin, look })))
-      // A quiet pin under a lit one would cover it: the lit pin stands for the place.
       .filter((pin, _, all) => pin.look !== 'quiet' || all.every(other => other.look === 'quiet' || Math.hypot(other.x - pin.x, other.y - pin.y) >= PIN_JOIN));
     const shown = cities.map(city => { const [x, y] = at(city.at); return { name: city.name, x, y }; });
     const named = (look: PinLook) => look === 'lit' || look === 'right' || look === 'wrong';
@@ -71,7 +51,6 @@ export default function BattleMap({ places: given, palette, box: fixed, onPin }:
   }, [width, places, cities, boxKey]); // eslint-disable-line react-hooks/exhaustive-deps
   const label = (at: { x: number; y: number; anchor: 'start' | 'middle' | 'end' }, text: string, size: number) => {
     const where = { x: at.x, y: at.y, fontSize: size, textAnchor: at.anchor, fontFamily: 'Amiri' };
-    // The paper-coloured outline first, under the letters, so a name stays readable over a coast.
     return (
       <G>
         <SvgText {...where} fill={palette.paper} stroke={palette.paper} strokeWidth={4}>{text}</SvgText>
@@ -114,7 +93,6 @@ export default function BattleMap({ places: given, palette, box: fixed, onPin }:
               {at && label(at, name, 14)}
             </G>
           ))}
-          {/* The quiet pins first, under the rest; the names were laid out in the opposite order, the lit first. */}
           {[...drawing.pins].reverse().map(({ name, x, y, look, label: at }) => (
             <G key={`${look}:${name}`}>
               {dot(look, x, y)}
@@ -123,7 +101,6 @@ export default function BattleMap({ places: given, palette, box: fixed, onPin }:
           ))}
         </Svg>
       )}
-      {/* Each pin a finger-sized button over the drawing; a choice is named by its number in the list only, so it tells nothing. */}
       {drawing && onPin && drawing.pins.map(({ name, x, y, look }) => (
         <TapRow key={`${look}:${name}`} onPress={() => onPin(name.split('، '))}
           label={look === 'choice' || look === 'selected' ? `موضع ${num(places.findIndex(place => place.name === name.split('، ')[0]) + 1)}` : name} selected={look === 'choice' || look === 'selected' ? look === 'selected' : undefined}

@@ -28,10 +28,8 @@ const TABS: { key: Tab; label: string }[] = [{ key: 'all', label: 'الكل' }, 
 const TAB_KIND: Record<Exclude<Tab, 'all'>, JournalKind> = { saved: 'saved', forgotten: 'forgotten', notes: 'note' };
 const SEARCH = 'ابحث في مدونتي';
 
-/** A time stored before the app kept real dates (a test's seed, an old record) is shown without a day. */
 const SINCE_DATES = Date.UTC(2020, 0, 1);
 const day = (at: number) => (at >= SINCE_DATES ? new Date(at).toLocaleDateString('ar-EG', { day: 'numeric', month: 'long' }) : '');
-/** The small line above a card (owner, 2026-11-24): what it is and when it was kept. */
 const headLine = (entry: JournalEntry) => {
   const when = day(entry.at);
   if (entry.kind === 'note') return when ? `تأملي · كتبته يوم ${when}` : 'تأملي';
@@ -39,31 +37,21 @@ const headLine = (entry: JournalEntry) => {
   return when ? `محفوظة · ${when}` : 'محفوظة';
 };
 
-/**
- * The forgotten ayat to recall, one card each (owner, 2026-11-23), asked as recite mode asks them. An ayah ticked «تذكّرتها»
- * keeps its place while the page is open, as a ticked card does on the homepage. Each comes with when it was last forgotten.
- */
 function useForgottenAyat() {
   const due = useSyncExternalStore(subscribeDueMarks, readDueMarks);
   const kept = useRef<{ key: string; at: number }[]>([]);
   return useMemo(() => {
-    // The first due mark of each ayah, most forgotten first: ForgottenPost hides all of that ayah's due words from it.
     const first = new Map<string, { key: string; at: number }>();
     for (const key of mostForgotten(due)) {
       const ayah = markAyah(key);
       first.set(ayah, { key: first.get(ayah)?.key ?? key, at: Math.max(first.get(ayah)?.at ?? 0, due[key].at) });
     }
-    // A card keeps its key, so a ticked ayah is not drawn again under another of its words.
     kept.current = kept.current.map(item => ({ key: item.key, at: first.get(markAyah(item.key))?.at ?? item.at }));
     for (const [ayah, mark] of first) if (!kept.current.some(item => markAyah(item.key) === ayah)) kept.current.push(mark);
     return kept.current;
   }, [due]);
 }
 
-/**
- * The thirty juz as bars (owner, 2026-11-24: like a histogram, in one colour so the page stays simple), juz 1 on the
- * right, each as tall as what is kept in it, no numbers written. A touch names the juz; lifting the finger goes to it.
- */
 function JuzStrip({ rows, onJuz, palette }: { rows: readonly JournalRow[]; onJuz: (juz: number) => void; palette: Palette }) {
   const [picked, setPicked] = useState<number | null>(null);
   const counts = JUZ_STARTS.map(() => 0);
@@ -74,18 +62,12 @@ function JuzStrip({ rows, onJuz, palette }: { rows: readonly JournalRow[]; onJuz
   );
 }
 
-/** A surah's name over its kept ayat, as the mushaf heads a surah. */
 const SurahHead = ({ surah, palette }: { surah: number; palette: Palette }) => (
   <View accessibilityRole="header" style={{ alignItems: 'center', paddingVertical: 8, borderTopWidth: 1, borderBottomWidth: 1, borderColor: palette.rule }}>
     <Text style={{ color: palette.accent, fontSize: 18 }}>سورة {surahName(surah)}</Text>
   </View>
 );
 
-/**
- * «مدونتي» (owner, 2026-11-24): everything kept, saved, forgotten and the reader's notes, in the mushaf's order under each
- * surah's name, then what is kept outside the mushaf; a strip of the juz on top. The cards are the homepage's own cards,
- * each with a small line above it of what it is and when.
- */
 export default function LibraryScreen() {
   const palette = usePalette();
   const bottom = useTabBarSpace();
@@ -147,7 +129,6 @@ export default function LibraryScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      {/* Pushed over home in the home tab, so the tab bar stays (owner, 2026-11-23); the back button returns to home. */}
       <TopBar back={() => (router.canGoBack() ? router.back() : toTab('/'))} search={{ value: query, onChangeText: setQuery, placeholder: SEARCH, label: SEARCH }} />
       <FlatList ref={list} data={rows} keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag"
         keyExtractor={row => (row.row === 'entry' ? row.entry.id : row.row === 'surah' ? `surah:${row.surah}` : 'others')}

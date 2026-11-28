@@ -11,21 +11,17 @@ import SplitBar from '@/ui/SplitBar';
 import type { Palette } from '@/lib/theme';
 import { DotShape } from './BattleTimeline';
 
-/** The width of the line's column at the right: the dots sit on its middle. */
 const RAIL = 36;
 const DOT = 12;
 const BIG_DOT = 22;
 
-/** The place a row names under the battle's name, when its name does not already say it («غزوة بدر» at بدر). */
 const placeOf = (battle: AppBattle) => {
   const place = battle.place?.name;
   return place && !battle.name.includes(place) ? place : undefined;
 };
 
-/** A battle that has more than its name: its numbers, or its course in the source's words. */
 const isBig = (battle: AppBattle) => !!(battle.moments.length || (battle.counts.muslims && battle.counts.others));
 
-/** One battle on the line: its dot on the rail, its name, kind and place; a big one adds both sides' numbers and its course. */
 function Station({ battle, palette }: { battle: AppBattle; palette: Palette }) {
   const big = isBig(battle);
   const size = big ? BIG_DOT : DOT;
@@ -33,7 +29,6 @@ function Station({ battle, palette }: { battle: AppBattle; palette: Palette }) {
   return (
     <TapRow role="link" label={battle.name} onPress={() => router.push({ pathname: '/battle', params: { slug: battle.slug } })} style={{ gap: 10, paddingVertical: 5 }}>
       <View style={{ width: RAIL, alignItems: 'center', paddingTop: big ? 6 : 10 }}>
-        {/* A ring of the page's colour around the dot cuts the rail, so the dot reads as a station on it. */}
         <Svg width={size + 8} height={size + 8}>
           <Circle cx={size / 2 + 4} cy={size / 2 + 4} r={size / 2 + 4} fill={palette.paper} />
           <DotShape kind={dotKind(battle.kind?.value)} palette={palette} cx={size / 2 + 4} cy={size / 2 + 4} size={size} />
@@ -56,12 +51,6 @@ function Station({ battle, palette }: { battle: AppBattle; palette: Palette }) {
   );
 }
 
-/**
- * The battles as one line down the page (owner, 2026-11-23; sketch tools-design/battles, list أ, after a transit map): each
- * year a station named on the rail, each battle a dot on it, the big ones (numbers or a told course) a bigger station with
- * both sides' numbers and its course. The rail is the accent through the Prophet's ﷺ years in Madinah, muted after them.
- * `onGroup` hands each year's place in the list, so a year opened from the feed scrolls to it.
- */
 export default function BattleLine({ groups, palette, onGroup }: {
   groups: TimelineGroup<AppBattle>[]; palette: Palette; onGroup?: (year: number, y: number) => void;
 }) {

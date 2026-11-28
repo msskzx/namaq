@@ -26,7 +26,7 @@ flowchart RL
 
 | Part of the screen | Label | Opens | Code |
 | --- | --- | --- | --- |
-| `PersonRows` | (onPress) | [الترجمة](person.md) | [components/tarajim/PersonRows.tsx:21](../../mobile/src/components/tarajim/PersonRows.tsx#L21) |
+| `PersonRows` | (onPress) | [الترجمة](person.md) | [components/tarajim/PersonRows.tsx:16](../../mobile/src/components/tarajim/PersonRows.tsx#L16) |
 
 ## Sheets
 

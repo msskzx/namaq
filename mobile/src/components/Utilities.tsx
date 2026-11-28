@@ -26,7 +26,6 @@ import { Tap } from '@/ui/Tap';
 import TapRow from '@/ui/TapRow';
 import { FEATURE_ICON } from '@/components/featureIcons';
 
-/** The two drawings of the day's times (owner, 2026-11-24). */
 const DAY_VIEWS = [{ key: 'dial', label: 'دائرة' }, { key: 'line', label: 'خط' }] as const satisfies readonly { key: PrayerView; label: string }[];
 
 const VIEWS: { id: UtilityView; Icon: (props: LucideProps) => React.ReactNode; label: string }[] = [
@@ -34,14 +33,9 @@ const VIEWS: { id: UtilityView; Icon: (props: LucideProps) => React.ReactNode; l
   { id: 'adhkar', Icon: HandHeart, label: 'الأذكار' },
 ];
 
-/**
- * The icons at the top of the utilities tab. The highlight slides with the pages under it:
- * `progress` is the pager's place, 0 on the first page and 1 on the second (owner, 2026-11-15).
- */
 export function UtilityPicker({ palette, progress }: { palette: Palette; progress?: Animated.Value }) {
   const [view, setView] = utilityView.use();
   const [spots, setSpots] = useState<{ x: number; width: number }[]>([]);
-  // The icon under most of the highlight is drawn light, so it stays readable while the highlight moves.
   const [lit, setLit] = useState(() => Math.max(0, VIEWS.findIndex(item => item.id === view)));
   useEffect(() => {
     if (!progress) { setLit(Math.max(0, VIEWS.findIndex(item => item.id === view))); return; }
@@ -50,7 +44,6 @@ export function UtilityPicker({ palette, progress }: { palette: Palette; progres
   }, [progress, view]);
   const measured = spots.length === VIEWS.length && spots.every(Boolean);
   const steps = VIEWS.map((_, i) => i);
-  // Laid out left to right with the order reversed, so the first sits on the right and the highlight's left is the screen's left in either layout direction.
   return (
     <View accessibilityRole="radiogroup" accessibilityLabel="الأدوات"
       style={{ direction: 'ltr', flexDirection: 'row-reverse', borderWidth: 1, borderColor: palette.rule, borderRadius: 12, padding: 2, gap: 2 }}>
@@ -76,21 +69,11 @@ export function UtilityPicker({ palette, progress }: { palette: Palette; progres
 
 export const UTILITY_VIEWS = VIEWS.map(view => view.id);
 
-/**
- * One utility's page: the tools or the adhkar. `on` runs the compass only while its page is on screen; `scrollTo` brings
- * the qibla into view; `reach` is how far down the
- * page has been seen, so the compass asks for the location only once it is reached.
- */
 export function UtilityPage({ view, palette, on = true, onPlace, scrollTo, reach = Infinity, query }: { view: UtilityView; palette: Palette; on?: boolean; onPlace: () => void; scrollTo?: (y: number) => void; reach?: number; query?: string }) {
   return view === 'adhkar' ? <Adhkar query={query} palette={palette} onPlace={onPlace} />
     : <Tools palette={palette} on={on} onPlace={onPlace} scrollTo={scrollTo} reach={reach} />;
 }
 
-/**
- * The tools page (owner, 2026-11-23: prayer times, the qibla and the Hijri date on one page; sketch
- * /mnt/project-files/adhkar-page-redesign/utilities-sketch-dark.png): today's date and week, the next prayer and the six
- * times with their bells, the place and the way they are worked out, then the qibla.
- */
 function Tools({ palette, on, onPlace, scrollTo, reach }: { palette: Palette; on: boolean; onPlace: () => void; scrollTo?: (y: number) => void; reach: number }) {
   const [place] = prayerPlace.use();
   const [qiblaY, setQiblaY] = useState(0);
@@ -119,7 +102,6 @@ function Tools({ palette, on, onPlace, scrollTo, reach }: { palette: Palette; on
   );
 }
 
-/** Before any place is known: the two ways to give one. Location is asked for only on a tap. */
 function FirstUse({ palette, onPick }: { palette: Palette; onPick: () => void }) {
   const [busy, setBusy] = useState(false);
   const here = async () => {
@@ -150,7 +132,6 @@ function Wide({ Icon, label, onPress, palette, primary, disabled }: { Icon: (pro
   );
 }
 
-/** The place, as a chip that opens the place sheet. */
 function PlaceChip({ place, palette, onPress }: { place: Place; palette: Palette; onPress: () => void }) {
   return (
     <Pressable onPress={onPress} accessibilityRole="button" accessibilityLabel={`المكان: ${place.name}`} hitSlop={4}
@@ -162,7 +143,6 @@ function PlaceChip({ place, palette, onPress }: { place: Place; palette: Palette
   );
 }
 
-/** The next prayer large with the time left, then the six times, each with its bell (owner, 2026-11-23: the sunrise too), then the place line. */
 function Times({ place, palette, onPlace }: { place: Place; palette: Palette; onPlace: () => void }) {
   const now = useMinute();
   const [settings, setSettings] = prayerSettings.use();
@@ -170,7 +150,6 @@ function Times({ place, palette, onPlace }: { place: Place; palette: Palette; on
   const [methods, setMethods] = useState(false);
   const dayKey = now.toDateString();
   const times = useMemo(() => timesFor(place, now, settings), [place, settings, dayKey]); // eslint-disable-line react-hooks/exhaustive-deps
-  // After isha, the next is tomorrow's fajr.
   const tomorrow = useMemo(() => timesFor(place, new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 12), settings), [place, settings, dayKey]); // eslint-disable-line react-hooks/exhaustive-deps
   const next = nextPrayer(times, now);
   const nextAt = next ? times[next] : tomorrow.fajr;
@@ -179,7 +158,6 @@ function Times({ place, palette, onPlace }: { place: Place; palette: Palette; on
   const [alerts, setAlerts] = adhanAlerts.use();
   const [view, setView] = prayerView.use();
   const upcoming = { key: next ?? 'fajr', at: nextAt, left } as const;
-  // Switched on but the phone blocks notifications: say so under the card.
   const [blocked, setBlocked] = useState(false);
   const back = useForeground();
   useEffect(() => {
@@ -191,7 +169,6 @@ function Times({ place, palette, onPlace }: { place: Place; palette: Palette; on
   const toggle = async (key: PrayerKey) => {
     buzz();
     if (alerts[key]) { setAlerts({ ...adhanAlerts.get(), [key]: false }); return; }
-    // The permission is asked for only here, the first time a time is switched on.
     const ok = await allowAlerts();
     setBlocked(!ok);
     if (ok) setAlerts({ ...adhanAlerts.get(), [key]: true });
@@ -209,7 +186,6 @@ function Times({ place, palette, onPlace }: { place: Place; palette: Palette; on
             <TimeCells times={times} next={upcoming} palette={palette} bell={bell} />
           </>
         ) : <DayLine times={times} now={now} next={upcoming} palette={palette} bell={bell} />}
-        {/* The place and the way the times are worked out: the card's source line; a tap opens them to change. */}
         <TapRow onPress={() => setOpen(true)} label={`المكان وطريقة الحساب: ${place.name}، ${method.label}`} style={{ alignItems: 'center', gap: 6, borderTopWidth: 1, borderColor: `${palette.rule}55`, paddingTop: 8 }}>
           {place.name === MY_LOCATION ? <LocateFixed size={16} color={palette.muted} /> : <MapPin size={16} color={palette.muted} />}
           <Text numberOfLines={1} style={{ flex: 1, color: palette.muted, fontSize: 14 }}>{place.name} · الحساب: {method.label} · العصر: {settings.hanafi ? 'الحنفي' : 'الجمهور'}</Text>
@@ -261,7 +237,6 @@ function Times({ place, palette, onPlace }: { place: Place; palette: Palette; on
 
 const BELL = 20;
 
-/** The adhan switch on a prayer's row: a bell when it rings, a struck bell when it doesn't. */
 function BellButton({ on, color, name, sunrise = false, onPress }: { on: boolean; color: string; name: string; sunrise?: boolean; onPress: () => void }) {
   const Icon = on ? Bell : BellOff;
   return (
@@ -282,7 +257,6 @@ function Radio({ label, on, onPress, palette }: { label: string; on: boolean; on
   );
 }
 
-/** Where the times are for: the phone's place, or a city from the list. */
 export function PlaceSheet({ open, onClose, palette }: { open: boolean; onClose: () => void; palette: Palette }) {
   const [place] = prayerPlace.use();
   const [query, setQuery] = useState('');
@@ -313,10 +287,8 @@ export function PlaceSheet({ open, onClose, palette }: { open: boolean; onClose:
   );
 }
 
-/** The Kaaba's black cloth and gold band, the same in both themes. */
 const KAABA = '#1d1b19';
 
-/** The qibla: a dial that turns with the phone, north marked «ش», and the Kaaba on the qibla's bearing. */
 function Qibla({ place, palette, on }: { place: Place; palette: Palette; on: boolean }) {
   const bearing = useMemo(() => qiblaFor(place), [place]);
   const heading = useHeading(on);
@@ -325,11 +297,9 @@ function Qibla({ place, palette, on }: { place: Place; palette: Palette; on: boo
   const facing = turn !== null && Math.abs(turn) <= FACING;
   const was = useRef(false);
   useEffect(() => { if (facing && !was.current) buzz(); was.current = facing; }, [facing]);
-  // Without a compass the dial stays north up, so the arrow still shows the direction against a map.
   const spin = live ? -heading : 0;
   const tone = facing ? palette.green : palette.accent;
   const ticks = Array.from({ length: 72 }, (_, i) => i * 5);
-  // As wide as the card allows (owner, 2026-11-24: the qibla alone across the page).
   const [width, setWidth] = useState(0);
   const DIAL = Math.min(width, 360);
   const R = DIAL / 2 - 10;
@@ -376,10 +346,6 @@ function Qibla({ place, palette, on }: { place: Place; palette: Palette; on: boo
 
 const WEEK = ['س', 'ح', 'ن', 'ث', 'ر', 'خ', 'ج'];
 
-/**
- * Today at the top of the tools page (owner, 2026-11-23): the Hijri date over the Gregorian one, and this week's days from
- * Saturday with today marked; the calendar button opens the whole month in a sheet.
- */
 function Today({ palette }: { palette: Palette }) {
   const now = useMinute();
   const dayKey = now.toDateString();
@@ -397,10 +363,6 @@ function Today({ palette }: { palette: Palette }) {
   );
 }
 
-/**
- * The month under the qibla (owner, 2026-11-24): its days as moons with today ringed, today's juz, and the calendar
- * button that opens the whole month in a sheet. Its source is the Umm al-Qura calendar.
- */
 function Month({ palette }: { palette: Palette }) {
   const now = useMinute();
   const [open, setOpen] = useState(false);
@@ -425,7 +387,6 @@ function Month({ palette }: { palette: Palette }) {
   );
 }
 
-/** The Hijri month, Saturday first, with the Gregorian day under each day. */
 function Calendar({ palette }: { palette: Palette }) {
   const now = useMinute();
   const [offset, setOffset] = useState(0);
@@ -447,7 +408,6 @@ function Calendar({ palette }: { palette: Palette }) {
         </Pressable>
         {arrow(ChevronLeft, 1, 'الشهر التالي')}
       </View>
-      {/* Today's juz, which follows the Hijri day (owner, 2026-11-18: its shortcut lives here and as a card on home). */}
       {juz && <View style={{ alignItems: 'center' }}><Button Icon={FEATURE_ICON.mushaf} label={`اقرأ جزء اليوم: ${juzLabel(juz)}`} onPress={() => openJuz(juz[0])} /></View>}
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', rowGap: 6 }}>
         {WEEK.map(day => <Text key={day} style={{ width: `${100 / 7}%`, color: palette.muted, fontSize: 14, textAlign: 'center' }}>{day}</Text>)}

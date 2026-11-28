@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Keyboard, Platform } from 'react-native';
 
-/** Whether the keyboard is up, so controls that do not matter while typing can step aside instead of riding up on it. */
 export function useKeyboardShown() {
   const [shown, setShown] = useState(false);
   useEffect(() => {
@@ -13,7 +12,6 @@ export function useKeyboardShown() {
   return shown;
 }
 
-/** How far the keyboard covers the bottom of the screen, so a sheet with a search box, or the reader's write mode, can sit above it. */
 export function useKeyboardHeight(active: boolean) {
   const [height, setHeight] = useState(0);
   useEffect(() => {

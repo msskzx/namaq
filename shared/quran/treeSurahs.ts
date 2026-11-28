@@ -1,9 +1,7 @@
-/** A surah a tree's ayat come from, with those ayat (in mushaf order). */
 export type TreeSurah = { surah: number; ayahKeys: string[] };
 
 const parts = (key: string) => key.split(':').map(Number) as [number, number];
 
-/** The surahs a tree's ayat come from, in mushaf order: the chips under a branches tree. */
 export function treeSurahs(ayahKeys: readonly string[]): TreeSurah[] {
   const bySurah = new Map<number, string[]>();
   for (const key of new Set(ayahKeys)) {

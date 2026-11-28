@@ -36,7 +36,6 @@ function BookRow({ book, palette, first }: { book: Book; palette: Palette; first
   );
 }
 
-/** The books of one kind, or all of them under their kinds, each with its download or remove button. */
 export function BookList({ kind, palette }: { kind?: BookKind; palette: Palette }) {
   useBooks();
   const kinds = BOOK_KINDS.filter(k => !kind || k.kind === kind);

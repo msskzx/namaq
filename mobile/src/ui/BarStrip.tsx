@@ -8,28 +8,15 @@ import type { Palette } from '@/lib/theme';
 const PILL = 260;
 const LIFT_SLOP = 10;
 
-/**
- * A row of bars, the first on the right, each as tall as its count, the whole one control: a touch or a slide picks the
- * nearest bar and names it in a pill above the finger, where the finger does not cover it. Where a word gathers by surah
- * (components/SurahStrip.tsx), and a Sahih's kitabs by their hadith (components/Sahih.tsx, owner 2026-11-23: sketch
- * hadith-design), where lifting the finger opens the kitab and `mark` points at the one read last.
- * `holdScroll` keeps the touch from the page's scroll (a sheet); without it a page scrolled over the bars still scrolls.
- */
 export default function BarStrip({ counts, tone, picked, onPick, onLift, onSliding, name, under, mark, ends, height = 96, holdScroll = true, label, palette }: {
   counts: number[];
-  /** The bars' colour when it is not the rule's («مدونتي»'s juz, lit where something is kept). */
   tone?: string;
   picked: number | null; onPick: (index: number) => void;
-  /** The finger lifted (or a screen reader activated) on this bar. */
   onLift?: (index: number) => void;
   onSliding?: (sliding: boolean) => void;
-  /** What the pill says for a bar. */
   name: (index: number) => string;
-  /** The picked bar's name under it once the finger is off. */
   under?: boolean;
-  /** A small accent mark over this bar. */
   mark?: number;
-  /** The first and last bars' names under the row's two ends. */
   ends?: [string, string];
   height?: number; holdScroll?: boolean; label: string; palette: Palette;
 }) {
@@ -62,7 +49,6 @@ export default function BarStrip({ counts, tone, picked, onPick, onLift, onSlidi
         onResponderGrant={event => { grantY.current = event.nativeEvent.pageY; setSliding(true); pick(event); }} onResponderMove={pick}
         onResponderRelease={event => {
           setSliding(false);
-          // A finger that went up or down more than a tap's slop was scrolling (ui/Tap.tsx), so lifting it opens nothing.
           if (onLift && width && Math.abs(event.nativeEvent.pageY - grantY.current) <= LIFT_SLOP) onLift(at(event));
         }}
         onResponderTerminate={() => setSliding(false)} style={{ height: height + top + (under ? 20 : 0), direction: 'ltr' }}>

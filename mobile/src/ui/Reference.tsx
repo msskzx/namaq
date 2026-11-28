@@ -7,20 +7,12 @@ import ExternalLink from '@/ui/ExternalLink';
 import type { Palette } from '@/lib/theme';
 import { Tap } from '@/ui/Tap';
 
-/** A quote from a book: its words, with the page it cites as a link (the page alone when it has no words). A quote with no page is our own note on the ones above. */
 export type { Quote, Source } from '@/ui/sourceSlot';
 
-/**
- * A section's reference, collapsed to the book and page it cites (a muted line with a chevron); a tap opens the quotes,
- * the first in ink, the rest smaller. The website has the same in src/components/common/Reference.tsx.
- */
 export default function Reference({ title, quotes, links = [], places, editions, palette }: { title: string; quotes: Quote[];
-  /** Links under the quotes when open (the source's own page, our sources and licences page). */
   links?: { label: string; url: string }[];
-  /** Where in the book and its printing, written out in a share picture of the card (ui/CardShare PictureRefs). */
   places?: string[]; editions?: string[]; palette: Palette }) {
   const [open, setOpen] = useState(false);
-  // On a home card the reference joins the card's source line under its buttons (owner 2026-11-20), and draws nothing here.
   const lifted = useLiftSource({ line: title, quotes, links, ...(places && { places }), ...(editions && { editions }) });
   if (lifted) return null;
   return (

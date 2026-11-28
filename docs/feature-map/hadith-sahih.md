@@ -34,14 +34,14 @@ flowchart RL
 
 | Part of the screen | Label | Opens | Code |
 | --- | --- | --- | --- |
-| `People` | (onPress) | [الترجمة](person.md) | [components/battles/BattleParts.tsx:130](../../mobile/src/components/battles/BattleParts.tsx#L130) |
-| `StoryLinkRow` | (onPress) | [القصة](story.md) | [components/stories/StoryParts.tsx:166](../../mobile/src/components/stories/StoryParts.tsx#L166) |
-| `SahihPage` | ‹›‹› | [أبواب الكتاب](hadith-kitab.md) | [screens/hadithSahih.tsx:44](../../mobile/src/screens/hadithSahih.tsx#L44) |
-|  | ‹›‹› | [أبواب الكتاب](hadith-kitab.md) | [screens/hadithSahih.tsx:44](../../mobile/src/screens/hadithSahih.tsx#L44) |
-|  | (onOpen) | [حديث الصحيح](hadith-sahih.md) | [screens/hadithSahih.tsx:55](../../mobile/src/screens/hadithSahih.tsx#L55) |
-|  | (onPress) | [حديث الأربعين](hadith-forty.md) | [screens/hadithSahih.tsx:57](../../mobile/src/screens/hadithSahih.tsx#L57) |
-| `InHadith` | ‹› · ‹› | [صفحة الآية](ayah.md) | [screens/hadithSahih.tsx:83](../../mobile/src/screens/hadithSahih.tsx#L83) |
-| `HadithSahihScreen` | (back) | [الحديث](hadith.md) | [screens/hadithSahih.tsx:126](../../mobile/src/screens/hadithSahih.tsx#L126) |
+| `People` | (onPress) | [الترجمة](person.md) | [components/battles/BattleParts.tsx:113](../../mobile/src/components/battles/BattleParts.tsx#L113) |
+| `StoryLinkRow` | (onPress) | [القصة](story.md) | [components/stories/StoryParts.tsx:131](../../mobile/src/components/stories/StoryParts.tsx#L131) |
+| `SahihPage` | ‹›‹› | [أبواب الكتاب](hadith-kitab.md) | [screens/hadithSahih.tsx:42](../../mobile/src/screens/hadithSahih.tsx#L42) |
+|  | ‹›‹› | [أبواب الكتاب](hadith-kitab.md) | [screens/hadithSahih.tsx:42](../../mobile/src/screens/hadithSahih.tsx#L42) |
+|  | (onOpen) | [حديث الصحيح](hadith-sahih.md) | [screens/hadithSahih.tsx:53](../../mobile/src/screens/hadithSahih.tsx#L53) |
+|  | (onPress) | [حديث الأربعين](hadith-forty.md) | [screens/hadithSahih.tsx:55](../../mobile/src/screens/hadithSahih.tsx#L55) |
+| `InHadith` | ‹› · ‹› | [صفحة الآية](ayah.md) | [screens/hadithSahih.tsx:76](../../mobile/src/screens/hadithSahih.tsx#L76) |
+| `HadithSahihScreen` | (back) | [الحديث](hadith.md) | [screens/hadithSahih.tsx:113](../../mobile/src/screens/hadithSahih.tsx#L113) |
 
 ## Sheets
 

@@ -5,7 +5,6 @@ export { searchable } from './searchText';
 
 export type AyahHit = { key: string; page: number; words: string[]; from: number; to: number };
 export type AyahSearch = { total: number; hits: AyahHit[] };
-/** `keys` per spoken word; `owner` maps each back to its display word (one display word can hold two, e.g. بَعْدَ مَا). */
 export type IndexedAyah = BranchAyah & { keys: WordKeys[]; owner: number[] };
 
 export function indexAyat(ayat: BranchAyah[]): IndexedAyah[] {
@@ -17,7 +16,6 @@ export function indexAyat(ayat: BranchAyah[]): IndexedAyah[] {
   });
 }
 
-/** Ayat holding the query in mushaf order; hamza-loose matches only when nothing matches as typed. */
 export function searchAyat(ayat: IndexedAyah[], query: string, limit = 30): AyahSearch {
   const wanted = searchQuery(query);
   if (wanted.strict.join('').length < 2) return { total: 0, hits: [] };

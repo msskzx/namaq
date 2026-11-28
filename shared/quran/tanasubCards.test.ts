@@ -19,7 +19,6 @@ describe('surah-order book cards on the compare pages', () => {
       const [card] = cards;
       expect(card.p).toEqual(link.pairs.map(([a, b]) => `${a}|${b}`));
       expect(card.a).toEqual([0, 1].map(side => [...new Set(link.pairs.map(pair => ayahOf(pair[side])))].sort((x, y) => x - y)));
-      // Every book entry is a card: a verdict on the same pair of ours never hides it.
       expect(card.x).toBeUndefined();
     }
   });
@@ -35,7 +34,6 @@ describe('surah-order book cards on the compare pages', () => {
   it('notes a link that names no ayah pair on its two neighbouring surahs only', () => {
     expect(pairNote(85, 86)?.text).toBe(ORDER_LINKS[86].text);
     expect(pairNote(86, 85)).toBe(pairNote(85, 86));
-    // A link that names ayat is a card, not a note; surahs that are not neighbours have none.
     expect(pairNote(87, 88)).toBeUndefined();
     expect(pairNote(85, 87)).toBeUndefined();
   });
@@ -48,7 +46,6 @@ describe('surah-order book cards on the compare pages', () => {
       expect(piece.keys.sort()).toEqual([...new Set(link.pairs.flat())].sort());
       expect(matrixOnly(piece), piece.id).toBe(!tanasubTree(link.link));
     }
-    // «خلق الإنسان» (al-Tin 4, al-Alaq 2) grows a tree; al-A'la and al-Ghashiya, joined by meaning, stay their ayat.
     expect(tanasubTree(96)?.map(trunk => trunk.end - trunk.start)).toEqual([2, 2]);
     expect(tanasubTree(88)).toBeUndefined();
   });

@@ -56,7 +56,6 @@ describe('every word a tree draws', () => {
     const wrong: string[] = [];
     const check = (id: string, words: string[], forms: Record<string, string[]> | undefined) => words.forEach((shared, index) => {
       for (const { word, keys } of writtenForms({ forms }, index, shared)) {
-        // A word its ayat stop on differently is drawn without the waqf sign only some of them carry: the rest is theirs letter for letter.
         if (forms && !isEnd(word) && !keys.every(key => forms[key][index] === word || bare(forms[key][index]) === word)) wrong.push(`${id}: ${word}`);
       }
     });

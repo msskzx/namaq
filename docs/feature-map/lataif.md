@@ -25,9 +25,9 @@ flowchart RL
 
 | Part of the screen | Label | Opens | Code |
 | --- | --- | --- | --- |
-| `Hadith` | افتح الحديث كاملًا: ‹› | [حديث الصحيح](hadith-sahih.md) | [components/scenes/RahmanPage.tsx:143](../../mobile/src/components/scenes/RahmanPage.tsx#L143) |
-| `LataifScreen` | (onPress) | [المشهد](scene.md) | [screens/lataif.tsx:31](../../mobile/src/screens/lataif.tsx#L31) |
-|  | (onPress) | [المشهد](scene.md) | [screens/lataif.tsx:34](../../mobile/src/screens/lataif.tsx#L34) |
+| `Hadith` | افتح الحديث كاملًا: ‹› | [حديث الصحيح](hadith-sahih.md) | [components/scenes/RahmanPage.tsx:119](../../mobile/src/components/scenes/RahmanPage.tsx#L119) |
+| `LataifScreen` | (onPress) | [المشهد](scene.md) | [screens/lataif.tsx:25](../../mobile/src/screens/lataif.tsx#L25) |
+|  | (onPress) | [المشهد](scene.md) | [screens/lataif.tsx:28](../../mobile/src/screens/lataif.tsx#L28) |
 
 ## Sheets
 

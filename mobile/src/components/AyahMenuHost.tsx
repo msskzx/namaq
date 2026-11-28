@@ -19,12 +19,6 @@ import NoteSheet from './NoteSheet';
 import TopicSheet, { type TopicOpen } from './TopicSheet';
 import { shareAyah } from './AyahShare';
 
-/**
- * The reader's long-press menu for every ayah drawn off the mushaf (owner, 2026-11-22; ayah-page/agreed.md part 4): an
- * ayah view (AyahFlow, AyahLines) opens it here, once for the app, with the ayah's page and the mushaf first. A view of
- * several ayat (an oath, a story's place) opens it on the first, with a row of the ayat to pick the one meant. Its sheets
- * open over the page the ayah is on.
- */
 export default function AyahMenuHost({ children }: { children: ReactNode }) {
   const palette = usePalette();
   const [menu, setMenu] = useState<{ keys: readonly string[]; key: string; at: MenuAt } | null>(null);
@@ -40,11 +34,9 @@ export default function AyahMenuHost({ children }: { children: ReactNode }) {
   const key = menu?.key ?? '';
   const [surah, ayah] = key.split(':').map(Number);
   const close = () => setMenu(null);
-  // On the ayah's own page, «صفحة الآية» would open it again.
   const path = usePathname();
   const params = useGlobalSearchParams<{ key?: string }>();
   const onItsPage = path === '/ayah' && params.key === key;
-  // Each button closes the menu, then does its thing for this ayah.
   const then = (act: (key: string) => void) => () => { close(); act(key); };
   return (
     <AyahMenuContext.Provider value={open}>

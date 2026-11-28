@@ -1,15 +1,9 @@
 import { APP_NAME, OPENING, SLOGAN } from '../brand';
 import { UI_SCALE } from '../quran/compareCardLook';
 
-// Pieces every recorder page shares, the website's and the app's: plain JavaScript in strings, since they run inside the page.
 
-/** The types tried in order: MP4 shares everywhere; WebM is the fallback some Android phones record. */
 export const VIDEO_TYPES = ['video/mp4;codecs=avc1', 'video/mp4', 'video/webm;codecs=vp9', 'video/webm'];
 
-/**
- * Pausing while it records, for both recorders: the app sends {type: 'pause'} or {type: 'resume'} into the page,
- * the clock (start) skips the paused time and the recorder leaves it out, as on the website.
- */
 export const PAUSE = String.raw`
 var pausedAt = 0, hiddenPause = false;
 function hold() { if (pausedAt) return; pausedAt = performance.now(); if (recorder.state === 'recording') recorder.pause(); }
@@ -29,7 +23,6 @@ document.addEventListener('visibilitychange', function () {
 });
 `;
 
-/** Starts once the fonts (one name or several: the Quran font, the interface font) and the emblem have loaded, so the first frame already has them. */
 export const READY = String.raw`
 function ready(logo, fonts, go) {
   fonts = [].concat(fonts);
@@ -39,11 +32,6 @@ function ready(logo, fonts, go) {
 }
 `;
 
-/**
- * Every video's end frame, as the app's opening screen: the emblem, the app's name in bold and the slogan under it, centred
- * in a frame of width × height at k pixels a point. The only place a video shows the emblem (owner, 2026-11-14).
- * `o` = { width, height, k, alpha, paper, ink, muted, ui }; `under` is an optional line under the slogan (where the next part goes on).
- */
 export const OUTRO = String.raw`
 var BRAND = ${JSON.stringify({ name: APP_NAME, slogan: SLOGAN, sizes: OPENING, scale: UI_SCALE })};
 function outro(ctx, logo, o, under, underColor) {
@@ -65,6 +53,5 @@ function outro(ctx, logo, o, under, underColor) {
 }
 `;
 
-/** The same end frame for a canvas drawn on the page itself (the website's tree video). */
 export const outroDrawer = (): ((ctx: CanvasRenderingContext2D, logo: HTMLImageElement | null, o: { width: number; height: number; k: number; alpha: number; paper: string; ink: string; muted: string; ui: string }) => void) =>
   new Function(`${OUTRO}; return outro;`)();

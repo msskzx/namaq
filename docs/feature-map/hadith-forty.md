@@ -33,8 +33,8 @@ flowchart RL
 
 | Part of the screen | Label | Opens | Code |
 | --- | --- | --- | --- |
-| `HadithFortyScreen` | (back) | [الحديث](hadith.md) | [screens/hadithForty.tsx:175](../../mobile/src/screens/hadithForty.tsx#L175) |
-|  | (unit) | [رواية الصحيح](hadith-unit.md) | [screens/hadithForty.tsx:177](../../mobile/src/screens/hadithForty.tsx#L177) |
+| `HadithFortyScreen` | (back) | [الحديث](hadith.md) | [screens/hadithForty.tsx:157](../../mobile/src/screens/hadithForty.tsx#L157) |
+|  | (unit) | [رواية الصحيح](hadith-unit.md) | [screens/hadithForty.tsx:159](../../mobile/src/screens/hadithForty.tsx#L159) |
 
 ## Sheets
 

@@ -2,19 +2,10 @@ import { View } from 'react-native';
 import { Text } from '@/ui/Text';
 import { CARD, type Palette } from '@/lib/theme';
 
-/**
- * The one speech bubble of a conversation drawn as a chat (a hadith's scenes, a sira story): only the words said, on the
- * speaker's side, in his colour. No name is written by it, lest it be read as part of the text, and no name ring beside it
- * (owner, 2026-11-22): the narrator's words that lead into the saying («فَقَالَ رَسُولُ اللَّهِ ﷺ») sit above the bubble on
- * its side, outside it, in full ink, and the people's chips above the scene are the key to the colours. `framed` rings the
- * bubble in his colour.
- */
 export default function Bubble({ colour, start, framed = true, lead, palette, children }: {
   colour: string;
-  /** On the start side (the right in Arabic) or the end side. */
   start: boolean;
   framed?: boolean;
-  /** The narrator's words just before the saying, drawn above it. */
   lead?: string;
   palette: Palette; children: React.ReactNode;
 }) {

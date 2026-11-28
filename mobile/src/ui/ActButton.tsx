@@ -7,27 +7,15 @@ import type { Palette } from '@/lib/theme';
 import QuranWords from '@/components/quran/text/QuranWords';
 import { Tap } from '@/ui/Tap';
 
-/**
- * A long-press button: the icon with its name under it (owner, 2026-11-13: the buttons got many, so each says what it is).
- * On (saved, forgotten, noted), the icon and its name take the mark's colour, filled where the icon has a body, with
- * nothing behind them (owner, 2026-11-17: no coloured square, as the فاصلة in the top bar).
- */
-/** Where a button is on the screen. */
 export type ButtonBox = { x: number; y: number; width: number; height: number };
 
 export default function ActButton({ Icon, label, name, onPress, onPressAt, expanded, quran = false, palette, on = false, color, tint, filled = false, wide = false }: { Icon: (props: LucideProps) => React.ReactNode; label: string; name: string; palette: Palette; on?: boolean; color?: string;
   onPress?: () => void;
-  /** Instead of onPress, for a press that opens something over the button (the reader's bubble): where the button is. */
   onPressAt?: (box: ButtonBox) => void;
-  /** Its bubble is open. */
   expanded?: boolean;
-  /** Its name is Quran words (the reader's bubble names the lit words), in the mushaf's font. */
   quran?: boolean;
-  /** As wide as its name, for a name of a few words (a feed card's «ليس من اهتماماتي»). */
   wide?: boolean;
-  /** The colour when on: the mark's own (purple for saved), the accent otherwise. */
   tint?: string;
-  /** Fill the icon when on (the bookmark). */
   filled?: boolean }) {
   const onColor = tint ?? palette.accent;
   const box = useRef<ComponentRef<typeof View>>(null);

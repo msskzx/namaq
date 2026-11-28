@@ -5,12 +5,8 @@ import { Text } from '@/ui/Text';
 import Card from '@/ui/Card';
 import type { Palette } from '@/lib/theme';
 
-// «من أخرجه» (owner, 2026-11-19; sketch /mnt/project-files/hadith-sciences, row 3): the hadith on top and each place it is
-// recorded under it, as the website's src/components/hadith/HadithBooks.tsx draws it. The hadith page, its feed card and
-// the quiz's look-up draw this one view; a Sahih page passes its own boxes and a press per box.
 const STEM = 12;
 
-/** The line from the hadith down to a box: across to its neighbours (none past the first and last), then down. */
 function Branch({ first, last, palette }: { first: boolean; last: boolean; palette: Palette }) {
   const line = (shown: boolean) => <View style={{ flex: 1, height: 1, backgroundColor: shown ? palette.rule : 'transparent' }} />;
   return (
@@ -21,7 +17,6 @@ function Branch({ first, last, palette }: { first: boolean; last: boolean; palet
   );
 }
 
-/** `namer` is who names the books marked `named` (al-Nawawi, or Ibn Rajab for the eight he adds). */
 export default function HadithBooks({ top, boxes, onOpen, namer = 'النووي', palette }: { top: string; boxes: BookBox[]; onOpen?: (box: BookBox) => void; namer?: string; palette: Palette }) {
   const said = (box: BookBox) => [box.number ? `${box.name} ${num(box.number)}` : box.name, ...(box.named ? [`سمّاه ${namer}`] : []), ...box.notes].join('، ');
   return (

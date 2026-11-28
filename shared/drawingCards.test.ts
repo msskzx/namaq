@@ -25,7 +25,6 @@ const byKey = new Map(corpus.ayat.map(ayah => [ayah.key, ayah]));
 const cards = openingCards(key => byKey.get(key));
 const oaths = [...buildOaths('allah', key => byKey.get(key)?.words), ...buildOaths('others', key => byKey.get(key)?.words)];
 
-// Owner, 2026-11-20: a card names its sources from the item's own data, never one we add; an item with none stays out.
 describe('the drawing cards\' items', () => {
   const kinds: [string, string[], (item: string) => unknown[]][] = [
     ['nasab', nasabPeople(people), slug => nasabSources(people.find(person => person.slug === slug)!, people)],
@@ -63,7 +62,7 @@ describe('the drawing cards\' items', () => {
     }
   });
 
-  // Owner, 2026-11-18/19 (docs/ship-checklist.md section 1): a fitna battle shows only its name, year, place and people.
+  // see docs/ship-checklist.md
   it('never draws a fitna battle\'s numbers, even where its data holds some', () => {
     for (const slug of FITNA_BATTLES) {
       const battle = battles.find(each => each.slug === slug)!;
@@ -73,7 +72,6 @@ describe('the drawing cards\' items', () => {
     }
   });
 
-  // Owner, 2026-11-20: the source line names the book and its author («تناسق الدرر · السيوطي»), never the author alone.
   it('reads a Quran-sciences reference as its book, author and place', () => {
     expect(authorCiteSource({ text: 'نص', cite: 'السيوطي، تناسق الدرر ص٦٣', url: 'u' })).toEqual({ book: 'تناسق الدرر', author: 'السيوطي', at: 'ص٦٣', quote: 'نص', url: 'u' });
     expect(authorCiteSource({ text: '', cite: 'السيوطي، الإتقان ٣/٣٦١' })).toMatchObject({ book: 'الإتقان', author: 'السيوطي', at: '٣/٣٦١' });
@@ -82,8 +80,6 @@ describe('the drawing cards\' items', () => {
   });
 });
 
-// Owner, 2026-11-21 (feed-visuals sketch, panels 4 and 5): a year of the battles timeline with its neighbours, and the two
-// armies side by side only where the data cites both.
 describe('the battle cards', () => {
   it('draw a year with the year before and after it on its own axis, and list only that year\'s battles', () => {
     for (const item of battleYearItems(battles)) {
@@ -91,7 +87,6 @@ describe('the battle cards', () => {
       const slice = battleYearSlice(battles, year)!;
       const years = slice.columns.map(column => column.year);
       expect(years, item).toContain(year);
-      // The year's own neighbours on its axis: on the Madinah axis the years either side, empty or not.
       const at = years.indexOf(year);
       expect(years.length, item).toBeLessThanOrEqual(3);
       expect([...years].sort((a, b) => a - b), item).toEqual(years);
@@ -99,7 +94,6 @@ describe('the battle cards', () => {
       expect(slice.battles.length, item).toBeGreaterThan(0);
       expect(slice.battles.every(battle => battle.year?.value === year), item).toBe(true);
     }
-    // The Madinah axis keeps its empty years, so a year has both neighbours there.
     expect(battleYearSlice(battles, 2)!.columns.map(column => column.year)).toEqual([1, 2, 3]);
   });
 

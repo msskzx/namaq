@@ -24,9 +24,9 @@ flowchart RL
 
 | Part of the screen | Label | Opens | Code |
 | --- | --- | --- | --- |
-| `DhikrRow` | ‹›‹› | [الذكر](dhikr.md) | [components/Adhkar.tsx:123](../../mobile/src/components/Adhkar.tsx#L123) |
-| `Month` | اقرأ جزء اليوم: ‹› | [المصحف](read.md) | [components/Utilities.tsx:419](../../mobile/src/components/Utilities.tsx#L419) |
-| `Calendar` | اقرأ جزء اليوم: ‹› | [المصحف](read.md) | [components/Utilities.tsx:451](../../mobile/src/components/Utilities.tsx#L451) |
+| `DhikrRow` | ‹›‹› | [الذكر](dhikr.md) | [components/Adhkar.tsx:110](../../mobile/src/components/Adhkar.tsx#L110) |
+| `Month` | اقرأ جزء اليوم: ‹› | [المصحف](read.md) | [components/Utilities.tsx:381](../../mobile/src/components/Utilities.tsx#L381) |
+| `Calendar` | اقرأ جزء اليوم: ‹› | [المصحف](read.md) | [components/Utilities.tsx:411](../../mobile/src/components/Utilities.tsx#L411) |
 
 ## Sheets
 

@@ -1,8 +1,5 @@
 import { seg, type Story, type StoryEvent } from './story';
 
-// The Quran does not retell his life as one story: it speaks to him as events happen.
-// Events and their ayat follow the sirah and asbab al-nuzul; disputed ones are listed in
-// /mnt/project-files/compare-refine/prophet-muhammad-draft.md for the owner's review.
 const events: StoryEvent[] = [
   { phase: 0, title: 'بدء الوحي', segments: [seg(96, 1, 5), seg(74, 1, 7)] },
   { phase: 0, title: 'رؤية جبريل بالأفق', segments: [seg(53, 1, 12), seg(81, 19, 25)] },

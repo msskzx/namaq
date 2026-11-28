@@ -23,10 +23,10 @@ flowchart RL
 
 | Part of the screen | Label | Opens | Code |
 | --- | --- | --- | --- |
-| `LibraryScreen` | (back) | [الرئيسية](home.md) | [screens/books.tsx:57](../../mobile/src/screens/books.tsx#L57) |
-|  | (onPress) | [تحفة الأطفال](tuhfa.md) | [screens/books.tsx:66](../../mobile/src/screens/books.tsx#L66) |
-| `BookCard` | (open) | [كتاب الحديث](hadith-book.md) | [screens/books.tsx:77](../../mobile/src/screens/books.tsx#L77) |
-|  | (open) | [الكتاب](book.md) | [screens/books.tsx:78](../../mobile/src/screens/books.tsx#L78) |
+| `LibraryScreen` | (back) | [الرئيسية](home.md) | [screens/books.tsx:44](../../mobile/src/screens/books.tsx#L44) |
+|  | (onPress) | [تحفة الأطفال](tuhfa.md) | [screens/books.tsx:53](../../mobile/src/screens/books.tsx#L53) |
+| `BookCard` | (open) | [كتاب الحديث](hadith-book.md) | [screens/books.tsx:62](../../mobile/src/screens/books.tsx#L62) |
+|  | (open) | [الكتاب](book.md) | [screens/books.tsx:63](../../mobile/src/screens/books.tsx#L63) |
 
 ## Sheets
 

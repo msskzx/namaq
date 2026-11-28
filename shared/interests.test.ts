@@ -30,12 +30,10 @@ describe('interests', () => {
     expect(pickedInterests.read()).toEqual(['tafsir', 'sira']);
     expect(toggledInterest(['tafsir', 'sira'], 'sira')).toEqual(['tafsir']);
     expect(toggledInterest(['tafsir'], 'irab')).toEqual(['tafsir', 'irab']);
-    // Undo after «ليس من اهتماماتي» puts the interest back, and a second undo (or one after picking it again) never takes it out.
     expect(restoredInterest(['tafsir'], 'hadith')).toEqual(['tafsir', 'hadith']);
     expect(restoredInterest(['tafsir', 'hadith'], 'hadith')).toEqual(['tafsir', 'hadith']);
     expect(activeInterests([]).length).toBe(INTERESTS.length);
     expect(activeInterests(['irab']).map(interest => interest.id)).toEqual(['irab']);
-    // Picks with nothing of the kind asked fall back to all that have it.
     const others = (interest: (typeof INTERESTS)[number]) => interest.id !== 'prophets';
     expect(activeInterests(['prophets'], others).length).toBe(INTERESTS.filter(others).length);
   });

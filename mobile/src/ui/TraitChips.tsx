@@ -4,20 +4,8 @@ import { Tap } from '@/ui/Tap';
 import type { Palette } from '@/lib/theme';
 import { QuranWord } from '@/components/quran/text/AyahFlow';
 
-/**
- * `meaning`: the book's own words for it, under the word (an ayah's word and Ibn Qutaybah's meaning). `place`: where it is
- * said, under it (a word's meaning at its ayah).
- */
 export type Trait = { label: string; names: string[]; agreed: boolean; meaning?: string; place?: string };
 
-/**
- * Framed words in a wrapping row, each with who gives it under it (owner, 2026-11-23: a person's «صفته» card, sketch
- * tarajim-feed-card/sketch/traits-dark.png; an ayah's «كلماتها», sketch quran-design/ayah-page). A word two named sayers
- * give is framed in the accent with both names; a word from an unnamed view names no one. `quran` sets the words in the
- * mushaf's letters. With `onPick` each is a tab that shows its saying under the row, the picked one framed in the accent;
- * without it they are not buttons, the full sayings being under them. `lines` gives each a line of its own across the card,
- * its words (and meaning under them) on the right and its place on the left (owner, 2026-11-24: a word's meanings on its page).
- */
 export default function TraitChips({ traits, palette, quran = false, picked, onPick, lines = false }: { traits: Trait[]; palette: Palette; quran?: boolean;
   picked?: number; onPick?: (at: number) => void; lines?: boolean }) {
   const chips = traits.map((trait, at) => {
@@ -28,7 +16,6 @@ export default function TraitChips({ traits, palette, quran = false, picked, onP
       ...(lines ? { flexDirection: 'row' as const, gap: 14, paddingHorizontal: 16, paddingVertical: 12, borderRadius: 14 } : null), backgroundColor: picked === at ? `${palette.accent}18` : undefined };
     const inner = lines ? <>
       <View style={{ flexShrink: 1, flexGrow: 1, alignItems: 'flex-start' }}>
-        {/* The Quran in its own colour and letters, ruled off from the book's meaning (owner 2026-11-24: tell them apart). */}
         {quran ? <QuranWord look={{ color: palette.accent }} place={{ textAlign: 'right' }}>{trait.label}</QuranWord>
           : <Text style={{ color: palette.ink, fontSize: 17, lineHeight: 28, textAlign: 'right' }}>{trait.label}</Text>}
         {trait.meaning ? <>

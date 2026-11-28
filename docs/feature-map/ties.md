@@ -30,12 +30,12 @@ flowchart RL
 
 | Part of the screen | Label | Opens | Code |
 | --- | --- | --- | --- |
-| `TiesScreen` | (back) | [التراجم](tarajim.md) | [screens/ties.tsx:37](../../mobile/src/screens/ties.tsx#L37) |
-|  | ترجمته | [الترجمة](person.md) | [screens/ties.tsx:58](../../mobile/src/screens/ties.tsx#L58) |
-|  | النسب | [النسب](nasab.md) | [screens/ties.tsx:59](../../mobile/src/screens/ties.tsx#L59) |
-|  | بينه وبين… | [بين عدة أشخاص](between.md) | [screens/ties.tsx:60](../../mobile/src/screens/ties.tsx#L60) |
-|  | (onPress) | [الغزوة](battle.md) | [screens/ties.tsx:68](../../mobile/src/screens/ties.tsx#L68) |
-|  | (onPress) | [كل التراجم](people.md) | [screens/ties.tsx:77](../../mobile/src/screens/ties.tsx#L77) |
+| `TiesScreen` | (back) | [التراجم](tarajim.md) | [screens/ties.tsx:31](../../mobile/src/screens/ties.tsx#L31) |
+|  | ترجمته | [الترجمة](person.md) | [screens/ties.tsx:50](../../mobile/src/screens/ties.tsx#L50) |
+|  | النسب | [النسب](nasab.md) | [screens/ties.tsx:51](../../mobile/src/screens/ties.tsx#L51) |
+|  | بينه وبين… | [بين عدة أشخاص](between.md) | [screens/ties.tsx:52](../../mobile/src/screens/ties.tsx#L52) |
+|  | (onPress) | [الغزوة](battle.md) | [screens/ties.tsx:60](../../mobile/src/screens/ties.tsx#L60) |
+|  | (onPress) | [كل التراجم](people.md) | [screens/ties.tsx:69](../../mobile/src/screens/ties.tsx#L69) |
 
 ## Sheets
 

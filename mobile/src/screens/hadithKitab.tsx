@@ -21,10 +21,8 @@ import { SAHIH, isSahihSlug, useSahihText } from '@/lib/sahih';
 import { SahihDownload, SahihHadithCard } from '@/components/Sahih';
 import { openBab, openSahih } from './hadith';
 
-/** A bab's name in its kitab's list: its number among the kitab's headed babs, or the hadith before the first heading. */
 const babNumber = (kitab: SahihKitab, at: number) => kitab.babs.slice(0, at + 1).filter(bab => bab.title).length;
 
-/** «حديث ٩»، «حديثان ١٤–١٥»، «٣ أحاديث ٩–١١»، or a heading al-Bukhari gives no hadith under. */
 function hadithLine(bab: SahihBab) {
   if (!bab.from) return 'ترجمة بلا حديث مسند';
   const count = bab.to - bab.from + 1;
@@ -48,10 +46,6 @@ function BabRow({ book, kitab, at, palette }: { book: SahihIndex; kitab: SahihKi
   );
 }
 
-/**
- * A kitab (owner's choice, 2026-11-24, sketch hadith-design/sketch5 «أ»): the list of its babs, each numbered with its
- * hadith, a tap opening the bab; the list ships with the app, so it shows before the book's text is downloaded.
- */
 function KitabIndex({ book, kitab }: { book: SahihIndex; kitab: SahihKitab }) {
   const palette = usePalette();
   const onScroll = useShrinkOnScroll();
@@ -85,10 +79,6 @@ function KitabIndex({ book, kitab }: { book: SahihIndex; kitab: SahihKitab }) {
   );
 }
 
-/**
- * A bab (sketch5 «أ ٢»): its heading large, what the author put under it before its first hadith (al-Bukhari's ayat and
- * reports, his «ترجمة») folded in its own card, then its hadith, each opening its page, and the babs on either side.
- */
 function BabPage({ book, kitab, at }: { book: SahihIndex; kitab: SahihKitab; at: number }) {
   const palette = usePalette();
   const onScroll = useShrinkOnScroll();

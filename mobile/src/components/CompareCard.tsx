@@ -36,18 +36,14 @@ import { FEATURE_ICON } from '@/components/featureIcons';
 
 const DOUBLE_TAP = 280;
 
-/** `written`: links whose words the sides write differently (writtenLinks). */
 type Light = { lit: string | null; reading?: number; onWord?: (link: string) => void; written?: Set<string> };
 
-/** The card's first words and a link to its two passages on the website. */
 function cardLink(card: PairCard) {
   const [a, b] = card.sides;
-  // The two surahs' page, scrolled to this card; a one-to-many card links to the page alone, since its far side is one of several ayat.
   const href = `${surahPairHref(a.surah, b.surah)}${card.many ? '' : `#${compareAnchor(a, b)}`}`;
   return `${mushafText(a.ayat[0]?.words.slice(0, 6).join(' ') ?? '')} …\n${WEBSITE}${href}`;
 }
 
-/** One ayah: same words in the accent, same root in purple, a lit word and its partner on a highlight, the word read underlined. */
 function AyahText({ ayah, surah, palette, light, plain = false, inline = false }: { ayah: CardAyah; surah: number; palette: Palette; light?: Light; plain?: boolean; inline?: boolean }) {
   const words = <>
     {ayah.words.map((word, i) => {
@@ -68,11 +64,9 @@ function AyahText({ ayah, surah, palette, light, plain = false, inline = false }
     })}
     <AyahWords look={{ color: palette.accent }}>{`\u00A0${num(ayah.number)}`}</AyahWords>
   </>;
-  // Inside a running text it takes the flow around it; on its own it is its own flow (the reader's line size, centred).
   return inline ? <Text style={{ color: plain ? palette.muted : palette.ink }}>{words}</Text> : <AyahFlow center menu={`${surah}:${ayah.number}`} color={plain ? palette.muted : palette.ink}>{words}</AyahFlow>;
 }
 
-/** The ayah before or after a side in the matrix: muted, its words coloured where the other side's neighbour shares them. */
 function Neighbour({ ayah, palette }: { ayah: AroundAyah; palette: Palette }) {
   return (
     <Text>
@@ -86,8 +80,7 @@ function Neighbour({ ayah, palette }: { ayah: AroundAyah; palette: Palette }) {
   );
 }
 
-/** A side's ayat as one running text, with the ayah before and after (muted) when the surrounding switch is on. */
-function RunningAyat({ ayat, surah, before, after, palette, light, lane = false }: { ayat: CardAyah[]; surah: number; before?: AroundAyah | null; after?: AroundAyah | null; palette: Palette; light: (ayah: CardAyah) => Light; /** Half the card wide, side by side: the reader's size from the screen, wrapping within the lane. */ lane?: boolean }) {
+function RunningAyat({ ayat, surah, before, after, palette, light, lane = false }: { ayat: CardAyah[]; surah: number; before?: AroundAyah | null; after?: AroundAyah | null; palette: Palette; light: (ayah: CardAyah) => Light; lane?: boolean }) {
   return (
     <AyahFlow center screen={lane} menu={[...(before ? [before.key] : []), ...ayat.map(ayah => `${surah}:${ayah.number}`), ...(after ? [after.key] : [])]} color={palette.ink}>
       {before && <><Neighbour ayah={before} palette={palette} />{' '}</>}
@@ -97,15 +90,12 @@ function RunningAyat({ ayat, surah, before, after, palette, light, lane = false 
   );
 }
 
-/** Where a side opens the reader: its first ayah, or, for the listed partners of a one-to-many card, the partner picked. */
 const readAt = (name: SideName, side: CardSide, selected: number) =>
   (name.listed ? `${side.surah}:${name.numbers[selected] ?? name.numbers[0]}` : sideKeys(side)[0]);
 
-/** `bare`: the head is the name alone, its buttons in the row under the card (the home feed, owner 2026-11-20). */
 function SideHead({ label, at, palette, group, bare = false }: { label: string; at: string; palette: Palette; group?: string; bare?: boolean }) {
   const read = `اقرأ ${label} في المصحف`;
   return (
-    // The buttons at the right edge, in the thumb's reach, and the surah's name and number in the middle (owner, 2026-11-15).
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
       {!bare && <View style={{ position: 'absolute', right: 0, flexDirection: 'row-reverse', alignItems: 'center', zIndex: 1 }}>
         <IconButton Icon={FEATURE_ICON.mushaf} label={read} onPress={() => readAyah(at)} size="small" />
@@ -116,7 +106,6 @@ function SideHead({ label, at, palette, group, bare = false }: { label: string; 
   );
 }
 
-/** A lane's head side by side: the surah and its ayat, then its buttons, all on one line to fit half the card. */
 function LaneHead({ label, at, palette, group, bare = false }: { label: string; at: string; palette: Palette; group?: string; bare?: boolean }) {
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', minHeight: 30 }}>
@@ -160,20 +149,13 @@ function Studio({ read, palette, record }: { read: ReturnType<typeof useReadAlon
   );
 }
 
-/** One compare card: both sides stacked, tap a coloured word to light its partner, double tap to save, the studio reads along. */
-function CompareCard({ card, palette, onPageVideo, onOpen, aside }: { card: PairCard; palette: Palette; /** Opens the whole pair page's video, offered in the share sheet. */ onPageVideo?: () => void;
-  /**
-   * Set where the card shows outside the compare tab (the home feed): a button that opens it there, first in the row, and the
-   * sides' own buttons (read in the mushaf, the tree) move from their heads to the row (owner, 2026-11-20: no button in a card).
-   */
+function CompareCard({ card, palette, onPageVideo, onOpen, aside }: { card: PairCard; palette: Palette; onPageVideo?: () => void;
   onOpen?: () => void;
-  /** The feed's «⋯» (ui/MoreMenu), alone at the row's left end (owner, 2026-11-20). */
   aside?: React.ReactNode }) {
   const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks);
   const saved = savedIdsOf(card, bookmarks).length > 0;
   const read = useReadAlong(card);
   const step = read.step;
-  // Share as video: the card read along in a story frame, from the studio or from the share sheet.
   const [video, setVideo] = useState<((font: string) => string) | null>(null);
   const record = () => { read.reset(); setVideo(() => cardVideoPage(card, read.plan, read.speed, palette)); };
   const [tapped, setTapped] = useState<string | null>(null);
@@ -183,18 +165,14 @@ function CompareCard({ card, palette, onPageVideo, onOpen, aside }: { card: Pair
   const onWord = (link: string) => { if (!step) setTapped(current => (current === link ? null : link)); };
   const [view, setView] = useState<BranchView>('matrix');
   const [beside, setBeside] = useState(besideLayout.get);
-  // The read-along studio lights words in the matrix, so it shows the matrix while open; a matrix-only card never shows a tree.
   const matrixOnly = compareMatrixOnly(card);
   const tree = view === 'tree' && !read.studio && !matrixOnly;
   const sides = shownAyat(card, selected);
-  // The card's own switches, opening on the settings' defaults.
   const [aroundOn, setAround] = useState(aroundSetting.get);
   const around = aroundOn ? aroundOf(sides) : undefined;
   const written = useMemo(() => writtenLinks(card, selected), [card, selected]);
-  // A story card lines its parts up in rows; any part folds to its ayah range, both sides at once.
   const parts = card.many ? undefined : card.sides[0].rows;
   const [closed, setFolded] = useState<number[]>([]);
-  // The studio reads every part, so it opens them all while it runs.
   const folded = read.studio ? [] : closed;
   const toggle = (row: number) => setFolded(current => (current.includes(row) ? current.filter(other => other !== row) : [...current, row]));
   const partName = (cardSide: CardSide, row: number) => `${surahName(cardSide.surah)} ${runsLabel(cardSide.rows![row])}`.trim();
@@ -213,7 +191,6 @@ function CompareCard({ card, palette, onPageVideo, onOpen, aside }: { card: Pair
     } else lastTap.current = now;
   };
 
-  // A side as the shared pieces (shared/quran/compareCardLook.ts), which the video draws too.
   const side = (cardSide: CardSide, i: 0 | 1) => {
     const view = sideView(card, i, selected, folded);
     const light = (ayah: CardAyah) => lightFor(lit, step, i, ayah.number, onWord, written);
@@ -221,7 +198,6 @@ function CompareCard({ card, palette, onPageVideo, onOpen, aside }: { card: Pair
     return (
       <View key={i} style={{ gap: many ? COMPARE_CARD.optionsGap : COMPARE_CARD.sideGap }}>
         <SideHead label={sideTitle(view.name, surahName)} at={readAt(view.name, cardSide, selected)} palette={palette} group={i === 0 ? card.group : undefined} bare={!!onOpen} />
-        {/* Story cards run in the first surah's order, so this surah tells this part before the last card's. */}
         {view.back && <Text style={{ color: palette.muted, fontSize: COMPARE_CARD.noteSize, textAlign: 'right' }}>قبلُ في السورة</Text>}
         {view.pieces.map((piece, k) => {
           switch (piece.kind) {
@@ -252,9 +228,7 @@ function CompareCard({ card, palette, onPageVideo, onOpen, aside }: { card: Pair
     );
   };
 
-  // Side by side: a lane per surah; a story part one surah tells runs across the card, its separator naming the surah that does not (owner, 2026-11-16).
   const besideBody = () => {
-    // A lane breaks where its ayat skip, each stretch after the first under a dotted rule naming its ayat, as the stacked sides do.
     const lane = (cardSide: CardSide, i: 0 | 1, wide = false) => {
       const stretches = cardSide.ayat.reduce<CardAyah[][]>((all, ayah) => {
         const last = all[all.length - 1];
@@ -273,7 +247,6 @@ function CompareCard({ card, palette, onPageVideo, onOpen, aside }: { card: Pair
     const twoLanes = (render: (i: 0 | 1) => ReactNode) => (
       <View style={{ flexDirection: 'row', gap: 8 }}>
         <View style={{ flex: 1 }}>{render(0)}</View>
-        {/* Solid between two surahs, dashed within one, as the stacked rule; iOS draws no dashed border on one edge, so a dashed box is clipped to one edge. */}
         {same ? <View style={{ width: 1, overflow: 'hidden' }}><View style={{ flex: 1, width: 3, borderWidth: 1, borderColor: palette.rule, borderStyle: 'dashed' }} /></View>
           : <View style={{ width: 1, backgroundColor: palette.rule }} />}
         <View style={{ flex: 1 }}>{render(1)}</View>
@@ -350,10 +323,8 @@ function CompareCard({ card, palette, onPageVideo, onOpen, aside }: { card: Pair
         {side(card.sides[1], 1)}
       </>
   );
-  // Share as image: the card as it is now (view, folded parts, lit words), drawn afresh for the image.
   const cardBox = { backgroundColor: palette.card, borderWidth: COMPARE_CARD.border, borderColor: palette.rule, borderRadius: COMPARE_CARD.radius, padding: COMPARE_CARD.padding, gap: COMPARE_CARD.gap };
   const share = () => shareCard({ content: width => <View style={{ ...cardBox, width }}>{body}{quote}</View>, link: cardLink(card), onVideo: record, onPageVideo });
-  // A surah-order book's card: its quote as written under the ayat, its book on the source line (owner, 2026-11-20).
   const link = card.book ? tanasubLink(card.book) : undefined;
   const sources = useMemo(() => (link ? sourcesOf([tanasubSource(link)]) : []), [link]);
   const quote = link && <Text style={{ color: palette.ink, fontSize: 17, lineHeight: 31, textAlign: 'justify', writingDirection: 'rtl', borderTopWidth: tree ? 0 : 1, borderTopColor: palette.rule, paddingTop: 6 }}>«{link.text}»</Text>;
@@ -362,7 +333,6 @@ function CompareCard({ card, palette, onPageVideo, onOpen, aside }: { card: Pair
   return (
     <View style={{ gap: 4 }}>
       {link && <Text style={{ color: palette.amber, fontSize: 14, textAlign: 'right', paddingHorizontal: 6 }}>{TANASUB_KIND}</Text>}
-      {/* A tree stands on the page as the branches trees do, its boxes the cards; the matrix is one card. */}
       <Tap onPress={tap} accessibilityHint="انقر مرتين للحفظ" style={tree ? { gap: COMPARE_CARD.gap } : cardBox}>
         {body}
         {quote}
@@ -377,20 +347,15 @@ function CompareCard({ card, palette, onPageVideo, onOpen, aside }: { card: Pair
           })}
           {!onOpen && saveButton}
           <IconButton Icon={Clapperboard} label="استوديو القراءة" onPress={read.open} />
-          {/* A story card's parts show no surrounding ayat, so it has no switch for them. */}
           {!parts && <IconButton Icon={UnfoldHorizontal} label="الآيات المحيطة" onPress={() => setAround(!aroundOn)} on={aroundOn} />}
           {!tree && <IconButton Icon={beside ? Rows2 : Columns2} label={beside ? 'السورتان بعضهما تحت بعض' : 'السورتان جنبًا إلى جنب'} onPress={() => setBeside(!beside)} />}
           {!matrixOnly && <IconButton Icon={view === 'tree' ? GalleryHorizontal : TreeIcon} label={view === 'tree' ? 'عرض المصفوفة' : 'عرض الشجرة'} onPress={() => setView(view === 'tree' ? 'matrix' : 'tree')} />}
-          {/* In matrix view this button sits on the first ayah's line instead, as on the website; in the feed it is always here. */}
           {(tree || onOpen) && card.group && <IconButton Icon={TreeIcon} label="افتح في متشابهات القرآن" onPress={() => toTab({ pathname: '/branches', params: { tree: card.group } })} />}
-          {/* In the feed, save comes after the card's tools, just before share (owner, 2026-11-20). */}
           {onOpen && saveButton}
-          {/* Share is always the last of the group, as on the branches tab. */}
           <IconButton Icon={Send} label="مشاركة" onPress={() => share()} />
           {aside ? <><View style={{ flex: 1 }} />{aside}</> : null}
         </View>
       )}
-      {/* In the feed the post's own source line names the book (HomeFeed PairPost). */}
       {!onOpen && <SourceLine named={sources} sources={sources} palette={palette} />}
       <VideoSheet page={video} onClose={() => setVideo(null)} palette={palette} />
     </View>
@@ -399,8 +364,6 @@ function CompareCard({ card, palette, onPageVideo, onOpen, aside }: { card: Pair
 
 export default memo(CompareCard);
 
-// A line between ayat: solid between two surahs, dashed between ayat of one surah, as on the website.
-// iOS draws no dashed border on one edge only, so a dashed box is clipped to its top edge.
 function Rule({ dashed, color }: { dashed?: boolean; color: string }) {
   if (!dashed) return <View style={{ height: 1, backgroundColor: color }} />;
   return (

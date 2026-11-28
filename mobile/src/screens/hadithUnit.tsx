@@ -24,7 +24,6 @@ import Isnad from '@/components/Isnad';
 
 const body = (palette: Palette) => ({ color: palette.ink, fontSize: 19, lineHeight: 36, textAlign: 'right' as const });
 
-/** A commentary's printed pages, one at a time, what it says about the hadith marked. */
 function Pages({ pages, palette }: { pages: ReaderPage[]; palette: Palette }) {
   const [index, setIndex] = useState(0);
   const page = pages[index];
@@ -42,7 +41,6 @@ function Pages({ pages, palette }: { pages: ReaderPage[]; palette: Palette }) {
   );
 }
 
-/** One hadith (the website's /hadith/[unit]): its isnad and scenes, or its whole text, then the compiler's remark and where else it is. */
 export default function HadithUnitScreen() {
   const palette = usePalette();
   const onScroll = useShrinkOnScroll();
@@ -57,14 +55,10 @@ export default function HadithUnitScreen() {
   const isSharh = view.explains.length > 0;
   const remarks = view.reports.filter(report => report.voice === 'AUTHOR');
   const open = (unit: string) => router.push({ pathname: '/hadith-unit', params: { unit } });
-  // The book the page's text is printed in, on the line under each of its sections (owner 2026-11-20); the isnad stays drawn.
   const source = sourcesOf([unitSource(view)]);
   const read = (unit: string, label: string) => <IconButton Icon={BookOpen} label={label} onPress={() => open(unit)} />;
-  // Every section shares as a picture under the book's name and place, its reference written out in full (release 1).
   const head = <ShareHead title={view.book} sub={[view.kitab, view.bab].filter(Boolean).join('، ') || undefined} palette={palette} />;
   const share = { head };
-  // A drawn hadith shares as the story does (#1110): equal 4:5 pictures, its scenes flowing between them, the book at the foot.
-  // Its head is the book's name alone: the kitab and bab are in the reference at the foot, and the first picture keeps room.
   const sharePaged = (report: (typeof hadith)[number]) => <IconButton Icon={Send} label="شارك الحديث" onPress={() => shareCard({ content: () => null, paged: () => ({
     head: <ShareHead title={view.book} palette={palette} />,
     blocks: report.scenes.flatMap((scene, i) => sceneBlocks(scene.lines, slots.get(report.id)![i], palette).map(block => block.node)),
@@ -88,7 +82,6 @@ export default function HadithUnitScreen() {
             </> : <>
               {view.isnad[report.id] && <Isnad isnad={view.isnad[report.id]} palette={palette} />}
               {report.scenes.length === 0 && report.statements.map((text, i) => <Text key={i} style={body(palette)}>{text}</Text>)}
-              {/* No «المشهد ١» heading of ours (owner, 2026-11-22): the scenes follow one another with space between. */}
               {report.scenes.length > 0 && (
                 <View style={{ gap: 28 }}>
                   {report.scenes.map((scene, i) => <HadithScene key={scene.ordinal} lines={scene.lines} slots={slots.get(report.id)![i]} palette={palette} />)}

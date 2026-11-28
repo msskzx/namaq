@@ -28,8 +28,8 @@ flowchart RL
 
 | Part of the screen | Label | Opens | Code |
 | --- | --- | --- | --- |
-| `TiesChain` | (open) | [الصلات](ties.md) | [components/TiesChain.tsx:164](../../mobile/src/components/TiesChain.tsx#L164) |
-| `BetweenScreen` | (back) | [التراجم](tarajim.md) | [screens/between.tsx:41](../../mobile/src/screens/between.tsx#L41) |
+| `TiesChain` | (open) | [الصلات](ties.md) | [components/TiesChain.tsx:135](../../mobile/src/components/TiesChain.tsx#L135) |
+| `BetweenScreen` | (back) | [التراجم](tarajim.md) | [screens/between.tsx:34](../../mobile/src/screens/between.tsx#L34) |
 
 ## Sheets
 

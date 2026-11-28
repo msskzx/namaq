@@ -1,17 +1,11 @@
 import type { Bi } from './sources';
 
-/**
- * The text of the about, privacy and attributions pages, read by the website (src/app/about, src/app/attributions) and
- * by the app's own pages (mobile/src/screens/info.tsx), so the two never drift (owner, 2026-11-18: no page lives on the
- * website alone except the question review).
- */
 
 export const ABOUT_INTRO: Bi = {
   ar: 'نَمَق إطار يجمع الكتب الكبرى في علوم الشريعة لطلاب العلم ولكل مسلم يريد أن يتعلم دينه من مصادره، والعربية لغته. يعرض نصوصها بصريًا، ومعها أدوات تعين على الفهم والحفظ، وكل ما فيه منسوب إلى كتابه وصفحته.',
   en: 'Namaq is a framework built on the great books of the Islamic sciences, for students of knowledge and every Muslim who wants to learn the religion from its sources, Arabic first. It shows their texts visually, with tools that help understanding and memorisation, and everything in it points to its book and page.',
 };
 
-/** What the phone app holds, one science to a line (the about page in the app, mobile/src/screens/info.tsx). */
 export const ABOUT_CONTENTS: { title: Bi; body: Bi }[] = [
   {
     title: { ar: 'القرآن', en: 'Quran' },
@@ -57,7 +51,6 @@ export const ABOUT_CONTENTS: { title: Bi; body: Bi }[] = [
   },
 ];
 
-/** How content is chosen and cited (content rules in team memory). No review labels anywhere (owner, 2026-11-17). */
 export const ABOUT_REFERENCES: Bi[] = [
   {
     ar: 'نعرض الثابت المشهور عند أهل العلم، والأصح أولًا. وما اختلفوا فيه يُنسب كل قول فيه إلى قائله مع مرجعه.',
@@ -75,7 +68,6 @@ export const ABOUT_REFERENCES: Bi[] = [
 
 type NameEntry = { title: string; definition: string; forms: string[] };
 
-/** The two dictionary entries for the name, as the website's about page has always shown them. */
 export const NAMAQ_NAME: { ar: { verb: NameEntry; noun: NameEntry }; en: { verb: NameEntry; noun: NameEntry } } = {
   ar: {
     verb: {
@@ -102,7 +94,6 @@ export const ATTRIBUTIONS_INTRO: Bi = {
   en: 'The books, data, fonts and libraries Namaq relies on, whom each one belongs to, the edition we quote, under what licence, and where each is used.',
 };
 
-/** What a source adds beyond its card: Siyar's scans and OCR text, the corpus's counting notes. */
 export const SOURCE_EXTRAS: Record<string, { links?: { label: Bi; url: string; prefix: Bi }[][]; notes: Bi[] }> = {
   siyar: {
     links: [
@@ -133,10 +124,6 @@ export const SOURCE_EXTRAS: Record<string, { links?: { label: Bi; url: string; p
 
 export const CONTACT_EMAIL = 'msskzx@gmail.com';
 
-/**
- * The app's privacy policy: what the phone keeps and what ever leaves it. The website's page (src/app/privacy) covers the
- * website, which has a cookie and analytics; the app has neither.
- */
 export const APP_PRIVACY: { title: string; body: string }[] = [
   { title: 'ما يحفظه التطبيق', body: 'إعداداتك، والمحفوظات، وتأملاتك، وما تحفظه من القرآن، وموضع قراءتك، واختياراتك في الرئيسية، والكتب والتلاوات التي تنزّلها: كلها على هاتفك وحده، ولا تُرسل إلى أحد. تُمحى إذا حذفت التطبيق.' },
   { title: 'الحسابات والتحليلات', body: 'لا حسابات ولا تسجيل دخول، ولا تحليلات ولا تتبّع ولا إعلانات، ولا يجمع التطبيق أي معلومات شخصية.' },

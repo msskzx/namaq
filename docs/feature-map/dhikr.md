@@ -28,7 +28,7 @@ flowchart RL
 
 | Part of the screen | Label | Opens | Code |
 | --- | --- | --- | --- |
-| `DhikrScreen` | (back) | [الأدوات والأذكار](utilities.md) | [screens/dhikr.tsx:82](../../mobile/src/screens/dhikr.tsx#L82) |
+| `DhikrScreen` | (back) | [الأدوات والأذكار](utilities.md) | [screens/dhikr.tsx:75](../../mobile/src/screens/dhikr.tsx#L75) |
 
 ## Sheets
 

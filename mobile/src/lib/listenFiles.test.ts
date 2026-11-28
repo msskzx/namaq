@@ -1,6 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-// An in-memory file system standing in for expo-file-system, and a network the test scripts per address.
 const disk = new Map<string, string>();
 const dirs = new Set<string>();
 let net: (url: string, path: string) => Promise<void>;
@@ -96,13 +95,11 @@ describe('audio downloads', () => {
     const files = await load();
     await files.downloadPack(7, 'all', 'all', KEYS);
     expect(files.packsOf(7)).toHaveLength(1);
-    // A day on, the source changed 1:1's file and the new one cannot be fetched.
     syncReply = () => ({ token: 't2', upsert: [row('1:1', 'https://cdn/new')], remove: [] });
     net = async () => { throw new Error('offline'); };
     await files.syncPacks(Date.now() + 2 * 24 * 60 * 60 * 1000);
     expect(disk.get(path('1:1'))).toBe('bytes of https://cdn/1:1');
     expect(files.localAyah(7, '1:1')).toBe(path('1:1'));
-    // The next start is not a day later, yet the file is fetched again.
     net = async (url, at) => { disk.set(at, `bytes of ${url}`); };
     downloads = 0;
     const again = await load();
@@ -165,7 +162,6 @@ describe('audio downloads', () => {
     net = async (url, at) => { disk.set(at, 'part'); await gate; disk.set(at, `bytes of ${url}`); };
     const start = files.syncPacks(Date.now() + 2 * 24 * 60 * 60 * 1000);
     await new Promise(resolve => setTimeout(resolve, 0));
-    // A stopped download sweeps the folder while the first repaired ayah is still arriving.
     files.stopDownload(7, 'all');
     expect([...disk.keys()].some(key => key.endsWith('.part'))).toBe(true);
     await files.syncPacks(Date.now());

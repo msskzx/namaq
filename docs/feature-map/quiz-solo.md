@@ -18,8 +18,8 @@ flowchart RL
 
 | Part of the screen | Label | Opens | Code |
 | --- | --- | --- | --- |
-| `SoloSetup` | ابدأ الاختبار | [الاختبار](quiz-play.md) | [screens/quiz/solo.tsx:73](../../mobile/src/screens/quiz/solo.tsx#L73) |
-|  | أكمله | [الاختبار](quiz-play.md) | [screens/quiz/solo.tsx:88](../../mobile/src/screens/quiz/solo.tsx#L88) |
+| `SoloSetup` | ابدأ الاختبار | [الاختبار](quiz-play.md) | [screens/quiz/solo.tsx:64](../../mobile/src/screens/quiz/solo.tsx#L64) |
+|  | أكمله | [الاختبار](quiz-play.md) | [screens/quiz/solo.tsx:79](../../mobile/src/screens/quiz/solo.tsx#L79) |
 
 ## Sheets
 

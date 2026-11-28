@@ -15,31 +15,18 @@ import type { Graded } from '@/lib/useWriteBoxes';
 import type { Palette } from '@/lib/theme';
 import { SURAH_TITLES } from '@shared/quran/surahNames';
 
-/** A page's text height for its width, as AyahLines and the home cards draw it. */
 const PAGE_TEXT_RATIO = 1.5;
 const NONE: Readonly<Record<string, unknown>> = {};
 const NO_SAVES: ReadonlySet<string> = new Set();
 const noTouch = () => {};
-/** MushafPageView asks for an ayah's end sign with this word. */
 const END = Number.MAX_SAFE_INTEGER;
-/** A recited ayah in a party (QuizPage's `party`). */
-export type PartyWrite = { pen: PenRule; asked: number[]; /** `done` false: what is written so far, graded if the time runs out; true: the ayah sent. */
+export type PartyWrite = { pen: PenRule; asked: number[];
   onWrite: (answer: string[], done: boolean) => void; words?: string[]; answer?: string[] | null };
 
-/** Whether the quiz's recite bar starts with the pen on (writing) or off (revealing). */
 const WRITE = 'quiz-write';
 
-/**
- * A quiz question about one ayah drawn as its whole mushaf page, the ayah in its own place and lines (owner, 2026-11-17):
- * the reader's page (MushafPageView). «الصفحة قبلها» off (the default): every other word is an empty box of its shape,
- * surah titles too, only the ayah numbers left, and nothing around the page says where it is. On: the ayat before it are
- * written. `ask` (the question's PageAsk) says how much of the asked ayah shows and whether its surah title shows. A recited
- * question (`ask.recite`) is recited with recite mode's own bar (recite/), as in the mushaf, stopping at the ayah's end:
- * `onWritten` gets the grade when the pen wrote it, `onShown` runs once it shows. `shown` shows all of it.
- */
 function QuizPage({ ayah, ask, shown, onWritten, onShown, party, palette }: { ayah: string; ask: PageAsk; shown: boolean;
   onWritten?: (graded: Graded) => void; onShown?: () => void;
-  /** In a party: the pen on with the host's rule, what is written handed over, and once revealed, the words marked by what was sent. */
   party?: PartyWrite; palette: Palette }) {
   const [width, setWidth] = useState(0);
   const inRow = useCardRow();
@@ -61,14 +48,12 @@ function QuizPage({ ayah, ask, shown, onWritten, onShown, party, palette }: { ay
   const recite = useRecite({ model: ask.recite ? parts?.model ?? null : null, position, setPosition, writing: (writing || !!party) && !shown && !sent, pen, until: ayah, floor: parts?.cut ?? 0,
     onWritten: (_key, graded) => onWritten?.(graded),
     onSubmit: party ? (_key, typed) => { setSent(true); party.onWrite(party.asked.map(at => typed[at] ?? ''), true); } : undefined });
-  // Each word written reaches the party, so a player the time runs out on is graded on what they wrote.
   const typedSoFar = recite.write?.typed;
   const latest = useRef(party);
   latest.current = party;
   useEffect(() => {
     if (typedSoFar && latest.current && !sent) latest.current.onWrite(latest.current.asked.map(at => typedSoFar[at] ?? ''), false);
   }, [typedSoFar, sent]);
-  // Revealed in a party: the words marked by what this player sent, as the party graded them.
   const marked = shown && party?.words && party.answer ? { key: ayah, ...writtenGrade({ asked: party.asked, words: party.words }, party.answer) } : null;
   const open = shown || !ask.recite || recite.done;
   useEffect(() => { if (recite.done) onShown?.(); }, [recite.done]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -83,16 +68,11 @@ function QuizPage({ ayah, ask, shown, onWritten, onShown, party, palette }: { ay
     const base = recite.view;
     return {
       ...(base ?? { upcoming: ayah, gap: null, nextAyah: () => null, nextWord: () => null }),
-      // The quiz stops at its ayah: nothing after it is the next one.
       upcoming: open ? null : base?.upcoming ?? ayah,
-      // Every surah title on the page is a step of its first ayah, so a title stays hidden like the words.
       titled,
       hidden: (key, word) => {
-        // Ayah numbers stay, so the page keeps the shape of its ayat.
         if (word === END) return false;
         const title = key.endsWith(':1') ? titled.get(Number(key.split(':')[0])) ?? 0 : 0;
-        // The asked ayah's surah title shows when it is the question, and else stays hidden until it is answered (always
-        // when the surah is the answer); its words are recite mode's.
         if (key === ayah) return word < steps ? ask.title !== 'shown' && (nameless || !open || !before) : !open && !!base?.hidden(ayah, word - steps);
         const place = order.indexOf(key);
         if (!before || place < 0 || place > at) return true;
@@ -110,7 +90,6 @@ function QuizPage({ ayah, ask, shown, onWritten, onShown, party, palette }: { ay
             write={shown ? null : recite.write} checked={marked ?? recite.checked} />
         )}
       </View>
-      {/* In a feed card the bar joins the row under the card, small like the recall card's (owner: no buttons in a card). */}
       {ask.recite && !shown && !sent && <UnderCard><RecitePill recite={recite} writing={writing || !!party} onWriting={toggleWriting} palette={palette} small={inRow} /></UnderCard>}
       {recite.write && recite.boxes.field}
     </View>

@@ -40,3 +40,7 @@ Counts are of product code: test files are left out. "Empty catch blocks" counts
 | 2026-11-28 | 3 feature map | app | page searches that leave their page | 0 | | the tarajim search did before #1225; now a test fails if one does |
 | 2026-11-28 | 3 feature map | app | single-thing pages linked one way only | 1 | | hadith → person (a long press on an ayah counts as a way to its page) |
 | 2026-11-28 | 3 feature map | app | links into another tab without its first page under it | 79 | | `router.push` or `router.navigate` instead of `toTab`, mostly home feed and quiz cards into the tarajim tab |
+| 2026-11-28 | 4 no comments | app | comment lines | 4477 | 20 | the 20 left are "see docs/… / see R00xx" pointers and `@vitest-environment` lines |
+| 2026-11-28 | 4 no comments | shared | comment lines | 3511 | 62 | pointers, plus the header of each generated `.d.ts` data file |
+| 2026-11-28 | 4 no comments | app + shared | comments turned into a doc or record pointer | 0 | 87 | a removed comment that named docs/… or R00xx kept only that name |
+| 2026-11-28 | 4 no comments | website | comment lines | 4443 | 4443 | the website is paused; the rule reaches it when it returns |

@@ -6,10 +6,6 @@ import type { Palette } from '@/lib/theme';
 
 const PER_ROW = 6;
 
-/**
- * Numbers in rings, six to a row (each ring 44pt or more on the narrowest phone), each opening its own (owner, 2026-11-23: sketch hadith-design, al-Nawawi's Forty and
- * Ibn Rajab's eight on the hadith tab). `tone` rings them in a colour of their own (Ibn Rajab's additions).
- */
 export default function NumberGrid({ numbers, onOpen, label, tone, palette }: {
   numbers: number[]; onOpen: (n: number) => void; label: (n: number) => string; tone?: string; palette: Palette;
 }) {

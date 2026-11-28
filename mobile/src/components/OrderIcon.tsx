@@ -1,9 +1,5 @@
 import { createLucideIcon } from 'lucide-react-native';
 
-/**
- * lucide's ListOrdered drawn for an Arabic list (owner, 2026-11-21; sketch quran-hub-icons/order-icon-dark.png): the
- * numbers ١ and ٢ on the right instead of the Western 1 and 2, which no icon may draw.
- */
 export default createLucideIcon('OrderIcon', [
   ['path', { d: 'M3 5h10', key: 'a' }],
   ['path', { d: 'M3 12h10', key: 'b' }],

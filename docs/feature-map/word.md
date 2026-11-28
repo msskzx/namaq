@@ -22,7 +22,7 @@ flowchart RL
 
 | Part of the screen | Label | Opens | Code |
 | --- | --- | --- | --- |
-| `WordView` | (open) | [المصحف](read.md) | [components/WordSheet.tsx:140](../../mobile/src/components/WordSheet.tsx#L140) |
+| `WordView` | (open) | [المصحف](read.md) | [components/WordSheet.tsx:111](../../mobile/src/components/WordSheet.tsx#L111) |
 
 ## Sheets
 

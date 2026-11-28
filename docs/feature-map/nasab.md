@@ -29,8 +29,8 @@ flowchart RL
 
 | Part of the screen | Label | Opens | Code |
 | --- | --- | --- | --- |
-| `Box` | (onPress) | [الترجمة](person.md) | [screens/nasab.tsx:33](../../mobile/src/screens/nasab.tsx#L33) |
-| `NasabScreen` | (back) | [التراجم](tarajim.md) | [screens/nasab.tsx:205](../../mobile/src/screens/nasab.tsx#L205) |
+| `Box` | (onPress) | [الترجمة](person.md) | [screens/nasab.tsx:31](../../mobile/src/screens/nasab.tsx#L31) |
+| `NasabScreen` | (back) | [التراجم](tarajim.md) | [screens/nasab.tsx:163](../../mobile/src/screens/nasab.tsx#L163) |
 
 ## Sheets
 

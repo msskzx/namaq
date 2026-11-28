@@ -7,9 +7,6 @@ import { num } from '@shared/quran/arabicNumber';
 import { Text } from '@/ui/Text';
 import { blend, type Palette } from '@/lib/theme';
 
-// An isnad as a metro line (owner 2026-11-24, sketch hadith-design/sketch3): a station for each narrator, every station the
-// same circle (the collector's filled), the line thick, the word each narrated with on the line between two stations. No
-// arrowheads (owner, 2026-11-20): the order down the page and the word on each line say who heard from whom.
 const R = 8;
 const STROKE = 4;
 const LEVEL = 112;
@@ -30,7 +27,6 @@ function Dot({ station, colour, palette, size = 2 * R + 6 }: { station: MetroSta
 
 const nameColour = (station: MetroStation, palette: Palette) => (station.kind === 'collector' ? palette.accent : station.kind === 'companion' ? palette.green : palette.ink);
 
-/** One plain chain: the line down the right, each name beside its station, the word between two stations on the line. */
 function Line({ metro, palette }: { metro: Metro; palette: Palette }) {
   const stations = [...metro.stations].sort((a, b) => a.level - b.level);
   const legTo = new Map(metro.legs.map(leg => [leg.to, leg]));
@@ -61,21 +57,14 @@ function Line({ metro, palette }: { metro: Metro; palette: Palette }) {
   );
 }
 
-/**
- * Routes and tabaqat: each tabaqa a shaded level with its name in the left margin, its people side by side on it; each
- * route its own colour from the collector until the routes meet, then one line. Where the routes over one stretch say
- * different words, their lines run side by side there, each with its word.
- */
 function RouteMap({ metro, width, palette }: { metro: Metro; width: number; palette: Palette }) {
   const colours = routeColours(palette);
   const left = NAME_W / 2;
   const right = width - NAME_W / 2;
   const x = (across: number) => (metro.cols > 1 ? right - across * (right - left) : width / 2);
-  // A shaded tabaqa is a colour of its own, so a name on it is backed by the same colour where a line runs behind it.
   const shade = blend(palette.ink, palette.card, 0.05);
   const ground = (level: number) => (metro.levels[level]?.tabaqa && level % 2 === 1 ? shade : palette.card);
   const BAND = { above: 26, below: LEVEL - 34 };
-  /** The colour under a point: its level's shade inside the level's band, the card between bands. */
   const groundAt = (py: number) => {
     const level = Math.floor((py - TOP + BAND.above) / LEVEL);
     return py <= y(level) + BAND.below ? ground(level) : palette.card;
@@ -87,7 +76,6 @@ function RouteMap({ metro, width, palette }: { metro: Metro; width: number; pale
     const from = at.get(leg.from)!;
     const to = at.get(leg.to)!;
     const level = from.level === to.level;
-    // Between two levels the line bends, and its word stands, low: under the names and the tabaqa's own name.
     const bendFrom = from.y + 64;
     const bendTo = to.y - 16;
     const lanes = leg.words.length > 1 ? leg.words.map((word, lane) => ({ ...word, shift: (lane - (leg.words.length - 1) / 2) * (STROKE + 3) })) : [{ ...leg.words[0], route: leg.route, shift: 0 }];
@@ -111,7 +99,6 @@ function RouteMap({ metro, width, palette }: { metro: Metro; width: number; pale
           <Polyline key={`l${leg.i}-${j}`} points={path.points} fill="none" stroke={path.colour} strokeWidth={STROKE} strokeLinecap="round" strokeLinejoin="round" />
         )))}
       </Svg>
-      {/* Each tabaqa's number and Ibn Hajar's name for it, low on its own level, under its people's names. */}
       {metro.levels.map((level, i) => level.tabaqa ? (
         <Text key={`t${i}`} pointerEvents="none" numberOfLines={1} style={{ position: 'absolute', left: 6, maxWidth: width - 12, top: y(i) + 54, color: palette.muted, fontSize: 11, lineHeight: 15, textAlign: 'left', backgroundColor: ground(i), paddingHorizontal: 2 }}>
           {`الطبقة ${num(level.tabaqa)}${level.name ? `، ${level.name}` : ''}`}
@@ -138,7 +125,6 @@ function RouteMap({ metro, width, palette }: { metro: Metro; width: number; pale
   );
 }
 
-/** A hadith's isnad drawn as a metro line: one plain chain down the right, or its routes and tabaqat as a map. */
 export default function Isnad({ isnad, palette }: { isnad: AppIsnad; palette: Palette }) {
   const [room, setRoom] = useState(0);
   const metro = isnadMetro(isnad);
@@ -149,7 +135,6 @@ export default function Isnad({ isnad, palette }: { isnad: AppIsnad; palette: Pa
       <View accessible accessibilityLabel={`الإسناد: ${metroOrder(metro).join('، ')}`}>
         {plain ? <Line metro={metro} palette={palette} /> : room > 0 ? <RouteMap metro={metro} width={room} palette={palette} /> : null}
       </View>
-      {/* The tabaqat are Ibn Hajar's, in Taqrib al-Tahdhib. */}
       {ranked && <Text style={{ color: palette.muted, fontSize: 13, textAlign: 'right' }}>الطبقات من تقريب التهذيب لابن حجر</Text>}
     </View>
   );

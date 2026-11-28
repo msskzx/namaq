@@ -16,7 +16,6 @@ describe('أين يلتقي النسبان؟', () => {
     for (const q of questions) {
       expect(q.choices).toHaveLength(4);
       expect(new Set(q.choices.map(c => bareName(c.value))).size).toBe(4);
-      // No wrong choice is a father the two share (anyone above the meeting point would also be "where they meet").
       expect(q.note?.text.split('\n')[0].endsWith(q.correctAnswer)).toBe(true);
     }
   });
@@ -31,7 +30,6 @@ describe('صاحب المنقبة', () => {
       expect(q.choices.map(c => c.value)).toContain(q.correctAnswer);
     }
     expect(questions.some(q => bareName(q.promptArabic).includes('طلحه'))).toBe(false);
-    // Ibn Ma'in's «مسور ثقة» names al-Miswar without the article.
     expect(questions.some(q => bareName(q.promptArabic).startsWith('«مسور'))).toBe(false);
   });
 
@@ -54,7 +52,6 @@ describe('fair choices', () => {
   it('writes «بنت» after a woman’s name in the nasab note, and never asks a meeting the question already names', () => {
     for (const q of nasabQuestions()) {
       expect(q.note?.text).not.toMatch(/^(?:صفية|عائشة) بن /u);
-      // Word for word: «عمرو بن حريث» does not name «عمر».
       expect(` ${bareName(q.promptArabic).replace(/[؟?]/gu, ' ')} `.includes(` ${bareName(q.correctAnswer)} `)).toBe(false);
     }
   });
@@ -77,7 +74,6 @@ describe('ما صلته به؟', () => {
     const questions = tieQuestions();
     expect(questions.length).toBeGreaterThan(0);
     const zubayr = questions.find(q => q.key.includes('az-zubayr-ibn-al-awwam') && q.key.includes('safiyyah-bint-abd-al-muttalib'))!;
-    // Asked one way round: what Safiyyah is to al-Zubayr, or he to her.
     expect(['أمه', 'ابنها']).toContain(zubayr.correctAnswer);
     const prophet = questions.find(q => q.key.includes('az-zubayr-ibn-al-awwam') && q.key.includes('prophet-muhammad'));
     if (prophet) expect(prophet.choices.map(c => c.value)).not.toContain('صاحبه');
@@ -89,7 +85,6 @@ describe('ابحث عن الجواب', () => {
   it('opens each Tarajim question on the people it asks about, with the answer marked for after the reveal', async () => {
     const { tieQuestions } = await import('./tarajim');
     const safiyyah = tieQuestions().find(q => q.key === 'TARAJIM_TIE:safiyyah-bint-abd-al-muttalib:az-zubayr-ibn-al-awwam')!;
-    // «ما صفية من الزبير؟»: his ties round him, where her node names what she is to him.
     expect(safiyyah.look).toEqual({ view: 'ties', slug: 'az-zubayr-ibn-al-awwam', mark: 'safiyyah-bint-abd-al-muttalib' });
     const [nasab] = nasabQuestions();
     expect(nasab.look).toEqual({ view: 'nasab', slugs: nasab.key.split(':').slice(1), mark: true });
@@ -147,7 +142,6 @@ describe('بمَ لُقّب؟ and ما كنيته؟', () => {
 describe('once answered, each choice says whose name it is (owner, 2026-11-22)', () => {
   const people = peopleJson as AppPerson[];
   const nameOf = (person: AppPerson) => (person.slug === 'prophet-muhammad' && !person.name.includes('ﷺ') ? `${person.name} ﷺ` : person.name);
-  /** The people a name belongs to, read straight from the entries the choices come from. */
   const bearersOf = (facts: ReturnType<typeof laqabFacts>, name: string) => facts.filter(fact => bareName(fact.name) === bareName(name));
   const check = (questions: ReturnType<typeof nameQuestions>, facts: ReturnType<typeof laqabFacts>, rightBy: (q: (typeof questions)[number]) => string) => {
     expect(questions.length).toBeGreaterThan(0);
@@ -157,7 +151,6 @@ describe('once answered, each choice says whose name it is (owner, 2026-11-22)',
         if (q.correctAnswers?.includes(choice.value) ?? q.correctAnswer === choice.value) { expect(line).toBe(rightBy(q)); continue; }
         const bearers = bearersOf(facts, choice.value);
         expect(bearers.length).toBeGreaterThan(0);
-        // Every bearer is named, and the words that give each the name are among the question's sources.
         for (const { person, fact } of bearers) {
           expect(line?.split('، ')).toContain(nameOf(person));
           expect(q.sources.some(source => source.quote === fact.text)).toBe(true);
@@ -184,7 +177,6 @@ describe('أسماء النبي ﷺ (several right choices)', () => {
   it('offers four choices, one to four of them his names as the hadith gives them, the rest Companions’ laqabs', () => {
     const names = new Set(prophetNames(people).map(title => title.name));
     expect(names.has('نبي')).toBe(false);
-    // A name the hadith joins with «و» is his too.
     expect(names.has('نبي التوبة')).toBe(true);
     expect(names.has('خاتم النبيين')).toBe(true);
     const questions = prophetNameQuestions(people, seededRandom(3), 30);

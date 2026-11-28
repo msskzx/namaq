@@ -4,10 +4,7 @@ import type { ReaderBookId } from '@shared/bookReader';
 import { openBookAt, openBookPage } from '@/lib/ways';
 import type { Palette } from '@/lib/theme';
 
-/**
- * A book sheet's way into the book itself: the book reader at its passage on the ayah, or at a printed page «part:page»
- * (docs/plans/book-reader.md). Without `onClose` (inside a quiz, which leaving would end) there is no button.
- */
+// see docs/plans/book-reader.md
 export default function OpenInBook({ book, ayah, printed, onClose, palette }: { book: ReaderBookId; onClose?: () => void; palette: Palette } & ({ ayah: string; printed?: never } | { printed: string; ayah?: never })) {
   if (!onClose) return null;
   return (

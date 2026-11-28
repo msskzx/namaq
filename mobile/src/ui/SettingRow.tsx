@@ -5,10 +5,6 @@ import { Text } from '@/ui/Text';
 import { Tap } from '@/ui/Tap';
 import type { Palette } from '@/lib/theme';
 
-/**
- * A settings row that folds: its icon, its name and what is chosen under it; a tap opens the picker below. Settings'
- * «ما أحفظه» and «اهتماماتي» share it. `onFold` hears each open and close (the interests start the feed afresh on close).
- */
 export default function SettingRow({ Icon, title, value, children, palette, onFold }: {
   Icon: LucideIcon; title: string; value: string; children: ReactNode; palette: Palette; onFold?: (open: boolean) => void;
 }) {

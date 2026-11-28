@@ -10,10 +10,7 @@ import { back } from '@/lib/ways';
 import { usePalette } from '@/lib/theme';
 import { SearchResults, useAppSearch } from '@/components/SearchResults';
 
-/**
- * One search across the app (owner, 2026-11-13), opened from the home top bar: surahs first, then ayat, words, trees, compare pages,
- * prophets' events, Tuhfa verses and the reader's notes. Each group shows three; its arrow opens the rest. docs/plans/search-everything.md
- */
+// see docs/plans/search-everything.md
 export default function SearchScreen() {
   const palette = usePalette();
   const shrink = useShrinkOnScroll();

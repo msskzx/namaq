@@ -9,8 +9,6 @@ import { QuranWord } from '@/components/quran/text/AyahFlow';
 
 export type HelpTopic = 'branches' | 'compare' | 'prophets' | 'order';
 
-/** A coloured sample word and what its colour means. */
-/** The colour of each likeness (MARK_LEGEND), as the colour setting draws it, with the kind of difference the books name for it. */
 function Legend({ palette }: { palette: Palette }) {
   return <>
     {MARK_LEGEND.map(item => <Key key={item.kind} word={item.word} color={(item.kind !== 'plain' && palette.marks[item.kind]) || palette.ink} text={item.ar} palette={palette} />)}
@@ -29,10 +27,6 @@ function Key({ word, color, text, palette }: { word: string; color: string; text
 
 const TITLES: Record<HelpTopic, string> = { branches: 'قواعد المطابقة', compare: 'كيف نقارن؟', prophets: 'كيف تُقرأ القصة؟', order: 'من أين هذا الكلام؟' };
 
-/**
- * The page help the website keeps in its settings sheet (MatchingRules in src/app/quran/branches/BranchHeading.tsx),
- * with the colour legend inside it. Shared by the branches and compare tabs.
- */
 export default function HelpSheet({ topic, note, onClose, palette }: { topic: HelpTopic | null; note?: string; onClose: () => void; palette: Palette }) {
   const paragraph = { color: palette.ink, fontSize: 15, lineHeight: 25, textAlign: 'right' as const };
   return (

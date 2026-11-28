@@ -1,6 +1,6 @@
 import { seg, type Story, type StoryEvent } from './story';
 
-// docs/plans/quran-prophet-timelines.md (Hud)
+// see docs/plans/quran-prophet-timelines.md
 const events: StoryEvent[] = [
   { phase: 0, title: 'أخوهم هود: اعبدوا الله', segments: [seg(7, 65), seg(11, 50), seg(26, 123, 126), seg(46, 21)] },
   { phase: 0, title: 'لا أسألكم عليه أجرا', segments: [seg(11, 51), seg(26, 127)] },

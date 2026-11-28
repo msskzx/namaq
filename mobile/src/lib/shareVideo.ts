@@ -4,7 +4,6 @@ import * as Sharing from 'expo-sharing';
 import { UI_FONT } from './theme';
 import { QURAN_FAMILY, QURAN_FONT_FILE } from '@/components/quran/text/quranFont';
 
-/** The Hafs font for the recorder page, inlined so the web view draws the same letters as the app. Read once; a failed read is tried again next time. */
 let faces: Promise<string> | null = null;
 export function fontFace() {
   faces ??= readFaces().catch(error => { faces = null; throw error; });
@@ -20,7 +19,6 @@ async function readFaces() {
     + (await face(UI_FONT, require('../../assets/fonts/Amiri-Bold.ttf'), 'bold'));
 }
 
-/** Saves the recorded video in the app's cache and opens the phone's share sheet. */
 export async function shareVideo(data: string, mime: string) {
   const file = new File(Paths.cache, `namaq-tree.${mime.includes('mp4') ? 'mp4' : 'webm'}`);
   if (file.exists) file.delete();

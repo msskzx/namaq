@@ -179,15 +179,10 @@ const rajab = dataOf(rajabFile);
 
 type IconType = (props: LucideProps) => React.ReactNode;
 
-/** A post's icon button, as the compare card's row has them: muted, or in the accent when on. */
 function Action({ Icon, label, on, onPress, tone, disabled }: { Icon: IconType; label: string; on?: boolean; onPress: () => void; palette: Palette; tone?: 'green'; disabled?: boolean }) {
   return <IconButton Icon={Icon} label={label} onPress={onPress} on={on} disabled={disabled} tone={tone} />;
 }
 
-/**
- * One of a card's two views at a time, swapped from the row under the card (owner, 2026-11-22: no switch inside a card): the
- * button names the other view, with its icon, and a tap shows it.
- */
 function SwapButton<K extends string>({ options, value, onChange, Icons }: { options: readonly { key: K; label: string }[]; value: K;
   onChange: (key: K) => void; Icons: Record<K, IconType> }) {
   const other = options.find(option => option.key !== value) ?? options[0];
@@ -197,46 +192,20 @@ function SwapButton<K extends string>({ options, value, onChange, Icons }: { opt
 const DRAWING_ICONS: Record<DrawingOrText, IconType> = { drawing: Network, text: TextAlignEnd };
 const ARMIES_ICONS: Record<ArmiesTab, IconType> = { field: Users, killed: Swords };
 
-/**
- * Every feed post's one shape (owner, 2026-11-14 and 2026-11-20, like an Instagram post): the head, the body in one card,
- * the row of icon buttons under it grouped on the right (the open button, the card's tools, save, share) with the «⋯» of
- * «ليس من اهتماماتي» alone on the left, then the source line. The head opens the general topic; the row's open button this
- * card's own place. A reading card's body opens it too (`press`), nothing else's: a tap on a question or recall card must
- * not cut its answer (owner, 2026-11-23). A long card stops at two thirds of the screen, the rest in a sheet (ui/Card `cap`).
- */
 function Post({ head, open, press, actions, share, picture, source, bar, palette, whole = false, children }: { head: React.ReactNode;
-  /** Opens the item in its own reader (the mushaf at the ayah, the hadith in its book): first in the row. */
   open?: React.ReactNode;
-  /**
-   * The card itself as a button to the same place as `open` (owner, 2026-11-23: the reading cards, «تابع القراءة» and
-   * «جزء اليوم», open the mushaf from a tap anywhere on the page slice), dimming while pressed as the head does. `label`
-   * names the page for a screen reader, apart from the open button's own name.
-   */
   press?: { onPress: () => void; label: string };
   actions?: React.ReactNode;
-  /**
-   * The card's share button, last of the group, after save. Left out, the card shares as it is (ui/CardShare, owner
-   * 2026-11-22: every card shares); a card with its own share (a video, pictures) gives it, and `false` shares nothing.
-   */
   share?: React.ReactNode | false;
-  /** What the picture shows instead of the card as it is: the recall card shares its ayah whole, never the hiding. */
   picture?: { head: React.ReactNode; body: React.ReactNode };
-  /** The books the card stands on, named on its source line; a `Reference` inside the card joins its sheet. */
   source?: Source[];
-  /**
-   * Never capped (owner, 2026-11-20): a question shows all its choices so it can be answered on the card, and a recall card
-   * its whole ayah with one write box.
-   */
   whole?: boolean;
-  /** A bar of the feature's own under the card, on its own line above the buttons (recite mode's bar, on the recall card; owner 2026-11-23). */
   bar?: React.ReactNode; palette: Palette; children: React.ReactNode }) {
-  // The card's save is named on the saved shelf by its head's title and line.
   const named = isValidElement<{ title?: string; sub?: string }>(head) ? [head.props.title, head.props.sub].filter(Boolean).join(' · ') : '';
   const menu = useNotMine();
   return (
     <View style={{ gap: 4 }}>
       {head}
-      {/* What the card's content hands up with UnderCard joins the row under the card, before the post's own buttons; share stays last. */}
       <CardWithRow palette={palette} pad={0} clip cap={!whole} bar={bar} onPress={press?.onPress} accessibilityLabel={press?.label}
         lead={open} row={<>{actions}<SaveAction text={named} />{share === undefined
           ? <CardShare head={picture?.head ?? head} sources={source} palette={palette}>{picture?.body ?? children}</CardShare>
@@ -245,22 +214,11 @@ function Post({ head, open, press, actions, share, picture, source, bar, palette
   );
 }
 
-/**
- * What a feed card's own buttons act on (owner, 2026-11-19): the card's kind and item (to save it) and the interest it came
- * from («ليس من اهتماماتي»). A card from outside the reader's interests is added from its line above (SurpriseLine).
- */
 type CardMenu = { kind: FeedCardKind | FeedQuizKind; item?: string; interest: string; surprise?: boolean;
-  /** Left out where taking the interest out makes no sense (the only one picked, one interest's own view). */
   notMine?: () => void;
-  /** A saved card shown again (the saved shelf, «مدونتي»): only to unsave it. */
   savedOnly?: boolean };
 const CardMenuContext = createContext<CardMenu | null>(null);
 
-/**
- * A feed card's save, in the row under the card like every other button (owner, 2026-11-20: every home card has one
- * layout, no «…» menu). `text` names a saved card on the saved shelf. The pair and tree cards save from their own row
- * (shared/bookmarkKind.ts SAVES_ITSELF).
- */
 function SaveAction({ text }: { text: string }) {
   const menu = useContext(CardMenuContext);
   const saved = useSyncExternalStore(subscribeBookmarks, readBookmarks);
@@ -270,38 +228,28 @@ function SaveAction({ text }: { text: string }) {
   return <IconButton Icon={Bookmark} label={on ? 'أزلها من المحفوظات' : 'احفظ البطاقة'} on={on} fill onPress={() => toggleBookmark({ id, text, href: '' })} />;
 }
 
-/** The card's «⋯» menu (owner, 2026-11-20): «ليس من اهتماماتي» on a card an interest brought, nothing elsewhere. */
 function useNotMine(): MoreItem[] {
   const menu = useContext(CardMenuContext);
   const notMine = menu && !menu.savedOnly && !menu.surprise ? menu.notMine : undefined;
   return notMine ? [{ Icon: CircleMinus, name: 'ليس من اهتماماتي', label: `«${interestById(menu!.interest)?.name ?? ''}» ليس من اهتماماتي`, onPress: notMine }] : [];
 }
 
-/** That «⋯» for a card that draws its own row (the pair and tree cards). */
 function NotMineMenu() {
   return <MoreMenu items={useNotMine()} />;
 }
 
-/** The source line under a card's buttons (owner, 2026-11-20). */
 const sourceLine = (palette: Palette) => function SourceLineOf(named: Source[], all: Source[]) { return <SourceLine named={named} sources={all} palette={palette} />; };
 
-/** A head's topic: a page of the tabs (owner, 2026-11-22: every card's head opens the general topic it names). */
 const topic = (href: Href, label: string) => ({ onPress: () => toTab(href), label });
-/** A head that names a person opens the person. */
 const personTopic = (slug: string) => ({ onPress: () => router.push({ pathname: '/person', params: { slug } }), label: `افتح ترجمة ${personName(GRAPH.nodes.get(slug)!)}` });
-/** One of the Forty's cards opens al-Nawawi's book. */
 const fortyTopic = () => topic({ pathname: '/hadith-book', params: { book: 'forty' } }, 'افتح الأربعين النووية');
 
-/** Where a post's ayat are, for its head: «البقرة ٦١ · آل عمران ٢١، ١١٢» (shared/quran/ayahPlaces.ts). */
 const placesOf = (keys: string[]) => ayahPlaces(keys, shortNames);
 
-/** A mushaf page as a card's source, its juz and page on the line: «المصحف · البقرة، الجزء ٣، الصفحة ٤٥» (owner, 2026-11-22). */
 const mushafPage = (surah: number, page: number): QuizSource =>
   ({ book: MUSHAF_BOOK, at: `${SURAH_NAMES[surah]}، ${juzLabel([pageData(page).juz])}، الصفحة ${num(page)}` });
-/** The ayat a card shows as its source: «المصحف · الإخلاص ٣», each with its page in the sheet. */
 const mushafOf = (...keys: string[]) => sourcesOf(keys.map(key => mushafSource(key, pageOfAyah(key))));
 
-/** The day's things, the same all day: date, juz. */
 function useToday() {
   const now = useMinute();
   const day = dayNumber(now);
@@ -310,36 +258,28 @@ function useToday() {
   return { day, date, juz };
 }
 
-/** Where the reader stopped, kept by the mushaf tab (Reader.tsx, key `reader-place`). */
 const lastPage = () => { const place = readJson('reader-place', isRecord); return isNumberIn(1, PAGES)(place?.page) ? Math.round(place.page) : 1; };
 
-/** The reading card: a slice of the page at the mushaf's فاصلة (else the page it was left on), a button there, today's date, and that page's juz. */
 export function ContinueReading({ palette }: { palette: Palette }) {
   const [last, setLast] = useState(lastPage);
-  // Back on home after reading: show the page reached when no فاصلة is set.
   useFocusEffect(useCallback(() => { setLast(lastPage()); }, []));
   const { page, fasila } = continuePage(useSyncExternalStore(subscribeFasilas, readFasilas, serverFasilas), last);
   const { surah } = useMemo(() => pageStart(pageData(page), surahBefore(page)), [page]);
   const { date } = useToday();
-  // The juz of the page it opens on, not today's juz (owner, 2026-11-18: today's juz is its own card in the feed).
   const juz = pageData(page).juz;
   const read = () => openIntent({ tab: 'read', page });
-  // The juz beside the surah and date in the head, as on today's juz card; the row holds only buttons (owner, 2026-11-22).
   const where = [shortNames[surah], juzLabel([juz]), date?.replace(/ هـ$/, '')].filter(Boolean).join(' · ');
   return (
     <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.mushaf} title={fasila || page > 1 ? 'تابع القراءة' : 'ابدأ القراءة'} sub={where} open={topic('/quran', 'افتح القرآن')} palette={palette} />}
       open={<OpenButton label={`افتح المصحف ${fasila ? 'عند فاصلتك' : 'حيث توقفت'}، سورة ${shortNames[surah] ?? ''}`} onPress={read} palette={palette} />} press={{ onPress: read, label: `الصفحة ${num(page)} من المصحف` }}
       source={sourcesOf([mushafPage(surah, page)])}
-      // Shared, the page alone: not where you stopped (owner's plan, 2026-11-22).
       picture={{ head: <PostHead Icon={FEATURE_ICON.mushaf} title={shortNames[surah] ?? ''} sub={juzLabel([juz])} palette={palette} />,
         body: <View style={{ paddingHorizontal: 12, paddingVertical: 6 }}><PageTop page={page} palette={palette} /></View> }}>
-      {/* The page's first half as the reader draws it (owner, 2026-11-14). */}
       <View style={{ paddingHorizontal: 12, paddingVertical: 6 }}><PageTop page={page} palette={palette} /></View>
     </Post>
   );
 }
 
-/** A look-alike pair as a post: the compare tab's own card (read-along, views, saving, sharing), and a button to open it there. */
 const PairPost = memo(function PairPost({ pair, palette }: { pair: PairCard; palette: Palette }) {
   const [a, b] = pair.sides;
   const compare = useCallback(() => openIntent({ tab: 'compare', lead: a.surah, other: b.surah, ayat: [...sideKeys(a), ...sideKeys(b)] }), [a, b]);
@@ -356,34 +296,15 @@ const PairPost = memo(function PairPost({ pair, palette }: { pair: PairCard; pal
   );
 });
 
-/**
- * What the reader marked on a recall card while the app runs (owner, 2026-11-22: a card does not vanish on a tick): the
- * card stays where it is, its tick lit and the ayah shown, and a second tap takes the tick back (`before`: each mark it
- * touched as it was). On the next visit a marked card gives way to the next one.
- */
 type Recalled = { did: 'remembered' | 'forgot'; before: Record<string, AyahMark | undefined>; visit: number };
 const recalled = new Map<string, Recalled>();
-/** The tick on this ayah's card in this visit; one from an earlier visit is over (its mark has moved on since). */
 const recalledNow = (ayah: string) => { const entry = recalled.get(markAyah(ayah)); return entry?.visit === visitStart() ? entry : undefined; };
-/** Whether the recall card asks to write the whole ayah (on) or reveals it word by word (off). */
 const RECALL_WRITE = 'recall-write';
 
-/**
- * An ayah to recall in the mushaf's own lines (AyahLines), asked as recite mode asks it (owner, 2026-11-14): what comes
- * before it shows, its words are hidden in their places, and recite mode's buttons reveal the next word or the whole ayah.
- * The pen switches to writing the whole ayah in write boxes (lib/useWriteBoxes); the last box shows the ayah with the
- * written words green or amber, and a mistake puts it on the forgotten shelf, as in the reader. A forgotten ayah that is due
- * comes with the review button and «تذكّرتها» rests it; an ayah of the day from what is memorized (`review` absent) has «نسيتها» too.
- * A due ayah hides all its forgotten words in their places at once, as the reader's review does (reviewPosition), and its
- * tick rests every one of them. The forgotten list draws one of these for each forgotten ayah (owner, 2026-11-23), with
- * its own `head`.
- */
 export function ForgottenPost({ ayah: asked, review, due: dueOne, title = 'هل تذكرها؟', Icon = LightbulbOff, head: ownHead, palette }: { ayah: string; review?: () => void;
-  /** A forgotten ayah due for review, with no review button: the forgotten list, whose cards are the review (owner, 2026-11-23). */
   due?: boolean; title?: string; Icon?: IconType; head?: { onPress: () => void; label: string }; palette: Palette }) {
   const ayah = markAyah(asked);
   const forgotten = dueOne ?? !!review;
-  // Fixed when the card is drawn, so a tick taken back puts back the same marks it rested.
   const [keys, gaps] = useMemo(() => {
     if (!forgotten) return [[asked], markWord(asked) === undefined ? undefined : [markWord(asked)!]] as const;
     const due = readDueMarks();
@@ -393,7 +314,6 @@ export function ForgottenPost({ ayah: asked, review, due: dueOne, title = 'هل 
   const [done, setDone] = useState(() => recalledNow(ayah));
   const [writing, setWriting] = useState(() => readJson(RECALL_WRITE, isBoolean) === true);
   const toggleWriting = () => setWriting(on => { writeJson(RECALL_WRITE, !on); return !on; });
-  // One tick at a time: tapping the lit one takes it back, tapping the other moves it.
   const mark = (did: Recalled['did']) => {
     if (done) Object.entries(done.before).forEach(([key, before]) => restoreMark(key, before));
     if (done?.did === did) { recalled.delete(ayah); setDone(undefined); return; }
@@ -405,7 +325,6 @@ export function ForgottenPost({ ayah: asked, review, due: dueOne, title = 'هل 
     setDone(now);
   };
   const marks = <>
-    {/* Worded, now that the recite bar has its own line (owner, 2026-11-23). */}
     <View style={{ flexDirection: 'row', gap: 8 }}>
       <Button pill label="تذكّرتها" Icon={done?.did === 'remembered' ? CircleCheck : Check} tone="green" active={done?.did === 'remembered'} onPress={() => mark('remembered')} />
       {!forgotten && <Button pill label="نسيتها" Icon={LightbulbOff} active={done?.did === 'forgot'} onPress={() => mark('forgot')} />}
@@ -413,18 +332,11 @@ export function ForgottenPost({ ayah: asked, review, due: dueOne, title = 'هل 
     {review && <Action Icon={EyeOff} label={REVIEW_LABEL} onPress={review} palette={palette} />}
   </>;
   const open = <OpenButton label="افتح صفحة الآية" onPress={() => openAyahPage(ayah)} palette={palette} />;
-  // A due forgotten ayah's head opens the forgotten list; any other recall question's, the quizzes, as every question's does.
   const head = ownHead ?? (forgotten ? { onPress: () => router.push({ pathname: '/library', params: { tab: 'forgotten' } }), label: 'افتح ما نسيته' } : topic('/quizzes', 'افتح الاختبارات'));
   return <Recall key={`${ayah}-${writing}`} ayah={ayah} gaps={gaps} title={title} Icon={Icon} head={head} writing={writing} onWriting={toggleWriting} open={open} marks={marks} revealed={!!done} palette={palette} />;
 }
 
-/**
- * The recall card itself: recite mode on one ayah (recite/useRecite.ts, the mushaf's own), with its bar under the card. A
- * tap, double tap or long press on the ayah does what it does in recite mode (the reader's gesture settings); the pen writes
- * what the pen setting asks, and it stops at the ayah's end. Drawn afresh for each way of asking (`writing`).
- */
 function Recall({ ayah, gaps, title, Icon, head, writing, onWriting, open, marks, revealed, palette }: { ayah: string; gaps?: readonly number[]; title: string; Icon: IconType; head: { onPress: () => void; label: string }; writing: boolean; onWriting: () => void; open: React.ReactNode; marks: React.ReactNode;
-  /** Marked from the card («تذكّرتها», «نسيتها»): the ayah shows whole, as recite mode shows it once done. */
   revealed?: boolean; palette: Palette }) {
   const model = useMemo(() => { const page = pageOfAyah(ayah); return page ? pageModel(pageData(page), surahBefore(page)) : null; }, [ayah]);
   const [position, setPosition] = useState<RecitePosition>({ start: ayah, ...(gaps?.length ? { gaps: [...gaps] } : {}), shown: null, words: 0 });
@@ -440,14 +352,12 @@ function Recall({ ayah, gaps, title, Icon, head, writing, onWriting, open, marks
     else if (action === 'save') toggleBookmark({ id: ayahBookmarkId(ayah), text: pageWords(ayah).join(' '), href: ayahHref(ayah) });
   };
   const touches = usePageTouch((gesture, key) => run(readGestures().recite[gesture], key), () => readGestures().recite.double !== 'none');
-  // While writing, a touch on the ayah only brings the keyboard back, as in the reader; the boxes pick a word themselves.
   const onTouch: typeof touches.touch = (...touch) => (recite.write ? recite.boxes.focus() : touches.touch(...touch));
   const [surah, number] = ayah.split(':').map(Number);
   return (
     <Post palette={palette} head={<PostHead Icon={Icon} title={title} sub={`${shortNames[surah] ?? ''} ${num(number)}`} open={head} palette={palette} />} whole
       bar={<RecitePill recite={recite} writing={writing} onWriting={onWriting} palette={palette} />}
       open={open} actions={marks} source={mushafOf(ayah)}
-      // Shared, the ayah's lines as the mushaf sets them: never what is hidden, nor whether it was remembered (owner, 2026-11-22).
       picture={{ head: <PostHead Icon={FEATURE_ICON.mushaf} title={shortNames[surah] ?? ''} sub={num(number)} palette={palette} />,
         body: <View style={{ padding: 12 }}><AyahLines ayah={ayah} menu={false} palette={palette} write={null} checked={null} shown whole /></View> }}>
       <View style={{ padding: 12 }}>
@@ -458,16 +368,10 @@ function Recall({ ayah, gaps, title, Icon, head, writing, onWriting, open, marks
   );
 }
 
-/** «تسميع» on a recite question card (owner, 2026-11-22: only where the question asks to recite the ayah). */
 function ReciteAction({ palette }: { palette: Palette }) {
   return <Action Icon={EyeOff} label="تسميع" onPress={() => openIntent({ tab: 'read', recite: true })} palette={palette} />;
 }
 
-/**
- * Where an answered question's «افتح» goes (owner, 2026-11-22): the page that presents what it asked, to read more there, never
- * the quizzes page. Its look names the feature; else its ayah opens in the reader, its surahs on the order page, a name
- * question on the person's page.
- */
 function openAnswer(question: SoloQuestion) {
   const person = (slug: string) => router.push({ pathname: '/person', params: { slug } });
   if (isTree(question)) return openTreesOf(questionAyat(question)[0]);
@@ -475,9 +379,7 @@ function openAnswer(question: SoloQuestion) {
     const [a, b] = [question.compare.shown.key, question.compare.asked.key];
     return openIntent({ tab: 'compare', lead: Number(a.split(':')[0]), other: Number(b.split(':')[0]), ayat: [a, b] });
   }
-  // «أين كانت؟»: the atlas at the place asked, its sheet open.
   if (question.map) return toTab({ pathname: '/atlas', params: { place: question.correctAnswer, at: String(Date.now()) } });
-  // The prophet's story, not the ayah its look shows.
   if (question.family === PROPHET_STORY) return router.push({ pathname: '/prophets/[slug]', params: { slug: question.correctAnswer } });
   const look = question.look;
   switch (look?.view) {
@@ -506,19 +408,13 @@ function openAnswer(question: SoloQuestion) {
   if (slug && findPerson(slug)) return person(slug);
 }
 
-/** The tree or compare question's room in a card before it has measured what it holds: the quiz's own tree and its buttons. */
 const QUIZ_TREE_HEIGHT = 380;
 
-/**
- * A feed question as it is first asked: the same for a kind and seed all day, so each is worked out once and kept, and a card
- * shown again (another chip, back to «لك») mounts at once instead of building its kind's questions afresh.
- */
 const feedRuns = new Map<string, SoloRun | null>();
 export function feedRun(kind: QuizTopic, seed: number, memorized: Memorized | null): SoloRun | null {
   const id = `${kind}|${seed}|${memorized ? JSON.stringify(memorized) : ''}`;
   if (feedRuns.has(id)) return feedRuns.get(id)!;
   const base = memorized ? { ...DEFAULT_LIST, filters: withMemorizedScope(DEFAULT_LIST.filters, memorized) } : DEFAULT_LIST;
-  // «رتّب الجزء كله» asks a run of surahs that fits the card, not a whole juz (owner, 2026-11-21).
   const list = kind === 'ORDER_JUZ' ? { ...base, filters: { ...base.filters, run: '1' } } : base;
   const started = startSolo({ ...DEFAULT_SOLO, kinds: [kind], length: 1, list }, seededRandom(seed));
   if (feedRuns.size > 300) feedRuns.delete(feedRuns.keys().next().value!);
@@ -526,15 +422,6 @@ export function feedRun(kind: QuizTopic, seed: number, memorized: Memorized | nu
   return feedRuns.get(id)!;
 }
 
-/**
- * One question of the solo quiz as a post (owner, 2026-11-14): the quiz's own question, drawn by its own parts (QuizChoice,
- * or a tree's QuizInputs and QuizFeedback), one kind a card in turn, the same question all day (`seed`). With «الأسئلة مما أحفظ
- * فقط» on, it asks from what is memorized, as the solo quiz does.
- */
-/**
- * What is memorized, as a feed's cards read it: the feed's own (Feed below), which waits for the picker to close and, in a feed
- * kept hidden behind another chip, for the feed to be shown. Outside a feed, the settled pick.
- */
 const FeedMemorized = createContext<Memorized | null | undefined>(undefined);
 function useFeedMemorized() {
   const fromFeed = useContext(FeedMemorized);
@@ -543,18 +430,15 @@ function useFeedMemorized() {
 }
 
 const QuizPost = memo(function QuizPost({ kind, seed, palette, sub, home = true }: { kind: QuizTopic; seed: number; palette: Palette;
-  /** The head's line under the title (the quizzes page names the kind's interest). */ sub?: string;
-  /** Off on the quizzes page itself, where a head opening the quizzes would go nowhere. */ home?: boolean }) {
-  // A tree or compare question's room follows what it holds, up to most of the screen (owner, 2026-11-18).
+ sub?: string;
+ home?: boolean }) {
   const [roomHeight, onFit] = useFitHeight(QUIZ_TREE_HEIGHT);
   const memorized = useFeedMemorized();
   const questions = useSyncExternalStore(memorizedQuestions.subscribe, memorizedQuestions.read);
-  // The question is drawn as the card mounts, from the one worked out before (feedRun), so a chip shows its cards at once.
   const asked = feedRun(kind, seed, memorized && questions ? memorized : null);
   const [run, setRun] = useState<SoloRun | null>(asked);
   const [runOf, setRunOf] = useState(asked);
   if (runOf !== asked) { setRunOf(asked); setRun(asked); }
-  // Answered wrong (or looked up), the question comes back after a rest; right, it goes (shared/quiz/missedQuestions.ts).
   const reported = useRef<string | null>(null);
   useEffect(() => {
     if (!run?.checked[0] || reported.current === `${kind}:${seed}`) return;
@@ -564,12 +448,10 @@ const QuizPost = memo(function QuizPost({ kind, seed, palette, sub, home = true 
   if (!run) return null;
   const question = run.questions[0];
   const checked = run.checked[0];
-  // Answered: a picked choice, or a tree or compare question checked (owner, 2026-11-22: «افتح» only then).
   const answered = isTree(question) || isCompare(question) ? !!checked : run.typed[0][0] !== undefined;
   const prompt = question.promptArabic && question.promptArabic !== FEED_QUIZ_NAMES[kind] ? <QuizPrompt text={question.promptArabic} palette={palette} /> : undefined;
   return (
     <Post palette={palette} head={<PostHead Icon={QUIZ_ICON[kind as FeedKind]} title={FEED_QUIZ_NAMES[kind]} sub={sub} open={home ? topic('/quizzes', 'افتح الاختبارات') : undefined} palette={palette} />} whole
-      // Unanswered, a tree or compare question's «تحقق» leads the row, before «تلميح», as the choice questions' does.
       open={answered ? <OpenButton label="افتح ما يشرح الجواب" onPress={() => openAnswer(question)} palette={palette} />
         : (isTree(question) || isCompare(question)) && !checked ? <Action Icon={Check} label="تحقق" onPress={() => setRun(check(run))} palette={palette} /> : undefined}
       actions={kind === RECITE_SNIPPET && !answered && <ReciteAction palette={palette} />}>
@@ -597,7 +479,6 @@ const QuizPost = memo(function QuizPost({ kind, seed, palette, sub, home = true 
   );
 });
 
-/** The surah openings quiz as a post: a surah's first ayah to write under its name, as the openings quiz asks it in the mushaf. */
 function OpeningPost({ seed, palette }: { seed: number; palette: Palette }) {
   const memorized = useFeedMemorized();
   const questions = useSyncExternalStore(memorizedQuestions.subscribe, memorizedQuestions.read);
@@ -606,11 +487,6 @@ function OpeningPost({ seed, palette }: { seed: number; palette: Palette }) {
   return surah ? <ForgottenPost ayah={`${surah}:1`} title={FEED_QUIZ_NAMES[OPENINGS]} Icon={QUIZ_ICON[OPENINGS]} palette={palette} /> : null;
 }
 
-/**
- * «من التراجم» (owner, 2026-11-18; sketch tarajim-app/sketch-dark.png, screen 4): a person from a converted entry in brief,
- * as his page gives it (owner, 2026-11-23: one virtue alone was too small a card), in the book's words with who says
- * each; the head opens the tarajim, «افتح» his page.
- */
 function TarajimPost({ id, palette }: { id: string; palette: Palette }) {
   const pick = virtueOf(id);
   if (!pick) return null;
@@ -618,7 +494,6 @@ function TarajimPost({ id, palette }: { id: string; palette: Palette }) {
   return (
     <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.person} title="من التراجم" sub={personName(pick.person)} open={topic('/tarajim', 'افتح التراجم')} palette={palette} />}
       open={<OpenButton label={`افتح ترجمة ${personName(pick.person)}`} onPress={open} palette={palette} />}
-      // The Sahih's routes too, where a virtue is shown in its words (owner, 2026-11-25).
       source={sourcesOf([...pageSources(briefFacts(pick.person).flatMap(fact => fact.refs)), ...briefFacts(pick.person).flatMap(fact => sahihSources(fact).slice(0, fact.sahih?.length ?? 0))])}>
       <View style={{ padding: 14 }}>
         <PersonBrief person={pick.person} palette={palette} />
@@ -627,10 +502,6 @@ function TarajimPost({ id, palette }: { id: string; palette: Palette }) {
   );
 }
 
-/**
- * «صلة» (owner, 2026-11-18; sketch tarajim-app/graph/sketch2-dark.png): two converted people and the nearest chain of ties
- * that joins them, in one sentence with the pages that state each tie; the head opens «بينه وبين…» with the two picked.
- */
 function TiePost({ id, palette }: { id: string; palette: Palette }) {
   const width = usePageWidth();
   const [shown, setShown] = useState<DrawingOrText>('drawing');
@@ -645,7 +516,6 @@ function TiePost({ id, palette }: { id: string; palette: Palette }) {
       actions={<SwapButton options={DRAWING_OR_TEXT} value={shown} onChange={setShown} Icons={DRAWING_ICONS} />}
       source={sourcesOf(pageSources(pair.steps.flatMap(step => step.link.refs)))}>
       <View style={{ padding: 14, gap: 6 }}>
-        {/* The same drawing as «بينه وبين…» (owner, 2026-11-19), or the sentence that says it: one at a time, the drawing first (owner, 2026-11-20). */}
         {shown === 'drawing'
           ? <TiesChain nodes={nodes} steps={pair.steps} first={pair.a} picked={[pair.a, pair.b]} width={Math.min(width - 60, 480)} palette={palette} inCard />
           : <Text style={{ color: palette.ink, fontSize: 18, lineHeight: 32, textAlign: 'right' }}>{chainSentence(GRAPH, pair.steps, personName)}.</Text>}
@@ -654,11 +524,6 @@ function TiePost({ id, palette }: { id: string; palette: Palette }) {
   );
 }
 
-/**
- * «الألقاب» and «الكنى» (owner, 2026-11-19; sketch titles-quiz/sketch-dark.png, screen 3): one person's laqab or kunya large,
- * the person under it, the book's words when they say more than the name, and the person page's own folded reference.
- * The head opens the person's page.
- */
 function NamePost({ kind, id, palette }: { kind: 'laqab' | 'kunya'; id: string; palette: Palette }) {
   const pick = nameList(kind).find(each => nameId(each) === id);
   if (!pick) return null;
@@ -679,10 +544,6 @@ function NamePost({ kind, id, palette }: { kind: 'laqab' | 'kunya'; id: string; 
   );
 }
 
-/**
- * «من حياته» (owner 2026-11-19: every feature gets a feed card, drawn with its own view): a person's «حياته» timeline as
- * his page draws it, the rail a year a line; the head opens his page.
- */
 function LifePost({ slug, palette }: { slug: string; palette: Palette }) {
   const person = findPerson(slug);
   if (!person) return null;
@@ -700,13 +561,8 @@ function LifePost({ slug, palette }: { slug: string; palette: Palette }) {
   );
 }
 
-/** The drawings' cards share the person's head: «نسبه» or «صلاته», the person under it. */
 const herOrHis = (slug: string, his: string, hers: string) => (findPerson(slug)?.sex === 'FEMALE' ? hers : his);
 
-/**
- * «نسبه» (owner, 2026-11-20: the drawings home was missing; sketch layout-cleanup panel 6): a person's nasab tree as his
- * nasab page draws it, long runs of fathers folded; its open button opens that page.
- */
 function NasabPost({ slug, palette }: { slug: string; palette: Palette }) {
   const person = findPerson(slug);
   if (!person) return null;
@@ -720,7 +576,6 @@ function NasabPost({ slug, palette }: { slug: string; palette: Palette }) {
   );
 }
 
-/** «صلاته»: a person's ties ring as his ties page draws it; a person on it opens his page, and its open button the ties page. */
 function TiesPost({ slug, palette }: { slug: string; palette: Palette }) {
   const width = usePageWidth();
   const [tie, setTie] = useState<Tie | undefined>();
@@ -740,14 +595,9 @@ function TiesPost({ slug, palette }: { slug: string; palette: Palette }) {
   );
 }
 
-/** The groups the data holds (shared/peopleCards.ts), read once. */
 let groups: GroupSource[] | undefined;
 const groupList = () => (groups ??= groupSources(STORIES, BATTLES));
 
-/**
- * «صلة بينهم» (owner, 2026-11-21; feed-visuals sketch panel 1): three to five people of one story or battle, or a man's
- * in-laws, joined by family as «بينه وبين…» draws them; its open button opens that page with them picked.
- */
 function GroupPost({ id, palette }: { id: string; palette: Palette }) {
   const width = usePageWidth();
   const [shown, setShown] = useState<DrawingOrText>('drawing');
@@ -772,7 +622,6 @@ function GroupPost({ id, palette }: { id: string; palette: Palette }) {
   );
 }
 
-/** «حياتهما» (feed-visuals sketch panel 2): two lives side by side, what they shared joined; it opens «حياتهما» with the two. */
 function LivesPost({ id, palette }: { id: string; palette: Palette }) {
   const [shown, setShown] = useState<LifeItem | undefined>();
   const slugs = id.split(',');
@@ -791,10 +640,6 @@ function LivesPost({ id, palette }: { id: string; palette: Palette }) {
   );
 }
 
-/**
- * «أين يلتقي نسبهما؟» (feed-visuals sketch panels 3 and 8): the nasab tree of two people, or of the Prophet ﷺ and the four
- * caliphs, each line leaving the shared one where it parts; it opens the nasab page with them.
- */
 function MeetPost({ id, palette }: { id: string; palette: Palette }) {
   const slugs = id.split(',');
   if (!slugs.every(slug => findPerson(slug))) return null;
@@ -811,7 +656,6 @@ function MeetPost({ id, palette }: { id: string; palette: Palette }) {
   );
 }
 
-/** Rings by id, read once: the one-kind rings fold as the card's ring would (its width on this phone). */
 let rings: Ring[] | undefined;
 const ringList_ = () => (rings ??= (() => {
   const width = Math.min(Dimensions.get('window').width - 60, 480);
@@ -819,10 +663,6 @@ const ringList_ = () => (rings ??= (() => {
 })());
 const SAHIH_NAMES = { bukhari: { book: 'صحيح البخاري', author: 'البخاري' }, muslim: { book: 'صحيح مسلم', author: 'مسلم' } } as const;
 
-/**
- * A ring (feed-visuals sketch panels 7 and 9): one kind of a person's ties (his ﷺ wives, his children…), a title and those
- * who hold it, or a hadith and the people it names, drawn round; a tie held in doubt is said under it with both views.
- */
 function RingPost({ id, palette }: { id: string; palette: Palette }) {
   const width = usePageWidth();
   const [tie, setTie] = useState<Tie | undefined>();
@@ -836,8 +676,6 @@ function RingPost({ id, palette }: { id: string; palette: Palette }) {
     const own = kin?.sure.find(each => each.to === slug);
     return personNode(slug, ring.by === 'kin' ? kindColor(palette, ring.kind) : palette.rule, go, own ? () => setTie(own) : undefined, ring.by === 'kin' ? ring.slug : undefined);
   });
-  // A tie the book gives «على خلاف» is drawn too, its line dashed (owner, 2026-11-22), when the ring still fits; a scholar's
-  // note that settles them (`ring.note`) leaves them out.
   const doubted = ring.note ? [] : ring.doubted;
   const withDoubted = [...nodes, ...doubted.map(each => ({ ...personNode(each.to, ring.by === 'kin' ? kindColor(palette, ring.kind) : palette.rule, go, () => setTie(each), ring.by === 'kin' ? ring.slug : undefined), dashed: true }))];
   const drawn = doubted.length && roundLayout(withDoubted.map(node => node.label), drawW) ? withDoubted : nodes;
@@ -856,7 +694,6 @@ function RingPost({ id, palette }: { id: string; palette: Palette }) {
   return (
     <Post palette={palette} head={head}
       open={<OpenButton label={ring.by === 'kin' ? `افتح صلات ${middle}` : ring.by === 'title' ? `افتح «${ring.name}»` : 'افتح الحديث'} onPress={open} palette={palette} />}
-      // The ties the book gives «على خلاف»: one button in the row, their words in one sheet (owner, 2026-11-22).
       actions={doubted.length > 0 && <Button pill label="على خلاف" Icon={Scale} onPress={() => setDoubtedOpen(true)} />}
       source={sourcesOf(source)}>
       <View style={{ padding: 14, gap: 10 }}>
@@ -869,10 +706,6 @@ function RingPost({ id, palette }: { id: string; palette: Palette }) {
   );
 }
 
-/**
- * A battle (sketch panel 6): its place on the still map and the two sides' numbers, as its page draws them; a fitna battle
- * shows no numbers (shared/drawingCards.ts battleOnCard). Its open button opens the battle's page.
- */
 function BattlePost({ slug, palette }: { slug: string; palette: Palette }) {
   const found = battleOf(slug);
   if (!found) return null;
@@ -890,12 +723,6 @@ function BattlePost({ slug, palette }: { slug: string; palette: Palette }) {
   );
 }
 
-/**
- * A year of the battles timeline with the year before and after it (owner, 2026-11-21; feed-visuals sketch, panel 4), the
- * year lit, and the year on the atlas's map (owner, 2026-11-23; atlas sketch, panel 5): in the Prophet's ﷺ years its places
- * lit and the earlier years' quiet, on the atlas's still frame; its battles listed under, each opening its page. A year's
- * column, the open button and the head open the atlas at that year.
- */
 function BattleYearPost({ id, palette }: { id: string; palette: Palette }) {
   const width = usePageWidth();
   const year = Number(id);
@@ -903,7 +730,6 @@ function BattleYearPost({ id, palette }: { id: string; palette: Palette }) {
   if (!slice) return null;
   const layer = slice.battles[0] ? layerOf(slice.battles[0]) : 'life';
   const toYear = (at: number) => toTab({ pathname: '/atlas', params: { ...(layerOf({ year: { value: at, refs: [] } }) === 'life' ? { year: String(at) } : { layer: 'after' }), at: String(Date.now()) } });
-  // The year on the atlas: on «بعده ﷺ» only the year's own places, lit.
   const places = layer === 'life' ? atlasPins(BATTLES, 'life', year)
     : [...new Map(slice.battles.flatMap(battle => (battle.place ? [[battle.place.name, battle.place] as const] : []))).values()];
   return (
@@ -930,10 +756,6 @@ function BattleYearPost({ id, palette }: { id: string; palette: Palette }) {
 
 const ARMIES_TAB_NAMES: { key: ArmiesTab; label: string }[] = [{ key: 'field', label: 'في الميدان' }, { key: 'killed', label: 'القتلى' }];
 
-/**
- * The two armies across the battles whose data cites both sides (owner, 2026-11-21; feed-visuals sketch, panel 5), a row of
- * the battle page's numbers each, «في الميدان» or «القتلى»; a dash where the source gives no number, and each number's other readings under it, attributed. A row opens its battle.
- */
 function ArmiesPost({ id, palette }: { id: string; palette: Palette }) {
   const [tab, setTab] = useState<ArmiesTab>(id === 'killed' ? 'killed' : 'field');
   const battles = armiesBattles(BATTLES);
@@ -961,7 +783,6 @@ function ArmiesPost({ id, palette }: { id: string; palette: Palette }) {
   );
 }
 
-/** A hadith's scene drawn as a chat, as its page draws it (sketch panel 6); its open button opens the hadith's page. */
 function HadithScenePost({ id, palette }: { id: string; palette: Palette }) {
   const found = sceneOf(HADITH.units, id);
   if (!found) return null;
@@ -980,13 +801,10 @@ function HadithScenePost({ id, palette }: { id: string; palette: Palette }) {
 let openings: OpeningCard[] | undefined;
 const openingList = () => (openings ??= openingCards(ayahOf));
 
-/** A card's year cell (TitleCells): every reading the books give, «٢ للهجرة» or «قبل الهجرة». */
 const yearCell = (values: string[]): FactCell[] => (values.length ? [{ key: 'year', Icon: CalendarDays, label: 'السنة', readings: values.map(value => ({ value })) }] : []);
-/** A card's place cell (TitleCells), in its book's words. */
 const placeCell = (value?: string): FactCell[] => (value ? [{ key: 'place', Icon: MapPin, label: 'المكان', readings: [{ value }] }] : []);
 const storyYear = (page: StoryPage) => (page === 'before' ? 'قبل الهجرة' : `${num(page)} للهجرة`);
 
-/** «فواتح السور»: a card of surahs whose openings go together, as the openings page draws it; its open button opens it there. */
 function OpeningCardPost({ id, palette }: { id: string; palette: Palette }) {
   const card = openingList().find(each => each.id === id);
   if (!card) return null;
@@ -1003,7 +821,6 @@ function OpeningCardPost({ id, palette }: { id: string; palette: Palette }) {
 let oaths: OathView[] | undefined;
 const oathList = () => (oaths ??= [...buildOaths('allah', ayahMushafWords), ...buildOaths('others', ayahMushafWords)]);
 
-/** «الأقسام»: an oath's ayat, the words sworn by in colour, as the oaths page draws it; its open button opens it there. */
 function OathPost({ id, palette }: { id: string; palette: Palette }) {
   const oath = oathList().find(each => each.id === id);
   if (!oath) return null;
@@ -1019,14 +836,9 @@ function OathPost({ id, palette }: { id: string; palette: Palette }) {
   );
 }
 
-/** The surah-order page's surah, by its number as the feed keeps it. */
 const orderSurahOf = (item: string) => orderSurahList().find(each => each.surah === Number(item));
 const openOrder = (s: OrderSurah) => router.push({ pathname: '/order', params: { juz: String(s.juz[0]) } });
 
-/**
- * «مقصود السورة» (owner, 2026-11-21; sketch surah-order-feed/sketch-dark.png, screen 2): a surah's card as the surah-order
- * page draws it, its opening ayat and al-Biqa'i's aim; the open button opens the page at the surah's juz.
- */
 function SurahAimPost({ id, palette }: { id: string; palette: Palette }) {
   const s = orderSurahOf(id);
   if (!s) return null;
@@ -1039,10 +851,6 @@ function SurahAimPost({ id, palette }: { id: string; palette: Palette }) {
   );
 }
 
-/**
- * «بين سورتين» (sketch screen 1): a surah and the one before it, al-Suyuti's words on what joins them (Ibn al-Zubayr's where
- * he is silent) and the ayat his words name, as the surah-order page shows them.
- */
 function SurahLinkPost({ id, palette }: { id: string; palette: Palette }) {
   const s = orderSurahOf(id);
   const before = orderSurahOf(String(Number(id) - 1));
@@ -1059,10 +867,6 @@ function SurahLinkPost({ id, palette }: { id: string; palette: Palette }) {
   );
 }
 
-/**
- * A prophet's event read across the surahs that tell it (sketch panel 6): the story page's own places, shared words in
- * colour, its buttons left on the page; the open button opens the story at this event.
- */
 function EventPost({ id, palette }: { id: string; palette: Palette }) {
   const found = eventOf(STORY_EVENTS, id);
   const prophet = found ? prophetStory(found.slug) : undefined;
@@ -1082,41 +886,26 @@ function EventPost({ id, palette }: { id: string; palette: Palette }) {
   );
 }
 
-/** The people whose life the feed can draw. */
 const lifePeople = () => PEOPLE.filter(person => drawsLine(personLife(person))).map(person => person.slug);
 
-/** The book a quiz kind asks from: its card stays out while that book is off the phone, as the book's own ayah card does. */
 const QUIZ_BOOKS: Partial<Record<FeedQuizKind, BookId>> = { TAFSIR: 'sadi', BALAGHA: 'itqan', TERM: 'itqan', IRAB: 'irab-words' };
 
-/** A question card of kind `kind`: the openings quiz, or one of the solo quiz's. */
 export function FeedQuiz({ kind, seed, palette, sub, home = true }: { kind: FeedQuizKind; seed: number; palette: Palette; sub?: string; home?: boolean }) {
   useBooks();
   if (!quizBookOn(kind)) return null;
   return kind === OPENINGS ? <OpeningPost seed={seed} palette={palette} /> : <QuizPost kind={kind} seed={seed} palette={palette} sub={sub} home={home} />;
 }
 
-/** Whether a kind's book is on (settings, «الكتب»): a kind asked from a book that is off is not asked. */
 export const quizBookOn = (kind: FeedQuizKind) => { const book = QUIZ_BOOKS[kind]; return !book || bookState(book) === 'on'; };
 
-/**
- * The tree card's height: its frame, the buttons and the chips. A lit path's ayat add their room below (TreeCard `ayatRoom`),
- * so the tree keeps its size (owner, 2026-11-14).
- */
 const TREE_HEIGHT = 470;
-/** On a taller screen the cards grow with it (owner, 2026-11-15): this share of the screen's height, never less than the sizes above. */
 const TREE_SHARE = 0.68;
 
-/**
- * One tree as a post: the branches tab's own pager (TreePager) holding just this tree, so it zooms, pans, lights a path on
- * a tap and saves on a double tap, as there. The open button takes it to the branches tab.
- */
 const TreePost = memo(function TreePost({ piece, palette }: { piece: BranchPiece; palette: Palette }) {
-  // Opens as the matrix (owner, 2026-11-17); the card's own switches change only this card.
   const [around] = aroundSetting.use();
   const pieces = useMemo(() => [piece], [piece]);
   const [room, setRoom] = useState(0);
   const { height: screen } = useWindowDimensions();
-  // The matrix's card follows its rows, up to most of the screen (owner, 2026-11-18); the tree keeps its own height.
   const [height, onFit] = useFitHeight(Math.max(TREE_HEIGHT, Math.round(screen * TREE_SHARE)));
   const embedded = useMemo(() => {
     const open = (at: BranchPiece) => toTab({ pathname: '/branches', params: { tree: at.id } });
@@ -1124,7 +913,6 @@ const TreePost = memo(function TreePost({ piece, palette }: { piece: BranchPiece
     return { open, ayatRoom: { height: room, set: setRoom }, onFit, extra: { lead, aside: <NotMineMenu /> } };
   }, [room, onFit, piece, palette]);
   const sources = useMemo(() => sourcesOf(pieceSources(piece.keys, piece.group)), [piece]);
-  // The pager draws the tree in its own card and its buttons under it, so the post is the head and the pager.
   return (
     <View style={{ gap: 4 }}>
       <PostHead Icon={FEATURE_ICON.trees} title="من متشابهات القرآن" sub={placesOf(piece.keys)} open={topic('/branches', 'افتح متشابهات القرآن')} palette={palette} />
@@ -1136,7 +924,6 @@ const TreePost = memo(function TreePost({ piece, palette }: { piece: BranchPiece
   );
 });
 
-/** A saved ayah as a post: the ayah in the mushaf's own lines, as the recall card shows it once revealed. */
 function SavedAyahPost({ ayah, palette }: { ayah: string; palette: Palette }) {
   const [surah, number] = ayah.split(':').map(Number);
   return (
@@ -1149,10 +936,6 @@ function SavedAyahPost({ ayah, palette }: { ayah: string; palette: Palette }) {
   );
 }
 
-/**
- * A saved item as its own card (owner, 2026-11-14): a tree as the tree card, a compare card as the pair card, an ayah in the
- * mushaf's lines. One that the data no longer holds is skipped.
- */
 function SavedPost({ item, palette }: { item: SavedItem; palette: Palette }) {
   const found = useMemo(() => {
     const kind = bookmarkKind(item);
@@ -1168,11 +951,6 @@ function SavedPost({ item, palette }: { item: SavedItem; palette: Palette }) {
   return found.pair ? <PairPost pair={found.pair} palette={palette} /> : null;
 }
 
-/**
- * A prophet's story map as a post (owner, 2026-11-14): the prophets page's own map (StoryMap), every event and surah, opened
- * sideways at the day's group; no scroll inside it (owner, 2026-11-20), a long map stops as every long card does (Post).
- * Any tap opens the story page at its top, not scrolled to an event, so a new reader sees where they landed (owner, 2026-11-14).
- */
 const StoryPost = memo(function StoryPost({ slug, phase, palette }: { slug: string; phase: number; palette: Palette }) {
   const prophet = useMemo(() => prophetStory(slug), [slug]);
   const map = useMemo(() => (prophet ? storyMap(prophet.events) : null), [prophet]);
@@ -1189,18 +967,11 @@ const StoryPost = memo(function StoryPost({ slug, phase, palette }: { slug: stri
   );
 });
 
-/** The day today's juz was marked read («قرأته»), kept on this device: one day, no history (no counts, owner's rule). */
 const JUZ_READ = 'juz-read';
 const juzRead = (day: number) => readJson(JUZ_READ, isNumberIn(0, Infinity)) === day;
 
-/** Today's juz shows half the lines the reading card does. */
 const JUZ_LINES = 4;
 
-/**
- * Today's juz as a post (owner, 2026-11-18: no longer a circle at the top): the Hijri day's juz, the top of its first page,
- * and a button to read it. «الجزءان» on the last day of a 29-day month. «قرأته» marks it read for the day (owner, 2026-11-22):
- * the card stays with its tick lit, and the feed leaves it out from the next visit until the next day's juz.
- */
 function JuzPost({ palette }: { palette: Palette }) {
   const { day, date, juz } = useToday();
   const [read, setRead] = useState(() => juzRead(day));
@@ -1214,13 +985,11 @@ function JuzPost({ palette }: { palette: Palette }) {
       open={<OpenButton label={`اقرأ ${juzLabel(juz)}، جزء اليوم`} onPress={open} palette={palette} />} press={{ onPress: open, label: `أول ${juzLabel(juz)}، الصفحة ${num(page)} من المصحف` }}
       actions={<Action Icon={read ? CircleCheck : Check} label="قرأته" tone="green" on={read} onPress={toggle} palette={palette} />}
       source={sourcesOf([mushafPage(start.surah, page)])}>
-      {/* Smaller than the reading card: the juz's first lines only (owner, 2026-11-22). */}
       <View style={{ paddingHorizontal: 12, paddingVertical: 6 }}><PageTop page={page} lines={JUZ_LINES} palette={palette} /></View>
     </Post>
   );
 }
 
-/** Friday's card (owner, 2026-11-20): Surat al-Kahf's first page; its button opens the mushaf there. */
 function KahfPost({ palette }: { palette: Palette }) {
   const page = pageOfAyah('18:1') ?? 293;
   const read = () => openIntent({ tab: 'read', at: '18:1' });
@@ -1232,10 +1001,6 @@ function KahfPost({ palette }: { palette: Palette }) {
   );
 }
 
-/**
- * The prayer card (owner, 2026-11-18): when a prayer is near it comes into the feed where the reader is, with the time left,
- * the five times of the day and the Hijri date. Its buttons open the prayer times and the qibla.
- */
 function PrayerPost({ prayer, times, palette }: { prayer: Exclude<PrayerKey, 'sunrise'>; times: PrayerDay; palette: Palette }) {
   const now = useMinute();
   const [place] = prayerPlace.use();
@@ -1246,7 +1011,6 @@ function PrayerPost({ prayer, times, palette }: { prayer: Exclude<PrayerKey, 'su
   const title = left > 0 ? `${PRAYER_NAMES[prayer]} ${inMinutes(left)}` : `حان وقت ${PRAYER_NAMES[prayer]}`;
   return (
     <Post palette={palette} head={<PostHead Icon={Clock} title={title} sub={[date, place?.name].filter(Boolean).join(' · ')} open={topic('/utilities', 'افتح مواقيت الصلاة')} palette={palette} />}
-      // Nothing to share: the times are your own day and place (owner's plan, 2026-11-22: own-state cards never share your state).
       share={false}
       actions={<>
         <Action Icon={Clock} label="مواقيت الصلاة" onPress={() => openUtility('tools')} palette={palette} />
@@ -1270,7 +1034,6 @@ function PrayerPost({ prayer, times, palette }: { prayer: Exclude<PrayerKey, 'su
 
 type Soon = { key: string; prayer: Exclude<PrayerKey, 'sunrise'>; times: PrayerDay };
 
-/** The prayer that is near now, with its day's times, or null; checked every half minute. */
 function soonNow(): Soon | null {
   const place = prayerPlace.get();
   if (!place) return null;
@@ -1280,10 +1043,6 @@ function soonNow(): Soon | null {
   return soon ? { key: `${now.toDateString()}-${soon.key}`, prayer: soon.key, times } : null;
 }
 
-/**
- * The prayer that is near, changing only when it becomes another one, so the feed draws again only then (not every minute).
- * The place or the method changed in the utilities is picked up within half a minute.
- */
 function usePrayerSoon(): Soon | null {
   const [soon, setSoon] = useState(soonNow);
   useEffect(() => {
@@ -1295,13 +1054,8 @@ function usePrayerSoon(): Soon | null {
   return soon;
 }
 
-/** How wide a book is on the books card: two and a bit show, so the row says it scrolls. */
 const FEED_BOOK = 150;
 
-/**
- * A few books from the library as a post (owner, 2026-11-18): the shelf's own cards, title and author, those with a فاصلة
- * first; a tap opens the book. The head opens the library.
- */
 function BooksPost({ day, palette }: { day: number; palette: Palette }) {
   useBooks();
   const fasilas = useSyncExternalStore(subscribeFasilas, readFasilas, serverFasilas);
@@ -1322,16 +1076,11 @@ function BooksPost({ day, palette }: { day: number; palette: Palette }) {
   );
 }
 
-/**
- * A scene from «مشاهد» as a post (owner, 2026-11-22): its card as on the scenes page (picture, title, surah and ayah); the
- * head opens the scenes page, the picture and «افتح» the scene itself.
- */
 const ScenePost = memo(function ScenePost({ id, palette }: { id: string; palette: Palette }) {
   const width = usePageWidth();
   if (id === RAHMAN_KEY) return (
     <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.scenes} title="من المشاهد" sub="الرحمن" palette={palette} open={{ onPress: () => toTab('/lataif'), label: 'افتح المشاهد' }} />}
       open={<RahmanActions only="open" />} share={<RahmanActions only="share" />} source={rahmanSourceList()}>
-      {/* The cover a little narrower than the card, so the card stays under two thirds of the screen. */}
       <View style={{ paddingHorizontal: 16, paddingVertical: 12 }}><RahmanCard palette={palette} width={Math.round((width - 64) * 0.8)} onPress={openRahman} /></View>
     </Post>
   );
@@ -1345,15 +1094,10 @@ const ScenePost = memo(function ScenePost({ id, palette }: { id: string; palette
   );
 });
 
-/**
- * A sira story (owner, 2026-11-18): its first report whole, so a first reader has what led to the words and what came of
- * them; the ayat it turns on folded under it. Its open button opens the story's page.
- */
 function SiraPost({ id, palette }: { id: string; palette: Palette }) {
   const story = STORIES.find(each => each.slug === id);
   if (!story?.reports[0]) return null;
   const report = story.reports[0];
-  // Drawn by speaker where a book names them (owner, 2026-11-21), as on the story's page.
   const drawn = drawnReport(report);
   const open = () => { continueAfter('sira', id); toTab({ pathname: '/story', params: { slug: story.slug } }); };
   return (
@@ -1361,7 +1105,6 @@ function SiraPost({ id, palette }: { id: string; palette: Palette }) {
       open={<OpenButton label={`افتح ${story.name}`} onPress={open} palette={palette} />}
       share={drawn ? <StoryShare story={story} report={report} palette={palette} /> : undefined}
       source={reportSource(report, drawn)}>
-      {/* Its identity on top, the year and place where a book gives them; who tells it after the words (owner, 2026-11-24). */}
       <TitleCells title={story.name} cells={[...yearCell((story.when?.pages ?? []).map(storyYear)), ...placeCell(story.place?.value)]} palette={palette} />
       <View style={{ paddingHorizontal: 16, paddingVertical: 12, gap: 12 }}>
         {drawn ? <ReportScene report={report} palette={palette} chainAfter /> : <Report report={report} palette={palette} plain chainAfter />}
@@ -1371,18 +1114,11 @@ function SiraPost({ id, palette }: { id: string; palette: Palette }) {
   );
 }
 
-/** The Forty (and Ibn Rajab's eight) taken whole from the Sahihayn, the most authentic first (owner, 2026-11-18), for the hadith cards. */
 const FEED_FORTY = FORTY.entries.filter(fromSahihayn);
 
-/** Ibn Rajab's explanations of a phrase of those hadith, for his card. */
 const RAJAB_PASSAGES = rajabFeedPassages(rajab as RajabChapter[], FORTY.entries);
-/** A passage's lasting id: its hadith's number and its first paragraph's place in the chapter. */
 const rajabId = ({ chapter, passage }: (typeof RAJAB_PASSAGES)[number]) => rajabItem(chapter.n, chapter.paragraphs.indexOf(passage[0]));
 
-/**
- * A passage of Ibn Rajab's Jami' al-'Ulum wal-Hikam (owner, 2026-11-18: every feature gets a card), where he explains a phrase
- * of one of the Forty; its open button opens the hadith's page, his whole chapter at its foot.
- */
 function RajabPost({ id, palette }: { id: string; palette: Palette }) {
   const picked = RAJAB_PASSAGES.find(each => rajabId(each) === id);
   if (!picked) return null;
@@ -1400,7 +1136,6 @@ function RajabPost({ id, palette }: { id: string; palette: Palette }) {
   );
 }
 
-/** One of the Forty in al-Nawawi's words; its open button opens the hadith's page with its records. */
 function HadithPost({ id, palette }: { id: string; palette: Palette }) {
   const entry = FEED_FORTY.find(each => String(each.n) === id);
   if (!entry) return null;
@@ -1416,19 +1151,13 @@ function HadithPost({ id, palette }: { id: string; palette: Palette }) {
   );
 }
 
-/** Every hadith number of a Sahih, from its kitabs, for its card; drawn only once its text is on the phone. */
 const sahihNumbers = (slug: SahihSlug) => SAHIH[slug].kitabs.flatMap(kitab => (kitab.from ? Array.from({ length: kitab.to - kitab.from + 1 }, (_, i) => String(kitab.from + i)) : []));
 
-/**
- * A hadith of Sahih al-Bukhari or Sahih Muslim whole (owner's sketch, 2026-11-19): the head names the book and its kitab › bab
- * (in Muslim the bab is al-Nawawi's, and says so), the hadith drawn as its page draws it; its open button opens its page.
- */
 function SahihPost({ slug, id, palette }: { slug: SahihSlug; id: string; palette: Palette }) {
   const { text } = useSahihText(slug);
   const book = SAHIH[slug];
   const found = text ? findHadith(text, Number(id)) : undefined;
   const place = placeOf(book, Number(id));
-  // A number Abd al-Baqi gives a record printed under another shows that record.
   if (!found || !place) return null;
   const open = () => toTab({ pathname: '/hadith-sahih', params: { book: slug, n: id } });
   const where = `${place.kitab.title}${place.bab?.title ? ` › ${place.bab.title}` : ''}${book.headingsBy === 'nawawi' && place.bab?.title ? ' (تبويب النووي)' : ''}`;
@@ -1443,10 +1172,6 @@ function SahihPost({ slug, id, palette }: { slug: SahihSlug; id: string; palette
   );
 }
 
-/**
- * «من أخرجه» (owner, 2026-11-19; sketch /mnt/project-files/hadith-sciences, frame 3b): the start of one of the Forty al-Nawawi
- * takes whole from the Sahihayn and the drawing of the places that record it. Its open button opens its page.
- */
 function RecordedPost({ id, palette }: { id: string; palette: Palette }) {
   const entry = FEED_FORTY.find(each => String(each.n) === id);
   if (!entry) return null;
@@ -1463,13 +1188,8 @@ function RecordedPost({ id, palette }: { id: string; palette: Palette }) {
   );
 }
 
-/** The hadith of the feed with a chain al-Bukhari's record draws, for «من الإسناد». */
 const FEED_CHAINS = FEED_FORTY.filter(entry => drawnBukhari(entry));
 
-/**
- * «من الإسناد» (owner, 2026-11-19; plan /mnt/project-files/hadith-sciences, feature 1): al-Bukhari's chain for one of the
- * Forty as the hadith's page draws it («الرسم»), the start of the saying under it; its open button opens the page.
- */
 function IsnadPost({ id, palette }: { id: string; palette: Palette }) {
   const entry = FEED_CHAINS.find(each => String(each.n) === id);
   const record = entry && drawnBukhari(entry);
@@ -1487,13 +1207,8 @@ function IsnadPost({ id, palette }: { id: string; palette: Palette }) {
   );
 }
 
-/** The lines of a term's definition a card shows before its page. */
 const TERM_LINES = 5;
 
-/**
- * A balagha term (owner, 2026-11-18): its name, its definition in the scholar's words, and one of al-Suyuti's examples with
- * the words he quotes lit. The first button opens the term's page; the second, the list of terms.
- */
 function TermPost({ id, day, palette }: { id: string; day: number; palette: Palette }) {
   const term = balaghaTerms.terms.find(each => each.name === id);
   const examples = useMemo(() => (term ? examplesOf(itqan, term) : []), [term]);
@@ -1522,7 +1237,6 @@ function TermPost({ id, day, palette }: { id: string; day: number; palette: Pale
   );
 }
 
-/** Ibn Qutaybah's entries a card can hold: one place, a word or a few, said in a few lines, on an ayah that fits a card. */
 const GHARIB_WORDS = 3;
 const GHARIB_CHARS = 240;
 const GHARIB_AYAH = 30;
@@ -1531,17 +1245,12 @@ const gharibItems = () => gharib.entries.flatMap((entry, at) => {
   return !more.length && to - from < GHARIB_WORDS && entry[3].length <= GHARIB_CHARS && ayahMushafWords(`${entry[0]}:${ayah}`).length <= GHARIB_AYAH ? [String(at)] : [];
 });
 
-/**
- * A word of the Quran and Ibn Qutaybah's meaning of it (release-1 plan 2026-11-23: «غريب القرآن» had questions and no
- * card): the ayah with the words he quotes lit, then his entry whole. «افتح» opens the word's page, the head the words page.
- */
 function GharibPost({ id, palette }: { id: string; palette: Palette }) {
   const entry = gharib.entries[Number(id)];
   if (!entry) return null;
   const [surah, page, shamelaId, text, [[ayah, from, to]]] = entry;
   const key = `${surah}:${ayah}`;
   const words = ayahMushafWords(key);
-  // A word's page is one word's: an entry on a phrase opens the ayah's page.
   const lemmas = from === to ? lemmasAtMushafWord(wordCounts, key, from) : [];
   const open = () => (lemmas.length ? toTab({ pathname: '/word', params: { ids: lemmas.join(',') } }) : openAyahPage(key));
   return (
@@ -1557,10 +1266,6 @@ function GharibPost({ id, palette }: { id: string; palette: Palette }) {
   );
 }
 
-/**
- * One rule of Tuhfat al-Atfal (release-1 plan 2026-11-23: «التجويد» had questions and no card): its verses as on the poem's
- * page, and the letters the poem names for it. «افتح» opens the poem at its first verse, the head the poem's top.
- */
 function TuhfaPost({ id, palette }: { id: string; palette: Palette }) {
   const passage = tuhfaPassage(id);
   if (!passage) return null;
@@ -1579,11 +1284,9 @@ function TuhfaPost({ id, palette }: { id: string; palette: Palette }) {
   );
 }
 
-/** Every battle's moments, in the battles' order, for the moment card. */
 const MOMENTS = (momentBattles as AppMomentBattle[]).flatMap(battle => battle.moments.map((moment, i) => ({ battle, moment, n: i + 1 })));
 const momentId = (item: (typeof MOMENTS)[number]) => momentItem(item.battle.slug, item.n);
 
-/** A moment of a battle in the source's words (owner, 2026-11-18); its open button opens the battle's page. */
 function MomentPost({ id, palette }: { id: string; palette: Palette }) {
   const item = MOMENTS.find(each => momentId(each) === id);
   if (!item) return null;
@@ -1593,7 +1296,6 @@ function MomentPost({ id, palette }: { id: string; palette: Palette }) {
     <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.battles} title={`من ${battle.name}`} sub={moment.title} open={topic({ pathname: '/battle', params: { slug: battle.slug } }, `افتح ${battle.name}`)} palette={palette} />}
       open={<OpenButton label={`افتح ${battle.name}`} onPress={open} palette={palette} />}
       source={sourcesOf([citeSource({ text: '', cite: moment.cite, url: moment.url })])}>
-      {/* «بطاقة التعريف» (owner, 2026-11-24): the scene's name, the battle's year and place; the chain after the words. */}
       <TitleCells title={moment.title} palette={palette}
         cells={[...yearCell(battle.year ? [`${num(battle.year.value)} للهجرة`] : []), ...placeCell(battleOf(battle.slug)?.place?.name)]} />
       <View style={{ paddingHorizontal: 16, paddingVertical: 12, gap: 12 }}><MomentWords moment={moment} palette={palette} /></View>
@@ -1601,10 +1303,6 @@ function MomentPost({ id, palette }: { id: string; palette: Palette }) {
   );
 }
 
-/**
- * A battle's scene in its book's words for the feed card: the Prophet's ﷺ saying barred in amber where the text gives it
- * whole, then the chain under «السند», the grading and the people.
- */
 function MomentWords({ moment, palette }: { moment: AppMomentBattle['moments'][number]; palette: Palette }) {
   const split = prophetSaying(moment.quote);
   const body = { color: palette.ink, fontSize: 18, lineHeight: 34, textAlign: 'right' as const };
@@ -1620,7 +1318,6 @@ function MomentWords({ moment, palette }: { moment: AppMomentBattle['moments'][n
   </>;
 }
 
-/** Each ayah card's list of ayat, read once when first asked for. */
 const noteLists: Partial<Record<AyahNote, string[]>> = {};
 const noteList = (kind: AyahNote) => (noteLists[kind] ??= kind === 'tafsir' ? singleAyahPassages() : kind === 'balagha' ? itqanSureAyat(itqan)
   : kind === 'qiraat' ? qiraatAyat() : allAyat(surahCounts.map(surah => surah.numberOfAyat)));
@@ -1630,23 +1327,14 @@ const NOTE_HEADS: Record<AyahNote, { Icon: IconType; title: string; open: string
   irab: { Icon: FEATURE_ICON.irab, title: 'من الإعراب', open: 'إعراب الآية' },
   qiraat: { Icon: FEATURE_ICON.qiraat, title: 'من القراءات', open: 'القراءات كاملة' },
 };
-/** Each note card's head opens its topic: al-Sa'di's tafsir, the balagha terms, the library, the readings. */
 const NOTE_TOPICS: Record<AyahNote, { onPress: () => void; label: string }> = {
   tafsir: topic({ pathname: '/book', params: { id: 'sadi' } }, 'افتح تفسير السعدي'),
   balagha: topic('/terms', 'افتح مصطلحات البلاغة'),
   irab: topic('/books', 'افتح المكتبة'),
   qiraat: topic('/qiraat', 'افتح القراءات'),
 };
-/** The lines of a book's words a card shows; the row's open button shows them all. */
 const NOTE_LINES = 4;
 
-/**
- * An ayah with a little of what a book says on it (owner, 2026-11-18: small cards, the whole text one tap away): al-Sa'di on
- * an ayah he explains alone, al-Suyuti's balagha paragraph on an ayah he surely names, a word's i'rab, or the readings. Its
- * open button, the one control (owner, 2026-11-20), opens the reader's own sheet for it: the whole tafsir, balagha or i'rab,
- * or every reading of the ayah. A card whose book is not on the phone is left out.
- */
-/** The book a note card reads from is on (the readings are built in). */
 const noteBookOn = (kind: AyahNote) => (kind === 'tafsir' ? bookState('sadi') === 'on' : kind === 'balagha' ? bookState('itqan') === 'on' : kind === 'irab' ? bookState('irab-words') === 'on' : true);
 
 const AyahNotePost = memo(function AyahNotePost({ kind, id, day, palette }: { kind: AyahNote; id: string; day: number; palette: Palette }) {
@@ -1656,14 +1344,12 @@ const AyahNotePost = memo(function AyahNotePost({ kind, id, day, palette }: { ki
   if (!note || !on) return null;
   const [surah, number] = note.key.split(':').map(Number);
   const head = NOTE_HEADS[kind];
-  // «افتح» opens the ayah's page at this card's section (owner, 2026-11-22: the ayah is the subject).
   const show = () => openAyahPage(note.key, kind, 'word' in note ? note.word : undefined);
   return (
     <Post palette={palette} head={<PostHead Icon={head.Icon} title={head.title} sub={`${shortNames[surah] ?? ''} ${num(number)}`} open={NOTE_TOPICS[kind]} palette={palette} />}
         open={<OpenButton label={`افتح صفحة الآية، ${head.open}`} onPress={show} palette={palette} />}
         source={sourcesOf(note.sources)}>
         {'readings' in note ? <View style={{ paddingVertical: 10 }}><QiraatPlace ayah={note.key} max={2} lines bare palette={palette} /></View> : <View style={{ paddingVertical: 10, gap: 6 }}>
-          {/* The ayah, then the book's words on a bar with whose they are (owner, 2026-11-24); its place is in the head above, so no title here. */}
           <View style={{ paddingHorizontal: 12 }}>
             <AyahLines ayah={note.key} menu={note.key} palette={palette} shown whole write={null} checked={null} />
           </View>
@@ -1684,7 +1370,6 @@ const AyahNotePost = memo(function AyahNotePost({ kind, id, day, palette }: { ki
   );
 });
 
-/** Every virtue of the converted people, read once: the «من التراجم» card's list. */
 let virtues: { person: (typeof PEOPLE)[number]; index: number }[] | undefined;
 const virtueList = () => (virtues ??= allVirtues(PEOPLE));
 const virtueOf = (id: string) => virtueList().find(each => virtueItem(each.person.slug, each.index) === id);
@@ -1692,13 +1377,8 @@ const nameLists: Partial<Record<'laqab' | 'kunya', NameFact[]>> = {};
 const nameList = (kind: 'laqab' | 'kunya') => (nameLists[kind] ??= kind === 'laqab' ? laqabFacts(PEOPLE) : kunyaFacts(PEOPLE));
 const nameId = (each: NameFact) => nameItem(each.person.slug, each.name);
 
-/** A dhikr's card on the adhkar page: its first tab (a morning and evening dhikr opens on the morning), scrolled to it. */
 const openDhikrCard = (item: Dhikr) => openDhikr(ADHKAR_TABS.find(tab => item.occasions.includes(tab))!, item.id);
 
-/**
- * A dhikr of the adhkar page (owner, 2026-11-23: every feature a feed card): the page's own card body, its times and how
- * often on the head, the same reference as on the page; «افتح» opens the page at its card, the head the adhkar page.
- */
 function DhikrPost({ id, palette }: { id: string; palette: Palette }) {
   const item = ADHKAR.find(each => each.id === id);
   if (!item) return null;
@@ -1714,13 +1394,11 @@ function DhikrPost({ id, palette }: { id: string; palette: Palette }) {
   );
 }
 
-/** The content cards drawn from a list (pairs and trees have their own picks): each kind's items, by a lasting id. */
 const NOTE_OF: Record<string, AyahNote> = { 'note-tafsir': 'tafsir', 'note-qiraat': 'qiraat', 'note-irab': 'irab', 'note-balagha': 'balagha' };
 const itemLists: Partial<Record<ListKind, readonly string[]>> = {};
 const LIST_OF: Record<ListKind, () => readonly string[]> = {
   'note-tafsir': () => noteList('tafsir'), 'note-qiraat': () => noteList('qiraat'), 'note-irab': () => noteList('irab'), 'note-balagha': () => noteList('balagha'),
   term: () => balaghaTerms.terms.map(term => term.name),
-  // The chosen iltifat examples left «مشاهد» on the phone (owner, 2026-11-21); the website keeps them for now.
   scene: () => [],
   mashahid: () => [DARK_SEA_KEY, RAHMAN_KEY],
   hadith: () => FEED_FORTY.map(entry => String(entry.n)),
@@ -1732,13 +1410,11 @@ const LIST_OF: Record<ListKind, () => readonly string[]> = {
   prophets: () => STORY_GROUPS.map(group => storyItem(group.slug, group.phase)),
   sira: () => STORIES.filter(story => story.reports[0]).map(story => story.slug),
   moment: () => MOMENTS.map(momentId),
-  // One card a person, his whole brief (owner, 2026-11-23), not one a virtue; a card saved before still opens.
   tarajim: () => virtueList().filter(each => each.index === 0).map(each => virtueItem(each.person.slug, each.index)),
   tie: () => TIE_PAIRS,
   laqab: () => nameList('laqab').map(nameId),
   kunya: () => nameList('kunya').map(nameId),
   life: lifePeople,
-  // One person's nasab is never drawn (owner, 2026-11-23: a long chain as a tree adds nothing); two meeting are «meet».
   nasab: () => [],
   ties: () => tiesPeople(PEOPLE, GRAPH),
   battle: () => battleItems(BATTLES),
@@ -1760,11 +1436,6 @@ const LIST_OF: Record<ListKind, () => readonly string[]> = {
 };
 const itemsOf = (kind: ListKind) => (itemLists[kind] ??= LIST_OF[kind]());
 
-/**
- * What every chip's cards are drawn from, worked out while the home is idle, one piece at a time (owner, 2026-11-23: a chip
- * should show its cards at once, not work them out on the tap): each kind's list, and a question of each kind, which builds
- * the kind's questions once (the quizzes keep them). Started once a run of the app, after the first cards are drawn.
- */
 let warmed = false;
 function warmFeed(day: number, memorized: Memorized | null) {
   if (warmed) return;
@@ -1775,9 +1446,7 @@ function warmFeed(day: number, memorized: Memorized | null) {
       const book = QUIZ_BOOKS[kind];
       if (!book || bookState(book) === 'on') feedRun(kind, feedQuizSeed(day, 0), memorized);
     }),
-    // The surahs' order and links, which the «تناسب السور» cards read.
     () => orderSurahList(),
-    // Each chip's first cards' own questions, as its feed asks them (Feed below: a round a card, the first few drawn on the tap).
     ...activeInterests(pickedInterests.read()).flatMap(interest => Array.from({ length: FIRST_CARDS }, (_, round) => () => {
       for (const slot of feedRound([interest], round, day)) {
         const book = QUIZ_BOOKS[slot.kind as FeedQuizKind];
@@ -1794,13 +1463,8 @@ function warmFeed(day: number, memorized: Memorized | null) {
   };
   setTimeout(() => idle(step), WARM_AFTER);
 }
-/** How long after the home's first cards the idle work starts (ms), so opening the app stays as quick as before. */
 const WARM_AFTER = 1500;
 
-/**
- * A story opened from the feed continues (owner, 2026-11-19): that kind's next card is the one after it in the list (the
- * next phase of a prophet's story, the next moment of the battle, the next sira story), before the day's turn goes on.
- */
 const continued = new Map<string, string>();
 const continuedListeners = new Set<() => void>();
 let continuedVersion = 0;
@@ -1812,7 +1476,6 @@ function continueAfter(kind: ListKind, item: string) {
 const subscribeContinued = (listener: () => void) => { continuedListeners.add(listener); return () => { continuedListeners.delete(listener); }; };
 const readContinued = () => continuedVersion;
 
-/** One content card by its kind and item: the card's own post, as it shows in the feed and when saved. */
 function ContentPost({ kind, item, day, palette }: { kind: ListKind; item: string; day: number; palette: Palette }) {
   if (kind in NOTE_OF) return <AyahNotePost kind={NOTE_OF[kind]} id={item} day={day} palette={palette} />;
   switch (kind) {
@@ -1852,7 +1515,6 @@ function ContentPost({ kind, item, day, palette }: { kind: ListKind; item: strin
   }
 }
 
-/** A saved feed card (owner, 2026-11-19: every card can be saved), drawn as it was in the feed; null when the data no longer holds it. */
 export function SavedFeedCard({ id, palette }: { id: string; palette: Palette }) {
   const card = cardOfBookmark(id);
   const { day } = useToday();
@@ -1862,10 +1524,8 @@ export function SavedFeedCard({ id, palette }: { id: string; palette: Palette })
   return <CardMenuContext.Provider value={menu}><ContentPost kind={kind} item={card.item} day={day} palette={palette} /></CardMenuContext.Provider>;
 }
 
-/** The interest's line over a card from outside the reader's interests, with a button to add it. */
 function SurpriseLine({ interest, added, palette }: { interest: string; added: boolean; palette: Palette }) {
   const name = interestById(interest)?.name ?? '';
-  // Once added the line stays, saying so, so the card under it does not move.
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, paddingHorizontal: 12 }}>
       <Text style={{ flex: 1, color: palette.muted, fontSize: 13, textAlign: 'right' }}>{added ? `أُضيف «${name}» إلى اهتماماتك` : `من غير اهتماماتك: ${name}`}</Text>
@@ -1875,7 +1535,6 @@ function SurpriseLine({ interest, added, palette }: { interest: string; added: b
   );
 }
 
-/** In a card's place after «ليس من اهتماماتي»: what was taken out, and a button to put it back. */
 function RemovedLine({ interest, onUndo, palette }: { interest: string; onUndo: () => void; palette: Palette }) {
   const name = interestById(interest)?.name ?? '';
   return (
@@ -1888,36 +1547,19 @@ function RemovedLine({ interest, onUndo, palette }: { interest: string; onUndo: 
   );
 }
 
-/** About how many cards come at a time, as the page opens and each time it nears the end: a round of every interest. */
 const STEP_CARDS = INTERESTS.length;
-/** How many cards a chip draws on its tap, about a screen's worth; the rest come a frame after. */
 const FIRST_CARDS = 3;
 
-/**
- * The home feed (owner, 2026-11-19): the reader's own cards at the top (a forgotten ayah that is due, today's juz, the prayer
- * when near), then rounds, each one card from every interest picked (shared/interests.ts, shared/homeFeed.ts feedRound),
- * content and questions taking turns, with a saved item and the books now and then; more rounds as the page nears its end.
- * `only` shows one interest's cards alone (the chip row over the feed). What was shown before is skipped (shared/feedSeen.ts);
- * once all was seen it starts again from the seen ones. A question answered wrong comes back after a rest.
- */
 export const Feed = memo(function Feed({ palette, nearEnd, screenBottom, only = null, column = null, lead, shown = true }: { palette: Palette; nearEnd: number;
-  /** Where the bottom of the screen is in the page, for a card that comes while the feed is open (the prayer card). */
   screenBottom: () => number;
-  /** One interest's id: its cards alone. */
   only?: string | null;
-  /** A tablet lying down (owner, 2026-11-23): the width of each of two columns of cards, which take turns; otherwise one column. */
   column?: number | null;
-  /** What heads the first column in two columns (the mushaf's page), so the second starts with a card beside it. */
   lead?: React.ReactNode;
-  /** False while the feed is kept hidden behind another chip's: it marks nothing seen and places no prayer card until shown. */
   shown?: boolean }) {
   const { day, juz } = useToday();
   const now = useMinute();
   const visit = useSyncExternalStore(subscribeVisit, visitStart, serverVisit);
-  // A new visit (pulled to refresh, or back after long away), or another chip, starts again from one round.
   const view = `${visit}|${only ?? ''}`;
-  // Another chip, or a new visit, draws the cards that fill the screen first and the rest a frame after, so the tap shows its
-  // cards at once (owner, 2026-11-23). The feed the home opens with is drawn whole, as before.
   const [whole, setWhole] = useState<string | null>(() => (only ? null : view));
   const drawn = whole === view;
   useEffect(() => {
@@ -1928,18 +1570,14 @@ export const Feed = memo(function Feed({ palette, nearEnd, screenBottom, only = 
   }, [drawn, view]);
   const [more, setMore] = useState({ view, batches: 0 });
   useEffect(() => {
-    // The short page of a feed being drawn is not its end.
     if (nearEnd && drawn) setMore(now => ({ view, batches: (now.view === view && now.batches ? now.batches : step) + step }));
   }, [nearEnd]); // eslint-disable-line react-hooks/exhaustive-deps -- only a new signal asks for more
   const seen = useSyncExternalStore(subscribeFeedSeen, readFeedSeen);
   const bookmarks = readBookmarks();
-  // The saved items as they were when the visit began, so saving or unsaving a card does not move the cards on screen.
   const saved = useMemo(() => shownBookmarks(bookmarks).filter(item => !isCardBookmark(item.id)), [visit]); // eslint-disable-line react-hooks/exhaustive-deps -- read once a visit
   const savedCards = useMemo(() => shownBookmarks(bookmarks).filter(item => isCardBookmark(item.id)), [visit]); // eslint-disable-line react-hooks/exhaustive-deps -- read once a visit
   const due = useSyncExternalStore(subscribeDueMarks, readDueMarks);
   const forgotten = mostForgotten(due)[0];
-  // The settings under «ما أحفظه»: questions come from the memorized range, pondering puts it first. A feed kept hidden takes
-  // a new pick when it is shown again, so closing the picker draws only the feed on screen.
   const settledMemorized = useSettledMemorized();
   const [heldMemorized, setHeldMemorized] = useState(settledMemorized);
   if (shown && heldMemorized !== settledMemorized) setHeldMemorized(settledMemorized);
@@ -1947,20 +1585,14 @@ export const Feed = memo(function Feed({ palette, nearEnd, screenBottom, only = 
   const questions = useSyncExternalStore(memorizedQuestions.subscribe, memorizedQuestions.read);
   const prefer = useSyncExternalStore(memorizedPrefer.subscribe, memorizedPrefer.read);
   const recall = useMemo(() => (memorized ? recallOfDay(questions ? memorized : { all: true }, day) : undefined), [memorized, questions, day]);
-  // The recall card asked this visit stays once the reader ticks it (owner, 2026-11-22), though a rested ayah is no longer
-  // due; the next visit asks the next one, and the ayah of the day ticked as remembered is not asked again.
   const fresh = forgotten ? { ayah: forgotten, review: true } : recall && recalled.get(markAyah(recall))?.did !== 'remembered' ? { ayah: recall, review: false } : undefined;
   const [held, setHeld] = useState({ visit, asked: fresh });
   const keep = held.visit === visit && held.asked && !!recalledNow(held.asked.ayah);
   const asked = keep ? held.asked : fresh;
   if (!keep && (held.visit !== visit || held.asked?.ayah !== fresh?.ayah || held.asked?.review !== fresh?.review)) setHeld({ visit, asked: fresh });
-  // Today's juz, once marked read, stays for the visit it was marked in and is left out after (owner, 2026-11-22).
   const showJuz = useMemo(() => !juzRead(day), [visit, day]); // eslint-disable-line react-hooks/exhaustive-deps -- read once a visit
-  // The interests as they were when the visit began (a change in settings starts a new visit); one taken out from a card's
-  // menu leaves the cards on screen in place, its own replaced by a line to put it back.
   const picked = useSyncExternalStore(pickedInterests.subscribe, pickedInterests.read, pickedInterests.server);
   const surprise = useSyncExternalStore(surpriseMe.subscribe, surpriseMe.read, surpriseMe.server);
-  // A note card whose book is off (or still loading) is passed over, and not counted as seen.
   useBooks();
   useEffect(() => warmFeed(day, memorized && questions ? memorized : null), []); // eslint-disable-line react-hooks/exhaustive-deps -- once a run of the app
   const frozen = useMemo(() => ({ picked, surprise }), [visit]); // eslint-disable-line react-hooks/exhaustive-deps -- read once a visit
@@ -1969,29 +1601,22 @@ export const Feed = memo(function Feed({ palette, nearEnd, screenBottom, only = 
     const chosen = activeInterests(frozen.picked);
     return { active: chosen, others: frozen.surprise && frozen.picked.length ? INTERESTS.filter(interest => !chosen.includes(interest)) : [] };
   }, [frozen, only]);
-  // Rounds of few interests are short: as many rounds at a time as make about a round of all, and the books and a saved
-  // item come once in each such step, not in every short round.
   const step = Math.max(1, Math.ceil(STEP_CARDS / (active.length + (others.length ? 1 : 0))));
   const batches = more.view === view && more.batches ? more.batches : step;
-  // Cards taken out from their menu this visit, by key; each leaves a line in its place, the others stay as they are.
   const [removed, setRemoved] = useState<{ visit: number; keys: ReadonlySet<string> }>({ visit, keys: new Set() });
   const removedKeys = removed.visit === visit ? removed.keys : new Set<string>();
   const showing = new Set(activeInterests(picked).map(interest => interest.id));
   const rounds = useMemo(() => Array.from({ length: batches }, (_, round) => feedRound(active, round, day, others)), [active, others, batches, day]);
-  // The questions answered wrong that are due again, as they were when the visit began.
   const missed = useMemo(() => ({ list: readMissed(), at: Date.now() }), [visit]); // eslint-disable-line react-hooks/exhaustive-deps -- read once a visit
-  // Back after a long time in the background: a new visit, so what was shown before counts as seen (shared/feedSeen.ts).
   useEffect(() => {
     const listener = AppState.addEventListener('change', state => (state === 'active' ? backToVisit() : leftVisit()));
     return () => listener.remove();
   }, []);
-  // How many of each kind the rounds hold, in order.
   const counts = useMemo(() => {
     const count: Record<string, number> = {};
     for (const slot of rounds.flat()) count[slot.kind] = (count[slot.kind] ?? 0) + 1;
     return count;
   }, [rounds]);
-  // The cards already shown stay in place as more come; a new visit, day, chip or setting picks afresh.
   const shownPairs = useRef<{ reset?: unknown[]; list: NonNullable<ReturnType<typeof pairOfDayNumber>>[] }>({ list: [] }).current;
   const shownTrees = useRef<{ reset?: unknown[]; list: NonNullable<ReturnType<typeof treeOfDay>>[] }>({ list: [] }).current;
   const pairs = useMemo(() => growingPicks(shownPairs, [view, day, prefer, memorized], offset => pairOfDayNumber(day + offset), pair => pair.id, seen, counts.pair ?? 0,
@@ -2013,7 +1638,6 @@ export const Feed = memo(function Feed({ palette, nearEnd, screenBottom, only = 
     return out;
   }, [counts, day, seen, view, visit, holders, turn]); // eslint-disable-line react-hooks/exhaustive-deps -- `turn` tells a story was opened
   const posts: React.ReactNode[] = [];
-  // Only what is drawn counts as seen (a note whose book is off draws nothing).
   const rendered: string[] = [];
   const used: Record<string, number> = {};
   const next = (kind: string) => { const at = used[kind] ?? 0; used[kind] = at + 1; return at; };
@@ -2058,7 +1682,6 @@ export const Feed = memo(function Feed({ palette, nearEnd, screenBottom, only = 
       rendered.push(...(item !== undefined && !slot.quiz ? [slot.kind === 'pair' || slot.kind === 'tree' ? item : `${slot.kind}:${item}`] : []));
       const menu: CardMenu = {
         kind: slot.kind, item, interest: slot.interest, surprise: slot.surprise,
-        // Not on the only interest left (none picked means all), on one interest's own view, nor on one already taken out.
         notMine: only || !showing.has(slot.interest) || showing.size === 1 ? undefined : () => {
           setRemoved({ visit, keys: new Set([...removedKeys, key]) });
           pickedInterests.write(activeInterests(pickedInterests.read()).map(each => each.id).filter(id => id !== slot.interest));
@@ -2078,12 +1701,8 @@ export const Feed = memo(function Feed({ palette, nearEnd, screenBottom, only = 
     }
   }
   if (!only && isKahfDay(now)) posts.splice(Math.min(KAHF_SLOT, posts.length), 0, <KahfPost key={`kahf${day}`} palette={palette} />);
-  // Pair ids hold «|», so the list is kept on lines.
   const renderedKey = rendered.join('\n');
   useEffect(() => { if (renderedKey && shown) markFeedSeen(renderedKey.split('\n')); }, [renderedKey, shown]);
-  // A prayer that is near comes in once, before the first post below the screen, so what the reader looks at stays put (owner,
-  // 2026-11-18). One near when home opens leads the feed. A card the reader has passed or is looking at stays; one still
-  // below the screen gives way to the next prayer's.
   const soon = usePrayerSoon();
   const [cards, setCards] = useState<(Soon & { after: string | null })[]>(() => (soon ? [{ ...soon, after: null }] : []));
   const top = useRef(0);
@@ -2096,7 +1715,6 @@ export const Feed = memo(function Feed({ palette, nearEnd, screenBottom, only = 
     const at = insertAt(keys.map(key => (tops.current.get(key) ?? Infinity) + top.current), bottom);
     setCards(now => [...now.filter(card => !below(`pr${card.key}`)), { ...soon, after: at ? keys[at - 1] : null }]);
   }, [soon?.key, shown]); // eslint-disable-line react-hooks/exhaustive-deps -- once for each prayer, on the feed on screen
-  // A new visit starts the feed again from the top, with the prayer that is near now leading it.
   const [cardsVisit, setCardsVisit] = useState(visit);
   if (cardsVisit !== visit) { setCardsVisit(visit); setCards(soon ? [{ ...soon, after: null }] : []); }
   for (const card of only ? [] : cards) {
@@ -2107,10 +1725,6 @@ export const Feed = memo(function Feed({ palette, nearEnd, screenBottom, only = 
   const placed = (i: number) => (drawn || i < FIRST_CARDS
     ? <View key={keys[i]} onLayout={event => { tops.current.set(keys[i], event.nativeEvent.layout.y); }}>{posts[i]}</View> : null);
   if (column) {
-    // Each column is a phone's page to the cards in it, so their drawings and ayat size from its width (ui/column.ts).
-    // A card's place is told within its column, which starts where the feed does, so the prayer card still comes below the screen.
-    // The cards take turns by their order without the prayer cards, which join the column of the card before them: a prayer
-    // card coming or going never moves a card to the other column.
     let turn = -1;
     const prayers = new Set(cards.map(card => `pr${card.key}`));
     const sides = keys.map(key => (prayers.has(key) ? Math.max(turn, 0) % 2 : ++turn % 2));

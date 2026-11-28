@@ -22,7 +22,7 @@ flowchart RL
 
 | Part of the screen | Label | Opens | Code |
 | --- | --- | --- | --- |
-| `BalaghaTermsScreen` | (onPress) | [المصطلح](term.md) | [screens/balaghaTerms.tsx:47](../../mobile/src/screens/balaghaTerms.tsx#L47) |
+| `BalaghaTermsScreen` | (onPress) | [المصطلح](term.md) | [screens/balaghaTerms.tsx:42](../../mobile/src/screens/balaghaTerms.tsx#L42) |
 
 ## Sheets
 

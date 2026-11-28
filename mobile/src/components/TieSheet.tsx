@@ -9,7 +9,6 @@ import { GRAPH, personName } from '@/lib/tarajim';
 
 type ShownTie = Pick<Tie, 'to' | 'link' | 'reversed'>;
 
-/** The sentence that names a tie, with its pages: in the sheet below, or where the page is already a sheet (the quiz's look-up). */
 export function TieSaying({ tie, palette }: { tie: ShownTie; palette: Palette }) {
   return (
     <View style={{ gap: 8 }}>
@@ -23,7 +22,6 @@ export function TieSaying({ tie, palette }: { tie: ShownTie; palette: Palette })
   );
 }
 
-/** The sentence that states a tie, with its pages: a tap on a name with no page, a long press on the ring. `to` may be a battle. */
 export default function TieSheet({ tie, onClose, palette }: { tie?: ShownTie; onClose: () => void; palette: Palette }) {
   return (
     <Sheet open={!!tie} onClose={onClose} palette={palette}>
@@ -32,10 +30,6 @@ export default function TieSheet({ tie, onClose, palette }: { tie?: ShownTie; on
   );
 }
 
-/**
- * A ring's ties the book gives «على خلاف», all in one sheet (owner, 2026-11-22): only the book's words and their pages,
- * no words of ours; two ties the book says in the same words show them once.
- */
 export function DoubtedSheet({ ties, open, onClose, palette }: { ties: readonly ShownTie[]; open: boolean; onClose: () => void; palette: Palette }) {
   const once = ties.filter((tie, i) => !tie.link.text || ties.findIndex(other => other.link.text === tie.link.text) === i);
   return (

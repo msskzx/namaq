@@ -20,10 +20,6 @@ import { lifeOf, personLife } from '@/lib/life';
 import { LifeSheet } from '@/components/LifeTimeline';
 import LifeColumns from '@/components/LifeColumns';
 
-/**
- * «حياتهما» (owner, 2026-11-18; sketch timeline-events/sketch-dark.png, screen 4): two lives or more side by side, a
- * column each, by year; what they shared on one row joined by a line, what one did alone in his own column.
- */
 export default function LifeScreen() {
   const palette = usePalette();
   const bottom = useTabBarSpace();
@@ -44,7 +40,6 @@ export default function LifeScreen() {
           {picked.map(s => <Chip key={s} label={name(s)} on palette={palette} onClear={picked.length > 1 ? () => setPicked(picked.filter(p => p !== s)) : undefined} />)}
           <Chip Icon={Plus} label="أضف" on={false} small palette={palette} onPress={() => setAdding(true)} />
         </View>
-        {/* The lives in the home card's shape, every sentence they rest on named on the book line (owner 2026-11-20). */}
         {picked.length > 1 && (
           <CardWithRow palette={palette} pad={[14, 8]} gap={6} source={sourcesOf(lifeSources(picked.flatMap(s => personLife(findPerson(s)!))))}>
             <LifeColumns slugs={picked} palette={palette} show={setShown} />

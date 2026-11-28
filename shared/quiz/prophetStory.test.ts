@@ -28,7 +28,6 @@ describe('«في قصة مَن هذه الآية؟»', () => {
 
   it('never offers as wrong a prophet whose story holds the ayat around it, nor Harun for Musa', () => {
     for (const question of prophetStoryQuiz.questions({ range: null, filters: {} }, 'easy', Math.random)) {
-      // The ayah's own key, whole: «37:125» ends with «7:125», so a suffix match finds Musa's ayah for Ilyas's.
       const item = items.find(each => question.ayahKey === each.key)!;
       const wrong = question.choices.map(choice => choice.value).filter(slug => slug !== question.correctAnswer);
       expect(wrong.filter(slug => item.nearby.includes(slug))).toEqual([]);

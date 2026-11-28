@@ -1,7 +1,6 @@
 import { keyStore } from './storage';
 import { reportError } from './errors';
 
-/** What a tap, double tap and long press do on the Quran reader's page, chosen per mode in the settings sheet. Kept on this device. */
 export type ReaderMode = 'read' | 'recite';
 export type Gesture = 'tap' | 'double' | 'long';
 export type GestureAction = 'tools' | 'next-ayah' | 'next-word' | 'back' | 'actions' | 'forgot' | 'save' | 'none';
@@ -9,7 +8,6 @@ export type ReaderGestures = Record<ReaderMode, Record<Gesture, GestureAction>>;
 
 export const GESTURES: Gesture[] = ['tap', 'double', 'long'];
 
-/** The actions each mode offers: revealing and stepping back only mean something while reciting. */
 export const MODE_ACTIONS: Record<ReaderMode, GestureAction[]> = {
   read: ['tools', 'actions', 'forgot', 'save', 'none'],
   recite: ['next-ayah', 'next-word', 'back', 'actions', 'forgot', 'save', 'tools', 'none'],
@@ -20,7 +18,6 @@ export const DEFAULT_GESTURES: ReaderGestures = {
   recite: { tap: 'next-ayah', double: 'next-word', long: 'actions' },
 };
 
-/** Actions that work on the ayah under the finger; the rest act on the page. */
 export const AYAH_ACTIONS: ReadonlySet<GestureAction> = new Set(['actions', 'forgot', 'save']);
 
 export function parseGestures(raw: string | null): ReaderGestures {

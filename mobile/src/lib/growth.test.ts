@@ -9,7 +9,6 @@ const list = treeList();
 const presentationOf = (index: number) => cardOf(list[index]).presentation;
 
 describe('a tree growing in the studio', () => {
-  // A matrix-only card (a book's ayat with no shared trunk) grows no tree.
   const presentation = presentationOf(list.findIndex(piece => piece.keys.length >= 4 && !matrixOnly(piece)));
   const ids = [...nodeIndices(presentation.tree).values()].map(nodeId);
 
@@ -31,10 +30,8 @@ describe('a tree growing in the studio', () => {
         const own = beats.filter(beat => beat.key === key);
         const counts = own.map(beat => beat.words!);
         expect(counts, key).toEqual([...counts].sort((a, b) => a - b));
-        // The root's beat shows the words before the phrase and the root's own; the ayah's words are never outrun before its end.
         const root = own.find(beat => beat.now.includes('n-1'))!;
         expect(root.words, key).toBe((presentation.offsets[key] ?? 0) + presentation.tree.words.filter(word => word !== '۝' && !word.startsWith('﴿')).length);
-        // By the ayah's last box the card shows every word of its passage; a run into the next surah's basmala is not counted.
         expect(Math.max(...counts.filter(count => count < ALL_WORDS)), key).toBe(passage.get(key)!.length);
         expect(counts[counts.length - 1], key).toBe(ALL_WORDS);
       }
@@ -146,14 +143,11 @@ describe('the ayah matrix', () => {
 
   it('links words only some rows share, faded, with one link per word across the rows', () => {
     const linksOf = (index: number) => matrixOf(presentationOf(index), false).rows.map(row => row.ayah!.ayat[0]);
-    // A tree of three or more ayat where some words are shared by only some of them.
     const index = list.findIndex((piece, i) => piece.keys.length >= 3 && linksOf(i).some(ayah => [...ayah.links!.values()].some(link => link.some)));
     expect(index).toBeGreaterThanOrEqual(0);
     const ayat = linksOf(index);
     const links = ayat.map(ayah => [...ayah.links!.entries()]);
-    // Words every row shares are the full-colour ones and carry no `some`.
     ayat.forEach((ayah, n) => expect(links[n].filter(([, link]) => !link.some).map(([i]) => i).sort((x, y) => x - y)).toEqual([...ayah.exact, ...ayah.rooted].sort((x, y) => x - y)));
-    // Each link a row has turns up in at least one other row.
     const all = links.flat().map(([, link]) => link.link);
     for (const link of new Set(all)) expect(all.filter(item => item === link).length).toBeGreaterThanOrEqual(2);
   });

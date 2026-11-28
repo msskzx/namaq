@@ -22,11 +22,7 @@ import { QuranWord } from '@/components/quran/text/AyahFlow';
 
 export type IrabTarget = { key: string; word: number };
 
-/**
- * A word's i'rab (owner, 2026-11-15; docs/plans/irab.md): the ayah's words as chips, the pressed one lit; under it the
- * short line from the corpus and treebank, then al-'Ukbari's passages on the word when his book is on the phone. A
- * tap on another chip moves to that word. With no i'rab book kept, the sheet offers them.
- */
+// see docs/plans/irab.md
 export default function IrabSheet({ target, onClose, palette }: { target: IrabTarget | null; onClose: () => void; palette: Palette }) {
   const [kept, setKept] = useState(target);
   if (target && target !== kept) setKept(target);
@@ -37,7 +33,6 @@ export default function IrabSheet({ target, onClose, palette }: { target: IrabTa
   );
 }
 
-/** The sheet's inside: a quiz that looks the word up draws it too, without `onClose` and so without the ways out of the quiz. */
 export function IrabBody({ target, palette, onClose }: { target: IrabTarget; palette: Palette; onClose?: () => void }) {
   useBooks();
   const { key } = target;
@@ -48,7 +43,6 @@ export function IrabBody({ target, palette, onClose }: { target: IrabTarget; pal
   const corpus = corpusWords(key, picked);
   const shortOn = bookState('irab-words') === 'on';
   const ukbariOn = bookState('ukbari') === 'on';
-  // null while reading the file, false when it cannot be read.
   const [ukbari, setUkbari] = useState<UkbariData | null | false>(null);
   useEffect(() => {
     let live = true;
@@ -57,7 +51,6 @@ export function IrabBody({ target, palette, onClose }: { target: IrabTarget; pal
     return () => { live = false; };
   }, [ukbariOn]);
   const passages = ukbari ? ukbariOf(ukbari, key, corpus) : [];
-  // The word the role points at («صفة» of «ٱللَّهِ»), outlined among the chips.
   const heads = new Set(corpus.map(i => lines[i]?.head).filter((head): head is number => head !== null && head !== undefined));
   const headChip = words.findIndex((_, i) => corpusWords(key, i).some(c => heads.has(c)));
   const none = !shortOn && !ukbariOn;
@@ -107,7 +100,6 @@ export function IrabBody({ target, palette, onClose }: { target: IrabTarget; pal
   );
 }
 
-/** One of al-'Ukbari's passages: the book and page on top (a link to the page), then his text with Quran words in the Quran font. */
 function Passage({ passage, onWord, palette, onClose }: { passage: BookPassage; onWord: boolean; palette: Palette; onClose?: () => void }) {
   return (
     <Card palette={palette} pad={[10, 14]} gap={4}>

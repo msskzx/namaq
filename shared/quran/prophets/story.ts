@@ -2,7 +2,7 @@ import { num } from '../arabicNumber';
 import { ayahWords } from '../normalize';
 import { surahName } from '../surahNames';
 
-// docs/plans/quran-prophet-timelines.md
+// see docs/plans/quran-prophet-timelines.md
 export type Range = [number, number];
 export type Segment = { surah: number; range: Range };
 export type StoryEvent = { title: string; segments: Segment[]; phase: number };
@@ -10,7 +10,6 @@ export type Story = { intro: string; phases: readonly string[]; events: StoryEve
 
 export const seg = (surah: number, lo: number, hi = lo): Segment => ({ surah, range: [lo, hi] });
 
-/** Where the story's text comes from: the website stores its own ayat file, the app reads its bundled Quran. */
 export type StoryText = { ayah: (key: string) => string | undefined };
 export type StoryData = { ayat: Record<string, string> };
 export const storedText = ({ ayat }: StoryData): StoryText => ({ ayah: key => ayat[key] });
@@ -19,7 +18,6 @@ export type StoryLine = { ayah: number; text: string; words: string[]; norm: str
 export type SegmentView = { surah: number; name: string; range: Range; lines: StoryLine[] };
 export type EventView = { n: number; title: string; phase: number; segments: SegmentView[]; count: number };
 
-/** Every ayah key the story's events cover, in event order. */
 export const storyKeys = (events: StoryEvent[]) =>
   events.flatMap(e => e.segments.flatMap(({ surah, range: [lo, hi] }) => Array.from({ length: hi - lo + 1 }, (_, k) => `${surah}:${lo + k}`)));
 
@@ -40,14 +38,12 @@ export function buildStory(events: StoryEvent[], { ayah }: StoryText): EventView
   });
 }
 
-/** The numbers the page's summary shows. */
 export const storySummary = (events: EventView[]) => ({
   events: events.length,
   ayat: events.reduce((t, e) => t + e.count, 0),
   surahs: new Set(events.flatMap(e => e.segments.map(g => g.surah))).size,
 });
 
-/** One surah's part in an event: its segments in that surah in ayah order, gathered where the surah first comes in the event. */
 export type Place = { surah: number; name: string; count: number; segments: SegmentView[] };
 
 export function placesOf(event: EventView): Place[] {
@@ -62,7 +58,6 @@ export function placesOf(event: EventView): Place[] {
   return [...bySurah.values()];
 }
 
-/** The map of a story: a row for every surah that tells part of it, in mushaf order, and its place in each event. */
 export type StoryMap = { surahs: { surah: number; name: string }[]; places: Place[][]; most: number };
 
 export function storyMap(events: EventView[]): StoryMap {
@@ -74,14 +69,9 @@ export function storyMap(events: EventView[]): StoryMap {
 
 export const placeIn = (map: StoryMap, event: number, surah: number) => map.places[event].find(p => p.surah === surah);
 
-/** A dot's diameter: the smallest for one ayah, the largest for the most ayat any place has, by area in between. */
 export const dotSize = (count: number, most: number, smallest: number, largest: number) =>
   Math.round(smallest + (largest - smallest) * Math.sqrt(Math.max(0, count - 1) / Math.max(1, most - 1)));
 
-/**
- * Which words of an event's places sit in a run of two or more words that another surah's place in the same event
- * also has, by place, segment, line and word. Lone common words (من، قال) stay plain.
- */
 export function sharedWords(places: Place[]): boolean[][][][] {
   const pairs = places.map(p => new Set(p.segments.flatMap(g => g.lines.flatMap(({ norm }) => norm.slice(1).map((w, k) => `${norm[k]} ${w}`)))));
   return places.map((p, i) => p.segments.map(g => g.lines.map(({ norm }) => {
@@ -90,5 +80,4 @@ export function sharedWords(places: Place[]): boolean[][][][] {
   })));
 }
 
-/** The ayah range of a segment, as «٣–١٣» or «١١». */
 export const rangeText = ([lo, hi]: Range) => (hi > lo ? `${num(lo)}–${num(hi)}` : num(lo));

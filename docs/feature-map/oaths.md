@@ -24,7 +24,7 @@ flowchart RL
 
 | Part of the screen | Label | Opens | Code |
 | --- | --- | --- | --- |
-| `OathCard` | افتح ‹› في المصحف | [المصحف](read.md) | [screens/oaths.tsx:63](../../mobile/src/screens/oaths.tsx#L63) |
+| `OathCard` | افتح ‹› في المصحف | [المصحف](read.md) | [screens/oaths.tsx:58](../../mobile/src/screens/oaths.tsx#L58) |
 
 ## Sheets
 

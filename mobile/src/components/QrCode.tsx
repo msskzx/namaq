@@ -2,7 +2,6 @@ import { useMemo } from 'react';
 import Svg, { Path, Rect } from 'react-native-svg';
 import { encode } from 'uqr';
 
-/** A QR code of a link, drawn in the page's ink on its paper, as the website's party lobby shows it. */
 export default function QrCode({ value, size, ink, paper }: { value: string; size: number; ink: string; paper: string }) {
   const { path, count } = useMemo(() => {
     const { data, size: modules } = encode(value, { border: 1 });

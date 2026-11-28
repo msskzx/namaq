@@ -31,13 +31,13 @@ flowchart RL
 
 | Part of the screen | Label | Opens | Code |
 | --- | --- | --- | --- |
-| `BabRow` | (onPress) | [أبواب الكتاب](hadith-kitab.md) | [screens/hadithKitab.tsx:39](../../mobile/src/screens/hadithKitab.tsx#L39) |
-| `KitabIndex` | (back) | [الحديث](hadith.md) | [screens/hadithKitab.tsx:65](../../mobile/src/screens/hadithKitab.tsx#L65) |
-| `BabPage` | (back) | [الحديث](hadith.md) | [screens/hadithKitab.tsx:103](../../mobile/src/screens/hadithKitab.tsx#L103) |
-|  | (go) | [أبواب الكتاب](hadith-kitab.md) | [screens/hadithKitab.tsx:104](../../mobile/src/screens/hadithKitab.tsx#L104) |
-|  | ‹›‹› | [أبواب الكتاب](hadith-kitab.md) | [screens/hadithKitab.tsx:114](../../mobile/src/screens/hadithKitab.tsx#L114) |
-|  | (onPress) | [حديث الصحيح](hadith-sahih.md) | [screens/hadithKitab.tsx:127](../../mobile/src/screens/hadithKitab.tsx#L127) |
-| `HadithKitabScreen` | (back) | [الحديث](hadith.md) | [screens/hadithKitab.tsx:143](../../mobile/src/screens/hadithKitab.tsx#L143) |
+| `BabRow` | (onPress) | [أبواب الكتاب](hadith-kitab.md) | [screens/hadithKitab.tsx:37](../../mobile/src/screens/hadithKitab.tsx#L37) |
+| `KitabIndex` | (back) | [الحديث](hadith.md) | [screens/hadithKitab.tsx:59](../../mobile/src/screens/hadithKitab.tsx#L59) |
+| `BabPage` | (back) | [الحديث](hadith.md) | [screens/hadithKitab.tsx:93](../../mobile/src/screens/hadithKitab.tsx#L93) |
+|  | (go) | [أبواب الكتاب](hadith-kitab.md) | [screens/hadithKitab.tsx:94](../../mobile/src/screens/hadithKitab.tsx#L94) |
+|  | ‹›‹› | [أبواب الكتاب](hadith-kitab.md) | [screens/hadithKitab.tsx:104](../../mobile/src/screens/hadithKitab.tsx#L104) |
+|  | (onPress) | [حديث الصحيح](hadith-sahih.md) | [screens/hadithKitab.tsx:117](../../mobile/src/screens/hadithKitab.tsx#L117) |
+| `HadithKitabScreen` | (back) | [الحديث](hadith.md) | [screens/hadithKitab.tsx:133](../../mobile/src/screens/hadithKitab.tsx#L133) |
 
 ## Sheets
 

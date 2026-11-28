@@ -18,12 +18,6 @@ import { findPerson, personName, unvowelled } from '@/lib/tarajim';
 import { Credit } from './person';
 import TiesRing, { TieSheet, tiesOf } from '@/components/TiesRing';
 
-/**
- * «صلاته» (owner, 2026-11-18; sketches tarajim-app/graph/sketch-dark.png and sketch2-dark.png): the person in the middle
- * and his ties round him, a line coloured by the kind of tie. A kind with more people than the ring holds is one node
- * with its count, and tapping it opens that kind alone. A person with a page moves to the middle; the trail above goes
- * back. A long press shows the sentence that states the tie. Battles and titles are badges under the drawing.
- */
 export default function TiesScreen() {
   const palette = usePalette();
   const bottom = useTabBarSpace();
@@ -38,7 +32,6 @@ export default function TiesScreen() {
   const go = (to: string) => setTrail([...trail, to]);
   if (!person) return <View style={{ flex: 1, backgroundColor: palette.paper }}><TopBar back={back} title="الصلات" /></View>;
 
-  // The page's side room and the card's padding and frame.
   const drawW = Math.min(width - 32 - 30, 480);
   const battles = [...new Map(person.battles.map(b => [b.slug, b])).values()];
 
@@ -53,7 +46,6 @@ export default function TiesScreen() {
               : <Text key={`${s}${i}`} style={{ color: palette.ink, fontSize: 15 }}>{personName(findPerson(s)!)}</Text>))}
           </View>
         )}
-        {/* One section in the home card's shape (owner 2026-11-20): the ring and its badges, the ways on under it, the books on the line. */}
         <CardWithRow palette={palette} gap={12} row={<>
           <IconButton Icon={Milestone} label={person.sex === 'FEMALE' ? 'ترجمتها' : 'ترجمته'} onPress={() => router.push({ pathname: '/person', params: { slug: person.slug } })} />
           <IconButton Icon={Network} label="النسب" onPress={() => router.push({ pathname: '/nasab', params: { slug: person.slug } })} />

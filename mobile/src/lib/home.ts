@@ -11,7 +11,6 @@ export type Reference = { surah: number; ayat: number[]; range?: boolean };
 export type SavedCard = { id: string; text: string; kind: BookmarkKind; references: Reference[]; open: Intent | null };
 
 let trees: Map<string, { keys: string[]; text: string }> | undefined;
-/** Each tree under its id and the ids the website saved it under. */
 const treeOf = (id: string) => {
   if (!trees) {
     trees = new Map();
@@ -23,23 +22,16 @@ const keysOfTree = (id: string) => treeOf(id)?.keys;
 
 const split = (key: string) => key.split(':').map(Number) as [number, number];
 
-/** The ayat a saved card names, by surah in mushaf order, as the website's homepage lists them. */
 export function referencesOf(keys: string[], range = false): Reference[] {
   const bySurah = new Map<number, number[]>();
   [...new Set(keys)].map(split).sort(([a, b], [c, d]) => a - c || b - d).forEach(([surah, ayah]) => bySurah.set(surah, [...(bySurah.get(surah) ?? []), ayah]));
   return [...bySurah].map(([surah, ayat]) => ({ surah, ayat, ...(range && ayat.length > 1 ? { range: true } : {}) }));
 }
 
-/**
- * The saved items the app can still show. A saved tree the data review removed has nothing to open, so it is left
- * out quietly; it stays in storage, so it comes back if the tree returns.
- */
 export const shownBookmarks = (items: Bookmark[]) => items.filter(item => bookmarkKind(item) !== 'tree' || !!keysOfTree(item.id));
 
-/** A homepage shelf card: what it is, which ayat it holds, and where in the app it opens. */
 export function savedCard(item: Bookmark): SavedCard {
   const kind = bookmarkKind(item);
-  // A saved feed card is drawn as its own card (HomeFeed SavedFeedCard); its title is all a shelf needs.
   if (kind === 'card') return { id: item.id, text: item.text, kind, references: [], open: null };
   if (kind === 'ayah') {
     const key = item.id.slice('ayah:'.length);
@@ -50,23 +42,16 @@ export function savedCard(item: Bookmark): SavedCard {
     const keys = compareBookmarkAyat(item);
     const surahs = keys.map(key => split(key)[0]);
     const other = surahs.find(surah => surah !== surahs[0]) ?? surahs[0];
-    // The card's first words as the page prints them, as saving one writes them: an older save may hold the corpus's spelling.
     const words = keys.length ? ayahOf(keys[0])?.words.slice(0, 6).join(' ') : undefined;
     return { id: item.id, text: words ? `${words} …` : item.text, kind, references: referencesOf(keys, /\d-\d/.test(item.id)), open: surahs.length ? { tab: 'compare', lead: surahs[0], other, ayat: keys } : null };
   }
   const tree = treeOf(item.id);
   const keys = tree?.keys;
-  // The tree's words as the page prints them today: an older save may hold the corpus's spelling.
   return { id: item.id, text: tree?.text ?? item.text, kind, references: referencesOf(keys ?? []), open: keys ? { tab: 'branches', open: item.id } : null };
 }
 
-/** A shelf card's words as the mushaf font draws them: the page's own words (savedCard), one medallion per ayah number. */
 export const shelfText = (card: Pick<SavedCard, 'text'>) => quranText(card.text);
 
-/**
- * Where else a saved card's ayat can be seen, for its long press: the mushaf, its tree and matrix (or, for an ayah,
- * the trees that hold it) and compare. Only the ones that lead somewhere; `targets` lists the compare pages to pick from.
- */
 export type CardWay =
   | { to: 'mushaf'; at: string }
   | { to: 'tree' | 'matrix'; open: Intent | null; tree?: string }
@@ -112,7 +97,6 @@ export function cardWays(item: Bookmark): CardWay[] {
   ];
 }
 
-/** A note on an ayah as a homepage card: the reader's words under the ayah's name; it opens the ayah in the mushaf. */
 export function noteCard(key: string, text: string): SavedCard {
   const [surah, ayah] = split(key);
   return { id: key, text, kind: 'ayah', references: [{ surah, ayat: [ayah] }], open: { tab: 'read', at: key } };

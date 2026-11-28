@@ -57,7 +57,6 @@ describe('the atlas', () => {
     const here = battlesAt(BATTLES, 'life', [placeOf('khandaq').name], 5);
     expect(here.length).toBeGreaterThan(1);
     expect(here[0].year?.value).toBe(5);
-    // The map hides the years after the chosen one, and so does the pin's sheet.
     expect(battlesAt(BATTLES, 'life', [placeOf('khandaq').name], 3).every(battle => battle.year!.value <= 3)).toBe(true);
   });
 
@@ -82,7 +81,6 @@ describe('the atlas', () => {
   });
 });
 
-// The atlas's map fills the screen, and no pin hides under the bars above or the sheet below (owner, 2026-11-23).
 describe('screenBox', () => {
   it('puts every pinned place of each layer inside the open band of the screen', () => {
     const screen = { width: 440, height: 956, top: 150, bottom: 500 };

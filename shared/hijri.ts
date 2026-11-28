@@ -1,8 +1,4 @@
 import { num } from './quran/arabicNumber';
-/**
- * Today's date in the Umm al-Qura Hijri calendar, in Arabic («الجمعة، ٣ جمادى الآخرة ١٤٤٨ هـ»),
- * or null where the platform's Intl has no Hijri calendar, so the widget hides instead of showing a Gregorian date.
- */
 export function hijriDate(date: Date): string | null {
   try {
     const format = new Intl.DateTimeFormat('ar-SA-u-ca-islamic-umalqura-nu-arab', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
@@ -13,7 +9,6 @@ export function hijriDate(date: Date): string | null {
   }
 }
 
-/** The day of the Umm al-Qura month (1–30), or null without a Hijri calendar. */
 export function hijriDay(date: Date): number | null {
   try {
     const format = new Intl.DateTimeFormat('en-u-ca-islamic-umalqura-nu-latn', { day: 'numeric' });
@@ -25,11 +20,6 @@ export function hijriDay(date: Date): number | null {
   }
 }
 
-/**
- * Today's juz on a juz-a-day plan, one full reading each Hijri month: day 1 is juz 1, day 30 is juz 30.
- * A month of 29 days gives its last day juz 29 and 30 together, so the reading still ends with the month.
- * Null where the platform has no Hijri calendar.
- */
 export function todaysJuz(date: Date): number[] | null {
   const day = hijriDay(date);
   if (!day) return null;
@@ -37,5 +27,4 @@ export function todaysJuz(date: Date): number[] | null {
   return day === 29 && hijriDay(tomorrow) === 1 ? [29, 30] : [day];
 }
 
-/** «الجزء ٣», or «الجزءان ٢٩ و٣٠» on the last day of a 29-day month. */
 export const juzLabel = (juz: number[]) => (juz.length > 1 ? `الجزءان ${num(juz[0])} و${num(juz[1])}` : `الجزء ${num(juz[0])}`);

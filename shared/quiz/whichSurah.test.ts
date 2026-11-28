@@ -43,12 +43,10 @@ describe('which surah', () => {
       for (const choice of question.choices) expect(picked).toContain(choice.value);
     }
     expect(whichSurah.count(scope)).toBe(questions.length);
-    // One surah: every answer would be that surah.
     expect(whichSurah.count({ range: null, filters: { surahs: '36' } })).toBe(0);
   });
 
   it('still asks a range of too few surahs, filling the choices with the surahs nearest it (owner, 2026-11-20)', () => {
-    // Middle, either end, three surahs, and two far apart.
     for (const range of [[36, 37], [1, 2], [113, 114], [36, 37, 38], [2, 100]]) {
       const gap = (n: number) => Math.min(...range.map(r => Math.abs(r - n)));
       for (const difficulty of ['easy', 'medium', 'hard'] as const) {
@@ -80,7 +78,6 @@ describe('which surah', () => {
       const lookAlikes = Object.keys(question.alike ?? {}).map(Number);
       const anchors = [Number(question.correctAnswer), ...lookAlikes];
       if (!lookAlikes.length) {
-        // A run of four surahs, the answer anywhere in it.
         expect(Math.max(...values) - Math.min(...values)).toBe(3);
         places.add([...values].sort((x, y) => x - y).indexOf(Number(question.correctAnswer)));
       }

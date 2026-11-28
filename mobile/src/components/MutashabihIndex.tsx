@@ -15,7 +15,6 @@ import AyahFlow, { AyahWords } from './quran/text/AyahFlow';
 
 const words = new Map(corpus.ayat.map(ayah => [ayah.key, ayah.words]));
 const placeName = (key: string) => { const [surah, ayah] = key.split(':').map(Number); return `${surahName(surah)} ${num(ayah)}`; };
-/** «الكرماني والإسكافي», or «٣ كتب» for more than two. */
 const booksLine = (names: string[]) => (names.length > 2 ? `${num(names.length)} كتب` : names.join(' و'));
 
 function Row({ row, palette, onOpen }: { row: IndexRow; palette: Palette; onOpen: () => void }) {
@@ -42,11 +41,6 @@ function Row({ row, palette, onOpen }: { row: IndexRow; palette: Palette; onOpen
   );
 }
 
-/**
- * The way into the mutashabih tab (owner, 2026-11-24: sketch quran-design/mutashabih-page, design ب): a bar for each surah as
- * tall as its cards in the list shown, and the picked surah's cards in mushaf order, each by its words in that surah with the
- * words it differs by lit, the places it is set beside, its kind of difference and the books that name it. A row opens its card.
- */
 export default function MutashabihIndex({ pieces, start, onOpen, palette, bottom }: {
   pieces: BranchPiece[]; start?: number; onOpen: (piece: BranchPiece, surah: number) => void; palette: Palette; bottom: number;
 }) {

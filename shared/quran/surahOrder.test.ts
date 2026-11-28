@@ -60,7 +60,6 @@ describe('orderSurahs', () => {
     }
   });
 
-  // Owner 2026-11-21: the books' Quran quotes showed without the mushaf's tashkeel; every quote is set from the page words.
   it('sets every Quran quote in the books from the mushaf page words', () => {
     const runs = surahs.flatMap(s => [...s.aim.runs, ...(s.link?.runs ?? [])]);
     expect(runs.some(run => 'quran' in run)).toBe(true);
@@ -68,14 +67,11 @@ describe('orderSurahs', () => {
       expect(data(key)!.join(' ')).toContain(words.join(' '));
     }
     const quotes = (surah: number) => surahs.find(s => s.surah === surah)!.link!.runs.flatMap(run => ('quran' in run ? [run.quran.map(a => a.key)] : []));
-    // A quote over three ayat at the end of the surah before.
     expect(quotes(15)[0]).toEqual(['14:48', '14:49', '14:50']);
-    // «"١"» names the surah's own first ayah, though the same words open 4:19 first (review, 2026-11-21).
     expect(quotes(5)[1]).toEqual(['5:1']);
   });
 
   it('leaves a quote in the book\'s words when the ayah the book names does not hold it', () => {
-    // al-Suyuti cites «"طه: ١٢٩"» for words 20:129 does not have; they are 42:14's, which he did not name.
     const link = surahs.find(s => s.surah === 21)!.link!;
     expect(link.runs.some(run => 'text' in run && run.text.startsWith('﴿وَلَوْلا كَلِمَةٌ'))).toBe(true);
   });
@@ -99,10 +95,8 @@ describe('orderSurahs', () => {
   it('shows several juz together, each surah once, and a link only after the surah before it', () => {
     const shown = orderInJuz(surahs, [1, 30]);
     expect(shown.map(s => s.surah)).toEqual([1, 2, ...Array.from({ length: 37 }, (_, k) => 78 + k)]);
-    // al-Naba' follows al-Baqara here, but its link is to al-Mursalat, which is not shown.
     expect(shown.map((_, i) => linkShows(shown, i)).filter(Boolean)).toHaveLength(1 + 36);
     expect(linkShows(shown, 2)).toBe(false);
-    // Juz 26 and 27 share al-Dhariyat: it shows once.
     expect(orderInJuz(surahs, [26, 27]).filter(s => s.surah === 51)).toHaveLength(1);
   });
 

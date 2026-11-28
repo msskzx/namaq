@@ -8,7 +8,6 @@ const entries: BookEntry[] = [
   { surah: 1, from: 1, to: 7, text: 'أول الكلام.\nثاني ﴿الْحَمْدُ لِلَّهِ رَبِّ﴾ ثم' },
   { surah: 2, from: 1, to: 5, text: 'تقدم الكلام.\nوقوله ﴿ذَلِكَ الْكِتَابُ﴾ أي هذا الكتاب' },
 ];
-// Page 2 starts inside the first passage's Quran quote; page 3 at the second passage.
 const quote = entries[0].text.indexOf('رَبِّ');
 const marks: PageBreak[] = [[0, 0, 1, 1], [0, quote, 1, 2], [1, 0, 1, 3]];
 

@@ -5,15 +5,8 @@ import { Tap } from '@/ui/Tap';
 import { MIN_TAP } from '@/ui/tapSize';
 import type { Palette } from '@/lib/theme';
 
-/**
- * A strip of many short tabs over pages swiped sideways (the years of «قصص السيرة», owner 2026-11-23): right to left, the
- * open one underlined in the accent and kept in view; a tap goes to its page. Each is at least MIN_TAP wide, so a long
- * strip scrolls. `progress` draws under it how far through the tabs the open one is (a battle's scenes). A few views of
- * one thing are ui/Tabs.
- */
 export default function StripTabs({ labels, names, at, onPick, progress = false, palette }: {
   labels: string[];
-  /** Each tab's full name, read out («السنة ٨» for «٨»). */
   names?: string[];
   at: number; onPick: (index: number) => void; progress?: boolean; palette: Palette;
 }) {
@@ -32,7 +25,6 @@ export default function StripTabs({ labels, names, at, onPick, progress = false,
           <Tap key={`${i}:${label}`} onPress={() => onPick(i)} accessibilityRole="tab" accessibilityState={{ selected: i === at }} accessibilityLabel={names?.[i] ?? label}
             onLayout={event => {
               centres.current[i] = event.nativeEvent.layout.x + event.nativeEvent.layout.width / 2;
-              // The tabs may be laid out after the strip: the open one comes into view once it is.
               if (i === at) show(i, false);
             }}
             style={{ minWidth: MIN_TAP, minHeight: MIN_TAP, paddingHorizontal: 8, alignItems: 'center', justifyContent: 'center',

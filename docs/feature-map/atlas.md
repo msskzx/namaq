@@ -26,10 +26,10 @@ flowchart RL
 
 | Part of the screen | Label | Opens | Code |
 | --- | --- | --- | --- |
-| `BattleRow` | افتح ‹› | [الغزوة](battle.md) | [screens/atlas.tsx:39](../../mobile/src/screens/atlas.tsx#L39) |
-| `AtlasBattle` | افتح ‹› | [الغزوة](battle.md) | [screens/atlas.tsx:64](../../mobile/src/screens/atlas.tsx#L64) |
-| `PlaceSheet` | افتح ‹› | [الغزوة](battle.md) | [screens/atlas.tsx:92](../../mobile/src/screens/atlas.tsx#L92) |
-| `AtlasScreen` | (pickFound) | [الغزوة](battle.md) | [screens/atlas.tsx:165](../../mobile/src/screens/atlas.tsx#L165) |
+| `BattleRow` | افتح ‹› | [الغزوة](battle.md) | [screens/atlas.tsx:37](../../mobile/src/screens/atlas.tsx#L37) |
+| `AtlasBattle` | افتح ‹› | [الغزوة](battle.md) | [screens/atlas.tsx:58](../../mobile/src/screens/atlas.tsx#L58) |
+| `PlaceSheet` | افتح ‹› | [الغزوة](battle.md) | [screens/atlas.tsx:81](../../mobile/src/screens/atlas.tsx#L81) |
+| `AtlasScreen` | (pickFound) | [الغزوة](battle.md) | [screens/atlas.tsx:137](../../mobile/src/screens/atlas.tsx#L137) |
 
 ## Sheets
 

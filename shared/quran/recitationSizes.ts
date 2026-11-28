@@ -1,10 +1,6 @@
 import sizes from '../data/quran/recitationSizes.json';
 import type { Memorized } from '../memorized';
 
-/**
- * Each reciter's file sizes, summed by surah and by juz (`npm run quran:recitation-sizes` reads every ayah file's size from
- * the server), so a download's size shows before it starts.
- */
 type Sizes = { surah: number[]; juz: number[] };
 const table = sizes as Record<string, Sizes>;
 const sum = (values: number[]) => values.reduce((a, b) => a + b, 0);

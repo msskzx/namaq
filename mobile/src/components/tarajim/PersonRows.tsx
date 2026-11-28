@@ -7,11 +7,6 @@ import TapRow from '@/ui/TapRow';
 import type { Palette } from '@/lib/theme';
 import { personLine, personName } from '@/lib/tarajim';
 
-/**
- * People as rows in one card (owner, 2026-11-19; sketch tarajim-hub/sketch-dark.png): the name, and the kunya or laqab on
- * the left in muted text; a row opens the person's page. One card for the list, never a card for each person.
- * `line` replaces the muted line, for a group whose title would repeat on every row.
- */
 export default function PersonRows({ people, palette, line = personLine }: { people: AppPerson[]; palette: Palette; line?: (person: AppPerson) => string }) {
   return (
     <Card palette={palette} pad={[0, 14]}>

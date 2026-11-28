@@ -13,39 +13,22 @@ import { CARD, type Palette } from '@/lib/theme';
 type Choice = { value: string; labelArabic: string };
 const BOX = 46;
 const GAP = 8;
-/** A pinned tray shows three rows of names and scrolls the rest, so the boxes keep most of the screen. */
 const TRAY_ROWS = 3;
 const CHIP = 44;
 const CHIP_GAP = 7;
 
-/**
- * An order filled in numbered boxes from a tray of names (owner, 2026-11-21; sketch surah-order-tray/sketch-dark.png): the
- * long lists («رتّب سور الجزء» and the surah-order page's own practice), where dragging would go back and forth. A name
- * tapped goes into the lit box and the next empty box lights; a filled box tapped sends its name back to the front of the
- * tray; an empty box tapped becomes the lit one, so what is known is filled first. «تحقق» works at any time, an empty box
- * counting as not placed (owner, 2026-11-21). `pinned`: the boxes scroll and the tray stays at the foot of the screen (a
- * whole juz); otherwise the tray sits under the boxes (the home card's six). Once checked, each box shows its surah green,
- * or accent with what was put there struck through, or muted «لم تضعها» when left empty; `onBox` opens a surah's own card.
- * A party sends each change as a draft (`onDraft`), so the time running out grades the boxes as they stand.
- */
 export default function OrderTray({ question, picked, palette, onPick, onDraft, onRetry, onLook, onBox, pinned = false, start, header, footer }: {
   question: { key: string; choices: Choice[]; order?: string[] };
-  /** The order sent, joined; undefined while it is still being filled. */
   picked: string | undefined;
   palette: Palette;
   onPick?: (value: string) => void;
   onDraft?: (value: string) => void;
-  /** «أعد الخطأ فقط»: the wrong and empty boxes emptied again, the right ones kept (the surah-order page's practice). */
   onRetry?: (start: string) => void;
-  /** «ابحث عن الجواب» for the lit box: the surah whose place it is, by its number. */
   onLook?: (surah: number) => void;
-  /** Once checked, a box tapped opens that surah's card. */
   onBox?: (surah: number) => void;
   pinned?: boolean;
-  /** Boxes already filled, as sent (a retry, or a party's draft). */
   start?: string;
   header?: React.ReactNode;
-  /** Under the boxes once checked: the question's sources. */
   footer?: React.ReactNode;
 }) {
   const values = question.choices.map(choice => choice.value);
@@ -57,7 +40,6 @@ export default function OrderTray({ question, picked, palette, onPick, onDraft, 
     setTray(next);
     onDraft?.(sentTray(next));
   };
-  // The list follows the lit box, so the next box to fill is always in sight above the tray.
   useEffect(() => {
     if (pinned && tray.at !== null) scroll.current?.scrollTo({ y: Math.max(0, (tray.at - 2) * (BOX + GAP)), animated: true });
   }, [pinned, tray.at]);

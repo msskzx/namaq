@@ -21,7 +21,6 @@ import Chip from '@/ui/Chip';
 
 const ALL: Range = { from: '1:1', to: '114:6' };
 
-/** One end of the range: a pill that opens the surah's ayah numbers in a row to pick from. */
 function RangeEnd({ value, onPick, palette, label }: { value: string; onPick: (key: string) => void; palette: Palette; label: string }) {
   const [open, setOpen] = useState(false);
   const [surah, ayah] = value.split(':').map(Number);
@@ -46,7 +45,6 @@ function RangeEnd({ value, onPick, palette, label }: { value: string; onPick: (k
   );
 }
 
-/** One download of the chosen reciter: its name, what it holds, its size, and the button that downloads, stops or refreshes it. */
 function PackRow({ reciter, kind, title, detail, keys, bytes, palette }: { reciter: number; kind: PackKind; title: string; detail: string; keys: string[]; bytes: number; palette: Palette }) {
   const progress = progressOf(reciter, kind);
   const have = packsOf(reciter).some(pack => pack.kind === kind);
@@ -70,10 +68,6 @@ function PackRow({ reciter, kind, title, detail, keys, bytes, palette }: { recit
   );
 }
 
-/**
- * The listening sheet (owner's sketch, 2026-11-17): the range and its repeats, then the reciter, whose downloads sit
- * under the chosen one. What is set here stays as the default for the next «استمع».
- */
 export default function ListenSheet({ open, start, onClose, palette }: { open: boolean; start: string | null; onClose: () => void; palette: Palette }) {
   const listening = useListening();
   const plan = useSyncExternalStore(subscribeListenPlan, readListenPlan, serverListenPlan);

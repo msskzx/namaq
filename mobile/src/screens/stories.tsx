@@ -29,7 +29,6 @@ type Scroller = ComponentRef<typeof ScrollView>;
 
 const openStory = (slug: string) => router.push({ pathname: '/story', params: { slug } });
 
-/** One story in a chapter: a row under a hairline, the whole row a link. */
 function StoryRow({ name, slug, palette, onLeave }: { name: string; slug: string; palette: Palette; onLeave?: () => void }) {
   return (
     <TapRow onPress={() => { onLeave?.(); openStory(slug); }} role="link" label={name} style={{ alignItems: 'center', gap: 6, borderTopWidth: 1, borderColor: `${palette.rule}70` }}>
@@ -39,7 +38,6 @@ function StoryRow({ name, slug, palette, onLeave }: { name: string; slug: string
   );
 }
 
-/** A chapter, folded to its name and first stories; open, every story in it and its battle page. */
 function ChapterCard({ chapter, palette, startOpen = false, onLeave }: { chapter: StoryChapter; palette: Palette; startOpen?: boolean; onLeave?: () => void }) {
   const [open, setOpen] = useState(startOpen);
   const battle = CHAPTER_BATTLE[chapter.name];
@@ -69,7 +67,6 @@ function ChapterCard({ chapter, palette, startOpen = false, onLeave }: { chapter
   );
 }
 
-/** One year's page: its heading, where its year comes from, and its chapters. */
 function YearPage({ page, width, height, bottom, palette, scrollers }: { page: StoriesPage; width: number; height: number; bottom: number; palette: Palette; scrollers: Map<PageKey, Scroller> }) {
   const shrink = useShrinkOnScroll();
   return (
@@ -86,7 +83,6 @@ function YearPage({ page, width, height, bottom, palette, scrollers }: { page: S
   );
 }
 
-/** «الفهرس»: every chapter in al-Bukhari's order, each opening to all its stories whatever their year. */
 function Contents({ open, onClose, startAt, palette }: { open: boolean; onClose: () => void; startAt?: string; palette: Palette }) {
   const sheet = useRef<Scroller>(null);
   return (
@@ -97,7 +93,6 @@ function Contents({ open, onClose, startAt, palette }: { open: boolean; onClose:
           <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>أبواب صحيح البخاري، بترتيبه</Text>
         </View>
         {STORY_CHAPTERS.map(chapter => (chapter.name === startAt
-          // The chapter a search opened comes open and in view.
           ? <View key={`${chapter.name}*`} onLayout={event => sheet.current?.scrollTo({ y: event.nativeEvent.layout.y, animated: false })}>
             <ChapterCard chapter={chapter} palette={palette} startOpen onLeave={onClose} />
           </View>
@@ -107,13 +102,11 @@ function Contents({ open, onClose, startAt, palette }: { open: boolean; onClose:
   );
 }
 
-/** What the search reads in a story: its name, chapter, place and tags, and the words of its first report. */
 const storyText = (story: AppStory) => [story.name, story.chapter, story.place?.value ?? '', ...story.tags,
   ...(story.reports[0]?.moments ?? []).flatMap(moment => [moment.title, moment.text])].join(' ');
 const STORY_TEXT = new Map<string, string>();
 const textOf = (story: AppStory) => { let text = STORY_TEXT.get(story.slug); if (text === undefined) STORY_TEXT.set(story.slug, text = storyText(story)); return text; };
 
-/** The search's finds (owner, 2026-11-24: the search here opened the app's search, not the stories): the chapters named, then the stories that hold the words. */
 function Found({ query, palette }: { query: string; palette: Palette }) {
   const chapters = STORY_CHAPTERS.filter(chapter => holdsTerms(chapter.name, query));
   const stories = STORIES.filter(story => holdsTerms(textOf(story), query));
@@ -128,17 +121,10 @@ function Found({ query, palette }: { query: string; palette: Palette }) {
   );
 }
 
-/**
- * «قصص السيرة» (owner, 2026-11-23): a page for each year, swiped right to left as the book is read, the strip on top going
- * to any year; on each page al-Bukhari's chapters in his order. A story is on a year only where a source gives it that
- * year («بلا سنة» holds the rest); a tag (owner, 2026-11-18) narrows every year to its stories. «الفهرس» lists every
- * chapter whole, and the search in the top bar finds a chapter, or a story by its name, place, tags or words.
- */
 export default function StoriesScreen() {
   const palette = usePalette();
   const bottom = useTabBarSpace();
   const { chapter } = useLocalSearchParams<{ chapter?: string }>();
-  // A search hit opens «الفهرس» at its chapter once; the param is cleared so the same hit opens it again.
   const [contents, setContents] = useState(Boolean(chapter));
   const [startAt, setStartAt] = useState(chapter);
   useEffect(() => {
@@ -156,7 +142,6 @@ export default function StoriesScreen() {
   const list = useRef<FlatList<StoriesPage>>(null);
   const shown = useRef(0);
   const scrollers = useRef(new Map<PageKey, Scroller>()).current;
-  // A tap on the open tab's button brings the shown year back to its top.
   useTabRetap('stories', () => scrollers.get(pages[shown.current]?.key)?.scrollTo({ y: 0, animated: true }));
   const go = useCallback((index: number) => {
     shown.current = index;
@@ -172,7 +157,6 @@ export default function StoriesScreen() {
     setCompact(false);
     setAt(index);
   }, [width, pages]);
-  // The web build snaps with CSS and sends no momentum event, so it settles when scrolling stops.
   const quiet = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const scrolled = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
     if (Platform.OS !== 'web') return;
@@ -193,7 +177,6 @@ export default function StoriesScreen() {
       <View style={{ paddingHorizontal: 16, paddingTop: 4, gap: 6 }}>
         <RowScroll gap={6}>
           {STORY_TAGS.map(name => <Chip key={name} label={name} on={tag === name} small palette={palette} onPress={() => {
-            // A tag narrows every year to its stories, from the first year it has.
             setTag(was => (was === name ? null : name));
             shown.current = 0;
             setAt(0);

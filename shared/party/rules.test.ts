@@ -153,7 +153,6 @@ describe('party questions', () => {
     expect(viewFor(state, 'p0', 0).looked).toBe(true);
     expect(viewFor(state, 'p2', 0).looked).toBe(false);
     expect(viewFor(state, 'p2', 0).players.map(player => player.looked)).toEqual([null, null, null]);
-    // Looking after the answer is sent is for learning only.
     state = run(state, [{ type: 'submit', playerId: 'p2', answer: 'a' }, { type: 'look', playerId: 'p2' }, { type: 'submit', playerId: 'p1', answer: 'b' }]);
     expect(state.phase).toBe('reveal');
     expect(state.players.map(player => player.score)).toEqual([5, 0, 10]);
@@ -172,7 +171,6 @@ describe('party questions', () => {
       { type: 'submit', playerId: 'p1', answer: ['a'] },
       { type: 'submit', playerId: 'p2', answer: ['a', 'c'] },
     ]);
-    // All right: ten; one of two: five; one right and one wrong: nothing.
     expect(state.players.map(player => player.score)).toEqual([10, 5, 0]);
     expect(viewFor(state, 'p1', 0).question?.correctAnswers).toEqual(['a', 'b']);
   });
@@ -317,7 +315,6 @@ describe('party helpers', () => {
     const words = ['قُلۡ', 'هُوَ', 'ٱللَّهُ', 'أَحَدٌ'];
     const written = { ...choice('ENDS:112:1', '1'), ayahKey: '112:1', page: { shows: 0, recite: true }, reveal: ['x'], write: { words, asked: [0, 1, 2, 3] } };
     let state = playing([written, choice('q2')]);
-    // The question names its ayah and is drawn on its page, so the ayah stays; its words wait for the reveal.
     expect(viewFor(state, 'p1', 0).question).toMatchObject({ key: 'q0', ayahKey: '112:1', write: { asked: [0, 1, 2, 3] }, reveal: undefined });
     expect((viewFor(state, 'p1', 0).question?.write as { words?: string[] }).words).toBeUndefined();
     state = run(state, [

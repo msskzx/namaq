@@ -9,14 +9,9 @@ import { MatrixInputs, type TreeQuestion } from './QuizTree';
 import { type Palette } from '@/lib/theme';
 import { surahNames } from '@/lib/branches';
 
-// The إن المتقين في tree, built by the same builder as every quiz tree (shared/quiz/branchQuestions.test.ts keeps it equal).
 const tree = example.tree as Branch;
 const prefixes = example.prefixes as Variant[];
 
-/**
- * How a متشابهات question works: what you type, the example question as the quiz draws it (the matrix, each ayah reading on
- * to its empty box), and how it is graded (the website's BranchExplainer).
- */
 export default function QuizExplainer({ leaves, palette }: { leaves: number; palette: Palette }) {
   const question = useMemo((): TreeQuestion => ({ tree, prefixes, asked: askedNodes(tree, leaves, () => 0.5) }), [leaves]);
   const values = useMemo(() => branchNodes(tree).map((node, index) => question.asked!.includes(index) ? '' : node.words.join(' ')), [question]);

@@ -21,28 +21,16 @@ import { shareCard } from '@/lib/shareImage';
 import { dark, ForcePalette, RAHMAN_ART, RAHMAN_PAPER, type Palette } from '@/lib/theme';
 import { BLOCK_GAP, BLOCK_W, HADITH_SIZES, PAGE_H, PAGE_ROOM, PAGE_W, rahmanAyat, RAHMAN_NAME, RahmanBlockView, RahmanPage, ScaledPage } from './scenes/RahmanPage';
 
-/**
- * «الرحمن», the second scene of «مشاهد» (owner, 2026-11-24; shared/quran/scenes/rahman.ts): still pages, each a 4:5 picture,
- * turned up and down like a short. Each section's blocks are measured out of sight, then flowed over its pages
- * (shared/sharePages.ts), its hadith at the biggest size that needs no more pages. The share button shares the section the
- * page is in, as the very pages shown: the seven of the introduction together, or one hadith's page.
- */
 let sections: RahmanSection[] | null = null;
-/** The scene's sections, read on first use (they list the ayat from the corpus). */
 const SECTIONS = () => (sections ??= rahmanSections(rahmanAyat()));
 export const openRahman = () => router.push({ pathname: '/scene', params: { id: RAHMAN_KEY } });
 
-/** How long the measured heights stay the same before the pages are laid out. */
 const SETTLE_MS = 600;
 
 type Laid = { section: number; blocks: number[]; size: number };
 const sizesOf = (section: number) => (SECTIONS()[section].blocks.some(block => block.kind === 'hadith') ? HADITH_SIZES : HADITH_SIZES.slice(0, 1));
 const measureKey = (section: number, block: number, size: number) => `${section}/${block}/${size}`;
 
-/**
- * Every page, once each block is measured: a section's pages at the biggest hadith size whose every block fits a page and
- * that needs no more pages than the smallest size (a block never splits, so one too tall would lose its words off the page).
- */
 function layOut(heights: Record<string, number>): Laid[] | null {
   const laid: Laid[] = [];
   for (const [s, section] of SECTIONS().entries()) {
@@ -59,7 +47,6 @@ function layOut(heights: Record<string, number>): Laid[] | null {
   return laid;
 }
 
-/** A block drawn out of sight to be measured; drawn once, whatever other heights come in. */
 const MeasuredBlock = memo(function MeasuredBlock({ block, size, onLayout }: { block: RahmanBlock; size: number; onLayout: (event: LayoutChangeEvent) => void }) {
   return (
     <View collapsable={false} style={{ position: 'absolute', top: 0, width: BLOCK_W }} onLayout={onLayout}>
@@ -79,14 +66,11 @@ export default function RahmanScene() {
   const [heights, setHeights] = useState<Record<string, number>>({});
   const [settled, setSettled] = useState<Record<string, number> | null>(null);
   const [at, setAt] = useState(0);
-  // An ayah measures twice (it guesses its size from the screen, then takes its own width's): the pages wait until the
-  // heights have stopped changing, or a page laid out on the first guess overflows.
   useEffect(() => {
     const timer = setTimeout(() => setSettled(heights), SETTLE_MS);
     return () => clearTimeout(timer);
   }, [heights]);
   const pages = useMemo(() => (settled ? layOut(settled) : null), [settled]);
-  // One handler per block, kept, so a new height re-renders no measured block (they are memo'd).
   const handlers = useRef(new Map<string, (event: { nativeEvent: { layout: { height: number } } }) => void>());
   const measured = (key: string) => {
     if (!handlers.current.has(key)) handlers.current.set(key, event => {
@@ -95,7 +79,6 @@ export default function RahmanScene() {
     });
     return handlers.current.get(key)!;
   };
-  // The pages snap to the list's own height, which is not always the window's (Android edge to edge).
   const [listHeight, setListHeight] = useState(height);
   const BAR = 56;
   const scale = Math.min((width - 24) / PAGE_W, (height - insets.top - insets.bottom - BAR * 2) / PAGE_H);
@@ -115,7 +98,6 @@ export default function RahmanScene() {
       <View style={{ flex: 1, backgroundColor: RAHMAN_ART.table }}>
         {!pages ? (
           <>
-            {/* Every block of every section, measured out of sight at the width a page gives it. */}
             <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0, width: BLOCK_W, opacity: 0 }}>
               {SECTIONS().flatMap((section, s) => section.blocks.flatMap((block, i) => (block.kind === 'hadith' ? sizesOf(s) : HADITH_SIZES.slice(0, 1)).map(size => (
                 <MeasuredBlock key={measureKey(s, i, size)} block={block} size={size} onLayout={measured(measureKey(s, i, size))} />
@@ -134,7 +116,6 @@ export default function RahmanScene() {
               </View>
             )} />
         )}
-        {/* The bar: back on the right, share on the left, off the page so the page shares clean; light on the dark table. */}
         <ForcePalette value={dark}>
         <View style={{ position: 'absolute', top: insets.top + 6, right: 12, left: 12, flexDirection: 'row', alignItems: 'center', gap: 8 }}>
           <IconButton Icon={ChevronRight} label="رجوع" tone="ink" onPress={() => (router.canGoBack() ? router.back() : toTab('/lataif'))} />
@@ -152,10 +133,8 @@ export default function RahmanScene() {
   );
 }
 
-/** The scene's first page, drawn as it is in the scene, for the list's cover and the feed. */
 export const RahmanCover = ({ width }: { width: number }) => <ScaledPage width={width}>{pageOf({ section: 0, blocks: SECTIONS()[0].blocks.map((_, i) => i), size: HADITH_SIZES[0] }, false)}</ScaledPage>;
 
-/** The line under the cover: al-Sa'di on the name the surah opens with, in his words. */
 export function rahmanTeaser(): { by: string; text: string; source: string } | null {
   const passage = tafsirSadiOf(SADI_OPENING.key);
   if (!passage) return null;
@@ -166,9 +145,7 @@ export function rahmanTeaser(): { by: string; text: string; source: string } | n
   return { by: 'السعدي', text: opening.slice(from, to + 'سعة رحمته'.length), source: `تيسير الكريم الرحمن ص ${num(passage.pages[0])}` };
 }
 
-/** The scene's card: its first page, then al-Sa'di's line. */
 export function RahmanCard({ palette, width, onPress, sources = false }: { palette: Palette; width: number; onPress?: () => void;
-  /** The scene's source line under it (the «مشاهد» list; a home card has its own). */
   sources?: boolean }) {
   const teaser = rahmanTeaser();
   const body = (
@@ -186,7 +163,6 @@ export function RahmanCard({ palette, width, onPress, sources = false }: { palet
   return sources ? <View style={{ gap: 6 }}>{card}<SourceLine sources={rahmanSourceList()} palette={palette} /></View> : card;
 }
 
-/** The books the scene's pages quote: the mushaf, the two Sahihs, al-Sa'di, and the corpus that counts the places. */
 export function rahmanSources(): QuizSource[] {
   const passage = tafsirSadiOf(SADI_OPENING.key);
   return [
@@ -199,10 +175,8 @@ export function rahmanSources(): QuizSource[] {
 }
 export const rahmanSourceList = () => sourcesOf(rahmanSources());
 
-/** The scene's first page as a picture, for a card's share button. */
 export const shareRahman = () => shareCard({ content: () => null, paged: () => ({ head: null, blocks: [], pictures: [<RahmanCover key={0} width={PAGE_W} />] }) });
 
-/** The scene's buttons in a home card's row: the one open button, and share. */
 export function RahmanActions({ only }: { only?: 'open' | 'share' }) {
   return <>
     {only !== 'share' && <OpenButton label={`افتح مشهد ${RAHMAN_NAME}`} onPress={openRahman} />}

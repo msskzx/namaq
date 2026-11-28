@@ -1,18 +1,13 @@
-// Every quiz question must give back the exact Quran text: what is shown plus what is asked,
-// put together in order, has to equal the stored mushaf words, with nothing missing or changed.
 import { num } from '../quran/arabicNumber';
 import { runOn, type Branch, type BranchAyah } from '../quran/branches';
 import { type BranchQuestion } from './branchQuestions';
 import { bare } from '../quran/quranText/ayahWords';
 
-/** Marks the end of an ayah when a branch runs on into the next one: ﴿٤٣﴾, or ۝ in a merged display. */
 const AYAH_MARK = /^(۝|﴿([٠-٩]+)﴾)$/;
 
-/** One ayah as a question carries it, from its first word to where its branch ends, ayah marks kept. */
 export type Rebuilt = { key: string; words: string[] };
 export type IntegrityError = { question: string; key: string; problem: string; rebuilt: string; expected: string };
 
-/** Each ayah of a tree: its given opening, then each node from the root down to its leaf, in that ayah's own spelling. */
 export function rebuildTreeAyat(question: Pick<BranchQuestion, 'tree' | 'prefixes'>): Rebuilt[] {
   const rebuilt: Rebuilt[] = [];
   const walk = (node: Branch, path: Branch[]) => {
@@ -28,16 +23,11 @@ export function rebuildTreeAyat(question: Pick<BranchQuestion, 'tree' | 'prefixe
   return rebuilt;
 }
 
-/** Each typed answer of a tree question, after the shown opening and trunk, must be the rest of its ayah. */
 export function rebuildTreeAnswers(question: Pick<BranchQuestion, 'tree' | 'prefixes' | 'branches'>): Rebuilt[] {
   const openings = new Map(rebuildTreeAyat({ tree: { ...question.tree, children: [], ayat: question.branches.flatMap(branch => branch.ayat.map(ayah => ayah.key)) }, prefixes: question.prefixes }).map(entry => [entry.key, entry.words]));
   return question.branches.flatMap(branch => branch.ayat.map(ayah => ({ key: ayah.key, words: [...(openings.get(ayah.key) ?? []), ...ayah.words] })));
 }
 
-/**
- * Compares rebuilt ayat with the mushaf. The text must equal the ayah exactly; each ayah mark must sit
- * where an ayah ends and carry that ayah's number, and the text then runs on to the end of the next ayah.
- */
 export function checkRebuilt(question: string, rebuilt: readonly Rebuilt[], ayat: readonly BranchAyah[]): IntegrityError[] {
   const order = new Map(ayat.map((ayah, index) => [ayah.key, index]));
   const basmala = ayat.find(ayah => ayah.key === '1:1');
@@ -54,7 +44,6 @@ export function checkRebuilt(question: string, rebuilt: readonly Rebuilt[], ayat
       if (++at >= ayat.length) return fail('runs past the last ayah', expected);
       expected.push(word, ...runOn(ayat[at - 1].key, ayat[at], basmala).words);
     }
-    // A box several ayat share keeps a waqf sign only where all of them carry it (writtenForms), so a word may lack its own ayah's sign.
     const [got, want] = [words.join(' ').split(' '), expected.join(' ').split(' ')];
     const same = got.length === want.length && got.every((word, i) => word === want[i] || word.normalize('NFC') === bare(want[i]).normalize('NFC'));
     return same ? [] : fail('text differs', expected);

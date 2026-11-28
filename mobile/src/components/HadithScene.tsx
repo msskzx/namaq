@@ -9,10 +9,6 @@ const body = (palette: Palette) => ({ color: palette.ink, fontSize: 18, lineHeig
 
 const named = (speaker: string, agent?: string) => (agent === PROPHET_AGENT ? PROPHET_LABEL : speaker);
 
-/**
- * The scene's lines drawn one block each (a line of narration, a bubble with its lead-in), for the scene and for a shared
- * picture, which lays the blocks out on pages. `line` is the block's place in `lines`.
- */
 export function sceneBlocks(lines: SceneLine[], slots: Map<string, number>, palette: Palette): { line: number; node: React.ReactNode }[] {
   const sides = bubbleSides(lines);
   const colourOf = (speaker?: string) => palette.slots[slots.get(speaker ?? '') ?? 0];
@@ -41,14 +37,7 @@ export function sceneBlocks(lines: SceneLine[], slots: Map<string, number>, pale
   });
 }
 
-/**
- * A hadith's scene as a conversation, its page's and its feed card's (owner's agreed story layout, 2026-11-21): the people
- * who speak as chips in their colours at the top, the Prophet ﷺ first, the key to the bubbles; the narration in full ink
- * at reading size; each saying in a bubble on its speaker's side, a new speaker on the other side, the narrator's lead-in
- * («فَقَالَ») above it outside the bubble. Who narrates is named once, when he changes, on its own line in ink.
- */
 export default function HadithScene({ lines, slots, palette, keyed = true }: { lines: SceneLine[]; slots: Map<string, number>; palette: Palette;
-  /** Draw the speakers' chips; a page whose people row above is already the key (a sira story) passes false. */
   keyed?: boolean }) {
   const agents = new Map(lines.filter(line => line.kind === 'turn' && line.speaker).map(line => [line.speaker!, line.agent]));
   const colourOf = (speaker?: string) => palette.slots[slots.get(speaker ?? '') ?? 0];

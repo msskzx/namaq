@@ -53,7 +53,6 @@ describe('the growth player', () => {
     claimTarget('quiz', quiz);
     expect(growthState()).toMatchObject({ total: 1, studio: false });
     openStudio();
-    // The branches tab rebuilding its tree under the quiz leaves the quiz's studio alone.
     claimTarget('branches', { ...branches });
     expect(growthState()).toMatchObject({ total: 1, studio: true });
     claimTarget('quiz', null);

@@ -55,10 +55,8 @@ function Line({ label, children, palette }: { label: string; children: React.Rea
   return <Text style={paragraph(palette)}><Text style={{ color: palette.muted }}>{label}</Text>{children}</Text>;
 }
 
-/** A use as the app says it: the website's labels mark the app's own pages «في تطبيق الهاتف», which is where this page already is. */
 const appUse = (use: string) => use.replace(/،? في تطبيق الهاتف$/, '');
 
-/** One source as the website's SourceCard draws it: its uses as plain words, since they name website pages. */
 function SourceCard({ source, palette }: { source: Source; palette: Palette }) {
   const extra = SOURCE_EXTRAS[source.id];
   return (
@@ -72,7 +70,6 @@ function SourceCard({ source, palette }: { source: Source; palette: Palette }) {
       </View>
       <Line label="الترخيص: " palette={palette}>{source.licence.ar}</Line>
       <Line label="يُستعمل في: " palette={palette}>{source.uses.map(use => appUse(use.ar)).join('، ')}</Line>
-      {/* Each link on its own line, as other screens put them: a link inside a line of text loses its alignment. */}
       {extra?.links?.flat().map(link => (
         <View key={link.url} style={{ alignItems: 'flex-start' }}>
           {link.prefix.ar ? <Text style={paragraph(palette, true)}>{link.prefix.ar}</Text> : null}
@@ -98,7 +95,6 @@ function Attributions({ palette }: { palette: Palette }) {
   );
 }
 
-/** About, privacy and the sources with their licences, in the app and offline (owner, 2026-11-18); the settings sheet opens them. */
 export default function InfoScreen({ page }: { page: InfoPage }) {
   const palette = usePalette();
   const insets = useSafeAreaInsets();

@@ -18,8 +18,8 @@ flowchart RL
 
 | Part of the screen | Label | Opens | Code |
 | --- | --- | --- | --- |
-| `PartyStart` | ابدأ | [غرفة الاختبار الجماعي](quiz-party-code.md) | [screens/quiz/party/index.tsx:29](../../mobile/src/screens/quiz/party/index.tsx#L29) |
-|  | انضم | [غرفة الاختبار الجماعي](quiz-party-code.md) | [screens/quiz/party/index.tsx:38](../../mobile/src/screens/quiz/party/index.tsx#L38) |
+| `PartyStart` | ابدأ | [غرفة الاختبار الجماعي](quiz-party-code.md) | [screens/quiz/party/index.tsx:28](../../mobile/src/screens/quiz/party/index.tsx#L28) |
+|  | انضم | [غرفة الاختبار الجماعي](quiz-party-code.md) | [screens/quiz/party/index.tsx:37](../../mobile/src/screens/quiz/party/index.tsx#L37) |
 
 ## Sheets
 

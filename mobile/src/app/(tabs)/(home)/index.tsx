@@ -1,6 +1,5 @@
 import { useCallback, useMemo, useRef, useState, useSyncExternalStore, type ComponentRef } from 'react';
 import { RefreshControl, useWindowDimensions, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
-// The gesture handler's scroll view, so a pinch on a tree card takes over from the page's scroll instead of losing to it.
 import { ScrollView } from 'react-native-gesture-handler';
 import { newVisit } from '@shared/feedSeen';
 import { interestsAsked } from '@shared/interests';
@@ -18,27 +17,15 @@ import { useTabRetap } from '@/lib/tabRetap';
 import { usePalette } from '@/lib/theme';
 import { COLUMN_GAP, isWide, WIDE_COLUMN } from '@/ui/column';
 
-/**
- * Home (owner, 2026-11-13): reading and learning first, like a social app's home. A search field in the top bar, a few buttons
- * for what is not a tab (owner, 2026-11-18, in the story circles' place), the page the mushaf was left on, then a feed that
- * loads more as it nears its end (owner, 2026-11-14: no «more» button and no tools below; today's juz, the prayer times and
- * the date come as cards in it, owner 2026-11-18), in turns by the interests picked, with a chip row to show one alone (owner,
- * 2026-11-19). Pulled down at the top, it refreshes. Nothing about the reader is counted or shown.
- */
-/** How close to the end (px) the feed asks for its next batch, about two cards ahead. */
 const NEAR_END = 1200;
-/** How many chips' own feeds stay drawn besides the mixed one. */
 const KEPT_FEEDS = 3;
 
 export default function HomeScreen() {
   const palette = usePalette();
   const shrink = useShrinkOnScroll();
-  // The chip row's pick: one interest's cards alone, or the mixed feed (null).
   const [chosen, setOnly] = useState<string | null>(null);
-  // A chip whose interest was taken out of the picks shows the mixed feed again.
   const picked = usePicked();
   const only = onlyOf(chosen, picked);
-  // Near the end of the feed: ask the feed on screen for its next batch, once for each new length of the page.
   const [nearEnd, setNearEnd] = useState<Record<string, number>>({});
   const askedAt = useRef(0);
   const seenTo = useRef({ y: 0, height: 0 });
@@ -48,8 +35,6 @@ export default function HomeScreen() {
       setNearEnd(now => ({ ...now, [only ?? '']: (now[only ?? ''] ?? 0) + 1 }));
     }
   };
-  // The feeds of the chips tapped last stay drawn, hidden, so going back to one is at once (owner, 2026-11-23); the mixed
-  // feed always stays.
   const [kept, setKept] = useState<(string | null)[]>([null]);
   if (!kept.includes(only)) setKept([null, only, ...kept.filter(view => view !== null)].slice(0, KEPT_FEEDS + 1));
   const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -63,15 +48,11 @@ export default function HomeScreen() {
   const asked = useSyncExternalStore(interestsAsked.subscribe, interestsAsked.read, interestsAsked.server);
   const screenBottom = useCallback(() => seenTo.current.y + seenTo.current.height, []);
   const scroll = useRef<ComponentRef<typeof ScrollView>>(null);
-  // Pulled down at the top, as in a social app: a new visit, so the feed shows what was not seen yet.
   const [refreshing, setRefreshing] = useState(false);
   const refresh = () => { setRefreshing(true); askedAt.current = 0; newVisit(); setTimeout(() => setRefreshing(false), 400); };
-  // The home button tapped again: back to the top.
   useTabRetap('index', () => scroll.current?.scrollTo({ y: 0, animated: true }));
-  // Lying down on a tablet, the cards come in two columns of a phone's size (owner, 2026-11-23); the page's padding is 16 each side.
   const { width, height } = useWindowDimensions();
   const column = isWide(width, height) ? (Math.min(width, WIDE_COLUMN) - 32 - COLUMN_GAP) / 2 : null;
-  // Made once, so a feed kept hidden is not drawn again each time the page is (the feeds are memo).
   const lead = useMemo(() => <ContinueReading palette={palette} />, [palette]);
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
@@ -91,7 +72,6 @@ export default function HomeScreen() {
           </View>
         ))}
       </ScrollView>
-      {/* The first open asks the interests (owner, 2026-11-19), then the tour runs. */}
       <InterestsWelcome palette={palette} />
       {asked && !seen && <Tour palette={palette} onDone={() => setSeen(true)} />}
     </View>

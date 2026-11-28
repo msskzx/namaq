@@ -6,26 +6,18 @@ import { COMPARE_CARD, markColour, sideView, UI_SCALE, writtenLinks, type CardPi
 import { stepEnds, videoParts, videoTimeline, type Segment } from './pageVideo';
 import { OUTRO, PAUSE, READY, VIDEO_TYPES } from './recorder';
 
-/** One word as the video draws it: its text, which ayah and word it is (-1 for the ayah number), its mark. */
 export type VideoWord = { text: string; ayah: number; word: number; kind?: MarkKind | 'written'; link?: string; seal?: boolean };
-/** A card piece as the video draws it (CardPiece in shared/quran/compareCardLook.ts, with words for the ayat and text for the notes). */
 export type VideoPiece =
   | { kind: 'ayat'; words: VideoWord[]; plain?: boolean; picked?: boolean }
   | { kind: 'part' | 'gap' | 'range'; label?: string }
   | { kind: 'dash' }
   | { kind: 'silent'; note: string };
 export type VideoSide = { label: string; back?: boolean; many?: boolean; pieces: VideoPiece[] };
-/** A card as the recorder reads it: both sides for each partner of a one-to-many card, its steps, where each ayah read starts and where each step ends. */
 export type VideoCard = { options: [VideoSide, VideoSide][]; same: boolean; steps: ReadStep[]; starts: number[]; ends: number[] };
-/** The screen's colours and fonts. `marks` holds the colour of each kind of mark, from markColour as the app's card colours them. */
 export type CompareLook = {
   paper: string; card: string; deep: string; ink: string; muted: string; rule: string; accent: string; green: string; highlight: string; onHighlight: string;
   marks: Partial<Record<MarkKind | 'written', string>>; font: string; ui: string; logo: string;
 };
-/**
- * What the compare recorder needs: the pair's name on top (with the story's name, the part and which card of how many under it),
- * the cards read along in turn, and the end frame with the emblem (and where the next part goes on).
- */
 export type CompareVideoInput = {
   title: string;
   subtitle?: string;
@@ -35,17 +27,14 @@ export type CompareVideoInput = {
   cards: VideoCard[];
   timeline: Segment[];
   look: CompareLook;
-  /** The app's measures (COMPARE_CARD) and its interface scale, which the recorder draws the card with. */
   measures: typeof COMPARE_CARD;
   uiScale: number;
   types: string[];
 };
 
-/** The look's mark colours, from the same rule the app's card uses. */
 export const markColours = (colours: MarkColours): CompareLook['marks'] =>
   ({ exact: markColour('exact', colours), written: markColour('exact', colours, true), root: markColour('root', colours), related: markColour('related', colours) });
 
-/** How the video names things: a side («الطور ١٧–٢٠»), and a story part a surah does not tell. */
 export type VideoNames = { side: (name: SideName) => string; silent: (surah: number) => string };
 
 const videoWords = (ayat: CardAyah[], written: Set<string>, plain?: boolean): VideoWord[] => ayat.flatMap(ayah => [
@@ -64,12 +53,10 @@ const videoPiece = (piece: CardPiece, names: VideoNames, written: Set<string>): 
     case 'gap': case 'range': return { kind: piece.kind, label: piece.label };
     case 'dash': return { kind: 'dash' };
     case 'silent': return { kind: 'silent', note: names.silent(piece.surah) };
-    // The ayat around a side follow a setting the video doesn't carry: the card alone, as the studio reads it.
     case 'around': return null;
   }
 };
 
-/** A side as the card shows it in the studio (every story part open), with the partner `option` picked. */
 function videoSide(card: PairCard, i: 0 | 1, option: number, names: VideoNames): VideoSide {
   const view = sideView(card, i, option);
   const written = writtenLinks(card, option);
@@ -81,7 +68,6 @@ function videoSide(card: PairCard, i: 0 | 1, option: number, names: VideoNames):
   };
 }
 
-/** A card's read-along as the recorder plays it, at the studio's speed. */
 export function videoCard(card: PairCard, plan: ReadStep[], speed: number, names: VideoNames): VideoCard {
   const count = card.many ? card.many.options.length : 1;
   return {
@@ -93,20 +79,14 @@ export function videoCard(card: PairCard, plan: ReadStep[], speed: number, names
   };
 }
 
-/** The recorder's input: one card alone (the card studio), or with `counters` the cards of a page. */
 export function compareVideoInput({ cards, look, ...text }: Omit<CompareVideoInput, 'timeline' | 'types' | 'measures' | 'uiScale'>): CompareVideoInput {
   return { ...text, cards, look, timeline: videoTimeline(cards.map(card => card.ends)), measures: COMPARE_CARD, uiScale: UI_SCALE, types: VIDEO_TYPES };
 }
 
-/** The frames' words: which part of how many, where the next part goes on, which card of how many. */
 export type FrameWords = { part: (at: number, of: number) => string; next: (at: number) => string; of: (at: number, of: number) => string };
 export const ARABIC: FrameWords = { part: (at, of) => `الجزء ${num(at)} من ${num(of)}`, next: at => `يتبع في الجزء ${num(at)}`, of: (at, of) => `${num(at)} من ${num(of)}` };
 export const ENGLISH: FrameWords = { part: (at, of) => `Part ${at} of ${of}`, next: at => `Continues in part ${at}`, of: (at, of) => `${at} of ${of}` };
 
-/**
- * The picked cards of a page as videos of about 3 minutes or less, in order: the pair's name stays on top
- * (with «الجزء ١ من ٣» when there are several), and each part ends on the emblem (and where the next part goes on).
- */
 export function pageVideoInputs({ title, subtitle, cards, look, words = ARABIC }: { title: string; subtitle?: string; cards: VideoCard[]; look: CompareLook; words?: FrameWords }): CompareVideoInput[] {
   const parts = videoParts(cards.map(card => card.ends));
   const several = parts.length > 1;
@@ -120,7 +100,6 @@ export function pageVideoInputs({ title, subtitle, cards, look, words = ARABIC }
   }));
 }
 
-/** The page that records the video: the card drawn as the app's compare tab shows it, the read word underlined and its partner lit. */
 export function compareRecorderPage(input: CompareVideoInput, fontFace = '') {
   return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <style>${fontFace}html,body{margin:0;height:100%;background:${input.look.paper};overflow:hidden}canvas{display:block;height:100%;width:auto;margin:0 auto;max-width:100%;object-fit:contain}</style></head>
@@ -132,8 +111,6 @@ ${RECORDER}
 </script></body></html>`;
 }
 
-// Plain JavaScript in a string, since it runs inside a web view (the phone) or a frame (the website).
-// Every size is the app's (INPUT.measures, in points) times K: the story frame is the phone's width scaled up to 1080 pixels.
 const RECORDER = String.raw`
 var WIDTH = 1080, HEIGHT = 1920, FADE = 400, M = INPUT.measures, K = WIDTH / M.phone;
 var TOP = 140, BOTTOM = 210;

@@ -9,7 +9,6 @@ import data from '../quranText/corpus';
 const ayat = new Map<string, BranchAyah>(data.ayat.map(ayah => [ayah.key, ayah]));
 
 it('shows a book\'s card exactly as the book names its ayat: no row reads on into the next ayah', () => {
-  // al-Kirmani's «في الأرض ولا في السماء» (3:5, 10:61, 14:38, 20:4, 29:22) ends 3:5 and 14:38, yet 3:6 and 14:39 are not his.
   for (const group of groups.filter(group => group.citations.length)) {
     const ends = ayahEnds(groupPresentation(group, ayat).tree);
     for (const place of group.places) expect([group.id, ends[place.key]]).toEqual([group.id, place.through ?? place.key]);
@@ -35,14 +34,11 @@ it('keeps explicit multi-ayah passages complete without repeating their final ay
       const whole = [...first.words, `﴿${num(Number(place.key.split(':')[1]))}﴾`, ...last.words];
       expect(passage.words.slice(0, whole.length)).toEqual(whole);
       expect(ayat.has(ends[place.key])).toBe(true);
-      // A passage reads on past its last ayah only as every tree does: while another row stays identical to it
-      // (al-Hijr 15:36-37 and Sad 38:79-80 both go on into «إلى يوم الوقت المعلوم»), never repeating its last ayah.
       if (passage.words.length === whole.length) expect(ends[place.key]).toBe(place.through);
       else {
         const [surah, through] = place.through!.split(':').map(Number);
         const [endSurah, end] = ends[place.key].split(':').map(Number);
         expect(endSurah === surah && end > through).toBe(true);
-        // The ayah after the passage follows its end marker, not a second copy of the passage's last ayah.
         expect(passage.words.slice(whole.length + 1, whole.length + 1 + last.words.length)).not.toEqual(last.words);
       }
     }

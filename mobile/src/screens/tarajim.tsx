@@ -14,16 +14,10 @@ import PersonRows from '@/components/tarajim/PersonRows';
 import IconTile from '@/ui/IconTile';
 import { FEATURE_ICON } from '@/components/featureIcons';
 
-/** A hub section's heading: short and muted, as on the hadith hub. */
 export function HubHeading({ text, palette }: { text: string; palette: Palette }) {
   return <Text accessibilityRole="header" style={{ color: palette.muted, fontSize: 16, textAlign: 'right', marginTop: 8 }}>{text}</Text>;
 }
 
-/**
- * The tarajim tab (owner, 2026-11-19; sketch tarajim-hub/sketch-dark.png): a hub, not a list. Search in the top bar and no page title, as on every tab (owner, 2026-11-22); typing shows the
- * people found as rows in one card in place of the sections. Then the whole list (the scholars' groups are its chips, owner 2026-11-23), the sira and its battles,
- * the ties between people and the nasab search (nothing capped, nothing dumped here).
- */
 export default function TarajimScreen() {
   const palette = usePalette();
   const onScroll = useShrinkOnScroll();

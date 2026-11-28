@@ -28,7 +28,7 @@ flowchart RL
 
 | Part of the screen | Label | Opens | Code |
 | --- | --- | --- | --- |
-| `TermExampleCard` | افتح ‹› في المصحف | [المصحف](read.md) | [components/BalaghaTerm.tsx:73](../../mobile/src/components/BalaghaTerm.tsx#L73) |
+| `TermExampleCard` | افتح ‹› في المصحف | [المصحف](read.md) | [components/BalaghaTerm.tsx:57](../../mobile/src/components/BalaghaTerm.tsx#L57) |
 
 ## Sheets
 

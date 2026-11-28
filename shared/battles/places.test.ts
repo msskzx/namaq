@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { GEONAMES, LANDMARKS, PLACES, placeSayer } from './places';
 
-// Owner, 2026-11-23: every place on the battle maps is correct and carries its reference.
 describe('the places on the battle maps', () => {
   const shown = Object.keys(PLACES);
 
@@ -29,7 +28,6 @@ describe('the places on the battle maps', () => {
   });
 });
 
-// The battle page names who says each place's words (owner, 2026-11-23: the speaker is clear to a new reader).
 describe('placeSayer', () => {
   it('names the sayer of every quoted place', () => {
     const quoted = Object.values(PLACES).flatMap(place => place.refs).filter(ref => ref.text);

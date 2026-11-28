@@ -28,11 +28,11 @@ flowchart RL
 
 | Part of the screen | Label | Opens | Code |
 | --- | --- | --- | --- |
-| `HadithBookScreen` | (back) | [الحديث](hadith.md) | [screens/hadithBook.tsx:32](../../mobile/src/screens/hadithBook.tsx#L32) |
-|  | (onPress) | [حديث الأربعين](hadith-forty.md) | [screens/hadithBook.tsx:41](../../mobile/src/screens/hadithBook.tsx#L41) |
-|  | (onOpenKitab) | [أبواب الكتاب](hadith-kitab.md) | [screens/hadithBook.tsx:51](../../mobile/src/screens/hadithBook.tsx#L51) |
-|  | (onOpen) | [أبواب الكتاب](hadith-kitab.md) | [screens/hadithBook.tsx:56](../../mobile/src/screens/hadithBook.tsx#L56) |
-|  | (onOpenBab) | [أبواب الكتاب](hadith-kitab.md) | [screens/hadithBook.tsx:56](../../mobile/src/screens/hadithBook.tsx#L56) |
+| `HadithBookScreen` | (back) | [الحديث](hadith.md) | [screens/hadithBook.tsx:27](../../mobile/src/screens/hadithBook.tsx#L27) |
+|  | (onPress) | [حديث الأربعين](hadith-forty.md) | [screens/hadithBook.tsx:35](../../mobile/src/screens/hadithBook.tsx#L35) |
+|  | (onOpenKitab) | [أبواب الكتاب](hadith-kitab.md) | [screens/hadithBook.tsx:45](../../mobile/src/screens/hadithBook.tsx#L45) |
+|  | (onOpen) | [أبواب الكتاب](hadith-kitab.md) | [screens/hadithBook.tsx:50](../../mobile/src/screens/hadithBook.tsx#L50) |
+|  | (onOpenBab) | [أبواب الكتاب](hadith-kitab.md) | [screens/hadithBook.tsx:50](../../mobile/src/screens/hadithBook.tsx#L50) |
 
 ## Sheets
 

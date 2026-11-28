@@ -14,14 +14,9 @@ import VideoSheet from './VideoSheet';
 import { nextSpeed, useReadSpeed } from './useReadAlong';
 import IconButton from '@/ui/IconButton';
 
-/**
- * Share a pair page as video: every card is ticked at first; untick the ones to leave out.
- * A video over about 3 minutes is split into parts (shared/video/pageVideo.ts), recorded one after another.
- */
 export default function PageVideo({ lead, other, cards, open, onClose, palette }: { lead: number; other: number; cards: PairCard[]; open: boolean; onClose: () => void; palette: Palette }) {
   const speed = useReadSpeed();
   const [off, setOff] = useState<string[]>([]);
-  // Planned only while the list is open: every pair page has this sheet.
   const plans = useMemo(() => (open ? cards.map(card => ({ card, plan: readPlan(card) })) : []), [open, cards]);
   const picked = plans.filter(({ card }) => !off.includes(card.id));
   const lengths = partLengths(picked.map(({ plan }) => stepEnds(plan.map(step => stepTime(step, speed)))));
@@ -29,7 +24,6 @@ export default function PageVideo({ lead, other, cards, open, onClose, palette }
   const [part, setPart] = useState(0);
   const all = off.length === 0;
   const toggle = (id: string) => setOff(list => (list.includes(id) ? list.filter(other => other !== id) : [...list, id]));
-  // The list's sheet slides away first: a second modal can't open while the first is still closing on iOS.
   const record = () => { const next = pageVideoPages(lead, other, picked, speed, palette); onClose(); setTimeout(() => { setPart(0); setPages(next); }, 500); };
   const total = lengths.reduce((sum, length) => sum + length, 0);
   const summary = !lengths.length ? '' : lengths.length > 1 ? `الأجزاء ${num(lengths.length)} · ${clock(total)}` : clock(total);

@@ -3,7 +3,6 @@ import { Text } from '@/ui/Text';
 import type { Palette } from '@/lib/theme';
 import { Tap } from '@/ui/Tap';
 
-/** The website's switch: on means the knob sits on the right. */
 export default function Toggle({ on, onChange, label, palette, disabled = false }: { on: boolean; onChange: (on: boolean) => void; label: string; palette: Palette; disabled?: boolean }) {
   return (
     <Tap onPress={() => !disabled && onChange(!on)} accessibilityRole="switch" accessibilityState={{ checked: on, disabled }} accessibilityLabel={label}

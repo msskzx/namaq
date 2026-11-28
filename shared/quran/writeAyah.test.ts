@@ -38,7 +38,6 @@ describe('writing an ayah\'s first and last words', () => {
   });
 });
 
-// Words as the mushaf data stores them (the order of a word's marks matters), found by their bare letters.
 const mushafWords = Array.from({ length: 604 }, (_, i) => JSON.parse(readFileSync(new URL(`../data/quran/mushaf/${i + 1}.json`, import.meta.url), 'utf8')) as MushafPage)
   .flatMap(page => page.items.flatMap(item => ('line' in item ? item.line : []).filter((token): token is string => typeof token === 'string')));
 const bare = (word: string) => word.replace(/[\u064B-\u065F\u0670\u06D6-\u06ED\u0640\u0653]/g, '');
@@ -111,7 +110,6 @@ describe('clearLastBox', () => {
 describe('shownCut', () => {
   it('shows the opening as the quiz counts it, past a quarter sign', () => {
     expect(shownCut('112:1', ['۞', 'قُلۡ', 'هُوَ', 'ٱللَّهُ', 'أَحَدٌ'], 2)).toBe(3);
-    // The quiz's words are the page's: 15:7 «لَّوۡمَا» is one word for both.
     expect(shownCut('15:7', ['لَّوۡمَا', 'تَأۡتِينَا', 'بِٱلۡمَلَٰٓئِكَةِ'], 1)).toBe(1);
   });
   it('hides all of it from nothing, and shows all of it without a count', () => {

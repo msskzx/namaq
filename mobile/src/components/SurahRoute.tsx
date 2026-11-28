@@ -10,11 +10,6 @@ const HEIGHT = 30;
 const LINE = 6;
 const SIDE = 10;
 
-/**
- * «مسار السورة» (owner, 2026-11-23, sketch quran-design/ayah-page): the surah's sections as stops on one line from its
- * first ayah on the right, their parts as ticks, the stretch the ayah falls in and the ayah itself in the accent; above
- * it which section of how many, under it the stretch's title in the book's words and its ayat.
- */
 export default function SurahRoute({ surah, ayah, count, palette }: { surah: number; ayah: number; count: number; palette: Palette }) {
   const [width, setWidth] = useState(0);
   const route = surahRoute(surah, ayah, count);

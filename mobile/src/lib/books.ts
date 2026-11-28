@@ -5,10 +5,6 @@ import { bookOf, bookUrl, isBookId, type BookId } from '@shared/books';
 import { readJson, writeJson } from './storage';
 import { reportError } from '@shared/errors';
 
-/**
- * The person's books (shared/books.ts): which are on the phone, and downloading or removing one. A built-in book is
- * removed by hiding it, since the app's own files cannot shrink; a downloaded one is a file under the app's documents.
- */
 export type BookState = 'on' | 'off' | 'downloading' | 'failed';
 
 const HIDDEN = 'books-hidden';
@@ -19,7 +15,6 @@ let hidden = ids(HIDDEN);
 let saved = ids(SAVED);
 const busy = new Map<BookId, 'downloading' | 'failed'>();
 const loaded = new Map<BookId, unknown>();
-/** Grows each time a book is installed or removed, so what was built from its old copy is built again (readerBook.ts). */
 const revisions = new Map<BookId, number>();
 export const bookRevision = (id: BookId) => revisions.get(id) ?? 0;
 const revise = (id: BookId) => revisions.set(id, bookRevision(id) + 1);
@@ -34,13 +29,10 @@ export function bookState(id: BookId): BookState {
   return bookOf(id).builtIn ? (hidden.includes(id) ? 'off' : 'on') : saved.includes(id) ? 'on' : 'off';
 }
 
-/** Rerenders when any book comes or goes; read each book with bookState. */
 export const useBooks = () => useSyncExternalStore(subscribe, () => version);
 
 const folder = () => new Directory(Paths.document, 'books');
-/** Where each downloaded book keeps a passage's text in its entries (shared/quran/kashshaf.ts, shared/quran/irab.ts, shared/readerBooks.ts). */
 const TEXT_AT: Partial<Record<BookId, number>> = { kashshaf: 6, ukbari: 5, kirmani: 1, iskafi: 1, zubayr: 1 };
-/** A book's data must be a book: its source and a list of passages, each with its text where that book keeps it; a hadith book its kitabs (shared/sahih.ts). */
 const readable = (id: BookId, data: unknown) => {
   if (bookOf(id).kind === 'hadith') {
     const kitabs = (data as { kitabs?: unknown } | null)?.kitabs;
@@ -51,7 +43,6 @@ const readable = (id: BookId, data: unknown) => {
   const at = TEXT_AT[id] ?? -1;
   if (!book || typeof book !== 'object' || !book.source || typeof book.source !== 'object' || !Array.isArray(book.entries)
     || !book.entries.every(entry => Array.isArray(entry) && typeof entry[at] === 'string')) throw new Error('not a book');
-  // A book of mutashabih carries its own page breaks (shared/readerBooks.ts MutashabihBookData).
   const pageBreaks = (book as { breaks?: unknown }).breaks;
   if (bookOf(id).kind === 'mutashabih' && !(Array.isArray(pageBreaks) && pageBreaks.length
     && pageBreaks.every(row => Array.isArray(row) && row.length === 4 && row.every(Number.isInteger)))) throw new Error('not a book');
@@ -79,7 +70,6 @@ export async function addBook(id: BookId) {
     } else {
       const dir = folder();
       if (!dir.exists) dir.create({ intermediates: true, idempotent: true });
-      // Downloaded beside the book and moved over it only once it reads as a book, so a cut-off or wrong download never replaces it.
       const part = new File(dir, `${id}.json.part`);
       try {
         await File.downloadFileAsync(url, part, { idempotent: true });
@@ -116,12 +106,10 @@ export function removeBook(id: BookId) {
   changed();
 }
 
-/** A downloaded book's data, read from its file once; null when it is not on the phone or cannot be read. */
 const reading = new Map<BookId, Promise<unknown>>();
 export async function readBook<T>(id: BookId): Promise<T | null> {
   if (bookState(id) !== 'on' || bookOf(id).builtIn) return null;
   if (loaded.has(id)) return loaded.get(id) as T;
-  // Pages and cards that open together share one read: a whole Sahih is parsed once.
   if (!reading.has(id)) reading.set(id, readFromFile(id).finally(() => reading.delete(id)));
   return reading.get(id) as Promise<T | null>;
 }

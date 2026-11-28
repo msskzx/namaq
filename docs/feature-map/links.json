@@ -1,7 +1,7 @@
 [
  {
   "file": "mobile/src/app/(tabs)/(home)/index.tsx",
-  "line": 78,
+  "line": 59,
   "owner": "HomeScreen",
   "key": "search",
   "label": null,
@@ -14,7 +14,7 @@
  },
  {
   "file": "mobile/src/components/Adhkar.tsx",
-  "line": 123,
+  "line": 110,
   "owner": "DhikrRow",
   "key": "onPress",
   "label": "‹›‹›",
@@ -27,7 +27,7 @@
  },
  {
   "file": "mobile/src/components/AppShell.tsx",
-  "line": 26,
+  "line": 21,
   "owner": "AppShell",
   "key": null,
   "label": null,
@@ -38,7 +38,7 @@
  },
  {
   "file": "mobile/src/components/AyahMenuHost.tsx",
-  "line": 56,
+  "line": 48,
   "owner": "AyahMenuHost",
   "key": "page",
   "label": null,
@@ -49,7 +49,7 @@
  },
  {
   "file": "mobile/src/components/AyahMenuHost.tsx",
-  "line": 57,
+  "line": 49,
   "owner": "AyahMenuHost",
   "key": "mushaf",
   "label": null,
@@ -60,7 +60,7 @@
  },
  {
   "file": "mobile/src/components/AyahMenuHost.tsx",
-  "line": 58,
+  "line": 50,
   "owner": "AyahMenuHost",
   "key": "recite",
   "label": null,
@@ -71,7 +71,7 @@
  },
  {
   "file": "mobile/src/components/AyahMenuHost.tsx",
-  "line": 75,
+  "line": 67,
   "owner": "AyahMenuHost",
   "key": "onJump",
   "label": null,
@@ -82,7 +82,7 @@
  },
  {
   "file": "mobile/src/components/AyahPreviewSheet.tsx",
-  "line": 48,
+  "line": 41,
   "owner": "AyahPreviewSheet",
   "key": "open",
   "label": null,
@@ -93,7 +93,7 @@
  },
  {
   "file": "mobile/src/components/AyahPreviewSheet.tsx",
-  "line": 89,
+  "line": 80,
   "owner": "AyahPreviewSheet",
   "key": "onPress",
   "label": "‹›، ‹› ‹›",
@@ -104,7 +104,7 @@
  },
  {
   "file": "mobile/src/components/AyahPreviewSheet.tsx",
-  "line": 112,
+  "line": 102,
   "owner": "AyahPreviewSheet",
   "key": "onPress",
   "label": null,
@@ -115,7 +115,7 @@
  },
  {
   "file": "mobile/src/components/AyahPreviewSheet.tsx",
-  "line": 112,
+  "line": 102,
   "owner": "AyahPreviewSheet",
   "key": "onPress",
   "label": null,
@@ -126,7 +126,7 @@
  },
  {
   "file": "mobile/src/components/BalaghaSheet.tsx",
-  "line": 104,
+  "line": 94,
   "owner": "Itqan",
   "key": "onPress",
   "label": "افتح ‹› ‹› في المصحف",
@@ -137,7 +137,7 @@
  },
  {
   "file": "mobile/src/components/BalaghaSheet.tsx",
-  "line": 121,
+  "line": 110,
   "owner": "TermLink",
   "key": "onPress",
   "label": "‹› في مصطلحات البلاغة",
@@ -148,7 +148,7 @@
  },
  {
   "file": "mobile/src/components/BalaghaTerm.tsx",
-  "line": 73,
+  "line": 57,
   "owner": "TermExampleCard",
   "key": "onPress",
   "label": "افتح ‹› في المصحف",
@@ -161,7 +161,7 @@
  },
  {
   "file": "mobile/src/components/CompareCard.tsx",
-  "line": 111,
+  "line": 101,
   "owner": "SideHead",
   "key": "onPress",
   "label": null,
@@ -175,7 +175,7 @@
  },
  {
   "file": "mobile/src/components/CompareCard.tsx",
-  "line": 112,
+  "line": 102,
   "owner": "SideHead",
   "key": "onPress",
   "label": "افتح في متشابهات القرآن",
@@ -189,7 +189,7 @@
  },
  {
   "file": "mobile/src/components/CompareCard.tsx",
-  "line": 124,
+  "line": 113,
   "owner": "LaneHead",
   "key": "onPress",
   "label": "اقرأ ‹› في المصحف",
@@ -203,7 +203,7 @@
  },
  {
   "file": "mobile/src/components/CompareCard.tsx",
-  "line": 125,
+  "line": 114,
   "owner": "LaneHead",
   "key": "onPress",
   "label": "افتح في متشابهات القرآن",
@@ -217,7 +217,7 @@
  },
  {
   "file": "mobile/src/components/CompareCard.tsx",
-  "line": 376,
+  "line": 346,
   "owner": "CompareCard",
   "key": "onPress",
   "label": "اقرأ ‹› في المصحف",
@@ -231,7 +231,7 @@
  },
  {
   "file": "mobile/src/components/CompareCard.tsx",
-  "line": 385,
+  "line": 353,
   "owner": "CompareCard",
   "key": "onPress",
   "label": "افتح في متشابهات القرآن",
@@ -245,7 +245,7 @@
  },
  {
   "file": "mobile/src/components/CrashScreen.tsx",
-  "line": 31,
+  "line": 26,
   "owner": "ErrorBoundary",
   "key": "onPress",
   "label": "الرئيسية",
@@ -256,7 +256,7 @@
  },
  {
   "file": "mobile/src/components/DarkSea.tsx",
-  "line": 160,
+  "line": 138,
   "owner": "DarkSea",
   "key": "onPress",
   "label": "رجوع",
@@ -269,7 +269,7 @@
  },
  {
   "file": "mobile/src/components/DarkSea.tsx",
-  "line": 256,
+  "line": 229,
   "owner": "DarkSeaActions",
   "key": "onPress",
   "label": "افتح مشهد ‹›",
@@ -283,7 +283,7 @@
  },
  {
   "file": "mobile/src/components/DarkSea.tsx",
-  "line": 257,
+  "line": 230,
   "owner": "DarkSeaActions",
   "key": "onPress",
   "label": "افتح ‹› في المصحف",
@@ -297,7 +297,7 @@
  },
  {
   "file": "mobile/src/components/EventPlaces.tsx",
-  "line": 101,
+  "line": 92,
   "owner": "EventPlaces",
   "key": "onPress",
   "label": "‹›:‹›",
@@ -313,7 +313,7 @@
  },
  {
   "file": "mobile/src/components/EventPlaces.tsx",
-  "line": 117,
+  "line": 106,
   "owner": "EventPlaces",
   "key": "onPick",
   "label": null,
@@ -329,7 +329,7 @@
  },
  {
   "file": "mobile/src/components/EventPlaces.tsx",
-  "line": 129,
+  "line": 116,
   "owner": "CompareButton",
   "key": "onPress",
   "label": "قارن ‹›",
@@ -345,7 +345,7 @@
  },
  {
   "file": "mobile/src/components/HomeButtons.tsx",
-  "line": 15,
+  "line": 10,
   "owner": "BUTTONS",
   "key": "open",
   "label": "tools",
@@ -358,7 +358,7 @@
  },
  {
   "file": "mobile/src/components/HomeButtons.tsx",
-  "line": 16,
+  "line": 11,
   "owner": "BUTTONS",
   "key": "open",
   "label": "adhkar",
@@ -371,7 +371,7 @@
  },
  {
   "file": "mobile/src/components/HomeButtons.tsx",
-  "line": 17,
+  "line": 12,
   "owner": "BUTTONS",
   "key": "open",
   "label": "المكتبة",
@@ -384,7 +384,7 @@
  },
  {
   "file": "mobile/src/components/HomeButtons.tsx",
-  "line": 18,
+  "line": 13,
   "owner": "BUTTONS",
   "key": "open",
   "label": "مشاهد",
@@ -397,7 +397,7 @@
  },
  {
   "file": "mobile/src/components/HomeButtons.tsx",
-  "line": 19,
+  "line": 14,
   "owner": "BUTTONS",
   "key": "open",
   "label": "مدونتي",
@@ -410,7 +410,7 @@
  },
  {
   "file": "mobile/src/components/HomeCards.tsx",
-  "line": 95,
+  "line": 81,
   "owner": "useHomeCards",
   "key": "onPress",
   "label": null,
@@ -423,7 +423,7 @@
  },
  {
   "file": "mobile/src/components/HomeCards.tsx",
-  "line": 95,
+  "line": 81,
   "owner": "useHomeCards",
   "key": "onPress",
   "label": null,
@@ -436,7 +436,7 @@
  },
  {
   "file": "mobile/src/components/HomeCards.tsx",
-  "line": 95,
+  "line": 81,
   "owner": "useHomeCards",
   "key": "onPress",
   "label": null,
@@ -449,7 +449,7 @@
  },
  {
   "file": "mobile/src/components/HomeCards.tsx",
-  "line": 117,
+  "line": 100,
   "owner": "useHomeCards",
   "key": "onPress",
   "label": "افتح صفحة الآية",
@@ -462,7 +462,7 @@
  },
  {
   "file": "mobile/src/components/HomeCards.tsx",
-  "line": 120,
+  "line": 103,
   "owner": "useHomeCards",
   "key": "onPress",
   "label": "افتح المقارنة",
@@ -475,7 +475,7 @@
  },
  {
   "file": "mobile/src/components/HomeCards.tsx",
-  "line": 120,
+  "line": 103,
   "owner": "useHomeCards",
   "key": "onPress",
   "label": "افتح المقارنة",
@@ -488,7 +488,7 @@
  },
  {
   "file": "mobile/src/components/HomeCards.tsx",
-  "line": 120,
+  "line": 103,
   "owner": "useHomeCards",
   "key": "onPress",
   "label": "افتح المقارنة",
@@ -501,7 +501,7 @@
  },
  {
   "file": "mobile/src/components/HomeCards.tsx",
-  "line": 124,
+  "line": 107,
   "owner": "useHomeCards",
   "key": "onPress",
   "label": "افتح صفحة الآية",
@@ -514,7 +514,7 @@
  },
  {
   "file": "mobile/src/components/HomeCards.tsx",
-  "line": 127,
+  "line": 110,
   "owner": "useHomeCards",
   "key": "onPick",
   "label": null,
@@ -527,7 +527,7 @@
  },
  {
   "file": "mobile/src/components/HomeCards.tsx",
-  "line": 127,
+  "line": 110,
   "owner": "useHomeCards",
   "key": "onPick",
   "label": null,
@@ -540,7 +540,7 @@
  },
  {
   "file": "mobile/src/components/HomeCards.tsx",
-  "line": 127,
+  "line": 110,
   "owner": "useHomeCards",
   "key": "onPick",
   "label": null,
@@ -553,7 +553,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 326,
+  "line": 270,
   "owner": "ContinueReading",
   "key": "read",
   "label": "افتح المصحف ‹›، سورة ‹›",
@@ -566,7 +566,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 330,
+  "line": 273,
   "owner": "ContinueReading",
   "key": "open",
   "label": "افتح القرآن",
@@ -579,7 +579,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 345,
+  "line": 285,
   "owner": "PairPost",
   "key": "compare",
   "label": null,
@@ -592,7 +592,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 352,
+  "line": 292,
   "owner": "PairPost",
   "key": "open",
   "label": "افتح الآيات المتشابهة",
@@ -605,7 +605,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 415,
+  "line": 334,
   "owner": "ForgottenPost",
   "key": "onPress",
   "label": "افتح صفحة الآية",
@@ -620,7 +620,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 417,
+  "line": 335,
   "owner": "ForgottenPost",
   "key": "onPress",
   "label": "افتح ما نسيته",
@@ -635,7 +635,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 417,
+  "line": 335,
   "owner": "ForgottenPost",
   "key": "head",
   "label": "افتح الاختبارات",
@@ -650,7 +650,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 463,
+  "line": 372,
   "owner": "ReciteAction",
   "key": "onPress",
   "label": "تسميع",
@@ -664,7 +664,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 571,
+  "line": 454,
   "owner": "QuizPost",
   "key": "open",
   "label": "افتح الاختبارات",
@@ -678,7 +678,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 573,
+  "line": 455,
   "owner": "QuizPost",
   "key": "onPress",
   "label": "افتح ما يشرح الجواب",
@@ -692,7 +692,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 573,
+  "line": 455,
   "owner": "QuizPost",
   "key": "onPress",
   "label": "افتح ما يشرح الجواب",
@@ -706,7 +706,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 573,
+  "line": 455,
   "owner": "QuizPost",
   "key": "onPress",
   "label": "افتح ما يشرح الجواب",
@@ -720,7 +720,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 573,
+  "line": 455,
   "owner": "QuizPost",
   "key": "onPress",
   "label": "افتح ما يشرح الجواب",
@@ -734,7 +734,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 573,
+  "line": 455,
   "owner": "QuizPost",
   "key": "onPress",
   "label": "افتح ما يشرح الجواب",
@@ -748,7 +748,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 573,
+  "line": 455,
   "owner": "QuizPost",
   "key": "onPress",
   "label": "افتح ما يشرح الجواب",
@@ -762,7 +762,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 573,
+  "line": 455,
   "owner": "QuizPost",
   "key": "onPress",
   "label": "افتح ما يشرح الجواب",
@@ -776,7 +776,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 573,
+  "line": 455,
   "owner": "QuizPost",
   "key": "onPress",
   "label": "افتح ما يشرح الجواب",
@@ -790,7 +790,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 573,
+  "line": 455,
   "owner": "QuizPost",
   "key": "onPress",
   "label": "افتح ما يشرح الجواب",
@@ -804,7 +804,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 573,
+  "line": 455,
   "owner": "QuizPost",
   "key": "onPress",
   "label": "افتح ما يشرح الجواب",
@@ -818,7 +818,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 573,
+  "line": 455,
   "owner": "QuizPost",
   "key": "onPress",
   "label": "افتح ما يشرح الجواب",
@@ -832,7 +832,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 573,
+  "line": 455,
   "owner": "QuizPost",
   "key": "onPress",
   "label": "افتح ما يشرح الجواب",
@@ -846,7 +846,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 573,
+  "line": 455,
   "owner": "QuizPost",
   "key": "onPress",
   "label": "افتح ما يشرح الجواب",
@@ -860,7 +860,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 573,
+  "line": 455,
   "owner": "QuizPost",
   "key": "onPress",
   "label": "افتح ما يشرح الجواب",
@@ -874,7 +874,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 573,
+  "line": 455,
   "owner": "QuizPost",
   "key": "onPress",
   "label": "افتح ما يشرح الجواب",
@@ -888,7 +888,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 573,
+  "line": 455,
   "owner": "QuizPost",
   "key": "onPress",
   "label": "افتح ما يشرح الجواب",
@@ -902,7 +902,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 573,
+  "line": 455,
   "owner": "QuizPost",
   "key": "onPress",
   "label": "افتح ما يشرح الجواب",
@@ -916,7 +916,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 617,
+  "line": 493,
   "owner": "TarajimPost",
   "key": "open",
   "label": "افتح ترجمة ‹›",
@@ -930,7 +930,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 619,
+  "line": 495,
   "owner": "TarajimPost",
   "key": "open",
   "label": "افتح التراجم",
@@ -944,7 +944,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 641,
+  "line": 512,
   "owner": "TiePost",
   "key": "open",
   "label": "ارسم الصلة بين ‹› و‹›",
@@ -958,7 +958,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 643,
+  "line": 514,
   "owner": "TiePost",
   "key": "open",
   "label": "افتح التراجم",
@@ -972,7 +972,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 667,
+  "line": 532,
   "owner": "NamePost",
   "key": "open",
   "label": "افتح ترجمة ‹›",
@@ -986,7 +986,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 670,
+  "line": 535,
   "owner": "NamePost",
   "key": "open",
   "label": "افتح التراجم",
@@ -1000,7 +1000,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 691,
+  "line": 552,
   "owner": "LifePost",
   "key": "open",
   "label": "افتح ترجمة ‹›",
@@ -1014,7 +1014,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 693,
+  "line": 554,
   "owner": "LifePost",
   "key": "open",
   "label": null,
@@ -1028,7 +1028,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 713,
+  "line": 569,
   "owner": "NasabPost",
   "key": "open",
   "label": "افتح نسب ‹›",
@@ -1042,7 +1042,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 715,
+  "line": 571,
   "owner": "NasabPost",
   "key": "open",
   "label": null,
@@ -1056,7 +1056,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 730,
+  "line": 585,
   "owner": "TiesPost",
   "key": "open",
   "label": "افتح ‹›: ‹›",
@@ -1070,7 +1070,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 732,
+  "line": 587,
   "owner": "TiesPost",
   "key": "open",
   "label": null,
@@ -1084,7 +1084,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 736,
+  "line": 591,
   "owner": "TiesPost",
   "key": "onPick",
   "label": null,
@@ -1098,7 +1098,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 760,
+  "line": 610,
   "owner": "GroupPost",
   "key": "open",
   "label": "ارسم الصلة بينهم",
@@ -1112,7 +1112,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 762,
+  "line": 612,
   "owner": "GroupPost",
   "key": "open",
   "label": "افتح التراجم",
@@ -1126,7 +1126,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 781,
+  "line": 630,
   "owner": "LivesPost",
   "key": "open",
   "label": "قارن حياة ‹› و‹›",
@@ -1140,7 +1140,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 783,
+  "line": 632,
   "owner": "LivesPost",
   "key": "open",
   "label": "افتح التراجم",
@@ -1154,7 +1154,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 803,
+  "line": 648,
   "owner": "MeetPost",
   "key": "open",
   "label": "افتح النسب",
@@ -1168,7 +1168,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 806,
+  "line": 651,
   "owner": "MeetPost",
   "key": "open",
   "label": "افتح التراجم",
@@ -1182,7 +1182,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 832,
+  "line": 672,
   "owner": "RingPost",
   "key": "go",
   "label": null,
@@ -1196,7 +1196,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 848,
+  "line": 686,
   "owner": "RingPost",
   "key": "open",
   "label": null,
@@ -1210,7 +1210,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 849,
+  "line": 687,
   "owner": "RingPost",
   "key": "open",
   "label": "افتح ‹›",
@@ -1224,7 +1224,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 849,
+  "line": 687,
   "owner": "RingPost",
   "key": "open",
   "label": "افتح التراجم",
@@ -1238,7 +1238,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 850,
+  "line": 688,
   "owner": "RingPost",
   "key": "open",
   "label": null,
@@ -1252,7 +1252,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 851,
+  "line": 689,
   "owner": "RingPost",
   "key": "open",
   "label": null,
@@ -1266,7 +1266,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 852,
+  "line": 690,
   "owner": "RingPost",
   "key": "open",
   "label": null,
@@ -1280,7 +1280,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 880,
+  "line": 713,
   "owner": "BattlePost",
   "key": "open",
   "label": "افتح ‹›",
@@ -1294,7 +1294,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 882,
+  "line": 715,
   "owner": "BattlePost",
   "key": "open",
   "label": "افتح الغزوات والمعارك",
@@ -1308,7 +1308,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 905,
+  "line": 732,
   "owner": "BattleYearPost",
   "key": "toYear",
   "label": null,
@@ -1322,7 +1322,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 910,
+  "line": 736,
   "owner": "BattleYearPost",
   "key": "open",
   "label": "افتح الأطلس",
@@ -1336,7 +1336,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 920,
+  "line": 746,
   "owner": "BattleYearPost",
   "key": "onPress",
   "label": "افتح ‹›",
@@ -1350,7 +1350,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 943,
+  "line": 765,
   "owner": "ArmiesPost",
   "key": "open",
   "label": "افتح الغزوات والمعارك",
@@ -1364,7 +1364,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 944,
+  "line": 766,
   "owner": "ArmiesPost",
   "key": "onPress",
   "label": "افتح الغزوات والمعارك",
@@ -1378,7 +1378,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 953,
+  "line": 775,
   "owner": "ArmiesPost",
   "key": "onPress",
   "label": "افتح ‹›",
@@ -1392,7 +1392,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 970,
+  "line": 791,
   "owner": "HadithScenePost",
   "key": "open",
   "label": "افتح الحديث في ‹›",
@@ -1406,7 +1406,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 972,
+  "line": 793,
   "owner": "HadithScenePost",
   "key": "open",
   "label": "افتح الحديث",
@@ -1420,7 +1420,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 993,
+  "line": 811,
   "owner": "OpeningCardPost",
   "key": "open",
   "label": "افتح «‹›» في فواتح السور",
@@ -1434,7 +1434,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 995,
+  "line": 813,
   "owner": "OpeningCardPost",
   "key": "open",
   "label": "افتح فواتح السور",
@@ -1448,7 +1448,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1011,
+  "line": 828,
   "owner": "OathPost",
   "key": "open",
   "label": "افتح ‹› في الأقسام",
@@ -1462,7 +1462,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1013,
+  "line": 830,
   "owner": "OathPost",
   "key": "open",
   "label": "افتح الأقسام",
@@ -1476,7 +1476,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1015,
+  "line": 832,
   "owner": "OathPost",
   "key": "onPress",
   "label": "افتح ‹› في المصحف",
@@ -1490,7 +1490,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1034,
+  "line": 846,
   "owner": "SurahAimPost",
   "key": "open",
   "label": "افتح ترتيب السور",
@@ -1504,7 +1504,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1035,
+  "line": 847,
   "owner": "SurahAimPost",
   "key": "onPress",
   "label": "افتح سورة ‹› في ترتيب السور",
@@ -1518,7 +1518,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1051,
+  "line": 859,
   "owner": "SurahLinkPost",
   "key": "open",
   "label": "افتح ترتيب السور",
@@ -1532,7 +1532,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1052,
+  "line": 860,
   "owner": "SurahLinkPost",
   "key": "onPress",
   "label": "افتح ‹› و‹› في ترتيب السور",
@@ -1546,7 +1546,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1072,
+  "line": 876,
   "owner": "EventPost",
   "key": "open",
   "label": "افتح ‹› في القصة",
@@ -1560,7 +1560,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1074,
+  "line": 878,
   "owner": "EventPost",
   "key": "open",
   "label": "افتح قصص الأنبياء",
@@ -1574,7 +1574,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1122,
+  "line": 911,
   "owner": "TreePost",
   "key": "open",
   "label": null,
@@ -1587,7 +1587,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1130,
+  "line": 918,
   "owner": "TreePost",
   "key": "open",
   "label": "افتح متشابهات القرآن",
@@ -1600,7 +1600,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1143,
+  "line": 930,
   "owner": "SavedAyahPost",
   "key": "onPress",
   "label": "افتح المحفوظات",
@@ -1613,7 +1613,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1144,
+  "line": 931,
   "owner": "SavedAyahPost",
   "key": "onPress",
   "label": "افتح صفحة الآية",
@@ -1626,7 +1626,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1180,
+  "line": 958,
   "owner": "StoryPost",
   "key": "open",
   "label": null,
@@ -1640,7 +1640,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1182,
+  "line": 960,
   "owner": "StoryPost",
   "key": "open",
   "label": "افتح قصص الأنبياء",
@@ -1654,7 +1654,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1210,
+  "line": 981,
   "owner": "JuzPost",
   "key": "open",
   "label": "اقرأ ‹›، جزء اليوم",
@@ -1667,7 +1667,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1213,
+  "line": 984,
   "owner": "JuzPost",
   "key": "open",
   "label": "افتح القرآن",
@@ -1680,7 +1680,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1226,
+  "line": 995,
   "owner": "KahfPost",
   "key": "read",
   "label": "اقرأ سورة الكهف",
@@ -1693,7 +1693,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1228,
+  "line": 997,
   "owner": "KahfPost",
   "key": "open",
   "label": "افتح القرآن",
@@ -1706,7 +1706,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1248,
+  "line": 1013,
   "owner": "PrayerPost",
   "key": "open",
   "label": "افتح مواقيت الصلاة",
@@ -1719,7 +1719,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1252,
+  "line": 1016,
   "owner": "PrayerPost",
   "key": "onPress",
   "label": "tools",
@@ -1732,7 +1732,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1253,
+  "line": 1017,
   "owner": "PrayerPost",
   "key": "onPress",
   "label": "tools",
@@ -1745,7 +1745,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1312,
+  "line": 1066,
   "owner": "BooksPost",
   "key": "onPress",
   "label": "افتح المكتبة",
@@ -1758,7 +1758,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1315,
+  "line": 1069,
   "owner": "BooksPost",
   "key": "onPress",
   "label": null,
@@ -1771,7 +1771,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1332,
+  "line": 1082,
   "owner": "ScenePost",
   "key": "onPress",
   "label": "افتح المشاهد",
@@ -1785,7 +1785,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1335,
+  "line": 1084,
   "owner": "ScenePost",
   "key": "onPress",
   "label": null,
@@ -1799,7 +1799,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1340,
+  "line": 1089,
   "owner": "ScenePost",
   "key": "onPress",
   "label": "افتح المشاهد",
@@ -1813,7 +1813,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1343,
+  "line": 1092,
   "owner": "ScenePost",
   "key": "onPress",
   "label": null,
@@ -1827,7 +1827,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1358,
+  "line": 1102,
   "owner": "SiraPost",
   "key": "open",
   "label": "افتح ‹›",
@@ -1841,7 +1841,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1360,
+  "line": 1104,
   "owner": "SiraPost",
   "key": "open",
   "label": "افتح قصص السيرة",
@@ -1855,7 +1855,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1391,
+  "line": 1127,
   "owner": "RajabPost",
   "key": "open",
   "label": "افتح ‹›",
@@ -1869,7 +1869,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1393,
+  "line": 1129,
   "owner": "RajabPost",
   "key": "open",
   "label": null,
@@ -1883,7 +1883,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1407,
+  "line": 1142,
   "owner": "HadithPost",
   "key": "open",
   "label": "افتح ‹›",
@@ -1897,7 +1897,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1409,
+  "line": 1144,
   "owner": "HadithPost",
   "key": "open",
   "label": null,
@@ -1911,7 +1911,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1433,
+  "line": 1162,
   "owner": "SahihPost",
   "key": "open",
   "label": "افتح ‹› ‹›",
@@ -1925,7 +1925,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1436,
+  "line": 1165,
   "owner": "SahihPost",
   "key": "open",
   "label": "افتح ‹›",
@@ -1939,7 +1939,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1453,
+  "line": 1178,
   "owner": "RecordedPost",
   "key": "open",
   "label": "افتح ‹›",
@@ -1953,7 +1953,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1455,
+  "line": 1180,
   "owner": "RecordedPost",
   "key": "open",
   "label": null,
@@ -1967,7 +1967,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1477,
+  "line": 1197,
   "owner": "IsnadPost",
   "key": "open",
   "label": "افتح ‹›",
@@ -1981,7 +1981,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1479,
+  "line": 1199,
   "owner": "IsnadPost",
   "key": "open",
   "label": null,
@@ -1995,7 +1995,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1504,
+  "line": 1219,
   "owner": "TermPost",
   "key": "open",
   "label": "‹›: تعريفه وأمثلته",
@@ -2009,7 +2009,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1506,
+  "line": 1221,
   "owner": "TermPost",
   "key": "open",
   "label": "افتح مصطلحات البلاغة",
@@ -2023,7 +2023,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1508,
+  "line": 1223,
   "owner": "TermPost",
   "key": "onPress",
   "label": "مصطلحات البلاغة",
@@ -2037,7 +2037,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1546,
+  "line": 1255,
   "owner": "GharibPost",
   "key": "open",
   "label": "افتح صفحة الآية",
@@ -2051,7 +2051,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1546,
+  "line": 1255,
   "owner": "GharibPost",
   "key": "open",
   "label": "افتح صفحة الآية",
@@ -2065,7 +2065,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1548,
+  "line": 1257,
   "owner": "GharibPost",
   "key": "open",
   "label": "افتح ألفاظ القرآن",
@@ -2079,7 +2079,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1569,
+  "line": 1274,
   "owner": "TuhfaPost",
   "key": "open",
   "label": "افتح تحفة الأطفال",
@@ -2093,7 +2093,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1570,
+  "line": 1275,
   "owner": "TuhfaPost",
   "key": "onPress",
   "label": "افتح المنظومة",
@@ -2107,7 +2107,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1591,
+  "line": 1294,
   "owner": "MomentPost",
   "key": "open",
   "label": "افتح ‹›",
@@ -2121,7 +2121,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1593,
+  "line": 1296,
   "owner": "MomentPost",
   "key": "open",
   "label": "افتح ‹›",
@@ -2135,7 +2135,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1635,
+  "line": 1331,
   "owner": "NOTE_TOPICS",
   "key": "tafsir",
   "label": "افتح تفسير السعدي",
@@ -2149,7 +2149,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1636,
+  "line": 1332,
   "owner": "NOTE_TOPICS",
   "key": "balagha",
   "label": "افتح مصطلحات البلاغة",
@@ -2163,7 +2163,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1637,
+  "line": 1333,
   "owner": "NOTE_TOPICS",
   "key": "irab",
   "label": "افتح المكتبة",
@@ -2177,7 +2177,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1638,
+  "line": 1334,
   "owner": "NOTE_TOPICS",
   "key": "qiraat",
   "label": "افتح القراءات",
@@ -2191,7 +2191,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1660,
+  "line": 1347,
   "owner": "AyahNotePost",
   "key": "show",
   "label": "افتح صفحة الآية، ‹›",
@@ -2205,7 +2205,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1707,
+  "line": 1387,
   "owner": "DhikrPost",
   "key": "onPress",
   "label": "adhkar",
@@ -2219,7 +2219,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 1708,
+  "line": 1388,
   "owner": "DhikrPost",
   "key": "onPress",
   "label": "افتح الذكر في الأذكار",
@@ -2233,7 +2233,7 @@
  },
  {
   "file": "mobile/src/components/HomeFeed.tsx",
-  "line": 2022,
+  "line": 1646,
   "owner": "Feed",
   "key": "review",
   "label": null,
@@ -2246,7 +2246,7 @@
  },
  {
   "file": "mobile/src/components/LifeColumns.tsx",
-  "line": 18,
+  "line": 17,
   "owner": "Cell",
   "key": "onPress",
   "label": null,
@@ -2261,7 +2261,7 @@
  },
  {
   "file": "mobile/src/components/LifeColumns.tsx",
-  "line": 18,
+  "line": 17,
   "owner": "Cell",
   "key": "onPress",
   "label": null,
@@ -2276,7 +2276,7 @@
  },
  {
   "file": "mobile/src/components/LifeTimeline.tsx",
-  "line": 123,
+  "line": 107,
   "owner": "Item",
   "key": "onPress",
   "label": null,
@@ -2294,7 +2294,7 @@
  },
  {
   "file": "mobile/src/components/LifeTimeline.tsx",
-  "line": 123,
+  "line": 107,
   "owner": "Item",
   "key": "onPress",
   "label": null,
@@ -2312,7 +2312,7 @@
  },
  {
   "file": "mobile/src/components/LifeTimeline.tsx",
-  "line": 164,
+  "line": 146,
   "owner": "LifeSheet",
   "key": "onPress",
   "label": null,
@@ -2331,7 +2331,7 @@
  },
  {
   "file": "mobile/src/components/LifeTimeline.tsx",
-  "line": 164,
+  "line": 146,
   "owner": "LifeSheet",
   "key": "onPress",
   "label": null,
@@ -2350,7 +2350,7 @@
  },
  {
   "file": "mobile/src/components/MatrixCard.tsx",
-  "line": 169,
+  "line": 137,
   "owner": "Cell",
   "key": "onPress",
   "label": "قراءة ‹› ‹›",
@@ -2361,7 +2361,7 @@
  },
  {
   "file": "mobile/src/components/MutashabihFace.tsx",
-  "line": 62,
+  "line": 52,
   "owner": "BookAnswers",
   "key": "onPress",
   "label": "اقرأ كلام ‹› كاملًا في ‹›",
@@ -2372,7 +2372,7 @@
  },
  {
   "file": "mobile/src/components/OpenInBook.tsx",
-  "line": 14,
+  "line": 11,
   "owner": "OpenInBook",
   "key": "onPress",
   "label": "اقرأ في الكتاب",
@@ -2383,7 +2383,7 @@
  },
  {
   "file": "mobile/src/components/OpenInBook.tsx",
-  "line": 14,
+  "line": 11,
   "owner": "OpenInBook",
   "key": "onPress",
   "label": "اقرأ في الكتاب",
@@ -2394,7 +2394,7 @@
  },
  {
   "file": "mobile/src/components/OrderSurah.tsx",
-  "line": 105,
+  "line": 95,
   "owner": "SurahCard",
   "key": "onPress",
   "label": "‹›:1",
@@ -2411,7 +2411,7 @@
  },
  {
   "file": "mobile/src/components/PathAyat.tsx",
-  "line": 83,
+  "line": 68,
   "owner": "PathAyat",
   "key": "onPress",
   "label": "قارن ‹›",
@@ -2422,7 +2422,7 @@
  },
  {
   "file": "mobile/src/components/PathAyat.tsx",
-  "line": 86,
+  "line": 71,
   "owner": "PathAyat",
   "key": "onPick",
   "label": null,
@@ -2433,7 +2433,7 @@
  },
  {
   "file": "mobile/src/components/QuizCompare.tsx",
-  "line": 135,
+  "line": 120,
   "owner": "CompareFeedback",
   "key": "open",
   "label": "افتح في مقارنة السور",
@@ -2449,7 +2449,7 @@
  },
  {
   "file": "mobile/src/components/QuizTree.tsx",
-  "line": 204,
+  "line": 181,
   "owner": "TreeActions",
   "key": "onPress",
   "label": "افتح في متشابهات القرآن",
@@ -2465,7 +2465,7 @@
  },
  {
   "file": "mobile/src/components/RahmanScene.tsx",
-  "line": 140,
+  "line": 121,
   "owner": "RahmanScene",
   "key": "onPress",
   "label": "رجوع",
@@ -2478,7 +2478,7 @@
  },
  {
   "file": "mobile/src/components/RahmanScene.tsx",
-  "line": 208,
+  "line": 182,
   "owner": "RahmanActions",
   "key": "onPress",
   "label": "افتح مشهد ‹›",
@@ -2492,7 +2492,7 @@
  },
  {
   "file": "mobile/src/components/SearchResults.tsx",
-  "line": 49,
+  "line": 47,
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
@@ -2506,7 +2506,7 @@
  },
  {
   "file": "mobile/src/components/SearchResults.tsx",
-  "line": 58,
+  "line": 54,
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
@@ -2520,7 +2520,7 @@
  },
  {
   "file": "mobile/src/components/SearchResults.tsx",
-  "line": 72,
+  "line": 68,
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
@@ -2534,7 +2534,7 @@
  },
  {
   "file": "mobile/src/components/SearchResults.tsx",
-  "line": 78,
+  "line": 74,
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
@@ -2548,7 +2548,7 @@
  },
  {
   "file": "mobile/src/components/SearchResults.tsx",
-  "line": 86,
+  "line": 81,
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
@@ -2562,7 +2562,7 @@
  },
  {
   "file": "mobile/src/components/SearchResults.tsx",
-  "line": 87,
+  "line": 82,
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
@@ -2576,7 +2576,7 @@
  },
  {
   "file": "mobile/src/components/SearchResults.tsx",
-  "line": 87,
+  "line": 82,
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
@@ -2590,7 +2590,7 @@
  },
  {
   "file": "mobile/src/components/SearchResults.tsx",
-  "line": 94,
+  "line": 89,
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
@@ -2604,7 +2604,7 @@
  },
  {
   "file": "mobile/src/components/SearchResults.tsx",
-  "line": 94,
+  "line": 89,
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
@@ -2618,7 +2618,7 @@
  },
  {
   "file": "mobile/src/components/SearchResults.tsx",
-  "line": 102,
+  "line": 96,
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
@@ -2632,7 +2632,7 @@
  },
  {
   "file": "mobile/src/components/SearchResults.tsx",
-  "line": 102,
+  "line": 96,
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
@@ -2646,7 +2646,7 @@
  },
  {
   "file": "mobile/src/components/SearchResults.tsx",
-  "line": 102,
+  "line": 96,
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
@@ -2660,7 +2660,7 @@
  },
  {
   "file": "mobile/src/components/SearchResults.tsx",
-  "line": 113,
+  "line": 107,
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
@@ -2674,7 +2674,7 @@
  },
  {
   "file": "mobile/src/components/SearchResults.tsx",
-  "line": 123,
+  "line": 117,
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
@@ -2688,7 +2688,7 @@
  },
  {
   "file": "mobile/src/components/SearchResults.tsx",
-  "line": 129,
+  "line": 123,
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
@@ -2702,7 +2702,7 @@
  },
  {
   "file": "mobile/src/components/SettingsSheet.tsx",
-  "line": 28,
+  "line": 25,
   "owner": "SettingsSheet",
   "key": null,
   "label": "عن نمق",
@@ -2764,7 +2764,7 @@
  },
  {
   "file": "mobile/src/components/SettingsSheet.tsx",
-  "line": 29,
+  "line": 26,
   "owner": "SettingsSheet",
   "key": null,
   "label": "المصادر والتراخيص",
@@ -2826,7 +2826,7 @@
  },
  {
   "file": "mobile/src/components/SettingsSheet.tsx",
-  "line": 30,
+  "line": 27,
   "owner": "SettingsSheet",
   "key": null,
   "label": "سياسة الخصوصية",
@@ -2888,7 +2888,7 @@
  },
  {
   "file": "mobile/src/components/TermSheet.tsx",
-  "line": 39,
+  "line": 34,
   "owner": "TermChips",
   "key": "onPress",
   "label": "أمثلته في مصطلحات البلاغة",
@@ -2904,7 +2904,7 @@
  },
  {
   "file": "mobile/src/components/TiesChain.tsx",
-  "line": 164,
+  "line": 135,
   "owner": "TiesChain",
   "key": "open",
   "label": null,
@@ -2919,7 +2919,7 @@
  },
  {
   "file": "mobile/src/components/TreePager.tsx",
-  "line": 245,
+  "line": 201,
   "owner": "TreePager",
   "key": "openCompare",
   "label": null,
@@ -2930,7 +2930,7 @@
  },
  {
   "file": "mobile/src/components/Utilities.tsx",
-  "line": 419,
+  "line": 381,
   "owner": "Month",
   "key": "onPress",
   "label": "اقرأ جزء اليوم: ‹›",
@@ -2943,7 +2943,7 @@
  },
  {
   "file": "mobile/src/components/Utilities.tsx",
-  "line": 451,
+  "line": 411,
   "owner": "Calendar",
   "key": "onPress",
   "label": "اقرأ جزء اليوم: ‹›",
@@ -2956,7 +2956,7 @@
  },
  {
   "file": "mobile/src/components/WordSheet.tsx",
-  "line": 140,
+  "line": 111,
   "owner": "WordView",
   "key": "open",
   "label": null,
@@ -2972,7 +2972,7 @@
  },
  {
   "file": "mobile/src/components/battles/BattleLine.tsx",
-  "line": 34,
+  "line": 30,
   "owner": "Station",
   "key": "onPress",
   "label": null,
@@ -2985,7 +2985,7 @@
  },
  {
   "file": "mobile/src/components/battles/BattleParts.tsx",
-  "line": 130,
+  "line": 113,
   "owner": "People",
   "key": "onPress",
   "label": null,
@@ -3006,7 +3006,7 @@
  },
  {
   "file": "mobile/src/components/scenes/RahmanPage.tsx",
-  "line": 143,
+  "line": 119,
   "owner": "Hadith",
   "key": "onPress",
   "label": "افتح الحديث كاملًا: ‹›",
@@ -3022,7 +3022,7 @@
  },
  {
   "file": "mobile/src/components/stories/StoryParts.tsx",
-  "line": 166,
+  "line": 131,
   "owner": "StoryLinkRow",
   "key": "onPress",
   "label": null,
@@ -3036,7 +3036,7 @@
  },
  {
   "file": "mobile/src/components/tarajim/PersonRows.tsx",
-  "line": 21,
+  "line": 16,
   "owner": "PersonRows",
   "key": "onPress",
   "label": null,
@@ -3050,7 +3050,7 @@
  },
  {
   "file": "mobile/src/screens/atlas.tsx",
-  "line": 39,
+  "line": 37,
   "owner": "BattleRow",
   "key": "onPress",
   "label": "افتح ‹›",
@@ -3063,7 +3063,7 @@
  },
  {
   "file": "mobile/src/screens/atlas.tsx",
-  "line": 64,
+  "line": 58,
   "owner": "AtlasBattle",
   "key": "onPress",
   "label": "افتح ‹›",
@@ -3076,7 +3076,7 @@
  },
  {
   "file": "mobile/src/screens/atlas.tsx",
-  "line": 92,
+  "line": 81,
   "owner": "PlaceSheet",
   "key": "onPress",
   "label": "افتح ‹›",
@@ -3089,7 +3089,7 @@
  },
  {
   "file": "mobile/src/screens/atlas.tsx",
-  "line": 165,
+  "line": 137,
   "owner": "AtlasScreen",
   "key": "pickFound",
   "label": null,
@@ -3102,7 +3102,7 @@
  },
  {
   "file": "mobile/src/screens/ayah.tsx",
-  "line": 116,
+  "line": 106,
   "owner": "AyahScreen",
   "key": "back",
   "label": null,
@@ -3115,7 +3115,7 @@
  },
  {
   "file": "mobile/src/screens/ayah.tsx",
-  "line": 119,
+  "line": 109,
   "owner": "AyahScreen",
   "key": "onPress",
   "label": "افتح ‹› في المصحف",
@@ -3128,7 +3128,7 @@
  },
  {
   "file": "mobile/src/screens/ayah.tsx",
-  "line": 121,
+  "line": 111,
   "owner": "AyahScreen",
   "key": "onPress",
   "label": "سمّع من هذه الآية",
@@ -3141,7 +3141,7 @@
  },
  {
   "file": "mobile/src/screens/ayah.tsx",
-  "line": 150,
+  "line": 139,
   "owner": "AyahScreen",
   "key": "onJump",
   "label": null,
@@ -3154,7 +3154,7 @@
  },
  {
   "file": "mobile/src/screens/ayah.tsx",
-  "line": 250,
+  "line": 234,
   "owner": "SectionPart",
   "key": "open",
   "label": "افتح «‹›» في فواتح السور",
@@ -3167,7 +3167,7 @@
  },
  {
   "file": "mobile/src/screens/ayah.tsx",
-  "line": 258,
+  "line": 242,
   "owner": "SectionPart",
   "key": "open",
   "label": "افتح ‹› في الأقسام",
@@ -3180,7 +3180,7 @@
  },
  {
   "file": "mobile/src/screens/ayah.tsx",
-  "line": 269,
+  "line": 253,
   "owner": "SectionPart",
   "key": "open",
   "label": "افتح ‹› في القصة",
@@ -3193,7 +3193,7 @@
  },
  {
   "file": "mobile/src/screens/ayah.tsx",
-  "line": 278,
+  "line": 262,
   "owner": "SectionPart",
   "key": "openStory",
   "label": "افتح ‹›",
@@ -3206,7 +3206,7 @@
  },
  {
   "file": "mobile/src/screens/ayah.tsx",
-  "line": 290,
+  "line": 271,
   "owner": "SectionPart",
   "key": "onPress",
   "label": null,
@@ -3219,7 +3219,7 @@
  },
  {
   "file": "mobile/src/screens/ayah.tsx",
-  "line": 309,
+  "line": 289,
   "owner": "SectionPart",
   "key": "open",
   "label": "افتح ‹›",
@@ -3232,7 +3232,7 @@
  },
  {
   "file": "mobile/src/screens/balaghaTerms.tsx",
-  "line": 47,
+  "line": 42,
   "owner": "BalaghaTermsScreen",
   "key": "onPress",
   "label": null,
@@ -3245,7 +3245,7 @@
  },
  {
   "file": "mobile/src/screens/between.tsx",
-  "line": 41,
+  "line": 34,
   "owner": "BetweenScreen",
   "key": "back",
   "label": null,
@@ -3258,7 +3258,7 @@
  },
  {
   "file": "mobile/src/screens/book.tsx",
-  "line": 127,
+  "line": 116,
   "owner": "BookReader",
   "key": "openAyah",
   "label": null,
@@ -3271,7 +3271,7 @@
  },
  {
   "file": "mobile/src/screens/books.tsx",
-  "line": 57,
+  "line": 44,
   "owner": "LibraryScreen",
   "key": "back",
   "label": null,
@@ -3284,7 +3284,7 @@
  },
  {
   "file": "mobile/src/screens/books.tsx",
-  "line": 66,
+  "line": 53,
   "owner": "LibraryScreen",
   "key": "onPress",
   "label": null,
@@ -3297,7 +3297,7 @@
  },
  {
   "file": "mobile/src/screens/books.tsx",
-  "line": 77,
+  "line": 62,
   "owner": "BookCard",
   "key": "open",
   "label": null,
@@ -3311,7 +3311,7 @@
  },
  {
   "file": "mobile/src/screens/books.tsx",
-  "line": 78,
+  "line": 63,
   "owner": "BookCard",
   "key": "open",
   "label": null,
@@ -3325,7 +3325,7 @@
  },
  {
   "file": "mobile/src/screens/dhikr.tsx",
-  "line": 82,
+  "line": 75,
   "owner": "DhikrScreen",
   "key": "back",
   "label": null,
@@ -3338,7 +3338,7 @@
  },
  {
   "file": "mobile/src/screens/hadith.tsx",
-  "line": 56,
+  "line": 53,
   "owner": "ContinueCard",
   "key": "onPress",
   "label": "افتح ‹›",
@@ -3351,7 +3351,7 @@
  },
  {
   "file": "mobile/src/screens/hadith.tsx",
-  "line": 75,
+  "line": 71,
   "owner": "FortyShape",
   "key": "onOpen",
   "label": null,
@@ -3364,7 +3364,7 @@
  },
  {
   "file": "mobile/src/screens/hadith.tsx",
-  "line": 93,
+  "line": 86,
   "owner": "Hit",
   "key": "onPress",
   "label": null,
@@ -3377,7 +3377,7 @@
  },
  {
   "file": "mobile/src/screens/hadith.tsx",
-  "line": 93,
+  "line": 86,
   "owner": "Hit",
   "key": "onPress",
   "label": null,
@@ -3390,7 +3390,7 @@
  },
  {
   "file": "mobile/src/screens/hadith.tsx",
-  "line": 93,
+  "line": 86,
   "owner": "Hit",
   "key": "onPress",
   "label": null,
@@ -3403,7 +3403,7 @@
  },
  {
   "file": "mobile/src/screens/hadith.tsx",
-  "line": 151,
+  "line": 134,
   "owner": "HadithScreen",
   "key": "onPress",
   "label": null,
@@ -3416,7 +3416,7 @@
  },
  {
   "file": "mobile/src/screens/hadith.tsx",
-  "line": 166,
+  "line": 148,
   "owner": "HadithScreen",
   "key": "onOpenBook",
   "label": null,
@@ -3429,7 +3429,7 @@
  },
  {
   "file": "mobile/src/screens/hadith.tsx",
-  "line": 166,
+  "line": 148,
   "owner": "HadithScreen",
   "key": "onOpenKitab",
   "label": null,
@@ -3442,7 +3442,7 @@
  },
  {
   "file": "mobile/src/screens/hadith.tsx",
-  "line": 170,
+  "line": 152,
   "owner": "HadithScreen",
   "key": "onOpenBook",
   "label": "forty",
@@ -3455,7 +3455,7 @@
  },
  {
   "file": "mobile/src/screens/hadithBook.tsx",
-  "line": 32,
+  "line": 27,
   "owner": "HadithBookScreen",
   "key": "back",
   "label": null,
@@ -3468,7 +3468,7 @@
  },
  {
   "file": "mobile/src/screens/hadithBook.tsx",
-  "line": 41,
+  "line": 35,
   "owner": "HadithBookScreen",
   "key": "onPress",
   "label": null,
@@ -3481,7 +3481,7 @@
  },
  {
   "file": "mobile/src/screens/hadithBook.tsx",
-  "line": 51,
+  "line": 45,
   "owner": "HadithBookScreen",
   "key": "onOpenKitab",
   "label": null,
@@ -3494,7 +3494,7 @@
  },
  {
   "file": "mobile/src/screens/hadithBook.tsx",
-  "line": 56,
+  "line": 50,
   "owner": "HadithBookScreen",
   "key": "onOpen",
   "label": null,
@@ -3507,7 +3507,7 @@
  },
  {
   "file": "mobile/src/screens/hadithBook.tsx",
-  "line": 56,
+  "line": 50,
   "owner": "HadithBookScreen",
   "key": "onOpenBab",
   "label": null,
@@ -3520,7 +3520,7 @@
  },
  {
   "file": "mobile/src/screens/hadithForty.tsx",
-  "line": 175,
+  "line": 157,
   "owner": "HadithFortyScreen",
   "key": "back",
   "label": null,
@@ -3533,7 +3533,7 @@
  },
  {
   "file": "mobile/src/screens/hadithForty.tsx",
-  "line": 177,
+  "line": 159,
   "owner": "HadithFortyScreen",
   "key": "unit",
   "label": null,
@@ -3546,7 +3546,7 @@
  },
  {
   "file": "mobile/src/screens/hadithKitab.tsx",
-  "line": 39,
+  "line": 37,
   "owner": "BabRow",
   "key": "onPress",
   "label": null,
@@ -3559,7 +3559,7 @@
  },
  {
   "file": "mobile/src/screens/hadithKitab.tsx",
-  "line": 65,
+  "line": 59,
   "owner": "KitabIndex",
   "key": "back",
   "label": null,
@@ -3572,7 +3572,7 @@
  },
  {
   "file": "mobile/src/screens/hadithKitab.tsx",
-  "line": 103,
+  "line": 93,
   "owner": "BabPage",
   "key": "back",
   "label": null,
@@ -3585,7 +3585,7 @@
  },
  {
   "file": "mobile/src/screens/hadithKitab.tsx",
-  "line": 104,
+  "line": 94,
   "owner": "BabPage",
   "key": "go",
   "label": null,
@@ -3598,7 +3598,7 @@
  },
  {
   "file": "mobile/src/screens/hadithKitab.tsx",
-  "line": 114,
+  "line": 104,
   "owner": "BabPage",
   "key": "onPress",
   "label": "‹›‹›",
@@ -3611,7 +3611,7 @@
  },
  {
   "file": "mobile/src/screens/hadithKitab.tsx",
-  "line": 127,
+  "line": 117,
   "owner": "BabPage",
   "key": "onPress",
   "label": null,
@@ -3624,7 +3624,7 @@
  },
  {
   "file": "mobile/src/screens/hadithKitab.tsx",
-  "line": 143,
+  "line": 133,
   "owner": "HadithKitabScreen",
   "key": "back",
   "label": null,
@@ -3637,7 +3637,7 @@
  },
  {
   "file": "mobile/src/screens/hadithSahih.tsx",
-  "line": 44,
+  "line": 42,
   "owner": "SahihPage",
   "key": "onPress",
   "label": "‹›‹›",
@@ -3650,7 +3650,7 @@
  },
  {
   "file": "mobile/src/screens/hadithSahih.tsx",
-  "line": 44,
+  "line": 42,
   "owner": "SahihPage",
   "key": "onPress",
   "label": "‹›‹›",
@@ -3663,7 +3663,7 @@
  },
  {
   "file": "mobile/src/screens/hadithSahih.tsx",
-  "line": 55,
+  "line": 53,
   "owner": "SahihPage",
   "key": "onOpen",
   "label": null,
@@ -3676,7 +3676,7 @@
  },
  {
   "file": "mobile/src/screens/hadithSahih.tsx",
-  "line": 57,
+  "line": 55,
   "owner": "SahihPage",
   "key": "onPress",
   "label": null,
@@ -3689,7 +3689,7 @@
  },
  {
   "file": "mobile/src/screens/hadithSahih.tsx",
-  "line": 83,
+  "line": 76,
   "owner": "InHadith",
   "key": "onPress",
   "label": "‹› · ‹›",
@@ -3702,7 +3702,7 @@
  },
  {
   "file": "mobile/src/screens/hadithSahih.tsx",
-  "line": 126,
+  "line": 113,
   "owner": "HadithSahihScreen",
   "key": "back",
   "label": null,
@@ -3715,7 +3715,7 @@
  },
  {
   "file": "mobile/src/screens/hadithUnit.tsx",
-  "line": 55,
+  "line": 53,
   "owner": "HadithUnitScreen",
   "key": "back",
   "label": null,
@@ -3728,7 +3728,7 @@
  },
  {
   "file": "mobile/src/screens/hadithUnit.tsx",
-  "line": 59,
+  "line": 57,
   "owner": "HadithUnitScreen",
   "key": "open",
   "label": null,
@@ -3756,7 +3756,7 @@
  },
  {
   "file": "mobile/src/screens/info.tsx",
-  "line": 108,
+  "line": 104,
   "owner": "InfoScreen",
   "key": "back",
   "label": null,
@@ -3771,7 +3771,7 @@
  },
  {
   "file": "mobile/src/screens/lataif.tsx",
-  "line": 31,
+  "line": 25,
   "owner": "LataifScreen",
   "key": "onPress",
   "label": null,
@@ -3784,7 +3784,7 @@
  },
  {
   "file": "mobile/src/screens/lataif.tsx",
-  "line": 34,
+  "line": 28,
   "owner": "LataifScreen",
   "key": "onPress",
   "label": null,
@@ -3797,7 +3797,7 @@
  },
  {
   "file": "mobile/src/screens/library.tsx",
-  "line": 95,
+  "line": 77,
   "owner": "LibraryScreen",
   "key": "{ cards, noteCards, savedItems, noteItems, openOf, openAyah, menus }",
   "label": null,
@@ -3810,7 +3810,7 @@
  },
  {
   "file": "mobile/src/screens/library.tsx",
-  "line": 95,
+  "line": 77,
   "owner": "LibraryScreen",
   "key": "{ cards, noteCards, savedItems, noteItems, openOf, openAyah, menus }",
   "label": null,
@@ -3823,7 +3823,7 @@
  },
  {
   "file": "mobile/src/screens/library.tsx",
-  "line": 95,
+  "line": 77,
   "owner": "LibraryScreen",
   "key": "{ cards, noteCards, savedItems, noteItems, openOf, openAyah, menus }",
   "label": null,
@@ -3836,7 +3836,7 @@
  },
  {
   "file": "mobile/src/screens/library.tsx",
-  "line": 95,
+  "line": 77,
   "owner": "LibraryScreen",
   "key": "{ cards, noteCards, savedItems, noteItems, openOf, openAyah, menus }",
   "label": null,
@@ -3849,7 +3849,7 @@
  },
  {
   "file": "mobile/src/screens/library.tsx",
-  "line": 138,
+  "line": 120,
   "owner": "LibraryScreen",
   "key": "onPress",
   "label": "افتح الآية في المصحف",
@@ -3862,7 +3862,7 @@
  },
  {
   "file": "mobile/src/screens/library.tsx",
-  "line": 151,
+  "line": 132,
   "owner": "LibraryScreen",
   "key": "back",
   "label": null,
@@ -3875,7 +3875,7 @@
  },
  {
   "file": "mobile/src/screens/life.tsx",
-  "line": 37,
+  "line": 33,
   "owner": "LifeScreen",
   "key": "back",
   "label": null,
@@ -3888,7 +3888,7 @@
  },
  {
   "file": "mobile/src/screens/nasab.tsx",
-  "line": 33,
+  "line": 31,
   "owner": "Box",
   "key": "onPress",
   "label": null,
@@ -3906,7 +3906,7 @@
  },
  {
   "file": "mobile/src/screens/nasab.tsx",
-  "line": 205,
+  "line": 163,
   "owner": "NasabScreen",
   "key": "back",
   "label": null,
@@ -3919,7 +3919,7 @@
  },
  {
   "file": "mobile/src/screens/oaths.tsx",
-  "line": 63,
+  "line": 58,
   "owner": "OathCard",
   "key": "onPress",
   "label": "افتح ‹› في المصحف",
@@ -3932,7 +3932,7 @@
  },
  {
   "file": "mobile/src/screens/openings.tsx",
-  "line": 74,
+  "line": 70,
   "owner": "OpeningRows",
   "key": "onPress",
   "label": "‹›:1",
@@ -3947,7 +3947,7 @@
  },
  {
   "file": "mobile/src/screens/person.tsx",
-  "line": 268,
+  "line": 214,
   "owner": "Names",
   "key": "onPress",
   "label": null,
@@ -3960,7 +3960,7 @@
  },
  {
   "file": "mobile/src/screens/person.tsx",
-  "line": 314,
+  "line": 251,
   "owner": "PersonScreen",
   "key": "showBattle",
   "label": null,
@@ -3973,7 +3973,7 @@
  },
  {
   "file": "mobile/src/screens/person.tsx",
-  "line": 323,
+  "line": 256,
   "owner": "PersonScreen",
   "key": "back",
   "label": null,
@@ -3986,7 +3986,7 @@
  },
  {
   "file": "mobile/src/screens/person.tsx",
-  "line": 326,
+  "line": 258,
   "owner": "PersonScreen",
   "key": "tree",
   "label": "شجرة النسب",
@@ -3999,7 +3999,7 @@
  },
  {
   "file": "mobile/src/screens/person.tsx",
-  "line": 370,
+  "line": 298,
   "owner": "PersonScreen",
   "key": "onPress",
   "label": null,
@@ -4012,7 +4012,7 @@
  },
  {
   "file": "mobile/src/screens/person.tsx",
-  "line": 392,
+  "line": 320,
   "owner": "PersonScreen",
   "key": "onPress",
   "label": "قارن حياته بغيره",
@@ -4025,7 +4025,7 @@
  },
  {
   "file": "mobile/src/screens/person.tsx",
-  "line": 403,
+  "line": 331,
   "owner": "PersonScreen",
   "key": "onPin",
   "label": null,
@@ -4038,7 +4038,7 @@
  },
  {
   "file": "mobile/src/screens/person.tsx",
-  "line": 405,
+  "line": 333,
   "owner": "PersonScreen",
   "key": "onPress",
   "label": null,
@@ -4051,7 +4051,7 @@
  },
  {
   "file": "mobile/src/screens/person.tsx",
-  "line": 414,
+  "line": 342,
   "owner": "PersonScreen",
   "key": "onPress",
   "label": "تنقّل في صلاته",
@@ -4064,7 +4064,7 @@
  },
  {
   "file": "mobile/src/screens/person.tsx",
-  "line": 415,
+  "line": 343,
   "owner": "PersonScreen",
   "key": "onPress",
   "label": "بينه وبين…",
@@ -4077,7 +4077,7 @@
  },
  {
   "file": "mobile/src/screens/person.tsx",
-  "line": 418,
+  "line": 346,
   "owner": "PersonScreen",
   "key": "onPick",
   "label": null,
@@ -4090,7 +4090,7 @@
  },
  {
   "file": "mobile/src/screens/person.tsx",
-  "line": 439,
+  "line": 365,
   "owner": "PersonScreen",
   "key": "onPress",
   "label": "‹›‹›",
@@ -4103,7 +4103,7 @@
  },
  {
   "file": "mobile/src/screens/person.tsx",
-  "line": 449,
+  "line": 374,
   "owner": "PersonScreen",
   "key": "onPress",
   "label": null,
@@ -4116,7 +4116,7 @@
  },
  {
   "file": "mobile/src/screens/prophets/slug.tsx",
-  "line": 9,
+  "line": 8,
   "owner": "ProphetScreen",
   "key": "back",
   "label": null,
@@ -4129,7 +4129,7 @@
  },
  {
   "file": "mobile/src/screens/quiz/party/code.tsx",
-  "line": 380,
+  "line": 360,
   "owner": "QuestionStage",
   "key": "onOpen",
   "label": null,
@@ -4142,7 +4142,7 @@
  },
  {
   "file": "mobile/src/screens/quiz/party/code.tsx",
-  "line": 421,
+  "line": 400,
   "owner": "QuestionStage",
   "key": "onOpen",
   "label": null,
@@ -4155,7 +4155,7 @@
  },
  {
   "file": "mobile/src/screens/quiz/party/code.tsx",
-  "line": 455,
+  "line": 434,
   "owner": "FinalResults",
   "key": "onOpen",
   "label": null,
@@ -4168,7 +4168,7 @@
  },
  {
   "file": "mobile/src/screens/quiz/party/index.tsx",
-  "line": 29,
+  "line": 28,
   "owner": "PartyStart",
   "key": "start",
   "label": "ابدأ",
@@ -4181,7 +4181,7 @@
  },
  {
   "file": "mobile/src/screens/quiz/party/index.tsx",
-  "line": 38,
+  "line": 37,
   "owner": "PartyStart",
   "key": "join",
   "label": "انضم",
@@ -4207,7 +4207,7 @@
  },
  {
   "file": "mobile/src/screens/quiz/play.tsx",
-  "line": 109,
+  "line": 107,
   "owner": "QuizPlay",
   "key": "onOpen",
   "label": null,
@@ -4220,7 +4220,7 @@
  },
  {
   "file": "mobile/src/screens/quiz/solo.tsx",
-  "line": 73,
+  "line": 64,
   "owner": "SoloSetup",
   "key": "start",
   "label": "ابدأ الاختبار",
@@ -4233,7 +4233,7 @@
  },
  {
   "file": "mobile/src/screens/quiz/solo.tsx",
-  "line": 88,
+  "line": 79,
   "owner": "SoloSetup",
   "key": "onPress",
   "label": "أكمله",
@@ -4246,7 +4246,7 @@
  },
  {
   "file": "mobile/src/screens/quizzes.tsx",
-  "line": 91,
+  "line": 76,
   "owner": "QuizzesScreen",
   "key": "five",
   "label": null,
@@ -4259,7 +4259,7 @@
  },
  {
   "file": "mobile/src/screens/quizzes.tsx",
-  "line": 108,
+  "line": 92,
   "owner": "QuizzesScreen",
   "key": "onPress",
   "label": "اختبار مخصص",
@@ -4272,7 +4272,7 @@
  },
  {
   "file": "mobile/src/screens/quizzes.tsx",
-  "line": 109,
+  "line": 93,
   "owner": "QuizzesScreen",
   "key": "onPress",
   "label": "اختبار جماعي",
@@ -4285,7 +4285,7 @@
  },
  {
   "file": "mobile/src/screens/quran.tsx",
-  "line": 20,
+  "line": 19,
   "owner": "QURAN_TILES",
   "key": null,
   "label": "المصحف",
@@ -4298,7 +4298,7 @@
  },
  {
   "file": "mobile/src/screens/quran.tsx",
-  "line": 21,
+  "line": 20,
   "owner": "QURAN_TILES",
   "key": null,
   "label": "متشابهات القرآن",
@@ -4311,7 +4311,7 @@
  },
  {
   "file": "mobile/src/screens/quran.tsx",
-  "line": 22,
+  "line": 21,
   "owner": "QURAN_TILES",
   "key": null,
   "label": "مقارنة السور",
@@ -4324,7 +4324,7 @@
  },
  {
   "file": "mobile/src/screens/quran.tsx",
-  "line": 23,
+  "line": 22,
   "owner": "QURAN_TILES",
   "key": null,
   "label": "قصص الأنبياء",
@@ -4337,7 +4337,7 @@
  },
  {
   "file": "mobile/src/screens/quran.tsx",
-  "line": 24,
+  "line": 23,
   "owner": "QURAN_TILES",
   "key": null,
   "label": "تحفة الأطفال",
@@ -4350,7 +4350,7 @@
  },
  {
   "file": "mobile/src/screens/quran.tsx",
-  "line": 25,
+  "line": 24,
   "owner": "QURAN_TILES",
   "key": null,
   "label": "ألفاظ القرآن",
@@ -4363,7 +4363,7 @@
  },
  {
   "file": "mobile/src/screens/quran.tsx",
-  "line": 26,
+  "line": 25,
   "owner": "QURAN_TILES",
   "key": null,
   "label": "الأقسام",
@@ -4376,7 +4376,7 @@
  },
  {
   "file": "mobile/src/screens/quran.tsx",
-  "line": 27,
+  "line": 26,
   "owner": "QURAN_TILES",
   "key": null,
   "label": "مشاهد",
@@ -4389,7 +4389,7 @@
  },
  {
   "file": "mobile/src/screens/quran.tsx",
-  "line": 28,
+  "line": 27,
   "owner": "QURAN_TILES",
   "key": null,
   "label": "مصطلحات البلاغة",
@@ -4402,7 +4402,7 @@
  },
  {
   "file": "mobile/src/screens/quran.tsx",
-  "line": 29,
+  "line": 28,
   "owner": "QURAN_TILES",
   "key": null,
   "label": "القراءات",
@@ -4415,7 +4415,7 @@
  },
  {
   "file": "mobile/src/screens/quran.tsx",
-  "line": 30,
+  "line": 29,
   "owner": "QURAN_TILES",
   "key": null,
   "label": "فواتح السور",
@@ -4428,7 +4428,7 @@
  },
  {
   "file": "mobile/src/screens/quran.tsx",
-  "line": 31,
+  "line": 30,
   "owner": "QURAN_TILES",
   "key": null,
   "label": "ترتيب السور",
@@ -4441,7 +4441,7 @@
  },
  {
   "file": "mobile/src/screens/stories.tsx",
-  "line": 35,
+  "line": 34,
   "owner": "StoryRow",
   "key": "onPress",
   "label": null,
@@ -4454,7 +4454,7 @@
  },
  {
   "file": "mobile/src/screens/stories.tsx",
-  "line": 57,
+  "line": 55,
   "owner": "ChapterCard",
   "key": "onPress",
   "label": null,
@@ -4467,7 +4467,7 @@
  },
  {
   "file": "mobile/src/screens/story.tsx",
-  "line": 77,
+  "line": 68,
   "owner": "HadithOpen",
   "key": "onPress",
   "label": "افتح ‹›",
@@ -4484,7 +4484,7 @@
  },
  {
   "file": "mobile/src/screens/tarajim.tsx",
-  "line": 49,
+  "line": 43,
   "owner": "TarajimScreen",
   "key": "onPress",
   "label": "كل التراجم",
@@ -4497,7 +4497,7 @@
  },
  {
   "file": "mobile/src/screens/tarajim.tsx",
-  "line": 52,
+  "line": 46,
   "owner": "TarajimScreen",
   "key": "onPress",
   "label": "قصص السيرة",
@@ -4510,7 +4510,7 @@
  },
  {
   "file": "mobile/src/screens/tarajim.tsx",
-  "line": 53,
+  "line": 47,
   "owner": "TarajimScreen",
   "key": "onPress",
   "label": "الغزوات والمعارك",
@@ -4523,7 +4523,7 @@
  },
  {
   "file": "mobile/src/screens/tarajim.tsx",
-  "line": 54,
+  "line": 48,
   "owner": "TarajimScreen",
   "key": "onPress",
   "label": "الأطلس",
@@ -4536,7 +4536,7 @@
  },
  {
   "file": "mobile/src/screens/tarajim.tsx",
-  "line": 58,
+  "line": 52,
   "owner": "TarajimScreen",
   "key": "onPress",
   "label": "النسب",
@@ -4549,7 +4549,7 @@
  },
  {
   "file": "mobile/src/screens/tarajim.tsx",
-  "line": 59,
+  "line": 53,
   "owner": "TarajimScreen",
   "key": "onPress",
   "label": "بين عدة أشخاص",
@@ -4562,7 +4562,7 @@
  },
  {
   "file": "mobile/src/screens/tarajim.tsx",
-  "line": 60,
+  "line": 54,
   "owner": "TarajimScreen",
   "key": "onPress",
   "label": "حياتهم جنبًا إلى جنب",
@@ -4575,7 +4575,7 @@
  },
  {
   "file": "mobile/src/screens/ties.tsx",
-  "line": 37,
+  "line": 31,
   "owner": "TiesScreen",
   "key": "back",
   "label": null,
@@ -4588,7 +4588,7 @@
  },
  {
   "file": "mobile/src/screens/ties.tsx",
-  "line": 58,
+  "line": 50,
   "owner": "TiesScreen",
   "key": "onPress",
   "label": "ترجمته",
@@ -4601,7 +4601,7 @@
  },
  {
   "file": "mobile/src/screens/ties.tsx",
-  "line": 59,
+  "line": 51,
   "owner": "TiesScreen",
   "key": "onPress",
   "label": "النسب",
@@ -4614,7 +4614,7 @@
  },
  {
   "file": "mobile/src/screens/ties.tsx",
-  "line": 60,
+  "line": 52,
   "owner": "TiesScreen",
   "key": "onPress",
   "label": "بينه وبين…",
@@ -4627,7 +4627,7 @@
  },
  {
   "file": "mobile/src/screens/ties.tsx",
-  "line": 68,
+  "line": 60,
   "owner": "TiesScreen",
   "key": "onPress",
   "label": null,
@@ -4640,7 +4640,7 @@
  },
  {
   "file": "mobile/src/screens/ties.tsx",
-  "line": 77,
+  "line": 69,
   "owner": "TiesScreen",
   "key": "onPress",
   "label": null,
@@ -4653,7 +4653,7 @@
  },
  {
   "file": "mobile/src/screens/words.tsx",
-  "line": 57,
+  "line": 49,
   "owner": "WordsScreen",
   "key": "onPress",
   "label": "‹›، ‹› مرة",
@@ -4666,7 +4666,7 @@
  },
  {
   "file": "mobile/src/ui/TabBar.tsx",
-  "line": 76,
+  "line": 63,
   "owner": "TabBar",
   "key": "press",
   "label": null,
@@ -4677,7 +4677,7 @@
  },
  {
   "file": "mobile/src/ui/TabBar.tsx",
-  "line": 76,
+  "line": 63,
   "owner": "TabBar",
   "key": "press",
   "label": null,
@@ -4688,7 +4688,7 @@
  },
  {
   "file": "mobile/src/ui/TopBar.tsx",
-  "line": 81,
+  "line": 50,
   "owner": "TopBar",
   "key": "onPress",
   "label": "أدوات القرآن",
@@ -4750,7 +4750,7 @@
  },
  {
   "file": "mobile/src/ui/TopBar.tsx",
-  "line": 84,
+  "line": 53,
   "owner": "TopBar",
   "key": "onPress",
   "label": "المكتبة",
@@ -4812,7 +4812,7 @@
  },
  {
   "file": "mobile/src/ui/TopBar.tsx",
-  "line": 107,
+  "line": 70,
   "owner": "TopBar",
   "key": "onPress",
   "label": "الصفحة الرئيسية",

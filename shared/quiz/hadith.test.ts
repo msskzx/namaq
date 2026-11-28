@@ -45,7 +45,6 @@ describe('the hadith quizzes', () => {
     for (const question of [...narrator, ...complete]) {
       expect(question.choices).toHaveLength(4);
       expect(new Set(question.choices.map(choice => bare(choice.labelArabic))).size).toBe(4);
-      // The record the saying is quoted from, then the entry that holds it (al-Nawawi's, or Ibn Rajab's addition).
       expect(question.sources[0].book).toBe('صحيح البخاري');
       expect(['الأربعون النووية', 'جامع العلوم والحكم']).toContain(question.sources[1].book);
     }
@@ -58,8 +57,6 @@ describe('the hadith quizzes', () => {
       expect(right(question)).toBe(entry.companion);
       expect(bare(question.promptArabic)).not.toContain(bare(entry.companion));
       for (const other of entry.alsoFrom ?? []) expect(question.choices.map(choice => choice.labelArabic)).not.toContain(other);
-      // Once answered, each Companion offered says which hadith of the Forty al-Bukhari has from him (owner, 2026-11-22),
-      // and al-Bukhari's records of them are among the sources.
       for (const choice of question.choices) {
         const his = FORTY.entries.flatMap(item => (bare(item.companion) === bare(choice.labelArabic) ? item.records.filter(record => record.book === 'bukhari').map(record => ({ item, record })) : []));
         const line = question.whereOf?.[choice.value] ?? '';
@@ -78,7 +75,6 @@ describe('the hadith quizzes', () => {
     for (const question of complete) {
       expect(question.promptArabic.endsWith('…»')).toBe(true);
       expect(bare(question.promptArabic)).not.toContain(bare(right(question)));
-      // Under each wrong ending, the record it closes (owner, 2026-11-22), and that record among the sources.
       for (const choice of question.choices.filter(item => item.value !== question.correctAnswer)) {
         const line = question.whereOf?.[choice.value];
         const record = FORTY.entries.flatMap(entry => entry.records).find(each => line === `آخر ${recordName(each, num)}`);
@@ -231,18 +227,15 @@ describe('«من حدّث به؟»', () => {
         expect(told).not.toContain(plain(choice.labelArabic));
         expect(choice.labelArabic).not.toMatch(/^أبي$/);
       }
-      // Never «أبي» («my father») as an answer, nor the right man twice under two names («الأعمش» and «سليمان الأعمش»).
       expect(question.choices.map(choice => choice.labelArabic)).not.toContain('أبي');
       const shortNames = question.choices.map(choice => plain(choice.labelArabic).split(' ').filter(word => !/^(?:بن|ابن|ابو|ابي)$/.test(word)));
       for (const [i, a] of shortNames.entries()) for (const b of shortNames.slice(i + 1)) expect(a.every(word => b.includes(word)) || b.every(word => a.includes(word)), question.key).toBe(false);
-      // No case ending in the chain or the choices tells the place.
       expect(question.promptArabic.split('\n')[1] + question.choices.map(choice => choice.labelArabic).join(' ')).not.toMatch(/[ً-ْ]/);
     }
   });
 });
 
 describe('the words on an isnad line', () => {
-  // Owner, 2026-11-21: the exact words as printed, «قال» with them where the print has it.
   it('keeps «قَالَ:» before the word of transmission where al-Bukhari prints it', () => {
     const record = FORTY.entries[0].records.find(each => each.book === 'bukhari' && each.number === 54)!;
     expect(record.isnad!.edges.map(edge => bare(edge.label))).toEqual(['حدثنا', 'قال: أخبرنا', 'عن', 'عن', 'عن', 'عن']);
@@ -261,7 +254,6 @@ describe('«الشاهد» of «من راوي الحديث؟»', () => {
   it('is given for every narrator question, and stops before the saying', () => {
     for (const question of narrator) {
       expect(question.witness).toBeDefined();
-      // It ends at the Companion's «رضي الله عنه», before a word of the saying.
       expect(question.witness!.text).toMatch(/رضي الله (تعالى )?عن(ه|ها|هما)$/);
     }
   });

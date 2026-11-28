@@ -2,28 +2,16 @@ import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from '
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
-/**
- * Shared first (owner, 2026-11-17): every control and every framed box is drawn by one shared piece, and screens only
- * arrange shared pieces. A screen that needs something new adds an option to the shared piece, or builds a new shared
- * piece there; it never draws its own. The shared folders are mobile/src/ui/ (app) and src/components/common/ (website).
- * The plan and the inventory are in docs/plans/shared-first.md.
- *
- * sharedFirst.baseline.json lists today's breaks, counted per file. The checks fail when a file draws MORE than its listed
- * count (or a new file draws any), and when a file draws fewer (lower its count), so the list only shrinks.
- * `UPDATE_BASELINE=1 npx vitest run sharedFirst` rewrites it; only do that after moving a screen onto a shared piece,
- * never to let a new break in.
- */
+// see docs/plans/shared-first.md
 const ROOT = join(__dirname, '..');
 const BASELINE = join(__dirname, 'sharedFirst.baseline.json');
 
 const APP_SHARED = 'mobile/src/ui/';
 const WEB_SHARED = 'src/components/common/';
-/** Files whose rounded shapes are the content, not a frame: tree nodes and curves, the mushaf page, videos, theme swatches. */
 const DRAWINGS = [
   'mobile/src/components/BranchTree.tsx',
   'mobile/src/components/TreeCard.tsx',
   'mobile/src/components/MushafPageView.tsx',
-  // The page's hidden-word and write boxes, moved out of MushafPageView into the Quran module: each is a word's own shape.
   'mobile/src/components/quran/text/WriteBoxes.tsx',
   'mobile/src/components/ThemeTiles.tsx',
   'mobile/src/lib/treeVideo.ts',
@@ -39,13 +27,11 @@ function walk(dir: string, keep: (name: string) => boolean): string[] {
   });
 }
 
-/** Comments name the rule without breaking it. */
 const withoutComments = (text: string) => text.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|\s)\/\/.*$/gm, '$1');
 const notTest = (name: string) => !/\.test\.tsx?$/.test(name);
 const read = (path: string) => withoutComments(readFileSync(join(ROOT, path), 'utf8'));
 const count = (text: string, pattern: RegExp) => text.match(pattern)?.length ?? 0;
 
-/** The opening tags `<Name ...>` in a file, each up to its closing `>` (props may hold braces and arrows). */
 function openingTags(text: string, name: string): string[] {
   const tags: string[] = [];
   const start = new RegExp(`<${name}\\b`, 'g');
@@ -66,10 +52,6 @@ function openingTags(text: string, name: string): string[] {
   return tags;
 }
 
-/**
- * Every `{ ... }` group (style objects among them) with its nested groups taken out, so each group shows only its own
- * props: a style holding `transform: [{ ... }]` or `${palette.rule}55` still reads as one object.
- */
 function objects(text: string): string[] {
   const found: string[] = [];
   const open: string[][] = [];
@@ -81,22 +63,17 @@ function objects(text: string): string[] {
   return found;
 }
 
-// ---- App ----------------------------------------------------------------------------------------------------------
 
-/** Drawing primitives: a screen that imports one is drawing its own control, sheet, field, loader or bar. */
 const PRIMITIVES: Record<string, RegExp> = {
   'react-native': /^(Pressable|Touchable\w*|Modal|TextInput|Switch|ActivityIndicator)$/,
   'react-native-gesture-handler': /^(Pressable|Touchable\w*|RectButton|BorderlessButton)$/,
   'expo-blur': /^BlurView$/,
-  // The shared press (ui/Tap) is a raw tap area: a screen drawing one is still drawing its own control.
   '@/ui/Tap': /^Tap$/,
 };
 
-/** The local names a file gives the primitives it imports (aliases, multi-line imports, `import * as`, require). */
 function primitiveNames(text: string): string[] {
   const names: string[] = [];
   for (const [from, primitive] of Object.entries(PRIMITIVES)) {
-    // The shared press is caught by any path to it ('@/ui/Tap', '../ui/Tap', './Tap'), not only the alias.
     const source = from === '@/ui/Tap' ? `(?:[^'"]*/ui|\\.)/Tap` : from.replace(/[-/]/g, '\\$&');
     const named = new RegExp(`import\\s+(?:type\\s+)?(?:\\w+\\s*,\\s*)?\\{([^}]*)\\}\\s*from\\s*['"]${source}['"]`, 'g');
     const required = new RegExp(`(?:const|let|var)\\s*\\{([^}]*)\\}\\s*=\\s*require\\(\\s*['"]${source}['"]\\s*\\)`, 'g');
@@ -116,7 +93,6 @@ function primitiveNames(text: string): string[] {
   return names;
 }
 
-/** Plain text, boxes and gestures made tappable: the same control, drawn without a primitive. */
 const TAP_PROPS = /\son(Press|LongPress|PressIn|PressOut|Responder\w+|StartShouldSetResponder\w*|MoveShouldSetResponder\w*)\s*=/;
 
 function appControls(text: string): number {
@@ -126,18 +102,15 @@ function appControls(text: string): number {
   return drawn + tappable + gestures;
 }
 
-/** A framed box: rounded corners together with a border or the card colour. Literal radii count too: radii come from ui/. */
 const RADIUS = /\bborder\w*Radius\s*:|\.\.\.\s*CARD\b|\.radius\b/;
 const FRAME = /\bborder\w*Width\s*:|\bborder\w*Color\s*:|backgroundColor\s*:\s*palette\.(card|paperDeep)\b/;
 const LITERAL_RADIUS = /\bborder\w*Radius\s*:\s*\d/g;
 
-/** One per framed box; otherwise one per literal radius. */
 const appBoxes = (text: string) =>
   objects(text).reduce((sum, object) => sum + (RADIUS.test(object) && FRAME.test(object) ? 1 : count(object, LITERAL_RADIUS)), 0);
 
 const appFiles = walk('mobile/src', name => /\.tsx?$/.test(name) && notTest(name)).filter(path => !path.startsWith(APP_SHARED));
 
-// ---- Website ------------------------------------------------------------------------------------------------------
 
 const WEB_CONTROLS = [
   /<(button|input|select|textarea|dialog|summary)\b/g,
@@ -160,7 +133,6 @@ function webBoxes(path: string, text: string): number {
 
 const webFiles = walk('src', name => /\.(tsx?|css)$/.test(name) && notTest(name)).filter(path => !path.startsWith(WEB_SHARED));
 
-// ---- Counts -------------------------------------------------------------------------------------------------------
 
 type Counts = Record<string, number>;
 function tally(files: string[], measure: (path: string, text: string) => number): Counts {
@@ -173,13 +145,9 @@ function tally(files: string[], measure: (path: string, text: string) => number)
 }
 
 const breaks = {
-  /** App: a control (button, sheet, field, switch, loader, blurred bar, tappable text or box) drawn outside mobile/src/ui/. */
   appControls: tally(appFiles, (_, text) => appControls(text)),
-  /** App: a framed box or a literal radius outside mobile/src/ui/ (cards and boxes come from there). */
   appBoxes: tally(appFiles.filter(path => !DRAWINGS.includes(path)), (_, text) => appBoxes(text)),
-  /** Website: a raw control, dialog, popover, portal, fixed overlay or clickable div outside src/components/common/. */
   webControls: tally(webFiles, webControls),
-  /** Website: rounded corners set outside src/components/common/. */
   webBoxes: tally(webFiles, webBoxes),
 };
 

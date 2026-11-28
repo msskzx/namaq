@@ -1,8 +1,4 @@
-/**
- * The ten readers and their twenty riwayat, and the word differences (farsh) of each ayah from Quranpedia's qira'at
- * dump (scripts/quran/buildQiraat.ts); the data itself is read through qiraatData.ts, so pages that only show names
- * do not carry it. docs/plans/quran-qiraat.md
- */
+// see docs/plans/quran-qiraat.md
 export const READERS = [
   { id: 'nafi', name: 'نافع' },
   { id: 'ibn-kathir', name: 'ابن كثير' },
@@ -18,7 +14,6 @@ export const READERS = [
 
 export type ReaderId = (typeof READERS)[number]['id'];
 
-/** In the dump's order: a riwaya's number there is its place here plus one. */
 export const RIWAYAT = [
   { id: 'qalun', name: 'قالون', reader: 'nafi' },
   { id: 'warsh', name: 'ورش', reader: 'nafi' },
@@ -44,18 +39,11 @@ export const RIWAYAT = [
 
 export type RiwayaId = (typeof RIWAYAT)[number]['id'];
 
-/** One reading of a word: its text and the riwayat (numbered 1-20 as in RIWAYAT) that read it. The first is Hafs. */
 export type WordReading = { text: string; rawis: number[] };
-/** A word (or short phrase) of the ayah, by its first and last word index in the Hafs text, and how it is read. */
 export type WordDifference = { at: [number, number]; readings: WordReading[] };
 
 export const QIRAAT_SOURCE = { name: 'الموسوعة القرآنية', url: 'https://quranpedia.net' };
 
-/**
- * Who reads a reading, by name: a reader when both of his riwayat are in it, otherwise the riwaya. The biggest reading
- * of a word is «الباقون» when it holds exactly the riwayat no other reading names (unless `sayRest` is false: a quiz names them all). A
- * riwaya with two ways is named in both.
- */
 export function whoReads(reading: WordReading, all: WordReading[], sayRest = true): string {
   const others = new Set(all.filter(r => r !== reading).flatMap(r => r.rawis));
   const biggest = all.reduce((p, r) => (r.rawis.length > p.rawis.length ? r : p), all[0]);
@@ -72,11 +60,6 @@ export function whoReads(reading: WordReading, all: WordReading[], sayRest = tru
   return names.join('، ');
 }
 
-/**
- * The readers both of whose riwayat read a word one way, and none of them another (owner 2026-11-19): where a riwaya reads it
- * both ways (al-Bazzi at 10:16) a single reading would be half right, so that reader is not asked about it. Each with the
- * reading he reads (its place in `readings`).
- */
 export function wholeReaders(readings: WordReading[]): { reader: number; reading: number }[] {
   return READERS.flatMap((reader, i) => {
     const own = RIWAYAT.flatMap((riwaya, n) => (riwaya.reader === reader.id ? [n + 1] : []));

@@ -14,10 +14,7 @@ export type TopicOpen = { surah: number; section: number };
 
 const range = (s: TopicSection) => (s.from === undefined ? '' : s.from === s.to ? num(s.from) : `${num(s.from)}–${num(s.to!)}`);
 
-/**
- * A surah's topics (docs/plans/surah-topics.md): al-Biqa'i's aim of the surah in his words, then the sections the Sharjah
- * topical tafsir divides it into, the one tapped in the accent colour. A row opens its first ayah.
- */
+// see docs/plans/surah-topics.md
 export default function TopicSheet({ open, onClose, onJump, palette }: { open: TopicOpen | null; onClose: () => void; onJump: (surah: number, ayah: number) => void; palette: Palette }) {
   const topics = open ? surahTopicsOf(open.surah) : null;
   const aim = open ? surahAim(open.surah) : undefined;

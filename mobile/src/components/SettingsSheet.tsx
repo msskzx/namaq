@@ -18,12 +18,9 @@ import { InterestsSetting } from './Interests';
 import { PEN_NAMES, PenSetting } from './recite/PenSetting';
 import type { Palette } from '@/lib/theme';
 
-/** The tour opens once the sheet has slid away: iOS cannot show it over a sheet that is still closing. Each page's first-visit tip comes back with it. */
 const REPLAY_AFTER = 400;
 
-/** The website's settings sheet (src/components/common/TabBar.tsx): the look, the branches view, the mushaf touches, the books, then About, the sources and their licences, and Privacy, each a page of the app. */
 export default function SettingsSheet({ open, onClose, palette }: { open: boolean; onClose: () => void; palette: Palette }) {
-  // The app's own pages (screens/info.tsx), offline, not the website's (owner, 2026-11-18).
   const links = [
     { href: '/about' as const, label: 'عن نمق', icon: <Logo size={22} /> },
     { href: '/attributions' as const, label: 'المصادر والتراخيص', icon: <BookOpen size={20} color={palette.ink} /> },
@@ -39,7 +36,6 @@ export default function SettingsSheet({ open, onClose, palette }: { open: boolea
   const mushafLabel = [spread ? 'صفحتان حين يُمال الجهاز' : 'صفحة واحدة', beside ? 'المقارنة جنبًا إلى جنب' : 'المقارنة بعضها تحت بعض'].join(' · ');
   return (
     <Sheet open={open} onClose={onClose} palette={palette}>
-      {/* The preview stays at the top while the groups scroll under it (owner, 2026-11-24). */}
       <ScrollView stickyHeaderIndices={[1]} contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 16, gap: 14 }}>
         <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 18, fontWeight: '700' }}>الإعدادات</Text>
         <View style={{ backgroundColor: palette.paper, paddingBottom: 4 }}><LookPreview palette={palette} /></View>
@@ -90,7 +86,6 @@ export default function SettingsSheet({ open, onClose, palette }: { open: boolea
   );
 }
 
-/** The website's BranchConnectorSetting. */
 function ConnectorsSetting({ palette }: { palette: Palette }) {
   const [on, setOn] = connectors.use();
   return (
@@ -101,19 +96,16 @@ function ConnectorsSetting({ palette }: { palette: Palette }) {
   );
 }
 
-/** The website's BranchAroundSetting: how a card opens; each card's own button switches it there. */
 function AroundSetting({ palette }: { palette: Palette }) {
   const [on, setOn] = around.use();
   return <Toggle on={on} onChange={setOn} label="إظهار الآيات المحيطة افتراضيًا" palette={palette} />;
 }
 
-/** How a compare card's matrix opens; each card's own button switches it there. */
 function BesideSetting({ palette }: { palette: Palette }) {
   const [on, setOn] = besideLayout.use();
   return <Toggle on={on} onChange={setOn} label="عرض آيات المقارنة جنبًا إلى جنب افتراضيًا" palette={palette} />;
 }
 
-/** Only a tablet turns, so only a tablet asks (owner, 2026-11-23). */
 function SpreadSetting({ palette }: { palette: Palette }) {
   const [on, setOn] = mushafSpread.use();
   const { width, height } = useWindowDimensions();

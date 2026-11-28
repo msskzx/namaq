@@ -61,9 +61,9 @@ describe("al-Raghib's al-Mufradat", () => {
 
   it('links the right word in an ayah the page spaces otherwise («بَعۡدَ مَا» in 2:181)', () => {
     const heading = (word: number) => mufradatOf(mufradat, '2:181', word)?.[0].replace(/[\u064B-\u0652]/g, '');
-    expect(heading(4)).toBe('سمع'); // «سَمِعَهُۥ»
-    expect(heading(12)).toBe('سمع'); // «سَمِيعٌ»
-    expect(heading(13)).toBe('علم'); // «عَلِيمٌ»
+    expect(heading(4)).toBe('سمع');
+    expect(heading(12)).toBe('سمع');
+    expect(heading(13)).toBe('علم');
   });
 
   it('has nothing for a word with no root («مِنَ»)', () => {
@@ -82,8 +82,6 @@ describe("a word's meanings on the words page", () => {
   });
 
   it('puts an entry quoting a phrase on the page of the word he explains, and one explaining the phrase whole «في عبارة»', () => {
-    // «﴿وَالنَّخْلَ بَاسِقَاتٍ﴾ أي طوالا» explains باسقات alone: on its page, never on نخل's. «﴿أَعْجَازُ نَخْلٍ﴾ أي أصولُ نخل» explains
-    // the phrase whole: on نخل's page and أعجاز's under «في عبارة», never as either word's own meaning.
     const nakhl = gharibOfPlaces(gharib, marks, placesOfWord('نَخۡل'));
     expect(nakhl.some(entry => entry.text.includes('أي طوالا'))).toBe(false);
     expect(nakhl.filter(entry => !entry.phrase)).toEqual([]);
@@ -93,7 +91,6 @@ describe("a word's meanings on the words page", () => {
   });
 
   it("lists a word's own meanings before the phrases it is in, a phrase across two ayat too", () => {
-    // «﴿فَهَبْ لِي مِنْ لَدُنْكَ وَلِيًّا * يَرِثُنِي﴾ يعني الولد» explains the phrase whole, though at 19:6 it quotes يرثني alone.
     const found = gharibOfPlaces(gharib, marks, placesOfWord('أَجۡر'));
     const first = found.findIndex(entry => entry.phrase);
     expect(first).toBeGreaterThan(0);
@@ -124,7 +121,6 @@ describe("a word's meanings on the words page", () => {
   });
 
   it("gives al-Raghib's one article on the root of «نَخۡل» and of «نَّخِيل», a stray link outvoted", () => {
-    // In 2:181 the link for «سَمِيعٌ» lands on أله, one of 47 places of «سَمِيع».
     expect(mufradatOfPlaces(mufradat, placesOfWord('سَمِيع')).map(article => article[0].replace(/[\u064B-\u0652]/g, ''))).toEqual(['سمع']);
     expect(mufradatOfPlaces(mufradat, placesOfWord('نَخۡل')).map(article => article[0].replace(/[\u064B-\u0652]/g, ''))).toEqual(['نخل']);
     expect(mufradatOfPlaces(mufradat, placesOfWord('نَّخِيل')).map(article => article[0].replace(/[\u064B-\u0652]/g, ''))).toEqual(['نخل']);
