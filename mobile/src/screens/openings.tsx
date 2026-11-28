@@ -22,6 +22,7 @@ import { Tap } from '@/ui/Tap';
 import Chip from '@/ui/Chip';
 import Empty from '@/ui/Empty';
 import Folded from '@/ui/Folded';
+import { useLater } from '@/lib/hooks/useLater';
 
 const words = (key: string) => ayahOf(key)?.words ?? [];
 
@@ -112,13 +113,14 @@ export default function OpeningsScreen() {
   const kinds = OPENING_KINDS.filter(k => (!kind || k.id === kind) && shown(k.id).length > 0);
   const { at } = useLocalSearchParams<{ at?: string }>();
   const atKind = cards.find(card => card.id === at)?.kind;
+  const later = useLater();
   const place = useRef<{ kind?: number; card?: number; done?: boolean }>({});
   const placed = (part: 'kind' | 'card', y: number) => {
     place.current[part] = y;
     const { kind: top, card, done } = place.current;
     if (done || top === undefined || card === undefined) return;
     place.current.done = true;
-    requestAnimationFrame(() => scroll.current?.scrollTo({ y: top + card, animated: false }));
+    later.nextFrame(() => scroll.current?.scrollTo({ y: top + card, animated: false }));
   };
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>

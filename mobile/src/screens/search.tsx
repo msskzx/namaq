@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ComponentRef } from 'react';
+import { useRef, useState, type ComponentRef } from 'react';
 import { ScrollView, View } from 'react-native';
 import type { AppKind as SearchKind } from '@/lib/searchAll';
 import TopBar from '@/ui/TopBar';
@@ -9,6 +9,7 @@ import { useTabRetap } from '@/lib/tabRetap';
 import { back } from '@/lib/ways';
 import { usePalette } from '@/lib/theme';
 import { SearchResults, useAppSearch } from '@/components/SearchResults';
+import { useAdjustOn } from '@/lib/hooks/useAdjustOn';
 
 // see docs/plans/search-everything.md
 export default function SearchScreen() {
@@ -20,7 +21,7 @@ export default function SearchScreen() {
   const [query, setQuery] = useState('');
   const [open, setOpen] = useState<SearchKind | null>(null);
   useTabRetap('search', () => { if (top.current > 4) scroll.current?.scrollTo({ y: 0, animated: true }); else setQuery(''); });
-  useEffect(() => { setOpen(null); }, [query]);
+  useAdjustOn([query], () => setOpen(null));
   const { found, waiting } = useAppSearch(query);
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>

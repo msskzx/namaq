@@ -113,3 +113,36 @@ types, but the import no longer says what it is. Each got its `type` mark back. 
   This is the pattern from the talk: when every screen writes its own effect, every screen gets its own bug.
 - **Fix:** one hook, `useWebScrollEnd`, with a test that it does not fire after unmount. Lint now rejects a raw
   `setTimeout` in a screen, so a sixth copy cannot be written.
+
+## A frame with the old state (step 7, screens)
+
+- **Where:** `screens/quran.tsx` and `screens/search.tsx`, and every screen that read a route param.
+- **Wrong:** `useEffect(() => { setOpen(null); }, [query])`. The effect runs after the screen has drawn.
+- **Effect:** each new letter typed drew the new results under the old open group for one frame, then drew
+  again. The atlas opened from a link (`/atlas?year=5`) drew one frame of its first year before the linked one,
+  and `/order?juz=…` and `/people?title=…` did the same when a new link arrived while the screen was open.
+- **Found by:** `react-hooks/set-state-in-effect`, frozen in the baseline since step 7.
+- **Fix:** `useAdjustOn([query], () => setOpen(null))` sets the state while rendering, so the first frame is
+  already right. Only the work React cannot do while rendering (scrolling, clearing the route params) stays
+  after the draw, in `useOnChange`.
+
+## Timers that outlived their screen (step 7, screens)
+
+- **Where:** `screens/oaths.tsx` (a retry after a failed scroll and the first scroll), `screens/openings.tsx`,
+  `app/(tabs)/(home)/index.tsx` (the refresh spinner), `screens/quiz/solo.tsx`, `screens/tree-sizes.tsx`.
+- **Wrong:** `setTimeout` and `requestAnimationFrame` called from a handler or a layout callback, with nothing
+  keeping the id.
+- **Effect:** leaving the screen in the 50 to 400 ms before the timer fired still ran it: a scroll on a list
+  that was gone, a state change on an unmounted screen.
+- **Found by:** `no-restricted-globals`, frozen in the baseline since step 7.
+- **Fix:** `useLater()`. A screen holds one slot: a new job replaces the waiting one, and the slot is cleared
+  when the screen closes.
+
+## A read that failed without a word (step 7, screens)
+
+- **Where:** `screens/ayah.tsx`, al-Kashshaf's text on the ayah page.
+- **Wrong:** `void readBook('kashshaf').then(…)` inside an effect, with a hand-written `live` flag.
+- **Effect:** a failed read of the downloaded book left the section empty and reported nothing.
+- **Found by:** `quality/no-raw-effects`, frozen in the baseline since step 7.
+- **Fix:** `useLoaded(kashshafOn ? 'kashshaf' : null, …)`, which keeps the `live` check in one place and sends a
+  failure to `reportError`.

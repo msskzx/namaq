@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { FlatList, View } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { Text } from '@/ui/Text';
@@ -16,6 +16,8 @@ import { READERS, RIWAYAT, type ReaderId } from '@shared/quran/qiraat';
 import { filterName, filterRawis, qiraatPlaces, riwayatOf, type QiraatFilter } from '@shared/quran/qiraatPlaces';
 import { surahName } from '@shared/quran/surahNames';
 import QiraatPlace from '@/components/QiraatPlace';
+import { useAdjustOn } from '@/lib/hooks/useAdjustOn';
+import { useOnChange } from '@/lib/hooks/useOnChange';
 
 type Row = { kind: 'surah'; surah: number } | { kind: 'place'; key: string; words: number[] };
 
@@ -34,13 +36,13 @@ export default function QiraatScreen() {
   const mark = filterRawis(filter);
   const reader = (id: ReaderId | undefined) => { setFrom(undefined); setFilter(id ? { reader: id } : {}); };
   const [from, setFrom] = useState<string | undefined>(ayah);
-  useEffect(() => {
+  useAdjustOn([ayah, at], () => {
     if (!ayah) return;
     setFilter({});
     setQuery('');
     setFrom(ayah);
-    list.current?.scrollToOffset({ offset: 0, animated: false });
-  }, [ayah, at]);
+  });
+  useOnChange([ayah, at], () => { if (ayah) list.current?.scrollToOffset({ offset: 0, animated: false }); });
   const start = from ? rows.findIndex(row => row.kind === 'place' && row.key === from) : -1;
   const shown = start > 0 ? rows.slice(rows[start - 1].kind === 'surah' ? start - 1 : start) : rows;
   const head = (

@@ -5,6 +5,7 @@ import BranchTree, { type Direction, type NodeActions } from '@/components/Branc
 import { aroundOf, cardOf, surahNames, treeList } from '@/lib/branches';
 import { sizeKey, type Shipped } from '@/lib/treeSizes';
 import { light } from '@/lib/theme';
+import { useLater } from '@/lib/hooks/useLater';
 
 const BATCH = 8;
 const DIRECTIONS: Direction[] = ['side', 'down'];
@@ -13,6 +14,7 @@ const ACTIONS: NodeActions = { onSubtree: () => {} };
 export default function TreeSizesScreen() {
   const pieces = useMemo(() => treeList().filter(piece => piece.keys.length > 1), []);
   const [at, setAt] = useState(0);
+  const later = useLater();
   const sizes = useRef<Record<string, Shipped>>({});
   const left = useRef(0);
   const batch = pieces.slice(at, at + BATCH);
@@ -28,7 +30,7 @@ export default function TreeSizesScreen() {
     sizes.current[key] = entry;
     left.current -= 1;
     if (left.current > 0) return;
-    if (at + BATCH < pieces.length) setTimeout(() => setAt(at + BATCH), 0);
+    if (at + BATCH < pieces.length) later.after(0, () => setAt(at + BATCH));
     else (globalThis as { treeSizes?: Record<string, Shipped> }).treeSizes = sizes.current;
   };
 

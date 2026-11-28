@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { View } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { atlasPins, battlesAt, layerBattles, layerOf, LAYERS, lifeYears, screenBox, type AtlasLayer } from '@shared/battles/atlas';
@@ -18,6 +18,7 @@ import OpenButton from '@/ui/OpenButton';
 import QuoteBar from '@/ui/QuoteBar';
 import EdgeBar from '@/ui/EdgeBar';
 import DrawerSheet from '@/ui/DrawerSheet';
+import { useAdjustOn } from '@/lib/hooks/useAdjustOn';
 import SourceLine, { sourcesOf } from '@/ui/SourceLine';
 import { usePalette, type Palette } from '@/lib/theme';
 import { useTabBarSpace } from '@/ui/tabBarSpace';
@@ -101,7 +102,7 @@ export default function AtlasScreen() {
   const [year, setYear] = useState(years[0]);
   const [query, setQuery] = useState('');
   const [sheet, setSheet] = useState<AppBattle[]>([]);
-  useEffect(() => {
+  useAdjustOn([params.layer, params.year, params.place, params.at, years], () => {
     setQuery('');
     const at = params.place ? BATTLES.find(battle => battle.place?.name === params.place) : undefined;
     const toLayer = at ? layerOf(at) : params.layer === 'after' ? 'after' : params.year ? 'life' : undefined;
@@ -109,7 +110,7 @@ export default function AtlasScreen() {
     const toYear = at && toLayer === 'life' ? at.year!.value : params.year ? Number(params.year) : undefined;
     if (toYear && years.includes(toYear)) setYear(toYear);
     if (at) setSheet(battlesAt(BATTLES, layerOf(at), [at.place!.name], toYear));
-  }, [params.layer, params.year, params.place, params.at, years]);
+  });
   const low = Math.round(size.height * 0.56);
   const box = useMemo(() => (size.width && barsEnd ? screenBox(BATTLES, layer, { width: size.width, height: size.height, top: barsEnd, bottom: low - PIN_ROOM }) : undefined),
     [layer, size.width, size.height, barsEnd, low]);

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { groupName } from '@shared/tarajimGroups';
@@ -12,6 +12,7 @@ import { useTabBarSpace } from '@/ui/tabBarSpace';
 import { back } from '@/lib/ways';
 import { byVolume, heldGroups, kunyaLine, personLine, searchPeople, titleFilters } from '@/lib/tarajim';
 import PersonRows from '@/components/tarajim/PersonRows';
+import { useAdjustOn } from '@/lib/hooks/useAdjustOn';
 
 export default function PeopleScreen() {
   const palette = usePalette();
@@ -19,7 +20,7 @@ export default function PeopleScreen() {
   const bottom = useTabBarSpace();
   const params = useLocalSearchParams<{ title?: string; at?: string }>();
   const [title, setTitle] = useState<string | undefined>(params.title);
-  useEffect(() => { if (params.title) setTitle(params.title); }, [params.title, params.at]);
+  useAdjustOn([params.title, params.at], () => { if (params.title) setTitle(params.title); });
   const [query, setQuery] = useState('');
   const groups = useMemo(() => {
     const held = heldGroups();

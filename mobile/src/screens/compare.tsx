@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
+import { useCallback, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { View } from 'react-native';
 import { Text } from '@/ui/Text';
 import { ArrowLeftRight } from 'lucide-react-native';
@@ -20,6 +20,7 @@ import { cardsFor, filteredPairs, landingIndex, pairTitle, visitKey, visitsOf, t
 import { isBoolean, isNumberIn, isRecord, readJson, writeJson } from '@/lib/storage';
 import { useIntent } from '@/lib/intent';
 import { usePalette } from '@/lib/theme';
+import { useOnChange } from '@/lib/hooks/useOnChange';
 
 const PLACE = 'compare-place';
 const FILTER = 'compare-filter';
@@ -85,7 +86,7 @@ export default function CompareScreen() {
     setJumps(value => value + 1);
   });
   const listKey = useMemo(() => `${filter.savedOnly ? 's' : ''}${filter.scope ? JSON.stringify(filter.scope) : ''}`, [filter]);
-  useEffect(() => { if (visit) writeJson(PLACE, { lead: visit.lead, other: visit.other }); }, [listKey]); // eslint-disable-line react-hooks/exhaustive-deps
+  useOnChange([listKey], () => { if (visit) writeJson(PLACE, { lead: visit.lead, other: visit.other }); });
 
   const savedIds = useCallback((id: string) => savedAs(id, bookmarks).length > 0, [bookmarks]);
   const count = visit ? (filter.savedOnly ? cardsFor(visit.lead, visit.other).filter(card => savedIds(card.id)).length : cardsFor(visit.lead, visit.other).length) : 0;

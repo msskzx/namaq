@@ -1,17 +1,4 @@
 {
-  "src/app/(tabs)/(home)/index.tsx": {
-    "no-restricted-globals": {
-      "count": 1
-    }
-  },
-  "src/app/_layout.tsx": {
-    "no-restricted-globals": {
-      "count": 2
-    },
-    "quality/no-raw-effects": {
-      "count": 2
-    }
-  },
   "src/components/Adhkar.tsx": {
     "quality/no-raw-effects": {
       "count": 1
@@ -431,43 +418,16 @@
       "count": 1
     }
   },
-  "src/screens/atlas.tsx": {
-    "quality/no-raw-effects": {
-      "count": 1
-    },
-    "react-hooks/set-state-in-effect": {
-      "count": 1
-    }
-  },
   "src/screens/ayah.tsx": {
-    "quality/no-raw-effects": {
-      "count": 1
-    },
     "react-hooks/preserve-manual-memoization": {
       "count": 5
     },
     "react-hooks/refs": {
       "count": 1
-    },
-    "react-hooks/set-state-in-effect": {
-      "count": 1
     }
   },
   "src/screens/battle.tsx": {
     "react-hooks/refs": {
-      "count": 1
-    }
-  },
-  "src/screens/battles.tsx": {
-    "quality/no-raw-effects": {
-      "count": 1
-    }
-  },
-  "src/screens/book.tsx": {
-    "quality/no-raw-effects": {
-      "count": 2
-    },
-    "react-hooks/set-state-in-effect": {
       "count": 1
     }
   },
@@ -477,149 +437,27 @@
     }
   },
   "src/screens/branches.tsx": {
-    "no-restricted-globals": {
-      "count": 2
-    },
-    "quality/no-raw-effects": {
-      "count": 3
-    },
     "react-hooks/immutability": {
-      "count": 1
-    },
-    "react-hooks/set-state-in-effect": {
       "count": 1
     }
   },
   "src/screens/compare.tsx": {
-    "quality/no-raw-effects": {
-      "count": 1
-    },
     "react-hooks/immutability": {
       "count": 1
     }
   },
-  "src/screens/dhikr.tsx": {
-    "no-restricted-globals": {
-      "count": 1
-    },
-    "quality/no-raw-effects": {
-      "count": 1
-    }
-  },
-  "src/screens/hadithSahih.tsx": {
-    "quality/no-raw-effects": {
-      "count": 1
-    }
-  },
   "src/screens/library.tsx": {
-    "no-restricted-globals": {
-      "count": 1
-    },
-    "quality/no-raw-effects": {
-      "count": 1
-    },
     "react-hooks/refs": {
       "count": 8
     }
   },
   "src/screens/oaths.tsx": {
-    "no-restricted-globals": {
-      "count": 2
-    },
-    "quality/no-raw-effects": {
-      "count": 1
-    },
     "react-hooks/refs": {
-      "count": 1
-    }
-  },
-  "src/screens/openings.tsx": {
-    "no-restricted-globals": {
-      "count": 1
-    }
-  },
-  "src/screens/order.tsx": {
-    "quality/no-raw-effects": {
-      "count": 1
-    },
-    "react-hooks/set-state-in-effect": {
-      "count": 1
-    }
-  },
-  "src/screens/people.tsx": {
-    "quality/no-raw-effects": {
-      "count": 1
-    },
-    "react-hooks/set-state-in-effect": {
-      "count": 1
-    }
-  },
-  "src/screens/qiraat.tsx": {
-    "quality/no-raw-effects": {
-      "count": 1
-    },
-    "react-hooks/set-state-in-effect": {
-      "count": 1
-    }
-  },
-  "src/screens/quiz/party/code.tsx": {
-    "quality/no-raw-effects": {
-      "count": 4
-    },
-    "react-hooks/set-state-in-effect": {
-      "count": 3
-    }
-  },
-  "src/screens/quiz/solo.tsx": {
-    "no-restricted-globals": {
-      "count": 2
-    }
-  },
-  "src/screens/quran.tsx": {
-    "quality/no-raw-effects": {
-      "count": 1
-    },
-    "react-hooks/set-state-in-effect": {
-      "count": 1
-    }
-  },
-  "src/screens/search.tsx": {
-    "quality/no-raw-effects": {
-      "count": 1
-    },
-    "react-hooks/set-state-in-effect": {
-      "count": 1
-    }
-  },
-  "src/screens/stories.tsx": {
-    "quality/no-raw-effects": {
-      "count": 1
-    },
-    "react-hooks/set-state-in-effect": {
       "count": 1
     }
   },
   "src/screens/tree-sizes.tsx": {
-    "no-restricted-globals": {
-      "count": 1
-    },
     "react-hooks/refs": {
-      "count": 1
-    }
-  },
-  "src/screens/tuhfa.tsx": {
-    "quality/no-raw-effects": {
-      "count": 1
-    },
-    "react-hooks/set-state-in-effect": {
-      "count": 1
-    }
-  },
-  "src/screens/utilities.tsx": {
-    "quality/no-raw-effects": {
-      "count": 2
-    },
-    "react-hooks/set-state-in-effect": {
       "count": 1
     }
   },

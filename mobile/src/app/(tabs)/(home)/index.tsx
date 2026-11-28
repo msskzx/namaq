@@ -16,6 +16,7 @@ import { tourSeen } from '@/lib/settings';
 import { useTabRetap } from '@/lib/tabRetap';
 import { usePalette } from '@/lib/theme';
 import { COLUMN_GAP, isWide, WIDE_COLUMN } from '@/ui/column';
+import { useLater } from '@/lib/hooks/useLater';
 
 const NEAR_END = 1200;
 const KEPT_FEEDS = 3;
@@ -49,7 +50,8 @@ export default function HomeScreen() {
   const screenBottom = useCallback(() => seenTo.current.y + seenTo.current.height, []);
   const scroll = useRef<ComponentRef<typeof ScrollView>>(null);
   const [refreshing, setRefreshing] = useState(false);
-  const refresh = () => { setRefreshing(true); askedAt.current = 0; newVisit(); setTimeout(() => setRefreshing(false), 400); };
+  const later = useLater();
+  const refresh = () => { setRefreshing(true); askedAt.current = 0; newVisit(); later.after(400, () => setRefreshing(false)); };
   useTabRetap('index', () => scroll.current?.scrollTo({ y: 0, animated: true }));
   const { width, height } = useWindowDimensions();
   const column = isWide(width, height) ? (Math.min(width, WIDE_COLUMN) - 32 - COLUMN_GAP) / 2 : null;

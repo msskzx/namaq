@@ -1,4 +1,4 @@
-import { useDeferredValue, useEffect, useMemo, useRef, useState, type ComponentRef } from 'react';
+import { useDeferredValue, useMemo, useRef, useState, type ComponentRef } from 'react';
 import { useLocalSearchParams } from 'expo-router';
 import { FlatList, Share, View } from 'react-native';
 import { Send } from 'lucide-react-native';
@@ -25,6 +25,8 @@ import { CardWithRow } from '@/ui/Card';
 import Tabs from '@/ui/Tabs';
 import Chip from '@/ui/Chip';
 import { FEATURE_ICON } from '@/components/featureIcons';
+import { useLater } from '@/lib/hooks/useLater';
+import { useOnChange } from '@/lib/hooks/useOnChange';
 
 const KINDS: { kind: OathKind; label: string }[] = [{ kind: 'allah', label: 'أقسم الله' }, { kind: 'others', label: 'أقسم غيره' }];
 const BUILT = { allah: buildOaths('allah', ayahMushafWords), others: buildOaths('others', ayahMushafWords) };
@@ -78,11 +80,12 @@ export default function OathsScreen() {
   const rows = useMemo(() => rowsOf(kind, by, typed), [kind, by, typed]);
   const reached = useRef<string | undefined>(undefined);
   const atRow = at && reached.current !== at && !typed.trim() ? rows.findIndex(row => 'oath' in row && row.oath.id === at) : -1;
-  useEffect(() => {
+  const later = useLater();
+  useOnChange([atRow, at], () => {
     if (atRow < 0) return;
     reached.current = at;
-    requestAnimationFrame(() => list.current?.scrollToIndex({ index: atRow, animated: false, viewOffset: 8 }));
-  }, [atRow, at]);
+    later.nextFrame(() => list.current?.scrollToIndex({ index: atRow, animated: false, viewOffset: 8 }));
+  });
   useTabRetap('oaths', () => { if (top.current > 4) list.current?.scrollToOffset({ offset: 0, animated: true }); else setBy(null); });
   const pick = (next: OathKind) => { setKind(next); setBy(null); list.current?.scrollToOffset({ offset: 0, animated: false }); };
   const chip = (label: string, value: OathBy | null) => <Chip key={label} label={label} on={by === value} onPress={() => setBy(value)} palette={palette} />;
@@ -97,7 +100,7 @@ export default function OathsScreen() {
         ListEmptyComponent={<Empty text="لا قسم فيه هذه الكلمات" palette={palette} />}
         onScrollToIndexFailed={({ index, averageItemLength }) => {
           list.current?.scrollToOffset({ offset: index * averageItemLength, animated: false });
-          setTimeout(() => list.current?.scrollToIndex({ index, animated: false, viewOffset: 8 }), 50);
+          later.after(50, () => list.current?.scrollToIndex({ index, animated: false, viewOffset: 8 }));
         }}
         ListHeaderComponent={
           <View style={{ gap: 4 }}>

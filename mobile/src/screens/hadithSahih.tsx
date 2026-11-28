@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { FlatList, ScrollView, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { ChevronLeft, MessagesSquare } from 'lucide-react-native';
@@ -25,6 +25,7 @@ import { SahihDownload, SahihHadithView, opening } from '@/components/Sahih';
 import HadithBooks from '@/components/HadithBooks';
 import { recordedIn, type BookBox } from '@shared/hadith';
 import { useWebScrollEnd } from '@/lib/hooks/useWebScrollEnd';
+import { useOnChange } from '@/lib/hooks/useOnChange';
 
 const openBox = (box: BookBox) => {
   const [book, n] = box.key.split(':');
@@ -94,7 +95,7 @@ export default function HadithSahihScreen() {
   const [index, setIndex] = useState(-1);
   const shown = index >= 0 ? index : start;
   const hadith = all[shown];
-  useEffect(() => { if (book && hadith) rememberOpened(book.slug, hadith.n, lastLink(hadith.routes[0]), opening(hadith)); }, [book, hadith]);
+  useOnChange([book, hadith], () => { if (book && hadith) rememberOpened(book.slug, hadith.n, lastLink(hadith.routes[0]), opening(hadith)); });
   const [width, setWidth] = useState(0);
   const list = useRef<FlatList<SahihHadith>>(null);
   const settle = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
