@@ -353,7 +353,7 @@ function CompareCard({ card, palette, onPageVideo, onOpen, aside }: { card: Pair
             const openTree: Choice | null = !(tree || onOpen) || !card.group ? null : { key: 'branches', label: 'افتح في المتشابهات', accessibilityLabel: 'افتح في متشابهات القرآن', Icon: FEATURE_ICON.trees,
               onPress: () => toTab({ pathname: '/branches', params: { tree: card.group } }) };
             const both = [switchView, openTree].filter((choice): choice is Choice => choice !== null);
-            if (both.length === 2) return <ChoiceSheet Icon={FEATURE_ICON.trees} title="المتشابهات" choices={both} />;
+            if (both.length === 2 && view !== 'tree') return <ChoiceSheet Icon={FEATURE_ICON.trees} title="المتشابهات" choices={both} />;
             return both.map(({ key, label, accessibilityLabel, Icon, onPress }) => <IconButton key={key} Icon={Icon} label={accessibilityLabel ?? label} onPress={onPress} />);
           })()}
           {onOpen && saveButton}
