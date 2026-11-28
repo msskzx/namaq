@@ -1,5 +1,6 @@
 import type { Page } from '@playwright/test';
-import { closeSource, expect, onScreen, open, openSource, readerPage, tab, test, openCards } from './fixtures';
+import { closeSource, drag, expect, onScreen, open, openSource, readerPage, tab, test, openCards } from './fixtures';
+import { num } from '../../shared/quran/arabicNumber';
 import { surahName as S } from '../../shared/quran/surahNames';
 import { mushafMarkOrder as drawn } from '../../shared/quran/quranText/markOrder';
 
@@ -50,6 +51,31 @@ test('the surah order narrows to a juz and cites its books', async ({ page }) =>
   await page.getByRole('button', { name: '٣٠', exact: true }).click();
   await expect(page.getByRole('heading', { name: drawn(S(78)) })).toBeVisible();
   await expect(page.getByRole('button', { name: /^المصدر: البقاعي، نظم الدرر/ }).first()).toBeVisible();
+});
+
+// Juz 30's 37 surahs (owner, 2026-11-28): the list is longer than the screen, so it gets a search by a name's first letters,
+// never by number (the boxes ask the numbers); a name held at the boxes' bottom edge scrolls them down to the last box.
+test('ordering a long juz finds a surah by its first letters and drags it down to a box below the screen', async ({ page }) => {
+  await open(page, '/order?juz=30');
+  await page.getByRole('button', { name: 'رتّبها بنفسك' }).click();
+  const juz = Array.from({ length: 114 - 78 + 1 }, (_, i) => 78 + i);
+  const listed = async () => (await page.locator('[role=button][aria-label]').evaluateAll(els => els.map(e => e.getAttribute('aria-label')!)))
+    .flatMap(label => juz.filter(surah => S(surah) === label));
+  const search = page.getByLabel('ابحث عن سورة');
+  await search.fill('ب');
+  await expect.poll(listed).toEqual(expect.arrayContaining([85, 90, 98]));
+  expect((await listed()).sort()).toEqual([85, 90, 98]);
+  await search.fill('٨٥');
+  await expect.poll(listed).toEqual([]);
+  await search.fill('الن');
+  const shown = await page.locator('[role=button][aria-label*="،"]').evaluateAll(els =>
+    els.filter(e => { const r = e.getBoundingClientRect(); return r.top >= 0 && r.bottom <= innerHeight; }).map(e => e.getAttribute('aria-label')!.split('،')[0]));
+  const first = (await page.getByLabel(new RegExp(`^${num(78)}، `)).boundingBox())!;
+  const check = (await page.getByRole('button', { name: 'تحقق' }).boundingBox())!;
+  await drag(page, page.getByLabel(S(114), { exact: true }), { x: first.x + first.width / 2, y: check.y - 30 }, 4000);
+  const placed = page.getByLabel(new RegExp(`، ${S(114)}، اضغط لإرجاعها$`));
+  await expect(placed).toBeVisible();
+  expect(shown).not.toContain((await placed.getAttribute('aria-label'))!.split('،')[0]);
 });
 
 // The list (owner, 2026-11-24): a tall cover from the scene itself, and under it the ayah's opening and one scholar's line with its book.

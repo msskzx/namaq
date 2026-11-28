@@ -6,7 +6,7 @@ import { numberVerses, type Poem } from '../../shared/tajwid/poem';
 import poemData from '../../shared/tajwid/tuhfat-al-atfal.json';
 
 const chapters = numberVerses(poemData as Poem);
-import { closeSource, expect, firstBoxes, open, stored, tab, test, writeBlank } from './fixtures';
+import { closeSource, drag, expect, firstBoxes, middle, open, stored, tab, test, writeBlank } from './fixtures';
 
 type Run = { questions: { tree: Branch; asked: number[] }[]; current: number };
 
@@ -281,33 +281,27 @@ test('a solo quiz of the year of a thing looks it up on the timeline, then names
 test.describe('«رتّب السور»', () => {
   test.use({ seed: { 'quiz-solo-settings': { kinds: ['ORDER'], list: { filters: { categories: 'mutashabeh' }, range: { from: 30, to: 30 }, saved: false }, difficulty: 'medium', leaves: 3, length: 5 } } });
 
-  test('a dragged surah lands where the finger leaves it, and each surah in its place earns its share', async ({ page }) => {
+  test('a surah dragged onto its number lands there, a tapped one fills the lit box, and each in its place earns its share', async ({ page }) => {
     await open(page, '/quiz/solo');
     await page.getByRole('button', { name: 'ابدأ الاختبار' }).click();
-    await expect(page.getByText('اسحب كل سورة', { exact: false })).toBeVisible();
+    await expect(page.getByText('اسحب السورة إلى رقمها', { exact: false })).toBeVisible();
     await expect.poll(() => stored(page, 'quiz-solo-run')).not.toBeNull();
     const run = await stored<{ questions: { choices: { value: string; labelArabic: string }[]; order: string[] }[] }>(page, 'quiz-solo-run');
     const { choices, order } = run!.questions[0];
-    // The first surah in the mushaf, held and dragged to the top row.
-    const first = choices.find(choice => choice.value === order[0])!;
-    const row = (await page.getByLabel(first.labelArabic, { exact: true }).boundingBox())!;
-    const top = (await page.getByLabel(choices[0].labelArabic, { exact: true }).boundingBox())!;
-    await page.mouse.move(row.x + 30, row.y + row.height / 2);
-    await page.mouse.down();
-    await page.waitForTimeout(400);
-    for (let step = 1; step <= 10; step++) await page.mouse.move(row.x + 30, row.y + row.height / 2 - (row.y - top.y) * step / 10);
-    await page.mouse.up();
+    const name = (value: string) => choices.find(choice => choice.value === value)!.labelArabic;
+    // The boxes carry each surah's own number (owner, 2026-11-28); the last surah is dragged onto the last box.
+    const last = order[order.length - 1];
+    await drag(page, page.getByLabel(name(last), { exact: true }), await middle(page.getByLabel(new RegExp(`^${num(Number(last))}، `))));
+    await expect(page.getByLabel(`${num(Number(last))}، ${name(last)}، اضغط لإرجاعها`)).toBeVisible();
+    // The first box is still lit: a tap puts the first surah there.
+    await page.getByLabel(name(order[0]), { exact: true }).click();
     await page.getByRole('button', { name: 'تحقق' }).click();
-    // The run reaches storage a moment after the answer (mobile/src/lib/soloStore.ts).
     const answer = async () => (await stored<{ typed: (string | undefined)[][] }>(page, 'quiz-solo-run'))!.typed[0][0];
     await expect.poll(answer).toBeDefined();
     const given = (await answer())!.split('\u001f');
     expect(given[0]).toBe(order[0]);
-    // The first surah is graded in its place; any other the reader left elsewhere says where he put it.
-    await expect(page.getByLabel(`${first.labelArabic}، في مكانها`)).toBeVisible();
-    for (const value of order.filter((value, at) => given[at] !== value)) {
-      const name = choices.find(choice => choice.value === value)!.labelArabic;
-      await expect(page.getByLabel(new RegExp(`^${name}، جعلتها`))).toBeVisible();
-    }
+    expect(given[order.length - 1]).toBe(last);
+    for (const value of [order[0], last]) await expect(page.getByLabel(`${num(Number(value))} ${name(value)}، في مكانها`)).toBeVisible();
+    for (const value of order.slice(1, -1)) await expect(page.getByLabel(`${num(Number(value))} ${name(value)}، لم تضعها`)).toBeVisible();
   });
 });

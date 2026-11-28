@@ -1,4 +1,5 @@
 import { PICKS, picksOf } from './choiceKinds';
+import { surahRank } from '../quran/surahSearch';
 
 export type Tray = { boxes: (string | null)[]; at: number | null; back: string[] };
 
@@ -24,9 +25,32 @@ export function tapBox(tray: Tray, at: number): Tray {
   return { boxes: tray.boxes.map((box, i) => (i === at ? null : box)), at: tray.at ?? at, back: [value, ...tray.back] };
 }
 
+const relit = (boxes: (string | null)[], at: number | null) => (at !== null && boxes[at] === null ? at : nextEmpty(boxes, at ?? 0));
+
+export function dropOn(tray: Tray, value: string, at: number): Tray {
+  const from = tray.boxes.indexOf(value);
+  if (from === at) return tray;
+  const there = tray.boxes[at];
+  const boxes = tray.boxes.map((box, i) => (i === at ? value : i === from ? there : box));
+  const sentBack = from < 0 && there !== null ? [there] : [];
+  return { boxes, at: relit(boxes, tray.at), back: [...sentBack, ...tray.back.filter(each => each !== value)] };
+}
+
+export function takeOut(tray: Tray, value: string): Tray {
+  const at = tray.boxes.indexOf(value);
+  return at < 0 ? tray : tapBox(tray, at);
+}
+
 export const inTray = (choices: readonly string[], tray: Tray) => {
   const placed = new Set(tray.boxes.filter((box): box is string => box !== null));
   return [...tray.back.filter(value => !placed.has(value)), ...choices.filter(value => !placed.has(value) && !tray.back.includes(value))];
+};
+
+export const trayFinds = (name: string, typed: string) => {
+  const names = typed.replace(/[0-9٠-٩۰-۹]/g, '').trim();
+  if (!names) return !typed.trim();
+  const rank = surahRank({ number: 0, name }, names);
+  return rank !== null && rank <= 1;
 };
 
 export const sentTray = (tray: Tray) => tray.boxes.map(box => box ?? '').join(PICKS);
