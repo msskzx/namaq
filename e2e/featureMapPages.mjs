@@ -95,6 +95,14 @@ export function renderPages() {
 
 export const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
+export function routeFiles(dir = path.join(REPO, 'mobile/src/app'), prefix = '') {
+  return fs.readdirSync(dir, { withFileTypes: true }).flatMap(entry => {
+    const rel = prefix ? `${prefix}/${entry.name}` : entry.name;
+    if (entry.isDirectory()) return routeFiles(path.join(dir, entry.name), rel);
+    return entry.name.endsWith('.tsx') && entry.name !== '_layout.tsx' ? [rel.slice(0, -4)] : [];
+  }).sort();
+}
+
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   fs.rmSync(path.join(REPO, 'docs/feature-map'), { recursive: true, force: true });
   fs.mkdirSync(path.join(REPO, 'docs/feature-map'));
