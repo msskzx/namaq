@@ -26,7 +26,7 @@ import IconButton from '@/ui/IconButton';
 import Chip from '@/ui/Chip';
 import Empty from '@/ui/Empty';
 
-function BarButton({ label, onPress, Icon, palette, on, dot }: { label: string; onPress: () => void; Icon: (props: LucideProps) => React.ReactNode; palette: Palette; on?: boolean; dot?: boolean }) {
+function BarButton({ label, onPress, Icon, on, dot }: { label: string; onPress: () => void; Icon: (props: LucideProps) => React.ReactNode; palette: Palette; on?: boolean; dot?: boolean }) {
   return <IconButton Icon={Icon} label={label} onPress={onPress} on={on} dot={dot} />;
 }
 

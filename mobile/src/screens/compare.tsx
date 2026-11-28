@@ -39,7 +39,7 @@ export default function CompareScreen() {
   const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks);
   const [filter, setFilter] = useState<PairFilter>(() => readJson(FILTER, isFilter) ?? {});
   // The saved-only list follows the bookmarks only when the filter changes, so unsaving a card doesn't pull the page away.
-  const pairs = useMemo(() => filteredPairs(filter), [filter]); // eslint-disable-line react-hooks/exhaustive-deps
+  const pairs = useMemo(() => filteredPairs(filter), [filter]);  
   const visits = useMemo(() => visitsOf(pairs), [pairs]);
   const [index, setIndex] = useState(() => landingIndex(visits, readJson(PLACE, isPlace)));
   const visit = visits[index];

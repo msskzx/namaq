@@ -121,7 +121,7 @@ export default function EventPlaces({ event, places, phase, focus, onStep, hasPr
 }
 
 /** The compare pages of a place's ayat: one opens at once, several open a list to choose from. */
-function CompareButton({ place, targets, onChoose, palette }: { place: Place; targets: CompareTarget[]; onChoose: (targets: CompareTarget[]) => void; palette: Palette }) {
+function CompareButton({ place, targets, onChoose }: { place: Place; targets: CompareTarget[]; onChoose: (targets: CompareTarget[]) => void; palette: Palette }) {
   if (!targets.length) return null;
   // Seen from this place's surah.
   const own = targets.map(t => (t.lead === place.surah ? t : { lead: t.other, other: t.lead, ayat: [t.ayat[1], t.ayat[0]] as [number, number] }));

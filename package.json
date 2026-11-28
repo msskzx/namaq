@@ -14,6 +14,7 @@
     "test:live": "vitest run --config vitest.live.config.mts",
     "test:ui": "playwright test -c e2e",
     "phone": "node e2e/phone.mjs",
+    "quality:count": "node scripts/quality/count.mjs",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",

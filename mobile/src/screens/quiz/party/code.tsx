@@ -16,7 +16,6 @@ import type { ChoiceQuestion, QuizLook } from '@shared/quiz/choiceKinds';
 import QuizChoice, { QuizPrompt } from '@/components/QuizChoice';
 import { LookButton, LookedNote, LookView } from '@/components/QuizLook';
 import { readAyah } from '@/lib/openReader';
-type QuestionChoice = { value: string; labelArabic: string };
 import TopBar from '@/ui/TopBar';
 import Toggle from '@/ui/Toggle';
 import Button, { Row } from '@/ui/Button';
@@ -38,6 +37,7 @@ import { partyUrl, playerId, saveName, savedName, usePartySocket, type PartyStat
 import { partyQuiz, type QuestionState } from '@/lib/quiz';
 import { usePalette, type Palette } from '@/lib/theme';
 import Field from '@/ui/Field';
+type QuestionChoice = { value: string; labelArabic: string };
 
 type Send = (action: PlayerAction) => void;
 /** A choice question sent with nothing picked. */

@@ -14,7 +14,7 @@ import { answeredQuestion, dueSeeds, readMissed } from '@shared/quiz/missedQuest
 import { activeInterests, INTERESTS, interestById, interestOf, pickedInterests, restoredInterest, surpriseMe, toggledInterest, type FeedCardKind } from '@shared/interests';
 import { bookmarkKind, cardMenuSaveId, cardOfBookmark, isCardBookmark } from '@shared/bookmarkKind';
 import { FORGOT, questionAyat, recited, RECITE_SNIPPET } from '@shared/quiz/choiceKinds';
-import { PROPHET_NAMES } from '@shared/quiz/tarajim';
+import { PROPHET_NAMES, nasabQuestions } from '@shared/quiz/tarajim';
 import type { QuizTopic } from '@shared/quiz/settings';
 import { backToVisit, growingPicks, savedOfSlot, leftVisit, markFeedSeen, readFeedSeen, subscribeFeedSeen, subscribeVisit, visitStart, serverVisit } from '@shared/feedSeen';
 import { allVirtues, feedBooks, LIST_KINDS, listStart, type ListKind, feedRound, hasBooksCard, hasJuzCard, inMinutes, insertAt, isKahfDay, KAHF_SLOT, prayerSoon, type FeedSlot } from '@shared/homeFeed';
@@ -26,12 +26,12 @@ import { findPerson, GRAPH, PEOPLE, personName, TIE_PAIRS, tiePair, unvowelled }
 import { useSettledMemorized } from './Memorized';
 import { kunyaFacts, laqabFacts, type NameFact } from '@shared/tarajimNames';
 import { chainSentence, groupWord } from '@shared/tarajimGraph';
-import TiesChain from './TiesChain';
-import LifeTimeline from './LifeTimeline';
+import TiesChain, { kindColor } from './TiesChain';
+import LifeTimeline, { LifeSheet } from './LifeTimeline';
 import { personLife } from '@/lib/life';
 import { drawsLine } from '@shared/events/lifeTimeline';
 import balaghaTerms from '@shared/data/quran/balaghaTerms';
-import { plainName, examplesOf } from '@shared/quran/balaghaTerms';
+import { plainName, examplesOf, termSource } from '@shared/quran/balaghaTerms';
 import { BookWords, ExampleAyat, ayatName, quotesTitle } from './BalaghaTerm';
 import { clock, FIVE, PRAYER_NAMES, type PrayerDay, type PrayerKey } from '@shared/prayer';
 import { BOOKS } from '@shared/books';
@@ -52,7 +52,7 @@ import { BattleYears } from './battles/BattleTimeline';
 import { yearTitle } from '@shared/battles/timeline';
 import TapRow from '@/ui/TapRow';
 import { STORIES } from '@/lib/stories';
-import { FORTY, fortyEntry } from '@/lib/hadith';
+import { FORTY, fortyEntry, HADITH } from '@/lib/hadith';
 import { compilerOf, drawnBukhari, fromSahihayn, rajabFeedPassages, recordedIn, type RajabChapter } from '@shared/hadith';
 import Isnad from '@/components/Isnad';
 import { chainLinks } from '@shared/isnadMetro';
@@ -70,30 +70,25 @@ import { armiesBattles, armiesItems, armiesSources, battleCardSources, battleIte
 import { NasabTree } from '@/screens/nasab';
 import { OpeningRows } from '@/screens/openings';
 import TiesRing, { foldedKinds, personNode, RoundRing, ringName, ringRoom, roundLayout, TieSheet, tiesOf, DoubtedSheet } from './TiesRing';
-import { kindColor } from './TiesChain';
 import LifeColumns from './LifeColumns';
-import { LifeSheet } from './LifeTimeline';
 import { CALIPHS_MEET, groupItems, groupOf, groupSources, kinOf, livesPairs, meetItems, meetSources, ringList, stepSources, type GroupSource, type Ring } from '@shared/peopleCards';
 import { lifeSources, type LifeItem } from '@shared/events/lifeTimeline';
-import { nasabQuestions } from '@shared/quiz/tarajim';
 import type { Tie } from '@shared/tarajimGraph';
 import BattleMap from './battles/BattleMap';
 import { atlasPins, layerBox, layerOf } from '@shared/battles/atlas';
 import { BATTLES, battleOf } from '@/lib/battles';
 import HadithScene from './HadithScene';
-import { HADITH } from '@/lib/hadith';
 import { sceneSlots } from '@shared/hadith';
 import { openingCards, type OpeningCard } from '@shared/quran/openingKinds';
-import { ayahOf } from '@/lib/branches';
+import { ayahOf, treeList, surahNames as shortNames } from '@/lib/branches';
 import OathWords from './OathWords';
 import { buildOaths, oathPlace, type OathView } from '@shared/quran/oaths';
 import EventPlaces from './EventPlaces';
-import { placesOf as eventPlaces } from '@shared/quran/prophets/story';
+import { placesOf as eventPlaces, storyMap } from '@shared/quran/prophets/story';
 import { STORIES as STORY_EVENTS } from '@shared/quran/prophets/stories';
 import CompareCard from './CompareCard';
 import TreePager from './TreePager';
 import { aliasesOf, EMPTY_LIST } from '@/lib/branchList';
-import { treeList } from '@/lib/branches';
 import { shownBookmarks } from '@/lib/home';
 import { REVIEW_LABEL, reviewForgotten } from './HomeCards';
 import { forgottenOrder, reviewPosition, type RecitePosition } from '@shared/quran/recite';
@@ -105,7 +100,6 @@ import AyahLines, { pageWords, PageTop } from './AyahLines';
 import QiraatPlace from './QiraatPlace';
 import { pairOfDayNumber, treeOfDay } from '@/lib/daily';
 import { cardsFor, sideKeys, sideLabel } from '@/lib/compare';
-import { surahNames as shortNames } from '@/lib/branches';
 import { ayahMushafWords, pageData, pageOfAyah, PAGES, surahBefore } from '@/lib/mushaf';
 import { isBoolean, isNumberIn, isRecord, readJson, writeJson } from '@/lib/storage';
 import { openIntent, openTreesOf, openUtility, toTab, openAyahPage } from '@/lib/ways';
@@ -141,17 +135,12 @@ import itqan from '@shared/data/quran/itqanBalagha';
 import surahCounts from '@shared/data/quran/surahs.json';
 import { allAyat, itqanSureAyat, type AyahNote } from '@shared/quran/ayahNotes';
 import { noteBody } from '@shared/quran/ayahNoteBody';
-import { itqanAt } from '@shared/quran/itqanBalagha';
-import { irabWordsAt } from '@shared/quran/irabData';
-import { qiraatAyat, qiraatOf } from '@shared/quran/qiraatData';
-import { singleAyahPassages, tafsirSadiOf } from '@shared/quran/tafsirSadiData';
+import { qiraatAyat } from '@shared/quran/qiraatData';
+import { singleAyahPassages } from '@shared/quran/tafsirSadiData';
 import { tafsirRuns } from '@shared/quran/tafsirSadi';
-import { corpusWords } from '@shared/quran/words';
-import type { WordDifference } from '@shared/quran/qiraat';
 import QuranWords from './quran/text/QuranWords';
 import { momentItem, nameItem, rajabItem, storyItem, virtueItem } from '@shared/feedItems';
 import { useFitHeight } from '@/lib/useFit';
-import { storyMap } from '@shared/quran/prophets/story';
 import { STORY_GROUPS } from '@shared/quran/prophets/storyGroup';
 import { check, DEFAULT_LIST, DEFAULT_SOLO, isCompare, isTree, pick, questionState, reveal, startSolo, typeAnswer, type SoloQuestion, type SoloRun } from '@/lib/quiz';
 import { readAyah } from '@/lib/openReader';
@@ -171,9 +160,7 @@ import SourceLine, { sourcesOf } from '@/ui/SourceLine';
 import CardShare from '@/ui/CardShare';
 import type { Source } from '@/ui/sourceSlot';
 import { citeSource, mushafSource, MUSHAF_BOOK, uniqueSources, type QuizSource } from '@shared/quiz/sources';
-import { irabSources, itqanSource, qiraatSources, sadiSource } from '@shared/quiz/bookSources';
 import { compiledSource, recordSource } from '@shared/quiz/hadith';
-import { termSource } from '@shared/quran/balaghaTerms';
 import { pieceSources, storySource } from '@shared/quran/pieceSources';
 import { tanasubLink, tanasubSource } from '@shared/quran/tanasubCards';
 import { SURAH_NAMES } from '@shared/quran/surahNames';
@@ -295,7 +282,7 @@ function NotMineMenu() {
 }
 
 /** The source line under a card's buttons (owner, 2026-11-20). */
-const sourceLine = (palette: Palette) => (named: Source[], all: Source[]) => <SourceLine named={named} sources={all} palette={palette} />;
+const sourceLine = (palette: Palette) => function SourceLineOf(named: Source[], all: Source[]) { return <SourceLine named={named} sources={all} palette={palette} />; };
 
 /** A head's topic: a page of the tabs (owner, 2026-11-22: every card's head opens the general topic it names). */
 const topic = (href: Href, label: string) => ({ onPress: () => toTab(href), label });
@@ -1416,7 +1403,6 @@ function RajabPost({ id, palette }: { id: string; palette: Palette }) {
 function HadithPost({ id, palette }: { id: string; palette: Palette }) {
   const entry = FEED_FORTY.find(each => String(each.n) === id);
   if (!entry) return null;
-  const { book } = compilerOf(entry);
   const open = () => toTab({ pathname: '/hadith-forty', params: { n: String(entry.n) } });
   return (
     <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.hadith} title="من الحديث" sub={entry.heading} open={fortyTopic()} palette={palette} />}
@@ -1600,7 +1586,7 @@ const momentId = (item: (typeof MOMENTS)[number]) => momentItem(item.battle.slug
 function MomentPost({ id, palette }: { id: string; palette: Palette }) {
   const item = MOMENTS.find(each => momentId(each) === id);
   if (!item) return null;
-  const { battle, moment, n } = item;
+  const { battle, moment } = item;
   const open = () => { continueAfter('moment', id); toTab({ pathname: '/battle', params: { slug: battle.slug } }); };
   return (
     <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.battles} title={`من ${battle.name}`} sub={moment.title} open={topic({ pathname: '/battle', params: { slug: battle.slug } }, `افتح ${battle.name}`)} palette={palette} />}

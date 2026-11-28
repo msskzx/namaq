@@ -6,7 +6,7 @@ import { compareLinksOfAyah } from '@/app/quran/compare/pairCards';
 import { ayahLinksFor, pageAyat } from '@/app/quran/read/ayahLinks';
 import page264 from '@shared/data/quran/mushaf/264.json';
 import type { MushafPage } from '@shared/quran/readerPage';
-import { BOTH_KINDS_LIST, branchList, EMPTY_LIST, hasTrees } from './branchList';
+import { BOTH_KINDS_LIST, branchList, hasTrees } from './branchList';
 import { cardsFor, compareTargetsOfAyah, focusIndex, holdsAyah, listedPairs } from './compare';
 import { cardWays, savedCard } from './home';
 import { treeList } from './branches';

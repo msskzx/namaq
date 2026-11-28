@@ -95,7 +95,7 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
 - Opening the PR means the work is finished: `npm run lint`, `npx tsc --noEmit`,
   `npm test` and `npm run build` pass (the same checks as "Before considering a
   change finished"), the review findings are fixed or answered in the PR body, and the
-  PR can merge once those checks pass (plus `npm run typecheck` in `mobile/` for
+  PR can merge once those checks pass (plus `npm run lint` and `npm run typecheck` in `mobile/` for
   app changes) unless the owner comments on it. GitHub CI is off for now (manual
   run only), so the local run is the gate. A migration the
   owner applies is not a reason to hold the merge: write the change so the app

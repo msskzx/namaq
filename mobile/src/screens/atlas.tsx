@@ -131,7 +131,7 @@ export default function AtlasScreen() {
     const toYear = at && toLayer === 'life' ? at.year!.value : params.year ? Number(params.year) : undefined;
     if (toYear && years.includes(toYear)) setYear(toYear);
     if (at) setSheet(battlesAt(BATTLES, layerOf(at), [at.place!.name], toYear));
-  }, [params.layer, params.year, params.place, params.at]);
+  }, [params.layer, params.year, params.place, params.at, years]);
   // The bars over the map's top (the search, then the layers, measured), and where the sheet rests: the map is open between
   // them, its pins kept a pin's room (PIN_ROOM) clear of the sheet's edge.
   const low = Math.round(size.height * 0.56);

@@ -2,7 +2,7 @@ import { notesByDate, readAyahNotes } from '@shared/ayahNotes';
 import { searchAll, SEARCH_ORDER, type SearchHit, type SearchSources } from '@shared/quran/searchAll';
 import { ADHKAR_ITEMS, bundledSources, GROUP_MAX } from '@shared/quran/searchSources';
 import { battleLine, searchBattles } from '@shared/battles/battle';
-import { searchSahih, type SahihSlug } from '@shared/sahih';
+import { searchSahih, type SahihSlug, SahihIndex } from '@shared/sahih';
 
 import { sayingStart, searchForty } from '@shared/hadith';
 import { listedPairs } from './compare';
@@ -12,7 +12,6 @@ import { BATTLES } from './battles';
 import { FORTY } from './hadith';
 import bukhari from '@shared/data/hadith/bukhari.json';
 import muslim from '@shared/data/hadith/muslim.json';
-import type { SahihIndex } from '@shared/sahih';
 
 /** The sira stories' chapters first (a chapter is what one looks for by «الوفود»), then each story. */
 const SIRA_ITEMS = [...STORY_CHAPTERS.map(chapter => ({ title: chapter.name, chapter: chapter.name })), ...STORIES.map(story => ({ title: story.name, slug: story.slug }))];

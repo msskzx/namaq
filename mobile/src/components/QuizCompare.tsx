@@ -43,7 +43,7 @@ function Line({ line, palette, children, after }: { line: CompareLine; palette: 
   );
 }
 
-function Bar({ label, onPress, Icon, palette }: { label: string; onPress: () => void; Icon: (props: LucideProps) => React.ReactNode; palette: Palette }) {
+function Bar({ label, onPress, Icon }: { label: string; onPress: () => void; Icon: (props: LucideProps) => React.ReactNode; palette: Palette }) {
   return (
     <IconButton Icon={Icon} label={label} onPress={onPress} tone="ink" />
   );

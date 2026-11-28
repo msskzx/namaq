@@ -39,7 +39,7 @@ export default function BattleMap({ places: given, palette, box: fixed, onPin }:
   const [width, setWidth] = useState(0);
   // A caller's new array of the same places keeps the drawing.
   const key = given.map(place => `${place.name}@${place.at.join(',')}@${place.look ?? ''}`).join('|');
-  const places = useMemo(() => given, [key]);
+  const places = useMemo(() => given, [key]); // eslint-disable-line react-hooks/exhaustive-deps
   const cities = useMemo(() => {
     const near = (city: { at: LonLat }) => places.some(place => Math.hypot(place.at[0] - city.at[0], place.at[1] - city.at[1]) < NEAR);
     // A city a lit pin names is that pin; one a quiet pin names stays a city with its name, the quiet dot on it.
@@ -68,7 +68,7 @@ export default function BattleMap({ places: given, palette, box: fixed, onPin }:
       pins: pins.map((pin, i) => ({ ...pin, label: named(pin.look) ? labels[i] : null })),
       cities: shown.map((city, i) => ({ ...city, label: labels[pins.length + i] })),
     };
-  }, [width, places, cities, boxKey]);
+  }, [width, places, cities, boxKey]); // eslint-disable-line react-hooks/exhaustive-deps
   const label = (at: { x: number; y: number; anchor: 'start' | 'middle' | 'end' }, text: string, size: number) => {
     const where = { x: at.x, y: at.y, fontSize: size, textAnchor: at.anchor, fontFamily: 'Amiri' };
     // The paper-coloured outline first, under the letters, so a name stays readable over a coast.
