@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { AppState } from 'react-native';
 import * as adhan from 'adhan';
 import * as Location from 'expo-location';
 import { MY_LOCATION, prayerDay, qiblaBearing, type Adhan, type Place, type PrayerDay, type PrayerSettings } from '@shared/prayer';
 import { reportError } from '@shared/errors';
+import { useNow } from '@/lib/hooks/useNow';
 
 const lib = adhan as unknown as Adhan;
 
@@ -26,12 +27,8 @@ export async function locate(): Promise<Place | null> {
 }
 
 export function useMinute() {
-  const [now, setNow] = useState(() => new Date());
-  useEffect(() => {
-    const tick = setInterval(() => setNow(new Date()), 30_000);
-    return () => clearInterval(tick);
-  }, []);
-  return now;
+  const now = useNow(30_000);
+  return useMemo(() => new Date(now), [now]);
 }
 
 const NO_COMPASS_MS = 4000;

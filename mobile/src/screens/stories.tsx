@@ -1,5 +1,5 @@
 import { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState, type ComponentRef } from 'react';
-import { FlatList, Platform, ScrollView, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
+import { FlatList, ScrollView, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { ChevronDown, ChevronLeft, ChevronUp, List } from 'lucide-react-native';
 import type { PageKey, StoriesPage, StoryChapter } from '@shared/stories/pages';
@@ -24,6 +24,7 @@ import { STORIES, STORY_CHAPTERS, STORY_PAGES, STORY_TAGS } from '@/lib/stories'
 import { storyPages } from '@shared/stories/pages';
 import Chip from '@/ui/Chip';
 import RowScroll from '@/ui/RowScroll';
+import { useWebScrollEnd } from '@/lib/hooks/useWebScrollEnd';
 
 type Scroller = ComponentRef<typeof ScrollView>;
 
@@ -157,13 +158,7 @@ export default function StoriesScreen() {
     setCompact(false);
     setAt(index);
   }, [width, pages]);
-  const quiet = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
-  const scrolled = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    if (Platform.OS !== 'web') return;
-    const { nativeEvent } = event;
-    clearTimeout(quiet.current);
-    quiet.current = setTimeout(() => settle({ nativeEvent } as NativeSyntheticEvent<NativeScrollEvent>), 150);
-  }, [settle]);
+  const scrolled = useWebScrollEnd(settle);
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       <TopBar back={back} hideOnScroll search={{ value: query, onChangeText: setQuery, placeholder: 'ابحث في قصص السيرة', label: 'ابحث في قصص السيرة' }}>

@@ -1,4 +1,4 @@
-import { useEffect, useState, useSyncExternalStore } from 'react';
+import { useMemo, useState, useSyncExternalStore } from 'react';
 import { Pressable, View } from 'react-native';
 import { router } from 'expo-router';
 import { ArrowLeftRight, ChevronDown, ChevronLeft, HandHeart, History, List, NotebookPen, ScrollText, TextSearch, type LucideProps } from 'lucide-react-native';
@@ -17,6 +17,8 @@ import { GROUP_MAX, searchApp, warmSearch, type AppGroup as SearchGroup, type Ap
 import { openDhikr } from '@/lib/adhkar';
 import { openIntent as go, toTab } from '@/lib/ways';
 import type { Palette } from '@/lib/theme';
+import { useAfter } from '@/lib/hooks/useAfter';
+import { useDebounced } from '@/lib/hooks/useDebounced';
 
 export const GROUP_SHOWN = 3;
 
@@ -148,19 +150,16 @@ const hitKey = (hit: SearchHit) => {
 };
 
 export function useAppSearch(query: string, keep?: (kind: SearchKind) => boolean) {
-  const [found, setFound] = useState<{ query: string; groups: SearchGroup[] }>({ query: '', groups: [] });
-  useEffect(() => { const timer = setTimeout(warmSearch, 400); return () => clearTimeout(timer); }, []);
+  useAfter(400, warmSearch);
   const notes = useSyncExternalStore(subscribeAyahNotes, readAyahNotes);
-  useEffect(() => {
-    const typed = query.trim();
-    if (!typed) { setFound({ query: '', groups: [] }); return; }
-    const timer = setTimeout(() => {
-      const groups = searchApp(typed);
-      setFound({ query: typed, groups: keep ? groups.filter(group => keep(group.kind)) : groups });
-    }, 150);
-    return () => clearTimeout(timer);
-  }, [query, notes]); // eslint-disable-line react-hooks/exhaustive-deps
-  return { found, waiting: query.trim() !== found.query };
+  const typed = query.trim();
+  const settled = useDebounced(typed, 150);
+  const found = useMemo<{ query: string; groups: SearchGroup[]; notes: typeof notes }>(() => {
+    if (!settled) return { query: '', groups: [], notes };
+    const groups = searchApp(settled);
+    return { query: settled, groups: keep ? groups.filter(group => keep(group.kind)) : groups, notes };
+  }, [settled, keep, notes]);
+  return { found, waiting: typed !== found.query };
 }
 
 export function SearchResults({ groups, open, onOpen, palette }: {

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState, type ComponentRef } from 'react';
-import { Animated, FlatList, Platform, ScrollView, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
+import { Animated, FlatList, ScrollView, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
 import { useIsFocused } from 'expo-router';
 import TabHint from '@/components/TabHint';
 import TopBar from '@/ui/TopBar';
@@ -9,6 +9,7 @@ import { back } from '@/lib/ways';
 import { setCompact, useShrinkOnScroll } from '@/lib/chrome';
 import { utilityView, type UtilityView } from '@/lib/settings';
 import { usePalette, type Palette } from '@/lib/theme';
+import { useWebScrollEnd } from '@/lib/hooks/useWebScrollEnd';
 
 type Scroller = ComponentRef<typeof ScrollView>;
 
@@ -63,14 +64,11 @@ export default function UtilitiesTab() {
     setCompact(false);
     setView(UTILITY_VIEWS[at]);
   }, [width, setView]);
-  const quiet = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const settleOnWeb = useWebScrollEnd(settle);
   const scrolled = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    const { nativeEvent } = event;
-    if (width) progress.setValue(Math.abs(nativeEvent.contentOffset.x) / width);
-    if (Platform.OS !== 'web') return;
-    clearTimeout(quiet.current);
-    quiet.current = setTimeout(() => settle({ nativeEvent } as NativeSyntheticEvent<NativeScrollEvent>), 150);
-  }, [settle, width, progress]);
+    if (width) progress.setValue(Math.abs(event.nativeEvent.contentOffset.x) / width);
+    settleOnWeb(event);
+  }, [settleOnWeb, width, progress]);
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
       {view === 'adhkar'

@@ -1,6 +1,6 @@
 const { defineConfig } = require('eslint/config');
 const expoConfig = require('eslint-config-expo/flat');
-const { default: quality } = require('../shared/lint/noComments.mjs');
+const { default: quality } = require('../shared/lint/quality.mjs');
 
 module.exports = defineConfig([
   expoConfig,
@@ -17,12 +17,12 @@ module.exports = defineConfig([
       'import/first': 'error',
       'import/no-duplicates': 'error',
       'react-hooks/exhaustive-deps': 'error',
-      'react-hooks/set-state-in-effect': 'warn',
-      'react-hooks/immutability': 'warn',
-      'react-hooks/refs': 'warn',
-      'react-hooks/preserve-manual-memoization': 'warn',
-      'react-hooks/purity': 'warn',
-      'react-hooks/use-memo': 'warn',
+      'react-hooks/set-state-in-effect': 'error',
+      'react-hooks/immutability': 'error',
+      'react-hooks/refs': 'error',
+      'react-hooks/preserve-manual-memoization': 'error',
+      'react-hooks/purity': 'error',
+      'react-hooks/use-memo': 'error',
     },
   },
   {
@@ -38,6 +38,19 @@ module.exports = defineConfig([
         { selector: "CallExpression[callee.property.name='then'] > ArrowFunctionExpression:nth-child(2)[body.operator='void']", message: "Report the error with reportError(where, error) from @shared/errors, so its cause is not lost." },
         { selector: "CallExpression[callee.property.name='catch'] > ArrowFunctionExpression[body.type=/Literal|Identifier/]", message: "Report the error with reportError(where, error) from @shared/errors, so its cause is not lost." },
         { selector: "CallExpression[callee.property.name='catch'] > ArrowFunctionExpression[body.operator='void']", message: "Report the error with reportError(where, error) from @shared/errors, so its cause is not lost." },
+      ],
+    },
+  },
+  {
+    files: ['src/**/*.ts', 'src/**/*.tsx'],
+    ignores: ['src/lib/**', 'src/**/*.test.ts', 'src/**/*.test.tsx'],
+    rules: {
+      'quality/no-raw-effects': 'error',
+      'no-restricted-globals': ['error',
+        ...['setTimeout', 'setInterval', 'requestAnimationFrame', 'requestIdleCallback'].map(name => ({ name, message: `No raw ${name} in app code (owner, 2026-11-28): use useDebounced, useNow, useAfter or useWebScrollEnd from @/lib/hooks, which clear themselves on unmount. If none fits, add a hook there with a test, or move the scheduling into a lib/ module that owns it. See docs/quality/effects.md.` })),
+      ],
+      'no-restricted-properties': ['error',
+        ...['window', 'globalThis'].flatMap(object => ['setTimeout', 'setInterval', 'requestAnimationFrame', 'requestIdleCallback'].map(property => ({ object, property, message: 'No raw timers in app code: use a hook from @/lib/hooks. See docs/quality/effects.md.' }))),
       ],
     },
   },

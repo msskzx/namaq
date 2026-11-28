@@ -81,3 +81,16 @@ types, but the import no longer says what it is. Each got its `type` mark back. 
 - **Found by:** the tests, right after the strip.
 - **Fix:** `@vitest-environment` joined the lint directives the rule keeps. Comments that switch a tool on or
   off are code, and they stay.
+
+## Five copies of one timer (step 7)
+
+- **Where:** `ui/Pager.tsx`, `ComparePager.tsx`, `screens/hadithSahih.tsx`, `screens/stories.tsx` and
+  `screens/utilities.tsx`.
+- **Wrong:** each pager had its own copy of the same 7 lines that wait 150 ms after the last web scroll event
+  to find the page that was swiped to. Only the one in `Pager.tsx` cleared the timer when the screen closed.
+- **Effect:** on the web, closing one of the other four right after a swipe left a timer that still called the
+  page change for a screen that was already gone.
+- **Found by:** the timer count for step 7. Copies drift: a fix made in one copy did not reach the other four.
+  This is the pattern from the talk: when every screen writes its own effect, every screen gets its own bug.
+- **Fix:** one hook, `useWebScrollEnd`, with a test that it does not fire after unmount. Lint now rejects a raw
+  `setTimeout` in a screen, so a sixth copy cannot be written.
