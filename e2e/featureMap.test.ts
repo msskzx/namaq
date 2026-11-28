@@ -31,7 +31,7 @@ describe('the feature map', () => {
   it('names fixed labels that the app still shows', () => {
     const app = `${sourceText(path.join(repo, 'mobile/src'))}\n${sourceText(path.join(repo, 'shared'))}`;
     const missing = SCREENS.flatMap(screen => [...(screen.tabBar ? [screen.tabBar] : []), ...(screen.from ?? []).flatMap(([, ...taps]) => taps)])
-      .filter(label => !label.startsWith('‹') && !app.includes(label));
+      .filter(label => !label.startsWith('‹') && ![`'${label}'`, `"${label}"`, `>${label}<`, `\`${label}\``].some(literal => app.includes(literal)));
     expect(missing, 'Labels in e2e/featureMap.mjs that no longer appear in the app: fix the tap there').toEqual([]);
   });
 
@@ -50,6 +50,7 @@ describe('the feature map', () => {
     for (const screen of SCREENS) {
       const url = new URL(urlNamed(screen.name)!, 'http://phone');
       expect(nameAt(url.pathname), screen.name).toBe(screen.name);
+      expect(url.pathname, `${screen.name} needs a sample`).not.toContain('[');
       if (!screen.file.includes('[')) expect(url.pathname).toBe(urlOf(screen.file));
     }
   });

@@ -6,8 +6,12 @@ talking about the app and with `npm run phone -- open <name>`. This file is writ
 missing from the map, when a fixed label in the map no longer appears in the app's code, when a screen cannot be
 reached from the tab bar, or when this file is out of date.
 
-On the arrows, `←` separates taps made one after another, and a label in ‹› is what the row shows (a name, a title),
-not fixed text. A rounded, dashed box is a screen from another section that leads in.
+On the arrows, `←` separates taps made one after another, and a label in ‹› is not fixed text: what a row shows (a
+name, a title), something typed into the search, or a gesture. A rounded, dashed box is a screen from another section
+that leads in.
+
+A section groups screens by topic under the tab bar button that leads to them. Screens outside `mobile/src/app/(tabs)`
+open over the whole screen and cover the tab bar; the table marks them `covered`.
 
 ## القرآن
 
@@ -38,13 +42,13 @@ flowchart TB
   class s24 elsewhere
   s24 -- "افتح صفحة الآية" --> s2
   s0 -- "متشابهات القرآن" --> s3
-  s2 -- "متشابهات الآية" --> s3
+  s2 -- "متشابهات الآية ← افتح في المتشابهات" --> s3
   s0 -- "مقارنة السور" --> s4
   s24 -- "افتح الآيات المتشابهة" --> s4
   s0 -- "قصص الأنبياء" --> s5
   s25(["البحث"])
   class s25 elsewhere
-  s25 -- "‹اسم النبي›" --> s6
+  s25 -- "‹اكتب اسم النبي› ← ‹اسم النبي›" --> s6
   s24 -- "‹بطاقة قصة نبي›" --> s6
   s0 -- "تحفة الأطفال" --> s7
   s0 -- "ألفاظ القرآن" --> s8
@@ -78,7 +82,7 @@ flowchart TB
   s20 -- "‹الحديث›" --> s21
   s25(["البحث"])
   class s25 elsewhere
-  s25 -- "‹الحديث›" --> s21
+  s25 -- "‹اكتب من نص الحديث› ← ‹الحديث›" --> s21
   s18 -- "‹رقم الحديث›" --> s22
   s22 -- "المشاهد في صحيح مسلم" --> s23
   classDef elsewhere stroke-dasharray: 4 3
@@ -127,7 +131,7 @@ flowchart TB
   bars31{{"شريط التبويب: التراجم"}} --> s31
   s31 -- "كل التراجم" --> s32
   s32 -- "‹اسم الشخص›" --> s33
-  s31 -- "‹اسم الشخص›" --> s33
+  s31 -- "‹اكتب الاسم في البحث› ← ‹اسم الشخص›" --> s33
   s33 -- "تنقّل في صلاته" --> s34
   s31 -- "قصص السيرة" --> s35
   s35 -- "‹اسم القصة›" --> s36
@@ -177,60 +181,60 @@ flowchart TB
 
 ## Every screen
 
-| Screen | Opens with | Reached from | File |
-| --- | --- | --- | --- |
-| القرآن | `/quran` | شريط التبويب: القرآن | `mobile/src/app/(tabs)/(quran)/quran.tsx` |
-| المصحف | `/read` | القرآن ← المصحف | `mobile/src/app/(tabs)/read.tsx` |
-| صفحة الآية | `/ayah?key=1:1` | المصحف ← ‹اضغط مطولًا على آية› ← صفحة الآية<br>الرئيسية ← افتح صفحة الآية | `mobile/src/app/ayah.tsx` |
-| متشابهات القرآن | `/branches` | القرآن ← متشابهات القرآن<br>صفحة الآية ← متشابهات الآية | `mobile/src/app/(tabs)/(quran)/branches.tsx` |
-| مقارنة السور | `/compare` | القرآن ← مقارنة السور<br>الرئيسية ← افتح الآيات المتشابهة | `mobile/src/app/(tabs)/(quran)/compare.tsx` |
-| قصص الأنبياء | `/prophets` | القرآن ← قصص الأنبياء | `mobile/src/app/(tabs)/(quran)/prophets.tsx` |
-| قصة النبي | `/prophets/musa` | البحث ← ‹اسم النبي›<br>الرئيسية ← ‹بطاقة قصة نبي› | `mobile/src/app/prophets/[slug].tsx` |
-| تحفة الأطفال | `/tuhfa` | القرآن ← تحفة الأطفال | `mobile/src/app/(tabs)/(quran)/tuhfa.tsx` |
-| ألفاظ القرآن | `/words` | القرآن ← ألفاظ القرآن | `mobile/src/app/(tabs)/(quran)/words.tsx` |
-| الكلمة | `/word?ids=814` | ألفاظ القرآن ← ‹الكلمة› | `mobile/src/app/(tabs)/(quran)/word.tsx` |
-| الأقسام | `/oaths` | القرآن ← الأقسام | `mobile/src/app/(tabs)/(quran)/oaths.tsx` |
-| مشاهد | `/lataif` | القرآن ← مشاهد<br>الرئيسية ← مشاهد | `mobile/src/app/(tabs)/(quran)/lataif.tsx` |
-| المشهد | `/scene?id=rahman` | مشاهد ← ‹غلاف المشهد› | `mobile/src/app/scene.tsx` |
-| مصطلحات البلاغة | `/terms` | القرآن ← مصطلحات البلاغة | `mobile/src/app/(tabs)/(quran)/terms.tsx` |
-| المصطلح | `/term?name=الجناس` | مصطلحات البلاغة ← ‹اسم المصطلح› | `mobile/src/app/(tabs)/(quran)/term.tsx` |
-| القراءات | `/qiraat` | القرآن ← القراءات | `mobile/src/app/(tabs)/(quran)/qiraat.tsx` |
-| فواتح السور | `/openings` | القرآن ← فواتح السور | `mobile/src/app/(tabs)/(quran)/openings.tsx` |
-| ترتيب السور | `/order` | القرآن ← ترتيب السور | `mobile/src/app/(tabs)/(quran)/order.tsx` |
-| الحديث | `/hadith` | شريط التبويب: الحديث | `mobile/src/app/(tabs)/(hadith)/hadith.tsx` |
-| كتاب الحديث | `/hadith-book?book=bukhari` | الحديث ← ‹اسم الكتاب› | `mobile/src/app/(tabs)/(hadith)/hadith-book.tsx` |
-| أبواب الكتاب | `/hadith-kitab?book=bukhari&kitab=2` | الحديث ← ‹كتاب من الصحيح›<br>كتاب الحديث ← ‹كتاب من الصحيح› | `mobile/src/app/(tabs)/(hadith)/hadith-kitab.tsx` |
-| حديث الصحيح | `/hadith-sahih?book=bukhari&n=1` | أبواب الكتاب ← ‹الحديث›<br>البحث ← ‹الحديث› | `mobile/src/app/(tabs)/(hadith)/hadith-sahih.tsx` |
-| حديث الأربعين | `/hadith-forty?n=1` | الحديث ← ‹رقم الحديث› | `mobile/src/app/(tabs)/(hadith)/hadith-forty.tsx` |
-| رواية الصحيح | `/hadith-unit?unit=muslim-jibril` | حديث الأربعين ← المشاهد في صحيح مسلم | `mobile/src/app/(tabs)/(hadith)/hadith-unit.tsx` |
-| الرئيسية | `/` | شريط التبويب: الرئيسية | `mobile/src/app/(tabs)/(home)/index.tsx` |
-| البحث | `/search` | الرئيسية ← البحث | `mobile/src/app/(tabs)/(home)/search.tsx` |
-| الأدوات والأذكار | `/utilities` | الرئيسية ← القبلة<br>الرئيسية ← الأذكار | `mobile/src/app/(tabs)/(home)/utilities.tsx` |
-| الذكر | `/dhikr?occasion=waking&id=waking-life` | الأدوات والأذكار ← ‹الذكر›<br>الرئيسية ← افتح الذكر في الأذكار | `mobile/src/app/(tabs)/(home)/dhikr.tsx` |
-| مدونتي | `/library` | الرئيسية ← مدونتي | `mobile/src/app/(tabs)/(home)/library.tsx` |
-| المكتبة | `/books` | الرئيسية ← المكتبة | `mobile/src/app/(tabs)/(library)/books.tsx` |
-| الكتاب | `/book?id=sadi` | المكتبة ← ‹اسم الكتاب›<br>الرئيسية ← افتح تفسير السعدي | `mobile/src/app/(tabs)/(library)/book.tsx` |
-| التراجم | `/tarajim` | شريط التبويب: التراجم | `mobile/src/app/(tabs)/(tarajim)/tarajim.tsx` |
-| كل التراجم | `/people` | التراجم ← كل التراجم | `mobile/src/app/(tabs)/(tarajim)/people.tsx` |
-| الترجمة | `/person?slug=abu-bakr-as-siddiq` | كل التراجم ← ‹اسم الشخص›<br>التراجم ← ‹اسم الشخص› | `mobile/src/app/(tabs)/(tarajim)/person.tsx` |
-| الصلات | `/ties?slug=abu-bakr-as-siddiq` | الترجمة ← تنقّل في صلاته | `mobile/src/app/(tabs)/(tarajim)/ties.tsx` |
-| قصص السيرة | `/stories` | التراجم ← قصص السيرة | `mobile/src/app/(tabs)/(tarajim)/stories.tsx` |
-| القصة | `/story?slug=islam-of-dimad` | قصص السيرة ← ‹اسم القصة› | `mobile/src/app/(tabs)/(tarajim)/story.tsx` |
-| الغزوات والمعارك | `/battles` | التراجم ← الغزوات والمعارك | `mobile/src/app/(tabs)/(tarajim)/battles.tsx` |
-| الغزوة | `/battle?slug=badr` | الغزوات والمعارك ← ‹اسم الغزوة›<br>الأطلس ← ‹اسم الغزوة› | `mobile/src/app/(tabs)/(tarajim)/battle.tsx` |
-| الأطلس | `/atlas` | التراجم ← الأطلس | `mobile/src/app/(tabs)/(tarajim)/atlas.tsx` |
-| النسب | `/nasab` | التراجم ← النسب | `mobile/src/app/(tabs)/(tarajim)/nasab.tsx` |
-| بين عدة أشخاص | `/between` | التراجم ← بين عدة أشخاص | `mobile/src/app/(tabs)/(tarajim)/between.tsx` |
-| حياتهم جنبًا إلى جنب | `/life` | التراجم ← حياتهم جنبًا إلى جنب | `mobile/src/app/(tabs)/(tarajim)/life.tsx` |
-| الاختبارات | `/quizzes` | شريط التبويب: الاختبارات | `mobile/src/app/(tabs)/quizzes.tsx` |
-| اختبار مخصص | `/quiz/solo` | الاختبارات ← اختبار مخصص | `mobile/src/app/quiz/solo.tsx` |
-| الاختبار | `/quiz/play` | اختبار مخصص ← ابدأ الاختبار | `mobile/src/app/quiz/play.tsx` |
-| اختبار جماعي | `/quiz/party` | الاختبارات ← اختبار جماعي | `mobile/src/app/quiz/party/index.tsx` |
-| غرفة الاختبار الجماعي | `/quiz/party/[code]` | اختبار جماعي ← ابدأ<br>اختبار جماعي ← انضم | `mobile/src/app/quiz/party/[code].tsx` |
-| عن نمق | `/about` | الرئيسية ← الإعدادات ← عن نمق | `mobile/src/app/about.tsx` |
-| سياسة الخصوصية | `/privacy` | الرئيسية ← الإعدادات ← سياسة الخصوصية | `mobile/src/app/privacy.tsx` |
-| المصادر والتراخيص | `/attributions` | الرئيسية ← الإعدادات ← المصادر والتراخيص | `mobile/src/app/attributions.tsx` |
-| مقاسات الأشجار | `/tree-sizes` | لا يُفتح من التطبيق (npm run tree-sizes opens it to measure every tree) | `mobile/src/app/tree-sizes.tsx` |
+| Screen | Opens with | Tab bar | Reached from | File |
+| --- | --- | --- | --- | --- |
+| القرآن | `/quran` | shown | شريط التبويب: القرآن | `mobile/src/app/(tabs)/(quran)/quran.tsx` |
+| المصحف | `/read` | shown | القرآن ← المصحف | `mobile/src/app/(tabs)/read.tsx` |
+| صفحة الآية | `/ayah?key=1:1` | covered | المصحف ← ‹اضغط مطولًا على آية› ← صفحة الآية<br>الرئيسية ← افتح صفحة الآية | `mobile/src/app/ayah.tsx` |
+| متشابهات القرآن | `/branches` | shown | القرآن ← متشابهات القرآن<br>صفحة الآية ← متشابهات الآية ← افتح في المتشابهات | `mobile/src/app/(tabs)/(quran)/branches.tsx` |
+| مقارنة السور | `/compare` | shown | القرآن ← مقارنة السور<br>الرئيسية ← افتح الآيات المتشابهة | `mobile/src/app/(tabs)/(quran)/compare.tsx` |
+| قصص الأنبياء | `/prophets` | shown | القرآن ← قصص الأنبياء | `mobile/src/app/(tabs)/(quran)/prophets.tsx` |
+| قصة النبي | `/prophets/musa` | covered | البحث ← ‹اكتب اسم النبي› ← ‹اسم النبي›<br>الرئيسية ← ‹بطاقة قصة نبي› | `mobile/src/app/prophets/[slug].tsx` |
+| تحفة الأطفال | `/tuhfa` | shown | القرآن ← تحفة الأطفال | `mobile/src/app/(tabs)/(quran)/tuhfa.tsx` |
+| ألفاظ القرآن | `/words` | shown | القرآن ← ألفاظ القرآن | `mobile/src/app/(tabs)/(quran)/words.tsx` |
+| الكلمة | `/word?ids=814` | shown | ألفاظ القرآن ← ‹الكلمة› | `mobile/src/app/(tabs)/(quran)/word.tsx` |
+| الأقسام | `/oaths` | shown | القرآن ← الأقسام | `mobile/src/app/(tabs)/(quran)/oaths.tsx` |
+| مشاهد | `/lataif` | shown | القرآن ← مشاهد<br>الرئيسية ← مشاهد | `mobile/src/app/(tabs)/(quran)/lataif.tsx` |
+| المشهد | `/scene?id=rahman` | covered | مشاهد ← ‹غلاف المشهد› | `mobile/src/app/scene.tsx` |
+| مصطلحات البلاغة | `/terms` | shown | القرآن ← مصطلحات البلاغة | `mobile/src/app/(tabs)/(quran)/terms.tsx` |
+| المصطلح | `/term?name=الجناس` | shown | مصطلحات البلاغة ← ‹اسم المصطلح› | `mobile/src/app/(tabs)/(quran)/term.tsx` |
+| القراءات | `/qiraat` | shown | القرآن ← القراءات | `mobile/src/app/(tabs)/(quran)/qiraat.tsx` |
+| فواتح السور | `/openings` | shown | القرآن ← فواتح السور | `mobile/src/app/(tabs)/(quran)/openings.tsx` |
+| ترتيب السور | `/order` | shown | القرآن ← ترتيب السور | `mobile/src/app/(tabs)/(quran)/order.tsx` |
+| الحديث | `/hadith` | shown | شريط التبويب: الحديث | `mobile/src/app/(tabs)/(hadith)/hadith.tsx` |
+| كتاب الحديث | `/hadith-book?book=bukhari` | shown | الحديث ← ‹اسم الكتاب› | `mobile/src/app/(tabs)/(hadith)/hadith-book.tsx` |
+| أبواب الكتاب | `/hadith-kitab?book=bukhari&kitab=2` | shown | الحديث ← ‹كتاب من الصحيح›<br>كتاب الحديث ← ‹كتاب من الصحيح› | `mobile/src/app/(tabs)/(hadith)/hadith-kitab.tsx` |
+| حديث الصحيح | `/hadith-sahih?book=bukhari&n=1` | shown | أبواب الكتاب ← ‹الحديث›<br>البحث ← ‹اكتب من نص الحديث› ← ‹الحديث› | `mobile/src/app/(tabs)/(hadith)/hadith-sahih.tsx` |
+| حديث الأربعين | `/hadith-forty?n=1` | shown | الحديث ← ‹رقم الحديث› | `mobile/src/app/(tabs)/(hadith)/hadith-forty.tsx` |
+| رواية الصحيح | `/hadith-unit?unit=muslim-jibril` | shown | حديث الأربعين ← المشاهد في صحيح مسلم | `mobile/src/app/(tabs)/(hadith)/hadith-unit.tsx` |
+| الرئيسية | `/` | shown | شريط التبويب: الرئيسية | `mobile/src/app/(tabs)/(home)/index.tsx` |
+| البحث | `/search` | shown | الرئيسية ← البحث | `mobile/src/app/(tabs)/(home)/search.tsx` |
+| الأدوات والأذكار | `/utilities` | shown | الرئيسية ← القبلة<br>الرئيسية ← الأذكار | `mobile/src/app/(tabs)/(home)/utilities.tsx` |
+| الذكر | `/dhikr?occasion=waking&id=waking-life` | shown | الأدوات والأذكار ← ‹الذكر›<br>الرئيسية ← افتح الذكر في الأذكار | `mobile/src/app/(tabs)/(home)/dhikr.tsx` |
+| مدونتي | `/library` | shown | الرئيسية ← مدونتي | `mobile/src/app/(tabs)/(home)/library.tsx` |
+| المكتبة | `/books` | shown | الرئيسية ← المكتبة | `mobile/src/app/(tabs)/(library)/books.tsx` |
+| الكتاب | `/book?id=sadi` | shown | المكتبة ← ‹اسم الكتاب›<br>الرئيسية ← افتح تفسير السعدي | `mobile/src/app/(tabs)/(library)/book.tsx` |
+| التراجم | `/tarajim` | shown | شريط التبويب: التراجم | `mobile/src/app/(tabs)/(tarajim)/tarajim.tsx` |
+| كل التراجم | `/people` | shown | التراجم ← كل التراجم | `mobile/src/app/(tabs)/(tarajim)/people.tsx` |
+| الترجمة | `/person?slug=abu-bakr-as-siddiq` | shown | كل التراجم ← ‹اسم الشخص›<br>التراجم ← ‹اكتب الاسم في البحث› ← ‹اسم الشخص› | `mobile/src/app/(tabs)/(tarajim)/person.tsx` |
+| الصلات | `/ties?slug=abu-bakr-as-siddiq` | shown | الترجمة ← تنقّل في صلاته | `mobile/src/app/(tabs)/(tarajim)/ties.tsx` |
+| قصص السيرة | `/stories` | shown | التراجم ← قصص السيرة | `mobile/src/app/(tabs)/(tarajim)/stories.tsx` |
+| القصة | `/story?slug=islam-of-dimad` | shown | قصص السيرة ← ‹اسم القصة› | `mobile/src/app/(tabs)/(tarajim)/story.tsx` |
+| الغزوات والمعارك | `/battles` | shown | التراجم ← الغزوات والمعارك | `mobile/src/app/(tabs)/(tarajim)/battles.tsx` |
+| الغزوة | `/battle?slug=badr` | shown | الغزوات والمعارك ← ‹اسم الغزوة›<br>الأطلس ← ‹اسم الغزوة› | `mobile/src/app/(tabs)/(tarajim)/battle.tsx` |
+| الأطلس | `/atlas` | shown | التراجم ← الأطلس | `mobile/src/app/(tabs)/(tarajim)/atlas.tsx` |
+| النسب | `/nasab` | shown | التراجم ← النسب | `mobile/src/app/(tabs)/(tarajim)/nasab.tsx` |
+| بين عدة أشخاص | `/between` | shown | التراجم ← بين عدة أشخاص | `mobile/src/app/(tabs)/(tarajim)/between.tsx` |
+| حياتهم جنبًا إلى جنب | `/life` | shown | التراجم ← حياتهم جنبًا إلى جنب | `mobile/src/app/(tabs)/(tarajim)/life.tsx` |
+| الاختبارات | `/quizzes` | shown | شريط التبويب: الاختبارات | `mobile/src/app/(tabs)/quizzes.tsx` |
+| اختبار مخصص | `/quiz/solo` | covered | الاختبارات ← اختبار مخصص | `mobile/src/app/quiz/solo.tsx` |
+| الاختبار | `/quiz/play` | covered | اختبار مخصص ← ابدأ الاختبار | `mobile/src/app/quiz/play.tsx` |
+| اختبار جماعي | `/quiz/party` | covered | الاختبارات ← اختبار جماعي | `mobile/src/app/quiz/party/index.tsx` |
+| غرفة الاختبار الجماعي | `/quiz/party/000000` | covered | اختبار جماعي ← ابدأ<br>اختبار جماعي ← انضم | `mobile/src/app/quiz/party/[code].tsx` |
+| عن نمق | `/about` | covered | الرئيسية ← الإعدادات ← عن نمق | `mobile/src/app/about.tsx` |
+| سياسة الخصوصية | `/privacy` | covered | الرئيسية ← الإعدادات ← سياسة الخصوصية | `mobile/src/app/privacy.tsx` |
+| المصادر والتراخيص | `/attributions` | covered | الرئيسية ← الإعدادات ← المصادر والتراخيص | `mobile/src/app/attributions.tsx` |
+| مقاسات الأشجار | `/tree-sizes` | covered | لا يُفتح من التطبيق (npm run tree-sizes opens it to measure every tree) | `mobile/src/app/tree-sizes.tsx` |
 
 ## Adding a screen
 
@@ -238,9 +242,9 @@ Add the route file, then an entry in `SCREENS` in `e2e/featureMap.mjs`, and run 
 
 - `file`: the route file under `mobile/src/app`, without `.tsx`.
 - `name`: what a person would call the screen. It must be unique.
-- `section`: the tab bar button it sits under, or «خارج الشريط».
+- `section`: the tab bar button whose topic it belongs to, or «خارج الشريط».
 - `tabBar`: only on the screen a tab bar button opens, the button's label.
 - `from`: each way in, as the screen a person is on, then the labels tapped there in order. A label in ‹› is what a
-  row shows; every other label must appear in the app's code.
+  row shows, a typed search or a gesture; every other label must appear in the app's code.
 - `sample`: for a screen that needs params, a query (`?slug=badr`) or a path (`/musa`) that gives it something to show.
 - `unlinked`: why nothing in the app opens the screen, for a tool such as `tree-sizes`.
