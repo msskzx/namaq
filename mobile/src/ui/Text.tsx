@@ -1,8 +1,9 @@
-import { createContext, useContext, type ComponentProps } from 'react';
+import { cloneElement, createContext, Fragment, isValidElement, useContext, type ComponentProps, type ReactNode } from 'react';
 import { Platform, StyleSheet, Text as NativeText, TextInput as NativeTextInput, type StyleProp, type TextStyle } from 'react-native';
 import { UI_FONT, UI_FONT_BOLD } from '@/lib/theme';
 import { textDirection } from '@/lib/rtl';
 import { UI_SCALE } from '@shared/quran/compareCardLook';
+import { mushafMarkOrder } from '@shared/quran/quranText/markOrder';
 
 export { UI_SCALE };
 const DEFAULT_SIZE = 14;
@@ -30,10 +31,17 @@ function rtlStyle(style: StyleProp<TextStyle>): StyleProp<TextStyle> {
   return [style, textDirection(StyleSheet.flatten(style) ?? {}, Platform.OS !== 'web')];
 }
 
-export function Text({ style, ...props }: ComponentProps<typeof NativeText>) {
+function inMushafOrder(children: ReactNode): ReactNode {
+  if (typeof children === 'string') return mushafMarkOrder(children);
+  if (Array.isArray(children)) return children.map(inMushafOrder);
+  if (isValidElement<{ children?: ReactNode }>(children) && children.type === Fragment) return cloneElement(children, { children: inMushafOrder(children.props.children) });
+  return children;
+}
+
+export function Text({ style, children, ...props }: ComponentProps<typeof NativeText>) {
   const parent = useContext(Inside);
   const ui = uiStyle(style, parent);
-  const text = <NativeText selectable={false} {...props} style={parent ? ui.style : rtlStyle(ui.style)} />;
+  const text = <NativeText selectable={false} {...props} style={parent ? ui.style : rtlStyle(ui.style)}>{inMushafOrder(children)}</NativeText>;
   return ui.role === parent ? text : <Inside.Provider value={ui.role}>{text}</Inside.Provider>;
 }
 
