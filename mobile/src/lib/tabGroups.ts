@@ -1,4 +1,4 @@
-export const QURAN_TOOLS = ['branches', 'compare', 'prophets', 'tuhfa', 'words', 'word', 'oaths', 'lataif', 'terms', 'term', 'openings', 'order', 'qiraat'] as const;
+export const QURAN_TOOLS = ['ayat', 'ayat-surah', 'branches', 'compare', 'prophets', 'tuhfa', 'words', 'word', 'oaths', 'lataif', 'terms', 'term', 'openings', 'order', 'qiraat'] as const;
 
 const ROOT_OF: Record<string, string> = { '(home)': 'index', '(library)': 'books', '(quran)': 'quran', '(hadith)': 'hadith', '(tarajim)': 'tarajim' };
 

@@ -14,6 +14,21 @@ test('the Quran hub links to every tool', async ({ page }) => {
   await expect(page.getByRole('link', { name: 'متشابهات القرآن' })).toBeVisible();
 });
 
+// Every ayah page is reached from the Quran tab, beside the mushaf (owner, 2026-11-28).
+test('«الآيات» opens every ayah page: a surah, then its ayah, or a typed place', async ({ page }) => {
+  await open(page, '/');
+  await tab(page, 'القرآن').click();
+  await page.getByRole('link', { name: 'الآيات', exact: true }).click();
+  await page.getByRole('link', { name: `سورة ${S(2)}، ٢٨٦ آية` }).click();
+  await expect(page.getByRole('heading', { name: S(2) })).toBeVisible();
+  await page.getByRole('link', { name: new RegExp(`^${S(2)} ٥: `) }).click();
+  await expect(page).toHaveURL(/\/ayah\?key=2(%3A|:)5/);
+  await open(page, '/ayat');
+  await page.getByLabel('ابحث عن سورة أو آية').fill('البقرة ٣٦');
+  await page.getByRole('link', { name: new RegExp(`^${S(2)} ٣٦: `) }).click();
+  await expect(page).toHaveURL(/\/ayah\?key=2(%3A|:)36/);
+});
+
 test('the surah order narrows to a juz and cites its books', async ({ page }) => {
   await open(page, '/order');
   await expect(page.getByRole('heading', { name: `${S(1)}` })).toBeVisible();

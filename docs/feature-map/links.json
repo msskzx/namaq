@@ -37,6 +37,20 @@
   "on": "every screen"
  },
  {
+  "file": "mobile/src/components/AyahListRow.tsx",
+  "line": 32,
+  "owner": "AyahListRow",
+  "key": "onPress",
+  "label": "‹›: ‹›",
+  "how": "push",
+  "route": "/ayah",
+  "opens": "صفحة الآية",
+  "on": [
+   "آيات السورة",
+   "الآيات"
+  ]
+ },
+ {
   "file": "mobile/src/components/AyahMenuHost.tsx",
   "line": 48,
   "owner": "AyahMenuHost",
@@ -2754,6 +2768,8 @@
    "الأدوات والأذكار",
    "الكتاب",
    "المكتبة",
+   "آيات السورة",
+   "الآيات",
    "متشابهات القرآن",
    "مقارنة السور",
    "مشاهد",
@@ -2816,6 +2832,8 @@
    "الأدوات والأذكار",
    "الكتاب",
    "المكتبة",
+   "آيات السورة",
+   "الآيات",
    "متشابهات القرآن",
    "مقارنة السور",
    "مشاهد",
@@ -2878,6 +2896,8 @@
    "الأدوات والأذكار",
    "الكتاب",
    "المكتبة",
+   "آيات السورة",
+   "الآيات",
    "متشابهات القرآن",
    "مقارنة السور",
    "مشاهد",
@@ -3259,6 +3279,19 @@
   "opens": "الترجمة",
   "on": [
    "صفحة الآية"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/ayat.tsx",
+  "line": 39,
+  "owner": "AyatScreen",
+  "key": "onOpen",
+  "label": null,
+  "how": "tab",
+  "route": "/ayat-surah",
+  "opens": "آيات السورة",
+  "on": [
+   "الآيات"
   ]
  },
  {
@@ -4332,10 +4365,10 @@
   "line": 20,
   "owner": "QURAN_TILES",
   "key": null,
-  "label": "متشابهات القرآن",
+  "label": "الآيات",
   "how": "tab",
-  "route": "/branches",
-  "opens": "متشابهات القرآن",
+  "route": "/ayat",
+  "opens": "الآيات",
   "on": [
    "القرآن"
   ]
@@ -4345,10 +4378,10 @@
   "line": 21,
   "owner": "QURAN_TILES",
   "key": null,
-  "label": "مقارنة السور",
+  "label": "ترتيب السور",
   "how": "tab",
-  "route": "/compare",
-  "opens": "مقارنة السور",
+  "route": "/order",
+  "opens": "ترتيب السور",
   "on": [
    "القرآن"
   ]
@@ -4356,97 +4389,6 @@
  {
   "file": "mobile/src/screens/quran.tsx",
   "line": 22,
-  "owner": "QURAN_TILES",
-  "key": null,
-  "label": "قصص الأنبياء",
-  "how": "tab",
-  "route": "/prophets",
-  "opens": "قصص الأنبياء",
-  "on": [
-   "القرآن"
-  ]
- },
- {
-  "file": "mobile/src/screens/quran.tsx",
-  "line": 23,
-  "owner": "QURAN_TILES",
-  "key": null,
-  "label": "تحفة الأطفال",
-  "how": "tab",
-  "route": "/tuhfa",
-  "opens": "تحفة الأطفال",
-  "on": [
-   "القرآن"
-  ]
- },
- {
-  "file": "mobile/src/screens/quran.tsx",
-  "line": 24,
-  "owner": "QURAN_TILES",
-  "key": null,
-  "label": "ألفاظ القرآن",
-  "how": "tab",
-  "route": "/words",
-  "opens": "ألفاظ القرآن",
-  "on": [
-   "القرآن"
-  ]
- },
- {
-  "file": "mobile/src/screens/quran.tsx",
-  "line": 25,
-  "owner": "QURAN_TILES",
-  "key": null,
-  "label": "الأقسام",
-  "how": "tab",
-  "route": "/oaths",
-  "opens": "الأقسام",
-  "on": [
-   "القرآن"
-  ]
- },
- {
-  "file": "mobile/src/screens/quran.tsx",
-  "line": 26,
-  "owner": "QURAN_TILES",
-  "key": null,
-  "label": "مشاهد",
-  "how": "tab",
-  "route": "/lataif",
-  "opens": "مشاهد",
-  "on": [
-   "القرآن"
-  ]
- },
- {
-  "file": "mobile/src/screens/quran.tsx",
-  "line": 27,
-  "owner": "QURAN_TILES",
-  "key": null,
-  "label": "مصطلحات البلاغة",
-  "how": "tab",
-  "route": "/terms",
-  "opens": "مصطلحات البلاغة",
-  "on": [
-   "القرآن"
-  ]
- },
- {
-  "file": "mobile/src/screens/quran.tsx",
-  "line": 28,
-  "owner": "QURAN_TILES",
-  "key": null,
-  "label": "القراءات",
-  "how": "tab",
-  "route": "/qiraat",
-  "opens": "القراءات",
-  "on": [
-   "القرآن"
-  ]
- },
- {
-  "file": "mobile/src/screens/quran.tsx",
-  "line": 29,
   "owner": "QURAN_TILES",
   "key": null,
   "label": "فواتح السور",
@@ -4459,13 +4401,104 @@
  },
  {
   "file": "mobile/src/screens/quran.tsx",
+  "line": 23,
+  "owner": "QURAN_TILES",
+  "key": null,
+  "label": "متشابهات القرآن",
+  "how": "tab",
+  "route": "/branches",
+  "opens": "متشابهات القرآن",
+  "on": [
+   "القرآن"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/quran.tsx",
+  "line": 24,
+  "owner": "QURAN_TILES",
+  "key": null,
+  "label": "مقارنة السور",
+  "how": "tab",
+  "route": "/compare",
+  "opens": "مقارنة السور",
+  "on": [
+   "القرآن"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/quran.tsx",
+  "line": 25,
+  "owner": "QURAN_TILES",
+  "key": null,
+  "label": "ألفاظ القرآن",
+  "how": "tab",
+  "route": "/words",
+  "opens": "ألفاظ القرآن",
+  "on": [
+   "القرآن"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/quran.tsx",
+  "line": 26,
+  "owner": "QURAN_TILES",
+  "key": null,
+  "label": "مصطلحات البلاغة",
+  "how": "tab",
+  "route": "/terms",
+  "opens": "مصطلحات البلاغة",
+  "on": [
+   "القرآن"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/quran.tsx",
+  "line": 27,
+  "owner": "QURAN_TILES",
+  "key": null,
+  "label": "القراءات",
+  "how": "tab",
+  "route": "/qiraat",
+  "opens": "القراءات",
+  "on": [
+   "القرآن"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/quran.tsx",
+  "line": 28,
+  "owner": "QURAN_TILES",
+  "key": null,
+  "label": "قصص الأنبياء",
+  "how": "tab",
+  "route": "/prophets",
+  "opens": "قصص الأنبياء",
+  "on": [
+   "القرآن"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/quran.tsx",
+  "line": 29,
+  "owner": "QURAN_TILES",
+  "key": null,
+  "label": "الأقسام",
+  "how": "tab",
+  "route": "/oaths",
+  "opens": "الأقسام",
+  "on": [
+   "القرآن"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/quran.tsx",
   "line": 30,
   "owner": "QURAN_TILES",
   "key": null,
-  "label": "ترتيب السور",
+  "label": "تحفة الأطفال",
   "how": "tab",
-  "route": "/order",
-  "opens": "ترتيب السور",
+  "route": "/tuhfa",
+  "opens": "تحفة الأطفال",
   "on": [
    "القرآن"
   ]
@@ -4740,6 +4773,8 @@
    "الأدوات والأذكار",
    "الكتاب",
    "المكتبة",
+   "آيات السورة",
+   "الآيات",
    "متشابهات القرآن",
    "مقارنة السور",
    "مشاهد",
@@ -4802,6 +4837,8 @@
    "الأدوات والأذكار",
    "الكتاب",
    "المكتبة",
+   "آيات السورة",
+   "الآيات",
    "متشابهات القرآن",
    "مقارنة السور",
    "مشاهد",
@@ -4864,6 +4901,8 @@
    "الأدوات والأذكار",
    "الكتاب",
    "المكتبة",
+   "آيات السورة",
+   "الآيات",
    "متشابهات القرآن",
    "مقارنة السور",
    "مشاهد",
