@@ -5,6 +5,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Text } from '@/ui/Text';
 import Button from '@/ui/Button';
 import { usePalette } from '@/lib/theme';
+import { causeChain, recentErrors } from '@shared/errors';
 
 /**
  * Shown in place of a screen that crashed, so the app never goes blank. Screens re-export it as `ErrorBoundary`
@@ -12,7 +13,11 @@ import { usePalette } from '@/lib/theme';
  */
 export function ErrorBoundary({ error, retry }: ErrorBoundaryProps) {
   const palette = usePalette();
-  const details = (error.stack ?? error.message).split('\n').slice(0, 8).join('\n');
+  const stack = (error.stack ?? '').split('\n');
+  const first = stack.findIndex(line => /^\s*at |@/.test(line));
+  const where = (first < 0 ? [] : stack.slice(first)).slice(0, 6).join('\n');
+  const before = recentErrors().slice(0, 5).map(item => `[${item.where}]${item.times > 1 ? ` ×${item.times}` : ''} ${item.reason}`).join('\n');
+  const details = [causeChain(error), where, before && `---\n${before}`].filter(Boolean).join('\n\n');
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: palette.paper }}>
       <View style={{ flex: 1, padding: 20, gap: 16, direction: 'rtl' }}>

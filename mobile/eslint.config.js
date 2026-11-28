@@ -24,4 +24,18 @@ module.exports = defineConfig([
       'react-hooks/use-memo': 'warn',
     },
   },
+  {
+    rules: {
+      'no-empty': ['error', { allowEmptyCatch: false }],
+      'no-restricted-syntax': ['error',
+        { selector: "CatchClause > BlockStatement[body.length=0]", message: "Report the error with reportError(where, error) from @shared/errors, so its cause is not lost." },
+        { selector: "CallExpression[callee.property.name='catch'] > :function[body.type='BlockStatement'][body.body.length=0]", message: "Report the error with reportError(where, error) from @shared/errors, so its cause is not lost." },
+        { selector: "CallExpression[callee.property.name='then'] > :function:nth-child(2)[body.type='BlockStatement'][body.body.length=0]", message: "Report the error with reportError(where, error) from @shared/errors, so its cause is not lost." },
+        { selector: "CallExpression[callee.property.name='then'] > ArrowFunctionExpression:nth-child(2)[body.type=/Literal|Identifier/]", message: "Report the error with reportError(where, error) from @shared/errors, so its cause is not lost." },
+        { selector: "CallExpression[callee.property.name='then'] > ArrowFunctionExpression:nth-child(2)[body.operator='void']", message: "Report the error with reportError(where, error) from @shared/errors, so its cause is not lost." },
+        { selector: "CallExpression[callee.property.name='catch'] > ArrowFunctionExpression[body.type=/Literal|Identifier/]", message: "Report the error with reportError(where, error) from @shared/errors, so its cause is not lost." },
+        { selector: "CallExpression[callee.property.name='catch'] > ArrowFunctionExpression[body.operator='void']", message: "Report the error with reportError(where, error) from @shared/errors, so its cause is not lost." },
+      ],
+    },
+  },
 ]);

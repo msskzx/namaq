@@ -37,6 +37,7 @@ import { partyUrl, playerId, saveName, savedName, usePartySocket, type PartyStat
 import { partyQuiz, type QuestionState } from '@/lib/quiz';
 import { usePalette, type Palette } from '@/lib/theme';
 import Field from '@/ui/Field';
+import { reportError } from '@shared/errors';
 type QuestionChoice = { value: string; labelArabic: string };
 
 type Send = (action: PlayerAction) => void;
@@ -266,7 +267,7 @@ function Lobby({ view, send, error, palette }: { view: PartyView; send: Send; er
   useEffect(() => setBuilt(null), [settingsKey]);
   const begin = (early?: boolean) => {
     let quiz;
-    try { quiz = partyQuiz(view.settings); } catch { return setBuilt('failed'); }
+    try { quiz = partyQuiz(view.settings); } catch (error) { reportError('party: build questions', error); return setBuilt('failed'); }
     if (quiz.questions.length < view.settings.length) return setBuilt('short');
     setBuilt(null);
     send({ type: 'start', ...(early && { early }), ...quiz });

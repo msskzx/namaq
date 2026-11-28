@@ -1,4 +1,5 @@
 import { keyStore } from './storage';
+import { reportError } from './errors';
 
 /**
  * Ayat a reader forgot while reading or reciting, with how often, kept on this device for now. Saved ayat go to the shared bookmarks.
@@ -23,7 +24,7 @@ function parse(raw: string | null): AyahMarks {
         }
       }
     }
-  } catch {}
+  } catch (error) { reportError('ayah marks: read', error); }
   return Object.keys(marks).length ? marks : NONE;
 }
 

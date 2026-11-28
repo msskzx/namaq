@@ -45,3 +45,29 @@ types, but the import no longer says what it is. Each got its `type` mark back. 
 - **Effect:** it reported 7,700 comment lines where there are 13,461, about 40% too few.
 - **Found by:** the reviewer recounting from the parsed syntax tree.
 - **Fix:** the counter walks the parsed file and collects the comments around every node.
+
+## A save that failed in silence (step 2, lint)
+
+- **Where:** `shared/storage.ts` `keyStore.write`, `shared/bookmarks.ts` `write`, and 20 more `catch {}` blocks.
+- **Wrong:** a failed save to the device was caught and dropped.
+- **Effect:** a reader's bookmark or note could be lost with nothing anywhere saying why.
+- **Found by:** `no-empty` with `allowEmptyCatch: false`, now an error in the app and in `shared/`.
+- **Fix:** each one calls `reportError(where, error)` from `shared/errors.ts`. The crash screen now shows the
+  error, every `cause` under it down to the root, and the last errors the app recovered from.
+
+## The recorder's reason was thrown away (step 2, reading the catches)
+
+- **Where:** `mobile/src/lib/scene.ts` `readRecorderMessage`.
+- **Wrong:** the video recorder's web page sent `{ type: 'error', message }`, and the app kept only "error".
+- **Effect:** "the video failed" with no way to learn why.
+- **Found by:** reading every catch while fixing the empty ones. No rule catches this one, because the catch
+  was not empty.
+- **Fix:** the message carries a `reason`, which is reported. The same reading found more failures that kept
+  no reason, among them scheduling the adhan alerts. A failure there meant the adhan silently never rang.
+
+## Comments that justified a shortcut (step 2, noticed for step 4)
+
+- `mobile/src/lib/lazyScreen.ts` and `HomeFeed.tsx` each have a `catch { /* … */ }` whose comment explains why
+  the error can be dropped. That is the pattern from the talk: the comment makes the shortcut look reviewed.
+  The stricter rule from the review (a catch block holding only a comment counts as empty) flagged both, and
+  they now report what failed.

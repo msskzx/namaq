@@ -1,4 +1,5 @@
 import { createElement, type ComponentType } from 'react';
+import { reportError } from '@shared/errors';
 
 /**
  * A route whose screen (and the data it reads) loads on its first visit instead of at launch.
@@ -29,7 +30,7 @@ export function warmScreens(gap = 120) {
     if (stopped) return;
     const get = pending.shift();
     if (!get) return;
-    try { get(); } catch { /* a screen that fails to load fails again on its visit, where the error screen shows */ }
+    try { get(); } catch (error) { reportError('lazy screen: preload', error); }
     setTimeout(next, gap);
   };
   const start = setTimeout(next, gap);

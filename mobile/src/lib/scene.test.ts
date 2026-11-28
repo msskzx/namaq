@@ -55,14 +55,14 @@ describe('the recorder page', () => {
 });
 
 describe('what the recorder says back', () => {
-  it('takes only a finished video of a video type, or a failure', () => {
+  it('takes only a finished video of a video type, or a failure with its reason', () => {
     expect(readRecorderMessage(JSON.stringify({ type: 'video', mime: 'video/mp4', data: 'AAAA' }))).toEqual({ type: 'video', mime: 'video/mp4', data: 'AAAA' });
-    expect(readRecorderMessage(JSON.stringify({ type: 'error', message: 'unsupported' }))).toEqual({ type: 'error' });
+    expect(readRecorderMessage(JSON.stringify({ type: 'error', message: 'unsupported' }))).toEqual({ type: 'error', reason: 'unsupported' });
     expect(readRecorderMessage(JSON.stringify({ type: 'video', mime: 'text/html', data: 'AAAA' }))).toBeNull();
     expect(readRecorderMessage(JSON.stringify({ type: 'video', mime: 'video/webm' }))).toBeNull();
     expect(readRecorderMessage(JSON.stringify({ type: 'progress', at: 1, total: 2 }))).toBeNull();
     expect(readRecorderMessage('{not json')).toBeNull();
     expect(readRecorderMessage('null')).toBeNull();
-    expect(readRecorderMessage(JSON.stringify({ type: 'video', mime: 'video/mp4', data: '' }))).toEqual({ type: 'error' });
+    expect(readRecorderMessage(JSON.stringify({ type: 'video', mime: 'video/mp4', data: '' }))).toEqual({ type: 'error', reason: 'the recording is empty' });
   });
 });

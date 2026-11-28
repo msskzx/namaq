@@ -1,4 +1,5 @@
 import { keyStore } from './storage';
+import { reportError } from './errors';
 
 /** A reader's own note on an ayah, kept on this device only. */
 export type AyahNote = { text: string; at: number };
@@ -16,7 +17,7 @@ function parse(raw: string | null): AyahNotes {
         if (/^\d+:\d+$/.test(key) && note && typeof note.text === 'string' && note.text.trim()) notes[key] = { text: note.text, at: Number(note.at) || 0 };
       }
     }
-  } catch {}
+  } catch (error) { reportError('ayah notes: read', error); }
   return Object.keys(notes).length ? notes : NONE;
 }
 

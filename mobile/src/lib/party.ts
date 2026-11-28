@@ -3,6 +3,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { AppState } from 'react-native';
 import type { ActionError, PartyView, PlayerAction } from '@shared/party/rules';
 import { device as deviceStorage } from './storage';
+import { reportError } from '@shared/errors';
 
 const PLAYER_KEY = 'namaq-party-player';
 const NAME_KEY = 'namaq-party-name';
@@ -25,7 +26,7 @@ export class NoPartyServer extends Error {}
 const START_TIMEOUT = 10_000;
 
 const read = (key: string) => { try { return deviceStorage.getItem(key); } catch { return null; } };
-const write = (key: string, value: string) => { try { deviceStorage.setItem(key, value); } catch {} };
+const write = (key: string, value: string) => { try { deviceStorage.setItem(key, value); } catch (error) { reportError('party: save to device', error); } };
 
 /** One id per device, so a phone that drops out rejoins the party as the same player with its score. */
 export function playerId() {
