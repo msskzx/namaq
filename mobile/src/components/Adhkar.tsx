@@ -22,17 +22,12 @@ import { adhkarAlerts, prayerPlace } from '@/lib/settings';
 import type { Palette } from '@/lib/theme';
 
 export const ADHKAR_ICONS = { morning: Sun, evening: Moon, sleep: Bed, waking: Sunrise, 'after-prayer': Mosque } as const;
-/** Room between the cards. */
 const GAP = 16;
 const REMINDER: Partial<Record<AdhkarOccasion, { time: AdhkarTime; label: string }>> = {
   morning: { time: 'morning', label: 'تذكير بأذكار الصباح بعد الفجر' },
   evening: { time: 'evening', label: 'تذكير بأذكار المساء بعد العصر' },
 };
 
-/**
- * The Quran selection in the mushaf's own lines, each passage as the reader draws its ayat (آية الكرسي, the end of
- * al-Baqara; al-Falaq and al-Nas each from its title, so al-Ikhlas shows only where it is chosen).
- */
 function QuranPage({ item, palette }: { item: Dhikr; palette: Palette }) {
   if (item.content.kind !== 'quran') return null;
   return (
@@ -44,7 +39,6 @@ function QuranPage({ item, palette }: { item: Dhikr; palette: Palette }) {
   );
 }
 
-/** A dhikr's words (the Quran passages in the mushaf's lines) and its virtue under them: the page's card and the feed's. */
 export function DhikrBody({ item, palette }: { item: Dhikr; palette: Palette }) {
   return <>
     {item.content.kind === 'text'
@@ -58,7 +52,6 @@ export function DhikrBody({ item, palette }: { item: Dhikr; palette: Palette }) 
   </>;
 }
 
-/** The fajr or asr reminder for the open tab, if it has one; switching it on asks for notifications the first time. */
 function useReminder(time: AdhkarTime | undefined, onPlace: () => void) {
   const [alerts, setAlerts] = adhkarAlerts.use();
   const [place] = prayerPlace.use();
@@ -75,7 +68,6 @@ function useReminder(time: AdhkarTime | undefined, onPlace: () => void) {
     if (!time) return;
     buzz();
     if (on) { setAlerts({ ...adhkarAlerts.get(), [time]: false }); return; }
-    // The reminder follows fajr and asr, so it needs the place the prayer times are for.
     if (!place) { onPlace(); return; }
     const ok = await allowAlerts();
     setBlocked(!ok);
@@ -84,7 +76,6 @@ function useReminder(time: AdhkarTime | undefined, onPlace: () => void) {
   return { on, blocked, toggle };
 }
 
-/** The grade under a dhikr, in its scholar's name, and who recorded it (owner, 2026-11-23: the reference right under it). */
 export function GradeLine({ item, palette }: { item: Dhikr; palette: Palette }) {
   const { grades, recorded } = gradeLine(item);
   return (
@@ -100,22 +91,18 @@ export function GradeLine({ item, palette }: { item: Dhikr; palette: Palette }) 
   );
 }
 
-/** «١٤ ذكرًا», «٣ أذكار», «ذكران». */
 export const adhkarCount = (n: number) => (n === 1 ? 'ذكر واحد' : n === 2 ? 'ذكران' : n <= 10 ? `${num(n)} أذكار` : `${num(n)} ذكرًا`);
 
-/** A dhikr in one line of a list: its first words, or the surahs and ayat it recites. */
 export function dhikrLine(item: Dhikr) {
   if (item.content.kind === 'quran') return item.content.ranges.map(range => `${surahName(range.surah)} ${num(range.from)}${range.to > range.from ? `–${num(range.to)}` : ''}`).join('، ');
   const words = item.content.text.split(/\s+/);
   return words.length > 6 ? `${words.slice(0, 6).join(' ')}…` : item.content.text;
 }
 
-/** How many of a time's adhkar were said today. */
 const saidOf = (counts: SaidToday['counts'], occasion: AdhkarOccasion) => adhkarFor(occasion).filter(item => saidDone(counts, saidKey(occasion, item.id))).length;
 
 const BOOK_NOTE = 'جمعها النووي في «الأذكار»، والحكم على كل حديث باسم قائله.';
 
-/** One dhikr as a row: said today or not, its first words, how often, and its grade (design ب, owner 2026-11-24). */
 function DhikrRow({ item, occasion, said, first, palette }: { item: Dhikr; occasion: AdhkarOccasion; said: boolean; first: boolean; palette: Palette }) {
   const grade = gradeLine(item).grades[0]?.rank;
   const line = dhikrLine(item);
@@ -130,7 +117,6 @@ function DhikrRow({ item, occasion, said, first, palette }: { item: Dhikr; occas
   );
 }
 
-/** The list of times, and a search over every dhikr (owner, 2026-11-24: no tabs, as the adhkar will grow). */
 function Times({ query, palette }: { query: string; palette: Palette }) {
   const [count] = useSaidToday();
   const found = useMemo(() => {
@@ -174,7 +160,6 @@ function Times({ query, palette }: { query: string; palette: Palette }) {
   );
 }
 
-/** One time's adhkar as a list, each marked once said today; a tap opens it (design ب, owner 2026-11-24). */
 function TimeList({ occasion, palette, onPlace }: { occasion: AdhkarOccasion; palette: Palette; onPlace: () => void }) {
   const [count] = useSaidToday();
   const items = adhkarFor(occasion);
@@ -202,13 +187,7 @@ function TimeList({ occasion, palette, onPlace }: { occasion: AdhkarOccasion; pa
   );
 }
 
-/**
- * The adhkar page in the utilities (owner, 2026-11-17; redesigned 2026-11-24, sketch /mnt/project-files/tools-design/adhkar):
- * al-Nawawi's al-Adhkar, each with a named scholar's grade of sahih or hasan. The times as a list with a search, a time's
- * adhkar as rows, and a dhikr open full screen (screens/dhikr.tsx). What was said is kept until the day ends.
- */
 export default function Adhkar({ query = '', palette, onPlace }: { query?: string; palette: Palette; onPlace: () => void }) {
   const occasion = useAdhkarPlace();
-  // The search is in the top bar (owner, 2026-11-24: never inside the page); what is typed shows its finds over any time's list.
   return occasion && !query.trim() ? <TimeList occasion={occasion} palette={palette} onPlace={onPlace} /> : <Times query={query} palette={palette} />;
 }

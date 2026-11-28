@@ -8,16 +8,9 @@ import { light } from '@/lib/theme';
 
 const BATCH = 8;
 const DIRECTIONS: Direction[] = ['side', 'down'];
-/** The node buttons take room, so the trees are measured with them, as the branches tab draws them. */
 const ACTIONS: NodeActions = { onSubtree: () => {} };
 
-/**
- * Not linked from the app: `npm run tree-sizes` opens it in the web build. It draws every tree both ways, with and
- * without the surrounding ayat, and the script reads the sizes and each tree's ayah count off `window.treeSizes`
- * into src/lib/treeSizes.json.
- */
 export default function TreeSizesScreen() {
-  // A book's one-ayah entry has no tree to draw: it shows as its matrix only.
   const pieces = useMemo(() => treeList().filter(piece => piece.keys.length > 1), []);
   const [at, setAt] = useState(0);
   const sizes = useRef<Record<string, Shipped>>({});

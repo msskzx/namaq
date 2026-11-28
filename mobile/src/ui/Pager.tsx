@@ -1,12 +1,6 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import { FlatList, Platform, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
 
-/**
- * Pages side by side, one at a time, as a book turns in Arabic: swiping right brings the next page from the left. `index`
- * is the open page; a swipe that lands on another calls `onIndex`, and a new `index` from outside turns to it.
- * Each page is drawn the pager's whole size; a page that is taller scrolls itself.
- * As ComparePager: the web build snaps with CSS and sends no momentum event, so it settles when scrolling stops.
- */
 export default function Pager<T>({ data, index, onIndex, keyOf, renderPage }: {
   data: readonly T[]; index: number; onIndex: (index: number) => void; keyOf: (item: T) => string;
   renderPage: (item: T, size: { width: number; height: number }) => ReactNode;
@@ -15,8 +9,6 @@ export default function Pager<T>({ data, index, onIndex, keyOf, renderPage }: {
   const [size, setSize] = useState({ width: 0, height: 0 });
   const { width } = size;
   const shown = useRef(index);
-  // As ComparePager: a resize (the bars hiding, a turn of the phone) can throw the list to a neighbouring page with no
-  // finger on it; a rest elsewhere right after one goes back to the open page.
   const resized = useRef(0);
   useEffect(() => {
     if (!width || shown.current === index) return;
@@ -43,7 +35,6 @@ export default function Pager<T>({ data, index, onIndex, keyOf, renderPage }: {
     clearTimeout(quiet.current);
     quiet.current = setTimeout(() => settle({ nativeEvent } as NativeSyntheticEvent<NativeScrollEvent>), 150);
   }, [settle]);
-  // A new width moves every page, so the open one is scrolled back into place.
   useEffect(() => { if (width) list.current?.scrollToIndex({ index: shown.current, animated: false }); }, [width]);
   const layout = useCallback((_: unknown, at: number) => ({ length: width, offset: width * at, index: at }), [width]);
   return (

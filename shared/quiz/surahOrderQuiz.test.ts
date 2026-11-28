@@ -37,7 +37,6 @@ describe('«رتّب السور»', () => {
   });
 
   it('fills a part of fewer than four surahs with the surahs just outside it, and asks nothing of one surah', () => {
-    // Juz 1 holds al-Fatiha and al-Baqarah: the two after them fill the question.
     const juz1 = surahOrderQuiz.questions({ range: { from: 1, to: 1 }, filters: {} }, 'medium', seededRandom(1));
     expect(juz1.length).toBeGreaterThan(0);
     for (const question of juz1) expect(question.order).toEqual(['1', '2', '3', '4']);
@@ -58,10 +57,8 @@ describe('«رتّب سور الجزء»', () => {
     const juz30 = questions.find(question => question.promptArabic === 'رتّب سور الجزء ٣٠')!;
     expect(juz30.order).toEqual(Array.from({ length: 37 }, (_, i) => String(78 + i)));
     expect(juz30.tray).toBe(true);
-    // al-Dhariyat starts in juz 26 and ends in juz 27.
     expect(questions.find(question => question.promptArabic === 'رتّب سور الجزء ٢٦')!.order).toContain('51');
     expect(questions.find(question => question.promptArabic === 'رتّب سور الجزء ٢٧')!.order).toContain('51');
-    // Juz 2 is al-Baqara alone: nothing to order.
     expect(questions.some(question => question.promptArabic === 'رتّب سور الجزء ٢')).toBe(false);
     expect(questions.every(question => question.order!.length > 1)).toBe(true);
   });

@@ -9,14 +9,12 @@ import { PEOPLE } from './tarajim';
 import { inAyat } from './links';
 import { revealedIn } from '@shared/stories/story';
 
-// The books' on/off state lives on the phone; every book is on here.
 vi.mock('./books', () => ({ bookState: () => 'on' }));
 
 const has = (key: string, test: (section: AyahSection) => boolean) => ayahSections(key).some(test);
 
 describe("an ayah's page (owner, 2026-11-22)", () => {
   it('keeps the agreed order of sections on every ayah of a surah', () => {
-    // Al-Baqarah holds every kind of section but the opening, oath and stories; the stories are checked below.
     for (let ayah = 1; ayah <= 286; ayah++) {
       const at = ayahSections(`2:${ayah}`).map(section => ORDER.indexOf(section.id));
       expect(at.every(i => i >= 0), `2:${ayah}`).toBe(true);
@@ -42,7 +40,6 @@ describe("an ayah's page (owner, 2026-11-22)", () => {
         expect(has(`${surah}:1`, section => section.id === 'opening' && section.card === card.id), `${surah}:1`).toBe(true);
       }
     }
-    // Al-Fatihah opens with the basmala: its opening is «الحمد لله», the second ayah.
     expect(has('1:1', section => section.id === 'opening')).toBe(false);
   });
 
@@ -58,8 +55,6 @@ describe("an ayah's page (owner, 2026-11-22)", () => {
     }
   });
 
-  // A story may give several sets of ayat, two of them «نزل فيه» (the-ifk: 24:11 about Aisha, 24:22 about Abu Bakr); each
-  // ayah's card quotes the set that holds it, not the story's first.
   it('lists every sira story on the first and last ayah of each set it gives, with that set', () => {
     const told = SIRA_STORIES.flatMap(story => story.ayat.map(ayat => ({ slug: story.slug, ayat })));
     expect(told.length).toBeGreaterThan(0);
@@ -71,11 +66,9 @@ describe("an ayah's page (owner, 2026-11-22)", () => {
     }
   });
 
-  // Every link both ways (owner, 2026-11-24): an ayah a person's entry ties him to names him on its page.
   it("shows on an ayah's page every person whose entry ties him to it", () => {
     const tied = PEOPLE.flatMap(person => person.ayat.flatMap(fact => (typeof fact.value === 'string' ? [{ slug: person.slug, key: fact.value }] : [])));
     expect(tied.length).toBeGreaterThan(0);
-    // On his own card, or on the card of the story that names him as the one it was revealed about (not on both).
     const named = (key: string, slug: string) => has(key, section => section.id === 'sira' && revealedIn(section.ayat) && section.ayat.about?.slug === slug);
     const own = (key: string, slug: string) => has(key, section => section.id === 'person' && section.slug === slug);
     for (const { slug, key } of tied) expect([named(key, slug), own(key, slug)], `${slug} ${key}`).toContainEqual(true);

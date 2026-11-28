@@ -3,12 +3,6 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { MIN_TAP, slopFor, touchOf } from '../mobile/src/ui/tapSize';
 
-/**
- * The tap floor (owner, 2026-11-19): everything tappable gives the finger at least 44 × 44 points, counting its box and
- * its hit slop, never by making the icon bigger. The app's presses all go through ui/Tap (raw presses are counted, and
- * may only shrink, in sharedFirst.test.ts), and Tap widens its own hit slop to the floor; the website's Button reaches
- * the floor with an invisible ::after. These checks fail if either path drops it.
- */
 const ROOT = join(__dirname, '..');
 const read = (path: string) => readFileSync(join(ROOT, path), 'utf8');
 
@@ -31,7 +25,6 @@ describe('tap floor', () => {
     const tap = read('mobile/src/ui/Tap.tsx');
     expect(tap).toMatch(/hitSlop=\{slopFor\(size,/);
     expect(tap).toMatch(/onLayout=/);
-    // The hit slop is set once, by the floor, after the press's other props, so nothing replaces it.
     expect(tap.match(/hitSlop=/g)).toHaveLength(1);
     expect(tap.indexOf('{...rest}')).toBeLessThan(tap.indexOf('hitSlop={slopFor('));
   });
@@ -39,7 +32,6 @@ describe('tap floor', () => {
   it('is applied to every website Button and to the chip\'s clear button', () => {
     expect(read('src/components/common/Chip.tsx')).toMatch(/const x = `\$\{TAP_FLOOR\} relative /);
     const button = read('src/components/common/Button.tsx');
-    // The website and the app keep one floor.
     expect(button).toContain(`(100%_-_${MIN_TAP}px)/2`);
     expect(button).toMatch(/export const TAP_FLOOR = "after:absolute after:content-\[''\] after:inset-\[min\(0px,calc\(\(100%_-_\d+px\)\/2\)\)\]";/);
     expect(button).toMatch(/'inline-flex items-center justify-center gap-2 transition', TAP_FLOOR,/);

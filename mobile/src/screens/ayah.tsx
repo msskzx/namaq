@@ -61,18 +61,10 @@ import { shareAyah } from '@/components/AyahShare';
 
 type Icon = React.ComponentProps<typeof PostHead>['Icon'];
 
-/** A book's quote with its page, as a section's line under its buttons. */
 const bookLine = (book: string, cite: string, url: string): Source => ({ line: book, quotes: [{ text: '', cite, url }] });
 
-/** The lines of a book's words a section shows; its «افتح» shows them all (owner, 2026-11-22: the reader's own sheet). */
 const LINES = 4;
 
-/**
- * Everything the app holds on one ayah (owner, 2026-11-22; /mnt/project-files/ayah-page/agreed.md, sketch in
- * ayah-page/sketch): the ayah with the mushaf and the reader's own buttons under it, then each thing on it as a home card
- * (its title and book above the card, only its text inside, one «افتح» under it opening the reader's sheet or its page).
- * Only what has something on this ayah is shown.
- */
 export default function AyahScreen() {
   const palette = usePalette();
   const insets = useSafeAreaInsets();
@@ -80,7 +72,6 @@ export default function AyahScreen() {
   const key = params.key ?? '1:1';
   const [surah, number] = key.split(':').map(Number);
   useBooks();
-  // Al-Kashshaf is a download: read from its file when it is on, as the balagha sheet reads it.
   const kashshafOn = bookState('kashshaf') === 'on';
   const [kashshaf, setKashshaf] = useState<KashshafData | null>(null);
   useEffect(() => {
@@ -104,7 +95,6 @@ export default function AyahScreen() {
   const [topic, setTopic] = useState<TopicOpen | null>(null);
   const open = useMemo<Openers>(() => ({ preview: setPreview, balagha: setBalagha, gharib: setGharib, irab: setIrab, topic: setTopic }), []);
   const word = params.word === undefined ? 0 : Number(params.word);
-  // The card «افتح» came from (a home tafsir card) is scrolled to once it is laid out.
   const scroller = useRef<ComponentRef<typeof ScrollView>>(null);
   const scrolledTo = useRef(false);
   const reachAt = (id: string) => (id === params.at && !scrolledTo.current
@@ -125,7 +115,6 @@ export default function AyahScreen() {
             <IconButton Icon={Send} label="مشاركة" onPress={() => shareAyah(key, palette, note)} />
           </>}>
           <View style={{ padding: 12 }}><LitAyat ayat={[{ words: ayahMushafWords(key), lit: [], number }]} menu={key} palette={palette} /></View>
-          {/* Its place at a glance, as the person page's head gives his (owner, 2026-11-23, sketch quran-design/ayah-page design أ). */}
           <FactCells palette={palette} cells={[
             { key: 'surah', label: 'السورة', readings: [{ value: surahName(surah) }] },
             { key: 'ayah', label: 'الآية', readings: [{ value: num(number), by: `من ${num(ayahCounts.get(surah) ?? number)}` }] },
@@ -152,7 +141,6 @@ export default function AyahScreen() {
   );
 }
 
-/** One thing on the ayah as a home card: its head above, the text in the card, «افتح» and the book line under it. */
 function Part({ Icon, title, sub, open, label, source, onAt, palette, children }: { Icon: Icon; title: string; sub?: string; open: () => void; label: string;
   source?: Source[]; onAt?: (y: number) => void; palette: Palette; children: React.ReactNode }) {
   return (
@@ -168,7 +156,6 @@ type Openers = {
   topic: (open: TopicOpen) => void;
 };
 
-/** A book's words with the Quran it quotes in the mushaf's letters and the accent, cut to a few lines. */
 function BookText({ text, lines = LINES, palette }: { text: string; lines?: number; palette: Palette }) {
   return (
     <Text numberOfLines={lines} style={{ color: palette.ink, fontSize: 17, lineHeight: 31, textAlign: 'right', writingDirection: 'rtl' }}>
@@ -177,7 +164,6 @@ function BookText({ text, lines = LINES, palette }: { text: string; lines?: numb
   );
 }
 
-/** One section; it redraws only when its own ayah or section changes, not on a sheet opening or a mark. */
 const SectionPart = memo(function SectionPart({ section, ayah, word, palette, open, onAt }: {
   section: AyahSection; ayah: string; word: number; palette: Palette; open: Openers; onAt?: (y: number) => void;
 }) {
@@ -197,7 +183,6 @@ const SectionPart = memo(function SectionPart({ section, ayah, word, palette, op
     case 'gharib':
       return <WordsPart {...common} entries={section.entries} ayah={ayah} open={open} />;
     case 'irab': {
-      // The word the feed's i'rab card showed, when it opened this page.
       const body = noteBody('irab', ayah, word, ayahMushafWords(ayah));
       if (!body || !('word' in body)) return null;
       return (
@@ -209,7 +194,6 @@ const SectionPart = memo(function SectionPart({ section, ayah, word, palette, op
       );
     }
     case 'balagha': {
-      // The paragraph the feed's balagha card shows (the one on this ayah alone), else the first.
       const paragraph = bookState('itqan') === 'on' ? section.itqan.find(each => each.places === 1) ?? section.itqan[0] : undefined;
       const kashshaf = !paragraph && bookState('kashshaf') === 'on' ? section.kashshaf : null;
       const heading = paragraph ? [paragraph.heading, 'الإتقان للسيوطي'].filter(Boolean).join(' · ') : 'الكشاف للزمخشري';
@@ -276,11 +260,8 @@ const SectionPart = memo(function SectionPart({ section, ayah, word, palette, op
       const told = section.ayat;
       const first = section.story.reports[0]?.moments[0]?.text;
       const openStory = () => toTab({ pathname: '/story', params: { slug: section.story.slug } });
-      // The person the story names, when his own entry gives the same tie: its words join the card's sources.
       const entry = told.about && findPerson(told.about.slug)?.ayat.filter(fact => fact.value === ayah);
       const source = sourcesOf([...told.refs.map(citeSource), ...(entry?.length ? factSources(entry, true) : [])]);
-      // Revealed about the story (owner, 2026-11-24, sketch data-plan/links-sketch design أ): the hadith's own words that
-      // say so, the hadith a tap away, then the people of the story, each opening his page.
       if (revealedIn(told)) {
         const ref = told.refs[0];
         const hadith = ref && reportHadith(ref);
@@ -300,7 +281,6 @@ const SectionPart = memo(function SectionPart({ section, ayah, word, palette, op
       );
     }
     case 'person': {
-      // The link written on the person's own record: his entry's words on the ayah, who says them, and its pages.
       const person = findPerson(section.slug);
       const facts = person?.ayat.filter(each => each.value === ayah) ?? [];
       if (!person || !facts.length) return null;
@@ -329,15 +309,9 @@ const SectionPart = memo(function SectionPart({ section, ayah, word, palette, op
   }
 });
 
-/**
- * «كلماتها» (owner, 2026-11-23, sketch quran-design/ayah-page design أ): each word Ibn Qutaybah explains on the ayah as a
- * framed word in the mushaf's letters with his short meaning under it, in his words; the picked one's whole entry under
- * them, his name first.
- */
 function WordsPart({ entries, ayah, palette, open, onAt }: { entries: GharibAt[]; ayah: string; palette: Palette; open: Openers; onAt?: (y: number) => void }) {
   const [picked, setPicked] = useState(0);
   const words = useMemo(() => ayahMushafWords(ayah), [ayah]);
-  // Every entry gharibAt lists quotes words of the ayah; its chip shows the first run it quotes.
   const chips = entries.map(each => {
     const [from, to] = each.words[0];
     return { label: words.slice(from, to + 1).join(' '), names: ['ابن قتيبة'], agreed: false, meaning: gharibData.meanings[each.at]?.replace(/\.$/, '') };
@@ -352,5 +326,4 @@ function WordsPart({ entries, ayah, palette, open, onAt }: { entries: GharibAt[]
   );
 }
 
-/** Surah names for a list of places, as the feed heads write them. */
 const PLACE_NAMES: Record<number, string> = Object.fromEntries(Array.from({ length: 114 }, (_, i) => [i + 1, surahName(i + 1)]));

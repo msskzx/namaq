@@ -17,10 +17,6 @@ const SMALLEST = 7;
 const LARGEST = 26;
 const LETTER = 7.5;
 
-/**
- * The website's story map (src/app/quran/prophets/[slug]/StoryMap.tsx): a column for each event under its group's colour,
- * a row for each surah, the surah names kept on the right while the events scroll sideways, opening at the first group (QuizTree's pattern).
- */
 export default function StoryMap({ map, events, phases, picked, onPick, onTitle, palette, at }: {
   map: StoryMapData;
   events: EventView[];
@@ -29,22 +25,17 @@ export default function StoryMap({ map, events, phases, picked, onPick, onTitle,
   onPick: (event: number, surah: number) => void;
   onTitle: (event: number) => void;
   palette: Palette;
-  /** The group it opens at, by its phase (the home feed's card); otherwise it opens at the first. */
   at?: number;
 }) {
   const groups = phases.map((name, phase) => ({ name, phase, events: events.map((e, i) => ({ e, i })).filter(({ e }) => e.phase === phase) })).filter(g => g.events.length > 0)
     .map(g => ({ ...g, cell: Math.max(CELL, Math.ceil((g.name.length * LETTER + 8) / g.events.length)) }));
-  // How far the opening group's right edge sits from the map's right edge, where the first group starts.
   const before = groups.slice(0, Math.max(0, groups.findIndex(g => g.phase === at))).reduce((sum, g) => sum + g.events.length * g.cell + GAP, 0);
   const rule = { borderBottomWidth: 1, borderColor: palette.rule };
-  // The first surah has a line above it too, under the event titles.
   const top = { borderTopWidth: 1 };
   const sideways = useRef<{ scrollToEnd: (options?: { animated?: boolean }) => void; scrollTo: (options: { x: number; animated?: boolean }) => void } | null>(null);
-  // More events wait on the left until the user has scrolled there: the left edge fades out to say so.
   const [more, setMore] = useState(false);
   const box = useRef(0);
   const wide = useRef(0);
-  // Opens at the first group (the right end), or at `at`'s group once both widths are known.
   const open = () => {
     if (!before) sideways.current?.scrollToEnd({ animated: false });
     else if (box.current && wide.current) sideways.current?.scrollTo({ x: Math.max(0, wide.current - box.current - before), animated: false });

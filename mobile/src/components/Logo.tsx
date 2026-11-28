@@ -3,7 +3,6 @@ import Svg, { Circle, G, Path } from 'react-native-svg';
 import { BERRIES, BOWL, BRANCHES } from '@/lib/logo';
 import { usePalette, type Palette } from '@/lib/theme';
 
-// The website's emblem (src/components/common/Emblem.tsx): the tree grown from a dotless ن, its berries in the accent colour.
 export default function Logo({ size = 32, palette: given }: { size?: number; palette?: Pick<Palette, 'ink' | 'accent'> }) {
   const theme = usePalette();
   const palette = given ?? theme;
@@ -18,10 +17,6 @@ export default function Logo({ size = 32, palette: given }: { size?: number; pal
   );
 }
 
-/**
- * The logo drawn in: the bowl, then each branch, then the berries, one after another (the opening of the first-launch tour).
- * Kept simple: each part fades in on a timer, no stroke drawing.
- */
 export function GrowingLogo({ size = 130, step = 140 }: { size?: number; step?: number }) {
   const palette = usePalette();
   const parts = 1 + BRANCHES.length + 1;

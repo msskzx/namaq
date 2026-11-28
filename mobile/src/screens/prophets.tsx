@@ -13,7 +13,6 @@ import { usePalette } from '@/lib/theme';
 
 const PICKED = 'prophets-picked';
 
-/** The prophets tab: one prophet's story at a time (Musa until one is picked), picked from a dropdown in the middle of the top bar (like the compare tab's). */
 export default function ProphetsTab() {
   const palette = usePalette();
   const [slug, setSlug] = useState(() => findProphet(readJson(PICKED, isString) ?? '')?.slug ?? 'musa');
@@ -33,7 +32,6 @@ export default function ProphetsTab() {
         </TopBar>
       )} />
       <Sheet open={picking} onClose={() => setPicking(false)} palette={palette}>
-        {/* All the prophets are taller than the sheet on a phone, so the list scrolls. */}
         <ScrollView style={{ flexShrink: 1 }} contentContainerStyle={{ paddingHorizontal: 8, paddingBottom: 16 }}>
           {PROPHETS.map(p => (
             <Pressable key={p.slug} onPress={() => pick(p.slug)} accessibilityRole="button" accessibilityState={{ selected: p.slug === slug }}

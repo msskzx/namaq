@@ -30,18 +30,15 @@ const RAJAB = rajab as RajabChapter[];
 
 type Mode = 'drawing' | 'text';
 const MODES = [{ key: 'drawing', label: 'الرسم' }, { key: 'text', label: 'النص' }] as const;
-// The owner's names (2026-11-18): the drawing, and the whole text with its isnad.
 
 const body = (palette: Palette) => ({ color: palette.ink, fontSize: 19, lineHeight: 36, textAlign: 'right' as const });
 const pagesName = (pages: number[]) => (pages.length > 1 ? `ص ${num(pages[0])}–${num(pages[pages.length - 1])}` : `ص ${num(pages[0])}`);
 
-/** A source's page: the book on its card's line, the place (linked to Shamela's page) and the edition in its sheet. */
 function Cite({ book, place, url, palette }: { book: keyof typeof FORTY.books; place: string; url: string; palette: Palette }) {
   const { title, edition } = FORTY.books[book];
   return <Reference title={title} quotes={[{ text: '', cite: place, url }, { text: `${title}، ${edition}` }]} places={[place]} editions={[edition]} palette={palette} />;
 }
 
-/** One record: the drawn chain with the saying under it, or the whole text, the chain in muted ink before the saying. */
 function Record({ record, mode, palette }: { record: FortyRecord; mode: Mode; palette: Palette }) {
   const chain = record.isnadEnd ? record.text.slice(0, record.isnadEnd) : '';
   const saying = record.text.slice(chain.length);
@@ -60,7 +57,6 @@ function Record({ record, mode, palette }: { record: FortyRecord; mode: Mode; pa
   );
 }
 
-/** A book's records for the hadith: the first in full, the others (Muslim's other routes, another place) folded under it. */
 function BookRecords({ title, records, mode, head, palette }: { title: string; records: FortyRecord[]; mode: Mode; head: React.ReactNode; palette: Palette }) {
   const firstWhole = records.find(record => !record.partial) ?? records[0];
   const rest = records.filter(record => record !== firstWhole);
@@ -83,7 +79,6 @@ function BookRecords({ title, records, mode, head, palette }: { title: string; r
   );
 }
 
-/** «الأربعون النووية، ص ٦٣» or «سنن الترمذي ٢٥١٨، ج ٤، ص ٦٦٨»: where a grade is printed. */
 const gradePlace = (grade: FortyGrade) => {
   const book = FORTY.books[grade.book];
   if (grade.book === 'nawawi') return `${book.title}، ${pagesName(grade.pages)}`;
@@ -91,11 +86,9 @@ const gradePlace = (grade: FortyGrade) => {
   return `${recordName({ book: grade.book, number: grade.number! }, num, FORTY.books)}، ج ${num(grade.volume)}، ${pagesName(grade.pages)}`;
 };
 
-/** A grade longer than a few lines (Ibn Rajab's whole discussion of the routes) opens on «المزيد» after its first lines. */
 const GRADE_LINES = 5;
 const LONG_GRADE = 300;
 
-/** One scholar's words on the grade: his name, his words as printed, and where. A long discussion opens on «المزيد». */
 function Grade({ grade, palette }: { grade: FortyGrade; palette: Palette }) {
   const [open, setOpen] = useState(false);
   const long = grade.quote.length > LONG_GRADE;
@@ -109,7 +102,6 @@ function Grade({ grade, palette }: { grade: FortyGrade; palette: Palette }) {
   );
 }
 
-/** What the scholars said of the hadith's grade (the owner's sketch, frame 4): each in his own words, under his name; no grade of ours. */
 function Grades({ grades, head, palette }: { grades: FortyGrade[]; head: React.ReactNode; palette: Palette }) {
   return (
     <SharedCard palette={palette} gap={14} shareHead={head} shareLabel="شارك ما قاله العلماء في درجته">
@@ -119,7 +111,6 @@ function Grades({ grades, head, palette }: { grades: FortyGrade[]; head: React.R
   );
 }
 
-/** The compiler's text as he printed it (al-Nawawi's, or Ibn Rajab's for his eight), with his page; the books he names are in «من أخرجه» under it. */
 function Compiled({ entry, head, palette }: { entry: FortyEntry; head: React.ReactNode; palette: Palette }) {
   const { book: key } = compilerOf(entry);
   const where = entry.volume ? `${num(entry.volume)}/ ${num(entry.pages[0])}` : pagesName(entry.pages);
@@ -131,16 +122,11 @@ function Compiled({ entry, head, palette }: { entry: FortyEntry; head: React.Rea
   );
 }
 
-/**
- * One of the Forty whole: its heading and Companion, al-Nawawi's text, then each book he names with its records, drawn or
- * read. The hadith's page draws it, and so does a quiz that looks a hadith up. `jibril` goes under al-Nawawi's text.
- */
 export function FortyHadith({ entry, palette, jibril }: { entry: FortyEntry; palette: Palette; jibril?: React.ReactNode }) {
   const [mode, setMode] = useState<Mode>('drawing');
   const books = RECORD_BOOKS.map(book => ({ book, records: entry.records.filter(record => record.book === book) })).filter(({ records }) => records.length > 0);
   const chapter = RAJAB.find(item => item.n === entry.n);
   const drawn = entry.records.some(record => record.isnad);
-  // Each card shares as a picture under the hadith's heading and Companion (release 1: every page shares).
   const head = <ShareHead title={entry.heading} sub={fromCompanion(entry.companion)} palette={palette} />;
   return <>
     <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 26, textAlign: 'right' }}>{entry.heading}</Text>
@@ -162,10 +148,6 @@ export function FortyHadith({ entry, palette, jibril }: { entry: FortyEntry; pal
   </>;
 }
 
-/**
- * One of al-Nawawi's Forty (owner, 2026-11-18): his text, then each book he names with the records found there, every chain
- * the edition links drawn («الرسم») or the text read as printed («النص»). No. 2 opens the Jibril pages with their scenes.
- */
 export default function HadithFortyScreen() {
   const palette = usePalette();
   const onScroll = useShrinkOnScroll();

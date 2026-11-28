@@ -13,7 +13,6 @@ describe('the dark sea scene (an-Nur 40)', () => {
     const words = darkSeaWords(key => pageWords.get(key));
     const steps = words.map(word => word.step);
     expect(steps.every((step, i) => step >= 0 && (i === 0 || step >= steps[i - 1]))).toBe(true);
-    // Every page with a phrase lights words of its own; the ayah ends on the last of them (owner, 2026-11-22).
     const phrased = DARK_SEA_STEPS.flatMap((step, page) => (step.phrase ? [page] : []));
     expect([...new Set(steps)]).toEqual(phrased);
     expect(DARK_SEA_STEPS[steps[steps.length - 1]].layer).toBe('end');
@@ -24,17 +23,14 @@ describe('the dark sea scene (an-Nur 40)', () => {
     expect(DARK_SEA_STEPS[wordsPage(DARK_SEA_STEPS.length - 1)].layer).toBe('end');
   });
 
-  // Owner, 2026-11-22: al-Sa'di's darknesses come piece by piece as each layer goes out, and stay his words in his order.
   it('splits a saying only into its own words, in order', () => {
     for (const step of DARK_SEA_STEPS) if (step.parts) expect(step.parts.join(' ')).toBe(step.sayings[0].text);
   });
 
-  // Every naming of the darknesses is still shown, after the end (owner, 2026-11-22).
   it('shows every reading of the darknesses', () => {
     for (const reading of DARK_SEA_READINGS) expect(sayings).toContain(reading);
   });
 
-  // Owner, 2026-11-21: attributed sayings only, never «قيل».
   it('links every line to its book\'s page, and never says «قيل»', () => {
     for (const saying of sayings) {
       expect(saying.source.url, saying.text).toMatch(/^https:\/\//);
@@ -42,7 +38,6 @@ describe('the dark sea scene (an-Nur 40)', () => {
     }
   });
 
-  // FIX ONLY FROM A SOURCE: a quote from a book the app holds is found in it word for word, on that ayah.
   it('quotes al-Sa\'di, al-Kashshaf and al-Raghib word for word', () => {
     const sadiText = (sadi.passages as unknown as [number, number, number, number, number, string][])
       .filter(([surah, from, to]) => surah === 24 && from <= 40 && 40 <= to).map(passage => passage[5]).join('\n');

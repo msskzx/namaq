@@ -1,4 +1,4 @@
-// docs/adr/0031-a-live-party-runs-in-one-durable-object.md
+// see docs/adr/0031-a-live-party-runs-in-one-durable-object.md
 import { partyPoints, questionPoints, share, type QuestionAnswer, type ScoredQuestion } from '../quiz/score';
 import { unmarked, type QuizLook } from '../quiz/choiceKinds';
 import { QUIZ_LEAVES, QUIZ_LENGTHS, QUIZ_TOPICS, RANGED_TOPICS, WRITTEN_TOPICS, type QuizTopic } from '../quiz/settings';
@@ -19,14 +19,11 @@ export type PartySettings = {
   person: string;
   juzFrom: number;
   juzTo: number;
-  /** The branches page's filters for the trees (the juz range stays in juzFrom/juzTo). */
   filters: ScopeFilters;
-  /** Easy, medium or hard trees (quiz/difficulty.ts). */
   difficulty: Difficulty;
   leaves: number;
   seconds: number;
   treeSeconds: number;
-  /** What the pen asks in a recited ayah, for everyone (the host's pen rule; owner 2026-11-17: the whole ayah by default). */
   pen: PenRule;
 };
 
@@ -48,12 +45,9 @@ export type PartyState = {
   current: number;
   deadline: number | null;
   answers: Record<string, QuestionAnswer>;
-  /** What each player has written so far on a recited ayah, graded if the time runs out before they send it. */
   drafts?: Record<string, QuestionAnswer>;
   results: Record<string, Points>;
-  /** Who opened «ابحث عن الجواب» on this question before answering: a right answer then earns LOOKED_POINTS. */
   looked?: Record<string, true>;
-  /** What each player's answer added to the score this question. */
   gained?: Record<string, number>;
   history?: Record<string, QuestionAnswer>[];
   hostAwaySince: number | null;
@@ -68,7 +62,6 @@ export type PlayerAction =
   | { type: 'settings'; settings: Partial<PartySettings> }
   | { type: 'ready'; ready: boolean }
   | { type: 'remove'; target: string }
-  /** `questions`: the host's phone built the quiz itself (the app works without the website); without them the worker asks /api/quiz. */
   | { type: 'start'; early?: boolean; questions?: PartyQuestion[]; surahNames?: Record<number, string> }
   | { type: 'submit'; answer: QuestionAnswer }
   | { type: 'draft'; answer: QuestionAnswer }
@@ -128,17 +121,14 @@ export function quizQuery(settings: PartySettings) {
     if (settings.difficulty && settings.difficulty !== DEFAULT_DIFFICULTY) params.set('difficulty', settings.difficulty);
     params.set('leaves', String(settings.leaves));
   }
-  // A recited ayah comes with its words and the places the pen asks, so the party can grade it.
   if (settings.topics.some(topic => WRITTEN_TOPICS.includes(topic))) params.set('pen', settings.pen ?? DEFAULT_SETTINGS.pen);
   return params.toString();
 }
 
-/** Questions the host's phone sent with its start: a list of questions, each with a key to grade it by. */
 const hostBuilt = (questions: unknown): questions is PartyQuestion[] =>
   Array.isArray(questions) && questions.length > 0 && questions.every(question => !!question && typeof question === 'object' && typeof (question as PartyQuestion).key === 'string');
 
 const key = (name: string) => name.normalize('NFC').trim().replace(/\s+/g, ' ').toLocaleLowerCase();
-/** Typed questions (a tree, a compare card's blanks, a written ayah) get the longer time. */
 const secondsFor = (state: PartyState, question: PartyQuestion) => (question.tree || question.compare || question.write ? state.settings.treeSeconds : state.settings.seconds) * 1000;
 
 function nextHost(players: Player[], hostId: string, connected: boolean) {
@@ -153,7 +143,6 @@ function ask(state: PartyState, index: number, now: number): PartyState {
 
 function reveal(state: PartyState): PartyState {
   const question = state.questions[state.current];
-  // A player the time ran out on is graded on what they had written so far.
   const answers = { ...state.drafts, ...state.answers };
   const results = Object.fromEntries(state.players.map(player => [player.id, questionPoints(question, answers[player.id])]));
   const history = [...(state.history ?? [])];
@@ -233,7 +222,6 @@ function apply(state: PartyState, action: Action, now: number): { state: PartySt
     if (player.id in state.answers) return { state };
     return { state: settle({ ...state, answers: { ...state.answers, [player.id]: action.answer } }) };
   }
-  // Looking after the answer is sent is for learning: it changes nothing.
   if (action.type === 'look') {
     if (state.phase !== 'question' || player.id in state.answers || state.looked?.[player.id]) return { state };
     return { state: { ...state, looked: { ...state.looked, [player.id]: true } } };
@@ -278,7 +266,6 @@ export function nextWake(state: PartyState) {
 
 export const expired = (state: PartyState, now: number) => now >= state.touched + IDLE_MS;
 
-/** `earned` is what this question added to the score once revealed; `looked` whether they looked it up first, shown only then. */
 export type PlayerView = Player & { submitted: boolean; earned: number | null; looked: boolean | null };
 export type PartyView = {
   code: string;
@@ -295,18 +282,15 @@ export type PartyView = {
   now: number;
   answer: QuestionAnswer | null;
   result: Points | null;
-  /** Whether you opened «ابحث عن الجواب» before answering this question. */
   looked: boolean;
   review?: { question: PartyQuestion; answer: QuestionAnswer | null; result: Points }[];
   error: string | null;
 };
 
-// docs/adr/0032-a-party-s-questions-are-fixed-when-the-host-starts-it.md
+// see docs/adr/0032-a-party-s-questions-are-fixed-when-the-host-starts-it.md
 export function viewFor(state: PartyState, playerId: string, now: number): PartyView {
   const revealed = state.phase === 'reveal';
   const question = state.phase === 'question' || revealed ? state.questions[state.current] : null;
-  // A choice question's key, ayah and look-alikes name its surah, so they wait for the reveal too. A written ayah names its
-  // place in the question and is drawn on its page, so its ayah stays; its words and its rest wait.
   const written = question?.write as { asked: number[] } | undefined;
   const hidden = question && !revealed ? { ...question, key: `q${state.current}`, correctAnswer: '', ...(question.correctAnswers ? { correctAnswers: [] } : {}), ...(question.order ? { order: [] } : {}), evidence: undefined, ayahKey: written ? question.ayahKey : undefined, alike: undefined, explains: undefined, whereOf: undefined, note: undefined, witness: undefined, sources: undefined, look: unmarked(question.look as QuizLook | undefined),
     ...(written ? { write: { asked: written.asked }, reveal: undefined } : {}) } : question;

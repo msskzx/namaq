@@ -10,7 +10,6 @@ import { surahName } from '@shared/quran/surahNames';
 import Card from '@/ui/Card';
 import AyahFlow, { AyahWords } from '@/components/quran/text/AyahFlow';
 
-/** One ayah as share as image draws it: its surah and number, the ayah in Hafs, and the reader's own note under it (in Amiri). */
 export default function AyahShare({ ayahKey, note, palette, width }: { ayahKey: string; note?: string; palette: Palette; width: number }) {
   const [surah, number] = ayahKey.split(':').map(Number);
   return (
@@ -24,7 +23,6 @@ export default function AyahShare({ ayahKey, note, palette, width }: { ayahKey: 
   );
 }
 
-/** Opens the share sheet on an ayah, with the reader's note when there is one; `later` when called from a closing sheet or menu. */
 export const shareAyah = (ayahKey: string, palette: Palette, note?: string, later = false) => (later ? shareCardLater : shareCard)({
   content: width => <AyahShare ayahKey={ayahKey} note={note} palette={palette} width={width} />,
   link: `${WEBSITE}${ayahHref(ayahKey)}`,

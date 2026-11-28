@@ -17,13 +17,11 @@ import { aliasesOf, BOTH_KINDS_LIST, branchList, EMPTY_LIST, isSavedIn, type Lis
 import { SURAH_NAMES } from '@shared/quran/surahNames';
 
 export type Presentation = { tree: Branch; prefixes: Variant[]; offsets: Record<string, number>; ayat: BranchAyah[] };
-/** Which word positions of an ayah every ayah shares, by how alike they are (shared/quran/wordMatch.ts). */
 export type Shared = { exact: Set<number>; written: Set<number>; rooted: Set<number> };
 export const sharedOf = (match?: AyahContext['match']): Shared => ({ exact: new Set(match?.exact), written: new Set(match?.written), rooted: new Set(match?.rooted) });
 export const NOTHING_SHARED: Shared = sharedOf();
 export const likenessAt = (shared: Shared, i: number): Likeness | undefined =>
   shared.rooted.has(i) ? 'root' : shared.written.has(i) ? 'written' : shared.exact.has(i) ? 'exact' : undefined;
-/** For each ayah in a tree, which of its word positions every ayah shares. */
 export type Matches = Record<string, Shared>;
 export type TreeCard = { piece: BranchPiece; presentation: Presentation; matches: Matches };
 
@@ -35,13 +33,10 @@ let ayatByKey: Map<string, BranchAyah> | undefined;
 const byKey = () => (ayatByKey ??= new Map(all.map(ayah => [ayah.key, ayah])));
 export const ayahOf = (key: string) => byKey().get(key);
 
-/** The trees of the website's default branches list, in mushaf order. */
-/** Every card of both tabs, the books' and ours: what the feed, the tour and a node's own tree draw from. */
 export const treeList = (): BranchPiece[] => branchList(BOTH_KINDS_LIST);
 
 const setOf = (ayahKeys: string[]) => [...ayahKeys].sort().join(' ');
 let bySet: Map<string, BranchPiece> | undefined;
-/** The tree of its own that holds exactly a node's ayat, which the node's «show only this part» button opens. */
 export function subtreeOf(ayahKeys: string[]): BranchPiece | undefined {
   if (!bySet) {
     bySet = new Map();
@@ -51,12 +46,9 @@ export function subtreeOf(ayahKeys: string[]): BranchPiece | undefined {
 }
 
 const cards = new Map<string, TreeCard>();
-/** The ends of a card the owner curated (twoAyat, ownAyatOnly), set by cardOf, read by the matrix and the ayat around it. */
 const curatedEnds = new WeakMap<Presentation, Record<string, string>>();
-/** A book's one-ayah card: the words it says twice that the book quotes, marked as shared words are (engine's repeatedQuoted). */
 const repeated = new WeakMap<Presentation, Record<string, number[]>>();
 
-/** The tree drawn on a card, built the same way as the website's branches page with the same filters. */
 
 export function cardOf(piece: BranchPiece, state: Pick<ListState, 'filters' | 'range'> = EMPTY_LIST): TreeCard {
   const id = JSON.stringify([piece.id, piece.keys.length, state.filters, state.range]);
@@ -66,10 +58,8 @@ export function cardOf(piece: BranchPiece, state: Pick<ListState, 'filters' | 'r
   const built: Presentation = piece.group
     ? groupPresentation(piece.group, byKey(), state.range, state.filters)
     : phrasePresentation(piece.phrase, all, true, !state.range, key => visible.has(key));
-  // A card the owner keeps to its own ayat: no ayah reads on into the one after it (the matrix's rows end on their own ayah).
   const presentation: Presentation = ownAyatOnly(piece) ? { ...built, tree: ownAyat(built.tree) } : built;
   const matches: Matches = Object.fromEntries(treeContexts(presentation.ayat).map(context => [context.ayah.key, sharedOf(context.match)]));
-  // A card the owner keeps two ayat deep: its matrix rows (and the card under the tree) read each ayah on into the next.
   if (twoAyat(piece)) curatedEnds.set(presentation, twoEnds(presentation.tree, key => positions.has(key)));
   if (ownAyatOnly(piece)) curatedEnds.set(presentation, ownEnds(presentation.tree));
   if (piece.group?.places.length === 1 && Object.keys(piece.group.differences).length) repeated.set(presentation, piece.group.differences);
@@ -79,12 +69,7 @@ export function cardOf(piece: BranchPiece, state: Pick<ListState, 'filters' | 'r
   return card;
 }
 
-/** An ayah drawn beside a tree with the surrounding-ayat switch on, with the words it shares with the others on its side. */
 export type Beside = Neighbour & Shared;
-/**
- * The ayat around a tree, as the website draws them: `before` each ayah's start, `after` each ayah's end,
- * `earlier` one more before an ayah whose ayah before is already drawn (see `required`).
- */
 export type Around = { before: Record<string, Beside | null>; after: Record<string, Beside | null>; earlier: Record<string, Beside | null>; ends: Record<string, string> };
 
 const marked = (list: (Neighbour | null)[]): Map<string, Beside> => {
@@ -103,7 +88,6 @@ export function aroundOf(presentation: Presentation): Around {
   return around;
 }
 
-/** The ayat around a card's matrix rows: as aroundOf, but after each row's end where the owner keeps the card two ayat deep. */
 const matrixAround = new WeakMap<Presentation, Around>();
 function matrixAroundOf(presentation: Presentation): Around {
   const ends = curatedEnds.get(presentation);
@@ -130,18 +114,9 @@ function aroundWith(presentation: Presentation, ends: Record<string, string>): A
   return around;
 }
 
-/**
- * A phrase that opens its ayah shows the ayah before only with the surrounding-ayat switch on, unless another ayah
- * has words before the phrase: then the ayah before is always drawn, so those words never read as a trunk every ayah shares.
- */
 export const mixedBefore = (presentation: Presentation) => presentation.prefixes.some(prefix => prefix.word);
 
-/** A word only some rows share (`some`), or any shared word's link: the same link in every row that has the word. */
 export type MatrixLink = { link: string; kind: Likeness; some: boolean };
-/**
- * One cell of the matrix: an ayah (or a passage running over several) with the words every row shares at that step, and
- * `links` for every shared word, those only some rows share too, so a tap lights the word in each row that has it.
- */
 export type MatrixAyah = Shared & { key: string; page: number; words: string[]; links?: Map<number, MatrixLink>; basmala?: string[] };
 export type MatrixCell = { ayat: MatrixAyah[] } | null;
 export type MatrixColumn = 'before' | 'ayah' | 'after';
@@ -149,10 +124,6 @@ export type Matrix = { columns: MatrixColumn[]; rows: Record<MatrixColumn, Matri
 
 const positions = new Map(all.map((ayah, i) => [ayah.key, i]));
 
-/**
- * The matrix row that draws an ayah, by row index. An ayah whose row was left out because another row already reads on into it
- * (uncoveredRows) is found in that row, its cells from that ayah on, so a path card still shows the ayah in the matrix's colours.
- */
 export function rowOf(matrix: Matrix, key: string): { r: number; row: Matrix['rows'][number] } | null {
   const own = matrix.rows.findIndex(row => row.ayah?.ayat[0]?.key === key);
   if (own >= 0) return { r: own, row: matrix.rows[own] };
@@ -162,7 +133,6 @@ export function rowOf(matrix: Matrix, key: string): { r: number; row: Matrix['ro
   return { r, row: { before: null, ayah: { ayat: ayat.slice(ayat.findIndex(ayah => ayah.key === key)) }, after: matrix.rows[r].after } };
 }
 
-/** The website's ayah matrix: a row per ayah of the tree, and with the switch on the ayah before and after each. */
 export function matrixOf(presentation: Presentation, withAround: boolean): Matrix {
   const ends = curatedEnds.get(presentation) ?? ayahEnds(presentation.tree);
   const every = presentation.ayat.map(ayah => ayah.key);
@@ -192,13 +162,8 @@ export function matrixOf(presentation: Presentation, withAround: boolean): Matri
   };
 }
 
-/** A word of the matrix's ayah column, by its row, ayah and place: what the read-along lights. */
 export const readId = (row: number, key: string, index: number) => `${row}:${key}:${index}`;
 
-/**
- * The matrix's read-along studio, as on the compare tab: each row read in turn, word by word, at compare's pace; the word read
- * lights with its matches in the other rows (`link:<link>`, the same links a tap lights). One step per row, for the progress bars.
- */
 const readingCache = new WeakMap<Presentation, Beat[]>();
 export function matrixReading(presentation: Presentation): Beat[] {
   const cached = readingCache.get(presentation);
@@ -212,10 +177,6 @@ export function matrixReading(presentation: Presentation): Beat[] {
   return beats;
 }
 
-/**
- * The studio's tour, read word by word (owner, 2026-11-15): each ayah's path beat becomes the matrix read-along of its row, the
- * word read lit in the card under the tree, at the read-along's pace. The beats keep the ayah (`key`) whose path is lit.
- */
 export function withPathReading(presentation: Presentation, beats: Beat[]): Beat[] {
   const matrix = matrixOf(presentation, false);
   return beats.flatMap(beat => {
@@ -230,7 +191,6 @@ export function withPathReading(presentation: Presentation, beats: Beat[]): Beat
 export const isSaved = (piece: BranchPiece, list = readBookmarks()) => isSavedIn(piece, list);
 export const toggleSaved = (piece: BranchPiece) => toggleBookmark({ id: piece.id, text: piece.text, href: branchesHref(piece.id) }, aliasesOf(piece));
 
-/** What a growing tree draws before its root for each ayah, and after each ayah's end, matching what BranchTree draws. */
 export function growthParts(presentation: Presentation, around: Around | undefined): { starts: { id: string; keys: string[] }[]; afters: Record<string, string> } {
   const all = keys(presentation.tree);
   const before = (key: string, context = around) => context?.before[key] ? [{ id: `b${key}`, keys: [key] }] : [];
@@ -245,10 +205,8 @@ export function growthParts(presentation: Presentation, around: Around | undefin
   return { starts, afters };
 }
 
-/** The website's details under a tree: the difference kinds and book citations for the ayat shown, or null when there are none. */
 const evidenceCache = new WeakMap<BranchPiece, Group | null>();
 
-/** Cached per piece, so the matrix's word connections keep one group object across renders and are not measured again on every studio tick. */
 export function evidenceOf(piece: BranchPiece): Group | null {
   if (!piece.group) return null;
   if (evidenceCache.has(piece)) return evidenceCache.get(piece)!;
@@ -258,7 +216,6 @@ export function evidenceOf(piece: BranchPiece): Group | null {
   return found;
 }
 
-/** The ayat of a searched tree that hold the searched words, lit when they are only some of them (the website's PathScope `lit`). */
 export function searchLit(presentation: Presentation, query: string): string[] {
   if (!query.trim()) return [];
   const holding = presentation.ayat.filter(ayah => textHolds(ayah.words.join(' '), query)).map(ayah => ayah.key);

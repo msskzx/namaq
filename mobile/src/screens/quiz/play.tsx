@@ -67,7 +67,6 @@ function Results({ run, palette }: { run: SoloRun; palette: Palette }) {
   );
 }
 
-/** A solo quiz in progress: the question strip, the tree to complete, and check / next at the bottom within thumb reach. */
 export default function QuizPlay() {
   const palette = usePalette();
   const insets = useSafeAreaInsets();
@@ -89,7 +88,6 @@ export default function QuizPlay() {
   const checked = run.checked[current];
   const last = current === run.questions.length - 1;
   const update = (next: SoloRun) => setRun(next);
-  // The prompt scrolls away with the tree; the question circles sit in the top bar.
   const top = <QuizPrompt text={question.promptArabic} palette={palette} />;
   const dots = <QuestionDots inBar states={run.questions.map((_, i) => questionState(run, i))} current={current} onPick={i => update(goTo(run, i))} palette={palette} />;
   return (
@@ -117,7 +115,6 @@ export default function QuizPlay() {
               : <QuizInputs key={question.key} question={question} typed={run.typed[current]} onType={(node, text) => update(typeAnswer(run, node, text))} palette={palette} names={surahNames} header={top}
                 hints={run.hints?.[current] ?? {}} onHints={hints => update(setHints(run, hints))} />}
           </QuestionSwipe>
-          {/* Check, next and the rest do not matter while typing, so they stay behind the keyboard. */}
           {!typing && <View style={{ paddingHorizontal: 12, paddingTop: 10, paddingBottom: insets.bottom + 10, gap: 10, borderTopWidth: 1, borderColor: palette.rule }}>
             {!checked && (isTree(question) || isCompare(question)) && (
               <Row>

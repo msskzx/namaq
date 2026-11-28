@@ -6,11 +6,6 @@ import type { Palette } from '@/lib/theme';
 
 export type TabOption<K extends string> = { key: K; label: string; Icon?: (props: LucideProps) => React.ReactNode };
 
-/**
- * The one row of tabs, the website's `Segmented`: a framed row, the open tab filled in the accent, the others muted.
- * For a few views of one thing (read or recite, two books, a book's contents or search). A list of words or filters
- * that wraps is chips, not tabs. `fill` stretches the tabs across the row; `iconOnly` shows icons with the name for a screen reader.
- */
 export default function Tabs<K extends string>({ options, value, onChange, label, palette, fill = false, iconOnly = false }: {
   options: readonly TabOption<K>[]; value: K; onChange: (key: K) => void; label?: string; palette: Palette; fill?: boolean; iconOnly?: boolean;
 }) {

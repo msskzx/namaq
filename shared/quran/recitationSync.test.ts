@@ -38,7 +38,6 @@ describe('recitation sync', () => {
     expect(applySync({ '1:1': a, '1:2': b }, { token: 't', upsert: [moved], remove: [1] })).toEqual({ rows: { '1:2': moved }, refetch: ['1:2'], drop: ['1:1'] });
     expect(applySync({ '1:1': a, '1:2': b }, { token: 't', upsert: [], remove: ['1:1'] }).drop).toEqual(['1:1']);
     expect(applySync({ '1:1': a, '1:2': b }, { token: 't', full: [a], upsert: [], remove: [] })).toEqual({ rows: { '1:1': a }, refetch: [], drop: ['1:2'] });
-    // A first sync has nothing on the phone to fetch again.
     expect(applySync({}, { token: 't', full: [a, b], upsert: [], remove: [] }).refetch).toEqual([]);
   });
 

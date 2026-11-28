@@ -1,5 +1,6 @@
 const { defineConfig } = require('eslint/config');
 const expoConfig = require('eslint-config-expo/flat');
+const { default: quality } = require('../shared/lint/noComments.mjs');
 
 module.exports = defineConfig([
   expoConfig,
@@ -25,7 +26,9 @@ module.exports = defineConfig([
     },
   },
   {
+    plugins: { quality },
     rules: {
+      'quality/no-comments': 'error',
       'no-empty': ['error', { allowEmptyCatch: false }],
       'no-restricted-syntax': ['error',
         { selector: "CatchClause > BlockStatement[body.length=0]", message: "Report the error with reportError(where, error) from @shared/errors, so its cause is not lost." },

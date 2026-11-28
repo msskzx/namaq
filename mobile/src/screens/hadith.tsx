@@ -25,7 +25,6 @@ import QuoteBar from '@/ui/QuoteBar';
 import TapRow from '@/ui/TapRow';
 import NumberGrid from '@/ui/NumberGrid';
 
-/** One of the Forty in a list: his number, the Companion, the opening of his text and the books he names. */
 export function FortyCard({ entry, palette, onPress }: { entry: FortyEntry; palette: Palette; onPress: () => void }) {
   return (
     <Card palette={palette} pad={[10, 14]} gap={4} accessibilityRole="link" accessibilityLabel={`${entry.heading}، ${fromCompanion(entry.companion)}`} onPress={onPress}>
@@ -43,11 +42,9 @@ export function FortyCard({ entry, palette, onPress }: { entry: FortyEntry; pale
 
 export const openBook = (book: SahihSlug | 'forty') => router.push({ pathname: '/hadith-book', params: { book } });
 export const openKitab = (book: SahihSlug, kitab: number) => router.push({ pathname: '/hadith-kitab', params: { book, kitab: String(kitab) } });
-/** A bab's page: the kitab's page with the bab's place in its list (sketch hadith-design/sketch5 «أ»). */
 export const openBab = (book: SahihSlug, kitab: number, bab: number) => router.push({ pathname: '/hadith-kitab', params: { book, kitab: String(kitab), bab: String(bab) } });
 export const openSahih = (book: SahihSlug, n: number) => router.push({ pathname: '/hadith-sahih', params: { book, n: String(n) } });
 
-/** The hadith read last, its narrator and the opening of its words, with «افتح» back to it (owner, 2026-11-23: sketch hadith-design). */
 function ContinueCard({ read, palette }: { read: LastRead; palette: Palette }) {
   const book = SAHIH[read.slug];
   const kitab = placeOf(book, read.n)?.kitab;
@@ -61,7 +58,6 @@ function ContinueCard({ read, palette }: { read: LastRead; palette: Palette }) {
   );
 }
 
-/** A Forty on the tab: its name and author, then its numbers in rings, each opening its hadith. */
 function FortyShape({ title, by, numbers, onOpenBook, tone, palette }: { title: string; by: string; numbers: number[]; onOpenBook: () => void; tone?: string; palette: Palette }) {
   return (
     <Card palette={palette} gap={12}>
@@ -77,15 +73,12 @@ function FortyShape({ title, by, numbers, onOpenBook, tone, palette }: { title: 
   );
 }
 
-/** al-Nawawi's Forty: his own forty-two (Ibn Rajab's eight are out of the app for now, mobile/src/lib/hadith.ts). */
 const FORTY_COUNT = FORTY.entries.length;
 
 type Found = 'hadith' | 'babs' | 'forty';
 
-/** Hits drawn at a time; more come as the list nears its end, so every hit shows without drawing thousands at once. */
 const SEARCH_STEP = 40;
 
-/** A search hit: the bab heading (or the hadith's opening) with its book and kitab. */
 function Hit({ hit, line, palette }: { hit: SahihHit; line: string; palette: Palette }) {
   const book = SAHIH[hit.book];
   const place = placeOf(book, hit.n);
@@ -97,11 +90,6 @@ function Hit({ hit, line, palette }: { hit: SahihHit; line: string; palette: Pal
   );
 }
 
-/**
- * The hadith tab: one search over both Sahihs' babs and hadith, in the top bar with no page title, as on every tab (owner,
- * 2026-11-22); then «تابع» on the hadith read last, each Sahih's shape (its kitabs as bars, a touch opening one), and the
- * Forty and Ibn Rajab's eight as numbers (owner, 2026-11-23: sketch hadith-design).
- */
 export default function HadithScreen() {
   const palette = usePalette();
   const onScroll = useShrinkOnScroll();
@@ -115,10 +103,6 @@ export default function HadithScreen() {
   const found = useMemo(() => (typed ? searchSahih(SAHIH_SLUGS.map(slug => ({ index: SAHIH[slug], text: texts[slug] })), typed, Infinity) : null), [typed, texts]);
   const missing = SAHIH_SLUGS.filter(slug => bookState(slug) !== 'on');
   const forty = useMemo(() => (/[ء-ي]/.test(typed) ? searchForty(FORTY.entries, typed) : []), [typed]);
-  // The finds in three lists, each its own tab with its count (owner, 2026-11-24: the hadith found were drawn only after
-  // every bab heading found, so a common word showed no hadith at all). It opens on the first with finds, the hadith first;
-  // a tab with none drops out, but the hadith's stays to offer the download.
-  // A tab picked holds for its search only; while the books' text is read the hadith tab waits with its loading dots.
   const [picked, setPicked] = useState<{ typed: string; key: Found } | null>(null);
   const lists = found ? ([
     { key: 'hadith', label: missing.length === SAHIH_SLUGS.length ? 'الأحاديث' : `الأحاديث ${num(found.hadith.length)}`, size: found.hadith.length },
@@ -129,7 +113,6 @@ export default function HadithScreen() {
     ?? (reading ? 'hadith' : lists.find(each => each.size)?.key ?? 'hadith');
   const [drawn, setDrawn] = useState({ typed: '', list, count: SEARCH_STEP });
   const count = drawn.typed === typed && drawn.list === list ? drawn.count : SEARCH_STEP;
-  // «تابع» and the mark on each book read the last hadith again each time the tab comes back into view.
   const [, setSeen] = useState(0);
   const read = lastRead();
   useFocusEffect(useCallback(() => { setSeen(was => was + 1); }, []));
@@ -156,7 +139,6 @@ export default function HadithScreen() {
             })}
             {reading ? <LoadingDots label="يقرأ نص الصحيحين" />
               : !found.hadith.length && missing.length < SAHIH_SLUGS.length && <Empty text="لا حديث فيه هذه الكلمات" palette={palette} />}
-            {/* A book not on the phone is searched once downloaded: its download right here, not a pointer to the library. */}
             {missing.map(slug => <SahihDownload key={slug} slug={slug} state={bookState(slug)} palette={palette} />)}
           </>}
         </> : <>

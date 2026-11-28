@@ -1,7 +1,6 @@
 import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
 import type { FrameHandle } from './VideoFrame';
 
-/** The recorder page in the web build: a frame, talking both ways through window messages. */
 const VideoFrame = forwardRef<FrameHandle, { html: string; onMessage: (data: string) => void }>(function VideoFrame({ html, onMessage }, ref) {
   const frame = useRef<HTMLIFrameElement>(null);
   useImperativeHandle(ref, () => ({ send: message => frame.current?.contentWindow?.postMessage(JSON.stringify(message), '*') }), []);

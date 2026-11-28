@@ -47,7 +47,6 @@ export function browseGroups(groups: Group[], filters: GroupFilters, ayat: Map<s
   const scoped = groups.flatMap(group => {
     const places = group.places.filter(place => visible.has(place.key) && (!place.through || visible.has(place.through)));
     const keys = new Set(places.map(place => place.key));
-    // A comparison needs two ayat in view; a book's one-ayah entry needs its one.
     if (keys.size < Math.min(2, group.places.length)) return [];
     const occurrences = group.tree.occurrences.filter(occurrence => keys.has(occurrence.key));
     const scopedTree = { ...group.tree, occurrences };

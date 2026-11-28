@@ -16,7 +16,6 @@ describe('the day line', () => {
     expect(lineRows(minutes, 480, 30)).toEqual(minutes.map(m => (m / DAY_MINUTES) * 480));
   });
   it('keeps close times apart and in order, never past the line', () => {
-    // Maghrib and isha a quarter of an hour apart, isha near midnight.
     const rows = lineRows([300, 720, 1380, 1395, 1430], 480, 30);
     for (let i = 1; i < rows.length; i++) expect(rows[i] - rows[i - 1]).toBeGreaterThanOrEqual(30);
     expect(rows[rows.length - 1]).toBeLessThanOrEqual(480);
@@ -31,7 +30,6 @@ describe('the month moons', () => {
     expect(moonOn(22).waxing).toBe(false);
   });
   it('lights a growing crescent on the right and a waning one on the left', () => {
-    // The outer arc's sweep: clockwise from the top (round the right) while growing.
     expect(moonPath(4, 7)).toMatch(/^M0 -7 A7 7 0 0 1/);
     expect(moonPath(26, 7)).toMatch(/^M0 -7 A7 7 0 0 0/);
   });

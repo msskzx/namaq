@@ -19,7 +19,6 @@ describe('the journal in the mushaf order', () => {
   });
 
   it('a tap on a juz goes to the first thing kept in it, and only juz with something kept are marked', () => {
-    // البقرة ٢٥٥ is in the third juz, after the surah's header (which belongs to the first).
     expect(rows[juzRow(rows, 3)]).toMatchObject({ row: 'entry', entry: { id: '2:255' } });
     expect(juzRow(rows, 30)).toBe(ids.indexOf('surah 112'));
     expect(juzRow(rows, 10)).toBe(-1);

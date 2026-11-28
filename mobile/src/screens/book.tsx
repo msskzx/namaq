@@ -31,14 +31,7 @@ import Tabs from '@/ui/Tabs';
 import { SearchField } from '@/ui/Field';
 import Empty from '@/ui/Empty';
 
-/**
- * The book reader (owner, 2026-11-16; docs/plans/book-reader.md): a book turned page by page as its printed edition
- * runs, the page following the finger like the mushaf's. The «فاصلة», the page where the reader stopped, is the ribbon
- * in the top bar: one tap puts it on the page open, filled there, and only the reader moves it (owner, 2026-11-17: per page,
- * nothing drawn over the text). A long press on a paragraph saves it, opens its ayat in the mushaf or shares it. The page
- * last open is kept by itself and never moves the فاصلة. Opened with ?id=<book>&entry=&at= it opens at that paragraph, lit;
- * with &printed=part:page (a branch card's citation of the book) at that printed page.
- */
+// see docs/plans/book-reader.md
 export default function BookScreen() {
   const params = useLocalSearchParams<{ id?: string; entry?: string; at?: string; ayah?: string; printed?: string }>();
   const id: ReaderBookId = isReaderBook(params.id) ? params.id : 'sadi';
@@ -63,13 +56,11 @@ export default function BookScreen() {
 }
 
 const keyOf = (spot: Spot) => `${spot.entry}:${spot.at}`;
-/** A surah's name, and «المقدمة» for a book's preface (shared/bookReader.ts BookEntry). */
 const nameOf = (surah: number | undefined) => (surah ? surahNames[surah] ?? num(surah) : surah === 0 ? 'المقدمة' : '');
 
 function BookReader({ id, book, palette, entry, at, ayah, printed }: { id: ReaderBookId; book: ReaderBook; palette: Palette; entry?: string; at?: string; ayah?: string; printed?: string }) {
   const { entries, pages } = book;
   const insets = useSafeAreaInsets();
-  // Room under the page's last line for the button back to the فاصلة, so it never covers the page's end.
   const bottom = useTabBarSpace() + 52;
   const asked = (): Spot | null => {
     if (entry !== undefined && Number.isInteger(Number(entry))) return { entry: Math.min(entries.length - 1, Math.max(0, Number(entry))), at: Number(at) || 0 };
@@ -97,7 +88,6 @@ function BookReader({ id, book, palette, entry, at, ayah, printed }: { id: Reade
   const scroller = useRef<ComponentRef<typeof ScrollView>>(null);
   const moved = useRef(0);
 
-  // Opened again on another paragraph (a reader sheet's book button): there, lit.
   useEffect(() => {
     const spot = asked();
     const printedPage = askedPage();
@@ -107,7 +97,6 @@ function BookReader({ id, book, palette, entry, at, ayah, printed }: { id: Reade
     router.setParams({ entry: undefined, at: undefined, ayah: undefined, printed: undefined });
   }, [entry, at, ayah, printed]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // The page last open, kept by itself: the فاصلة is never touched here.
   useEffect(() => {
     const first = pages[page]?.slices[0];
     if (first) setLastBookSpot(id, { entry: first.entry, at: first.from });
@@ -153,7 +142,6 @@ function BookReader({ id, book, palette, entry, at, ayah, printed }: { id: Reade
   const fasilaPage = fasila ? pageOfSpot(pages, fasila) : -1;
   const spot = actions?.spot;
   const isSaved = !!spot && saved.has(keyOf(spot));
-  // The page open is the فاصلة's page: the ribbon in the top bar is filled, and a tap takes it off.
   const onFasila = fasilaPage === page;
   const markPage = () => {
     const first = pages[page]?.slices[0];
@@ -161,7 +149,6 @@ function BookReader({ id, book, palette, entry, at, ayah, printed }: { id: Reade
     buzz();
     setBookFasila(id, onFasila ? null : { entry: first.entry, at: first.from, part: pages[page].part, page: pages[page].page });
   };
-  // The paragraph's menu, across the middle of the page, over the pressed line.
   const actionsAt = actions ? { x: (size?.width ?? 300) / 2, y: actions.y } : null;
   return (
     <View style={{ flex: 1 }} onLayout={event => setSize({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height })}>
@@ -203,7 +190,6 @@ function BookReader({ id, book, palette, entry, at, ayah, printed }: { id: Reade
   );
 }
 
-/** A saved paragraph's mark's place beside its first line, in the page's right margin. */
 const MARGIN = 20;
 
 const BookPageView = memo(function BookPageView({ book, entries, page, index, palette, minHeight, bottom, top, lit, saved, onHeight, onLong, onTap, onAyah }: {
@@ -218,7 +204,6 @@ const BookPageView = memo(function BookPageView({ book, entries, page, index, pa
         const entry = entries[slice.entry];
         const previous = entries[slice.entry - 1];
         const heads = slice.from === 0 && entry.surah > 0 && !(previous && previous.surah === entry.surah && previous.from === entry.from && book === 'ukbari');
-        // A chapter on a whole surah opens the mushaf at its first ayah; a preface opens none.
         const ayah = entry.from || 1;
         return (
           <View key={`${slice.entry}:${slice.from}`}>
@@ -258,7 +243,6 @@ const TABS = [
   { tab: 'search', label: 'البحث في الكتاب', Icon: Search },
 ] as const;
 
-/** One sheet for moving about the book: its surahs, the paragraphs saved from it, and a search through it. */
 function BookSheet({ open, onTab, onClose, id, entries, pages, page, palette, saved, onGo }: {
   open: 'contents' | 'saved' | 'search' | null; onTab: (tab: 'contents' | 'saved' | 'search') => void; onClose: () => void;
   id: ReaderBookId; entries: BookEntry[]; pages: BookPage[]; page: number; palette: Palette;
@@ -320,7 +304,6 @@ function BookSheet({ open, onTab, onClose, id, entries, pages, page, palette, sa
           <FlatList data={found.query === query ? found.hits : []} keyExtractor={hit => `${hit.entry}:${hit.at}`} style={{ flex: 1 }} keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag"
             renderItem={({ item: hit }) => {
               const at = pages[hit.page];
-              // The paragraph's start, or the page's own start where the paragraph began on the page before.
               const slice = at.slices.find(item => item.entry === hit.entry);
               const paragraph = Math.max(entries[hit.entry].text.lastIndexOf('\n', hit.at) + 1, slice?.from ?? 0);
               return (

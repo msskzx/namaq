@@ -12,11 +12,6 @@ function Dot({ delay, color }: { delay: number; color: string }) {
   return <Animated.View style={[{ width: 9, height: 9, borderRadius: 5, backgroundColor: color }, style]} />;
 }
 
-/**
- * The one loader: three terracotta berries, the website's small loader. Inline where something small is coming (a button's
- * download, a player's answer); `fill` centres it in the room it is given, for a page or a sheet waiting for its content.
- * `label` says what is coming to a screen reader. The app's start screen (LoadingScreen) and the quiz timer (Hourglass) are not loaders.
- */
 export default function LoadingDots({ label = 'جارٍ التحميل', fill = false }: { label?: string; fill?: boolean }) {
   const palette = usePalette();
   const dots = (

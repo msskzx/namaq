@@ -23,7 +23,6 @@ import { buzz } from '@/lib/haptics';
 import { toTab } from '@/lib/ways';
 import { usePalette, type Palette } from '@/lib/theme';
 
-/** One dhikr open: when it is said, its words, the whole report where we have it, its grade; the count ring under it. */
 function DhikrPage({ item, occasion, count, onTap, onReset, height, palette }: { item: Dhikr; occasion: AdhkarOccasion; count: number; onTap: () => void; onReset: () => void; height: number; palette: Palette }
 ) {
   const target = item.repeat?.count ?? 1;
@@ -54,11 +53,6 @@ function DhikrPage({ item, occasion, count, onTap, onReset, height, palette }: {
   );
 }
 
-/**
- * A dhikr open full screen (owner, 2026-11-24: design أ opened from the list of design ب): it starts on the dhikr tapped,
- * and a swipe goes through the rest of its time's adhkar. A dhikr counted to its number is kept as said until the day ends,
- * and the next one comes in.
- */
 export default function DhikrScreen() {
   const palette = usePalette();
   const bottom = useTabBarSpace();
@@ -76,7 +70,6 @@ export default function DhikrScreen() {
     buzz();
     const target = item.repeat?.count ?? 1;
     say(id, target);
-    // The last count of a dhikr brings the next one in.
     if (saidCount(count, id) + 1 >= target && at + 1 < items.length) next.current = setTimeout(() => setIndex(at + 1), 600);
   };
   const back = () => (router.canGoBack() ? router.back() : toTab('/utilities'));

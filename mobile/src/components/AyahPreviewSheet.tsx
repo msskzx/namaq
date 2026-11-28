@@ -31,17 +31,10 @@ import { FEATURE_ICON } from '@/components/featureIcons';
 
 export type Preview = { kind: 'trees' | 'compare' | 'readings' | 'tafsir'; key: string };
 
-/**
- * What an ayah's tree, compare or readings button shows in the reader (owner, 2026-11-13): a short preview in a sheet instead of
- * leaving the mushaf, each item opening its own page, and a last button that opens the whole page.
- */
 export default function AyahPreviewSheet({ preview, onClose, palette }: { preview: Preview | null; onClose: () => void; palette: Palette }) {
   const trees = useMemo(() => (preview?.kind === 'trees' ? treePiecesOfAyah(preview.key) : []), [preview]);
-  // The trees are the branches tab's own cards (owner, 2026-11-14): zoom, pan, a path lit on a tap, each card's tree/matrix
-  // and surrounding switches, opening as the matrix with the settings' surrounding. The reader's ayah opens lit on each tree.
   const [around] = aroundSetting.use();
   const [treeAt, setTreeAt] = useState(0);
-  // Another ayah's trees start counting from the first.
   const [counted, setCounted] = useState(preview);
   if (preview !== counted) { setCounted(preview); setTreeAt(0); }
   const embedded = useMemo(() => ({
@@ -52,7 +45,6 @@ export default function AyahPreviewSheet({ preview, onClose, palette }: { previe
   }), [preview, onClose]);
   const pairs = useMemo(() => (preview?.kind === 'compare' ? compareOfAyah(preview.key) : []), [preview]);
   const qiraat = useMemo(() => (preview?.kind === 'readings' ? qiraatOf(preview.key) : []), [preview]);
-  // Al-Sa'di ships with the app; the person may remove him (owner, 2026-11-15), and then the sheet offers the tafsir books.
   useBooks();
   const sadi = bookState('sadi') === 'on';
   const tafsir = useMemo(() => (preview?.kind === 'tafsir' && sadi ? tafsirSadiOf(preview.key) : null), [preview, sadi]);
@@ -64,7 +56,6 @@ export default function AyahPreviewSheet({ preview, onClose, palette }: { previe
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, paddingHorizontal: 18, paddingBottom: 8 }}>
           {preview.kind === 'trees' ? <TreeIcon size={20} color={palette.muted} /> : preview.kind === 'readings' ? <Layers size={20} color={palette.muted} />
             : preview.kind === 'tafsir' ? <FEATURE_ICON.tafsir size={20} color={palette.muted} /> : <ArrowLeftRight size={20} color={palette.muted} />}
-          {/* Al-Sa'di explains a run of ayat at once, so the tafsir names the whole run. */}
           <Text accessibilityRole="header" style={{ color: palette.muted, fontSize: 16 }}>
             {`${surahNames[surah] ?? num(surah)} ${tafsir && tafsir.from !== tafsir.to ? `${num(tafsir.from)}–${num(tafsir.to)}` : num(number)}`}
           </Text>
@@ -99,7 +90,6 @@ export default function AyahPreviewSheet({ preview, onClose, palette }: { previe
             );
           })}
         </ScrollView>}
-        {/* The book's own reader first, then the book line (owner 2026-11-20), as under a home card. */}
         {tafsir ? (
           <View style={{ marginHorizontal: 4, marginTop: 6, marginBottom: 8, gap: 2 }}>
             <View style={{ flexDirection: 'row', paddingHorizontal: 12 }}><OpenInBook book="sadi" ayah={preview.key} onClose={onClose} palette={palette} /></View>
@@ -120,7 +110,6 @@ export default function AyahPreviewSheet({ preview, onClose, palette }: { previe
   );
 }
 
-/** Al-Sa'di's words on an ayah, the Quran he quotes in the mushaf's font (a quiz that looks the tafsir up draws it too). */
 export function SadiText({ text, palette }: { text: string; palette: Palette }) {
   return (
     <Text selectable style={{ color: palette.ink, fontSize: 19, lineHeight: 36, textAlign: 'right', writingDirection: 'rtl', paddingHorizontal: 2 }}>
@@ -129,11 +118,8 @@ export function SadiText({ text, palette }: { text: string; palette: Palette }) 
   );
 }
 
-/** One word the readers differ on: Hafs's reading first, then the others in the accent colour, each with who reads it (the feed's readings card too). */
 export function QiraatWord({ word, palette, bare = false, inset = 14, mark }: { word: WordDifference; palette: Palette;
-  /** Inside another card (the feed's), the rows without a card of their own, `inset` from its sides. */
   bare?: boolean; inset?: number;
-  /** The riwayat the «القراءات» page is narrowed to: their readings are shaded. */
   mark?: readonly number[] }) {
   const rows = word.readings.map((reading, i) => {
     const marked = !!mark?.length && reading.rawis.some(n => mark.includes(n));

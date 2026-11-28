@@ -15,11 +15,6 @@ import itqan from '@shared/data/quran/itqanBalagha';
 import { counted } from '@shared/quran/arabicNumber';
 import { chapterTitle, plainName, searchTerms, examplesOf, termsByChapter } from '@shared/quran/balaghaTerms';
 
-/**
- * «مصطلحات البلاغة» (owner, 2026-11-18): every balagha term the app's cards and quizzes use, under al-Suyuti's chapters in
- * al-Itqan and his own headings, each with the first line of its definition and how many examples he gives. A tap opens
- * the term's page.
- */
 export default function BalaghaTermsScreen() {
   const palette = usePalette();
   const shrink = useShrinkOnScroll();

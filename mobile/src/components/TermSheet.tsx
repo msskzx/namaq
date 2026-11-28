@@ -12,11 +12,6 @@ import type { Palette } from '@/lib/theme';
 import { TermQuotes } from './BalaghaTerm';
 import { NoShare } from '@/ui/CardShare';
 
-/**
- * Once a quiz question on balagha is answered, a chip for each term among its choices; a tap opens the term's definition in
- * a sheet over the quiz, so the quiz stays where it is, with a button to the term's page in «مصطلحات البلاغة». A quiz or
- * party stacked over the tabs leaves the button out, since opening a tab would close it.
- */
 export default function TermChips({ names, palette }: { names: string[]; palette: Palette }) {
   const [open, setOpen] = useState<string | null>(null);
   const [kept, setKept] = useState<string | null>(null);

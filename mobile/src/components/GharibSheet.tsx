@@ -24,11 +24,7 @@ export type GharibTarget = { key: string; word: number };
 type Book = 'gharib' | 'mufradat';
 export const BOOK_NAMES: Record<Book, string> = { gharib: 'غريب القرآن لابن قتيبة', mufradat: 'المفردات للراغب' };
 
-/**
- * A word's meaning (owner, 2026-11-18; docs/plans/alfaz-al-quran.md), from two books picked with pills, like the balagha
- * sheet. Ibn Qutaybah: his entries on the ayah, whole, the ones on the pressed word first; a tap on one lights the words
- * it quotes. Al-Raghib: his whole article on the word's root. A book with nothing on the word or ayah has no pill.
- */
+// see docs/plans/alfaz-al-quran.md
 export default function GharibSheet({ target, onClose, palette }: { target: GharibTarget | null; onClose: () => void; palette: Palette }) {
   const [kept, setKept] = useState(target);
   if (target && target !== kept) setKept(target);
@@ -41,7 +37,6 @@ export default function GharibSheet({ target, onClose, palette }: { target: Ghar
   );
 }
 
-/** The sheet's inside, which a quiz that looks the word up draws too. */
 export function GharibBody({ target, palette }: { target: GharibTarget; palette: Palette }) {
   useBooks();
   const { key, word } = target;
@@ -49,7 +44,6 @@ export function GharibBody({ target, palette }: { target: GharibTarget; palette:
   const words = useMemo(() => ayahMushafWords(key), [key]);
   const gharibOn = bookState('gharib') === 'on';
   const mufradatOn = bookState('mufradat') === 'on';
-  // The entries on the pressed word first, then the ayah's others, each in his order.
   const entries = useMemo(() => {
     if (!gharibOn) return [];
     const all = gharibAt(gharib, key);
@@ -78,14 +72,12 @@ export function GharibBody({ target, palette }: { target: GharibTarget; palette:
           : (books.length === 1 ? books[0] : shown) === 'gharib'
             ? <Gharib entries={entries} picked={picked} onPick={setPicked} palette={palette} />
             : article && <Mufradat article={article} palette={palette} />}
-        {/* A hidden book is offered back under what the other shows (owner, 2026-11-15: books are the person's to keep). */}
         {(!gharibOn || !mufradatOn) && <BookList kind="gharib" palette={palette} />}
       </ScrollView>
     </View>
   );
 }
 
-/** An Ibn Qutaybah card's book line: his page, then the edition and where our text comes from. */
 export const gharibSource = (entry: { page: number; id: number }) => [{ line: GHARIB_BOOK, quotes: [{ text: '', cite: gharibCredit(entry), url: gharibPage(entry) },
   { text: `${GHARIB_BOOK}، ${GHARIB_EDITION}. النص من نسخة المكتبة الشاملة التي نشرها موقع تراث، كلام ابن قتيبة وحده بلا حواشي المحقق.` }],
   places: [`ص ${num(entry.page)}`], editions: [GHARIB_EDITION] }];
@@ -93,7 +85,6 @@ export const gharibSource = (entry: { page: number; id: number }) => [{ line: GH
 function Gharib({ entries, picked, onPick, palette }: { entries: GharibAt[]; picked: number | null; onPick: (at: number) => void; palette: Palette }) {
   return entries.map((entry, i) => (
     <CardWithRow key={entry.at} palette={palette} pad={[10, 14]} picked={picked === i} source={gharibSource(entry)}>
-      {/* The entry lights the words it quotes; its reference below is a control of its own. */}
       <Pickable picked={picked === i} onPick={() => onPick(i)}>
         <BookRuns text={entry.text} quran={palette.accent} style={{ color: palette.ink, fontSize: 18, lineHeight: 34, textAlign: 'right', writingDirection: 'rtl' }} />
       </Pickable>
@@ -101,9 +92,7 @@ function Gharib({ entries, picked, onPick, palette }: { entries: GharibAt[]; pic
   ));
 }
 
-/** Al-Raghib's whole article on a root, with its book line. */
 export function Mufradat({ article, head, palette }: { article: MufradatEntry;
-  /** The word over its share picture, on the word's page (a sheet shares nothing: ui/CardShare NoShare). */
   head?: React.ReactNode; palette: Palette }) {
   return (
     <SharedCard palette={palette} pad={[10, 14]} shareHead={head} shareLabel="شارك كلام الراغب" source={[{ line: MUFRADAT_BOOK, quotes: [{ text: '', cite: mufradatCredit(article), url: mufradatPage(article) },

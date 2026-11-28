@@ -1,4 +1,4 @@
-// docs/quiz-ayah-branches.md
+// see docs/quiz-ayah-branches.md
 import type { Branch } from '../quran/branches';
 import { normalizeWord, seated } from '../quran/normalize';
 import { shuffle, type Random } from './random';
@@ -45,7 +45,6 @@ export function matchedWords(given: string, words: string[]): number {
 
 export const LEAF_WORDS = 2;
 
-/** How many of the typed words, from the start, are right for these node words. */
 export function rightWords(given: string, words: string[]): number {
   const typed = given.trim().split(/\s+/).filter(Boolean);
   for (let count = typed.length; count > 0; count--) {
@@ -54,15 +53,8 @@ export function rightWords(given: string, words: string[]): number {
   return 0;
 }
 
-/**
- * Each typed word, right or wrong, read word by word against the node's words (owner, 2026-11-19: one extra letter marks
- * that word alone, not every word after it): the longest run of typed words found in order among the node's words is
- * right, the rest wrong, so a word typed twice, missed or misspelled is the only one marked. The run must start where the
- * node starts, give or take a word: «السماء وما» typed for «ولا في السماء وما» is all wrong, its start is missing.
- */
 export function typedMarks(given: string, words: string[]): boolean[] {
   const tokens = given.trim().split(/\s+/).filter(Boolean);
-  // «و بأيمانهم»: a lone و or ف typed apart from its word is read with it, and marked with it.
   const units: number[][] = [];
   tokens.forEach((token, at) => {
     const last = units[units.length - 1];
@@ -72,7 +64,6 @@ export function typedMarks(given: string, words: string[]): boolean[] {
   const typed = units.map(unit => unit.map(at => tokens[at]).join(''));
   const target = spoken(words);
   const same = (i: number, j: number) => matchedWords(typed[i], [target[j]]) === 1;
-  // The longest common run in order (LCS), then walked back to mark the typed words in it.
   const table = Array.from({ length: typed.length + 1 }, () => new Array<number>(target.length + 1).fill(0));
   for (let i = typed.length - 1; i >= 0; i--) for (let j = target.length - 1; j >= 0; j--)
     table[i][j] = same(i, j) ? table[i + 1][j + 1] + 1 : Math.max(table[i + 1][j], table[i][j + 1]);
@@ -93,29 +84,21 @@ export function leadingWords(given: string, words: string[]): number {
 
 export const spoken = (words: string[]) => words.filter(word => letters(word) !== '');
 
-/** The ayah signs a node opens with (﴿١٧﴾ where its ayah reads on into the next): drawn before an asked box, never typed. */
 export function leadingSigns(words: string[]): string[] {
   const first = words.findIndex(word => letters(word) !== '');
   return words.slice(0, first < 0 ? words.length : first);
 }
 
-/**
- * The typed answer without a repeat of the last word of the node before it: someone may type that word again
- * as the leaf's first word (لما قالوا under ثم يعودون لما). The repeat must be spelled right; it is dropped only
- * when that grades more words right, so a node that itself starts with the same word keeps it.
- */
 export function withoutRepeat(given: string, words: string[], before: string[]): string {
   const typed = given.trim().split(/\s+/).filter(Boolean);
   const last = before.slice(-1);
   const answer = typed.join(' ');
-  // Typed words and Quran words need not line up one to one (يا أيها for يَـٰٓأَيُّهَا).
   const count = last.length ? typed.findIndex((_, at) => at > 0 && matchedWords(typed.slice(0, at).join(' '), last) === 1) : -1;
   if (count < 1) return answer;
   const rest = typed.slice(count).join(' ');
   return rightWords(rest, words) > rightWords(answer, words) ? rest : answer;
 }
 
-/** The spoken words above each node, from the root's down to its parent's. */
 export function wordsBefore(tree: Branch): Map<Branch, string[]> {
   const before = new Map<Branch, string[]>();
   const visit = (node: Branch, path: string[]) => node.children.forEach(child => {

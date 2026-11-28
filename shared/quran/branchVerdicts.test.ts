@@ -23,7 +23,6 @@ describe('branch verdicts', () => {
   it('browsing leaves out dropped cards and review keeps them', () => {
     const all = branchInventory({}, null, true);
     const shown = branchInventory({}, null);
-    // A card a book cites always shows.
     expect(shown.length).toBe(all.filter(piece => !!piece.group?.citations.length || !droppedBranch(piece)).length);
   });
 });

@@ -40,7 +40,6 @@ describe('the four ayah quizzes', () => {
       expect(question.quranChoices).toBe(true);
       expect(question.choices).toHaveLength(3);
       expect(Object.keys(question.whereOf!).sort()).toEqual(question.choices.map(choice => choice.value).sort());
-      // Each whole ayah ends with its number, the mushaf's end mark.
       for (const choice of question.choices) expect(choice.labelArabic).toMatch(new RegExp(` ${num(Number(choice.value.split(':')[1]))}$`));
     }
   });
@@ -82,7 +81,6 @@ describe('the four ayah quizzes', () => {
     for (const question of tafsirQuiz.questions(whole, 'medium', seeded(5), 60)) {
       expect(question.look).toEqual({ view: 'tafsir', keys: question.choices.map(choice => choice.value), mark: question.correctAnswer });
     }
-    // The asked ayah is not always listed first.
     expect(new Set(tafsirQuiz.questions(whole, 'medium', seeded(6), 60).map(question => question.choices[0].value === question.correctAnswer)).size).toBe(2);
     for (const question of balaghaQuiz.questions(whole, 'medium', seeded(7), 20)) expect(question.look).toEqual({ view: 'balagha', key: question.ayahKey });
     for (const question of irabQuiz.questions(whole, 'medium', seeded(8), 20)) expect(question.look).toEqual({ view: 'irab', key: question.ayahKey, word: question.marked![0] });

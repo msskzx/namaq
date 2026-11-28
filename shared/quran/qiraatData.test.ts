@@ -62,24 +62,19 @@ describe('al-Nashr audit of al-Imran to al-Nas', () => {
   it('keeps every corrected word in the data and names every riwaya in it', () => {
     for (const { ayah, replacement } of corrections) {
       if (!replacement) continue;
-      // Stored in the Madina page's spelling, as the build writes it, and fully vowelled (scripts/quran/qiraatVowels.ts).
-      // Trimmed like every word to the words the readings differ on (فَمَنِ ٱضۡطُرَّ is stored as ٱضۡطُرَّ).
       const texts = replacement.readings.map(r => r.text);
       const cut = trimShared(texts);
-      // One the build cannot trim (أَوَ ءَابَآؤُنَا against أَوۡ ءَابَآؤُنَا) is kept whole.
       const trimmed = 'problem' in cut ? { start: 0, end: replacement.at[1] - replacement.at[0] + 1, texts } : cut;
       const at = [replacement.at[0] + trimmed.start, replacement.at[0] + trimmed.end - 1];
       const stored = word(ayah, at[0]);
       expect(stored.at).toEqual(at);
       expect(stored.readings.map(r => r.rawis)).toEqual(replacement.readings.map(r => r.rawis));
-      // A hamza's seat may move to the line, as the rasm writes it (وجَبۡرَئيلَ، وَجَبۡرَءِيلَ).
       const seated = (text: string) => text.replace(/[ئؤ]/g, 'ء');
       const words = (text: string) => text.trim().split(/\s+/).length;
       stored.readings.forEach((r, i) => {
         expect(words(r.text)).toBe(words(trimmed.texts[i]));
         expect(sameForm(seated(r.text), seated(madinaSpelling(trimmed.texts[i])))).toBe(true);
       });
-      // A riwaya al-Nashr gives both ways (al-Bazzi at 10:16, Hisham at 6:80) is named under both.
       expect([...new Set(replacement.readings.flatMap(r => r.rawis))].sort((a, b) => a - b)).toEqual(Array.from({ length: 20 }, (_, i) => i + 1));
     }
   });

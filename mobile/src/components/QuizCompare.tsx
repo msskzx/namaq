@@ -1,5 +1,3 @@
-// The compare quiz (shared/quiz/compareQuiz.ts) as the matrix only (owner, 2026-11-17: no trees): the given ayah whole, the
-// asked ayah with a box wherever it parts from it. Grading, hints and the checked marks follow the tree quiz's.
 import { useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { useFitReport, type OnFit } from '@/lib/useFit';
@@ -25,11 +23,9 @@ const ayahOf = (key: string) => Number(key.split(':')[1]);
 
 type Asked = { compare: CompareAsk; sources?: QuizSource[] };
 
-/** Given words in the app-wide word-match colours: same words terracotta, written differently amber, same root purple. */
 const Words = ({ line, at, palette }: { line: CompareLine; at: number[]; palette: Palette }) =>
   <>{at.map(i => <AyahWords key={i} mark={line.tones[i] && { kind: line.tones[i]! }} look={line.tones[i] ? undefined : { color: palette.ink }}>{line.words[i]}</AyahWords>)}</>;
 
-/** One ayah of the matrix in its card: its reference above, its words flowing right to left, then its number. */
 function Line({ line, palette, children, after }: { line: CompareLine; palette: Palette; children: React.ReactNode; after?: React.ReactNode }) {
   return (
     <Card palette={palette} pad={10} gap={2}>
@@ -49,15 +45,11 @@ function Bar({ label, onPress, Icon }: { label: string; onPress: () => void; Ico
   );
 }
 
-/** The buttons under a question, on the right as across the app. */
 const Buttons = ({ children }: { children: React.ReactNode }) =>
   <UnderCard><View style={{ direction: 'rtl', flexDirection: 'row', justifyContent: 'flex-start', paddingHorizontal: 8 }}>{children}</View></UnderCard>;
 
-/** The question: the given ayah, then the asked one with a box in each part, and the hint bulb. */
 export function CompareInputs({ question, typed, onType, palette, header, hints: kept, onHints, onFit }: { question: Asked; typed: string[]; onType: (blank: number, text: string) => void; palette: Palette; header?: React.ReactNode;
-  /** The hints shown so far, when the quiz keeps them (solo, so the review can mark them); otherwise they live here. */
   hints?: Hints; onHints?: (hints: Hints) => void;
-  /** In a feed card that follows its content: how much taller it is than its room (lib/useFit.ts). */
   onFit?: OnFit;
 }) {
   const fit = useFitReport(onFit);
@@ -66,7 +58,6 @@ export function CompareInputs({ question, typed, onType, palette, header, hints:
   const hints = kept ?? own;
   const shown = useMemo(() => compareHintsOf(ask, hints), [ask, hints]);
   const pieces = useMemo(() => comparePieces(ask), [ask]);
-  // Each blank in recite mode's boxes (owner, 2026-11-19): its first two words to write, the rest faint.
   const blanks = useMemo(() => ask.blanks.map((_, blank) => writeBlank(blank, blankWords(ask, blank))), [ask]);
   const write = useWriteBlanks({ id: `${ask.card}:${ask.asked.key}`, blanks, texts: typed, onType });
   const typing = useKeyboardShown();
@@ -99,7 +90,6 @@ function Badge({ row, palette }: { row: Correction; palette: Palette }) {
   );
 }
 
-/** A checked blank under the asked ayah: its number and verdict, a bulb when hinted, and what was typed when wrong. */
 function Mark({ row, palette, hinted }: { row: Correction; palette: Palette; hinted: boolean }) {
   const typed = row.typed ? row.typed.split(/\s+/) : [];
   return (
@@ -119,12 +109,7 @@ function Mark({ row, palette, hinted }: { row: Correction; palette: Palette; hin
   );
 }
 
-/**
- * The checked question: each blank shows its words, the ones enough to type underlined, after its numbered badge, and under the
- * ayah each blank's verdict and what was typed when wrong. The card opens on the compare page.
- */
 export function CompareFeedback({ question, typed, palette, header, hints, onFit }: { question: Asked; typed: string[]; palette: Palette; header?: React.ReactNode; hints?: Hints;
-  /** In a feed card that follows its content: how much taller it is than its room (lib/useFit.ts). */
   onFit?: OnFit;
 }) {
   const fit = useFitReport(onFit);

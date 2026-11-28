@@ -3,37 +3,27 @@ import { StyleSheet } from 'react-native';
 import { useDerivedValue, useFrameCallback, useReducedMotion, useSharedValue, type SharedValue } from 'react-native-reanimated';
 import { SEA_ART } from '@/lib/theme';
 
-/*
- * The sea of an-Nur 40, drawn with Skia on the phone's graphics thread (owner, 2026-11-23: the SVG build stuttered and
- * closed Expo Go). Each frame builds its paths in a worklet and Skia draws them straight away; no shape passes through
- * the app's view tree. Each layer stands alone, so hand-made art can take its place later.
- */
 
 const clamp = (v: number) => { 'worklet'; return Math.max(0, Math.min(1, v)); };
 const ease = (x: number) => { 'worklet'; return x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2; };
 const lerp = (a: number, b: number, u: number) => { 'worklet'; return a + (b - a) * u; };
 
-/** Where each part of the picture stands at a look (0 the calm sea … 7 the black). */
 function state(t: number, H: number) {
   'worklet';
   const sea = ease(clamp(t)), w1 = ease(clamp(t - 1)), w2 = ease(clamp(t - 2)), cl = ease(clamp(t - 3)), dk = clamp(t - 4);
   return {
     sea, w1, w2, cl,
-    // The four darknesses, one after another.
     dSea: ease(clamp(dk * 4)), dWave: ease(clamp(dk * 4 - 1)), dCloud: ease(clamp(dk * 4 - 2)), dNight: ease(clamp(dk * 4 - 3)),
     deeper: ease(clamp(t - 5)), black: ease(clamp(t - 6)),
     light: 1 - 0.1 * w1 - 0.1 * w2 - 0.22 * cl,
-    // The waterline: up as the depth opens, down as the clouds come so they never touch the waves.
     sy: H * (lerp(0.62, 0.5, sea) + 0.12 * cl),
   };
 }
-/** The edge of the newest layer is gold; once passed, it goes quiet. Its own stroke's and the gold's share of `alpha`. */
 function rim(t: number, at: number, alpha: number) {
   'worklet';
   const f = clamp(1 - Math.abs(t - at) * 1.4), a = alpha * (t > at + 0.5 ? 0.55 : 1);
   return { own: a * (1 - f), gold: a * f };
 }
-/** Adds a line through points every `step` across the width to `path`. */
 function addLine(path: SkPathBuilder, W: number, y: (x: number) => number, step: number, joined = false) {
   'worklet';
   for (let x = 0; x <= W + step; x += step) {
@@ -58,20 +48,17 @@ const BANKS = [[0.2, 0.05, 0.6, 0.7, 0.85], [0.26, 0.045, 2.1, 1.0, 1], [0.32, 0
 const SPECKS = Array.from({ length: 48 }, (_, i) => ({ x: ((i * 0.618) % 1), y: ((i * 0.377) % 1), r: 0.5 + ((i * 7) % 10) / 10, s: 0.2 + ((i * 3) % 7) / 10 }));
 
 export default function SeaSkia({ look, width: W, height: H, still = false }: { look: SharedValue<number>; width: number; height: number;
-  /** A picture that does not move (the share image). */
   still?: boolean }) {
   const reduced = useReducedMotion();
   const clock = useSharedValue(0);
   useFrameCallback(frame => { clock.value = (frame.timeSinceFirstFrame ?? 0) / 1000; }, !still && !reduced);
   const s = useDerivedValue(() => state(look.value, H));
 
-  // The water under the line, and the sky's last light.
   const waterY = useDerivedValue(() => s.value.sy);
   const waterH = useDerivedValue(() => H - s.value.sy);
   const waterTop = useDerivedValue(() => vec(0, s.value.sy));
   const glow = useDerivedValue(() => 0.45 * s.value.light * (1 - s.value.cl * 0.85));
 
-  // Seven crest lines, smaller as they go far; glints slide along them. They sink away as the depth opens.
   const crests = useDerivedValue(() => {
     const p = Skia.PathBuilder.Make(), { sy, sea } = s.value, time = clock.value, calm = 1 - sea * 0.75;
     for (let i = 0; i < 7; i++) {
@@ -84,7 +71,6 @@ export default function SeaSkia({ look, width: W, height: H, still = false }: { 
   const glintsOpacity = useDerivedValue(() => s.value.light * (1 - s.value.sea * 0.75) * (1 - s.value.dWave));
   const glintPhase = useDerivedValue(() => clock.value * 30);
 
-  // Light falling into the deep, fading as it goes down; and specks drifting in it.
   const rays = useDerivedValue(() => {
     const p = Skia.PathBuilder.Make(), { sy } = s.value, time = clock.value;
     for (let i = 0; i < 6; i++) {
@@ -165,7 +151,6 @@ export default function SeaSkia({ look, width: W, height: H, still = false }: { 
   };
   const banks = [bank(0), bank(1), bank(2)];
 
-  // How dark it has grown: the colours fade as each layer comes, then the darknesses fall one over another.
   const dim = useDerivedValue(() => 1 - s.value.light);
   const darkSea = useDerivedValue(() => 0.88 * s.value.dSea);
   const darkWaves = useDerivedValue(() => 0.85 * s.value.dWave);
@@ -173,7 +158,6 @@ export default function SeaSkia({ look, width: W, height: H, still = false }: { 
   const night = useDerivedValue(() => Math.min(1, 0.93 * s.value.dNight + 0.06 * s.value.deeper + 0.01 * s.value.black));
   const blacker = useDerivedValue(() => 0.75 * s.value.deeper + 0.25 * s.value.black);
 
-  // The darknesses' bands stand where the layers are once all have come (the waterline then at 0.62).
   const sy = H * 0.62;
   const BAND = [SEA_ART.clear, SEA_ART.black, SEA_ART.black, SEA_ART.clear];
   const band = (opacity: SharedValue<number>, y: number, h: number) => (

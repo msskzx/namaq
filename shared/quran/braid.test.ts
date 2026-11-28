@@ -56,7 +56,6 @@ describe('compareTree', () => {
   it('makes a compare tree that parts and rejoins, each box naming the sides through it', () => {
     const side = (key: string) => { const [surah, ayah] = key.split(':').map(Number); return { surah, ayah, ayat: [{ number: ayah, words: words(key) }] }; };
     const { tree, sides } = compareTree([side('2:35'), side('7:19')]);
-    // It opens apart: a root with no words, a child for each side, then the shared «اسكن انت وزوجك الجنة».
     expect(tree.words).toEqual([]);
     expect(tree.children.map(keys)).toEqual([['2:35'], ['7:19']]);
     expect(keys(tree)).toEqual(['2:35', '7:19']);
@@ -75,17 +74,13 @@ describe('compareTree', () => {
     ];
     const { tree } = compareTree(sides, new Set(['m']));
     const [first, second] = tree.children;
-    // A box of one side names the ayat it holds; the sides' names are no longer kept for the first boxes alone.
     expect(first.holds).toEqual([['2:51']]);
     expect(second.holds).toEqual([['7:142']]);
-    // An ayah's end sign follows its last word, a word the other side writes differently is written, a root match is root.
     expect(second.words).toContain('﴿١٤٢﴾');
     expect(first.tones![first.words.indexOf('مُوسَىٰٓ')]).toBe('written');
     expect(first.tones![first.words.indexOf('وَٰعَدْنَا')]).toBe('root');
-    // The box each side's last word is in hangs the ayah after it, found after the side's last ayah.
     const last = (node: Branch): Branch => node.rejoin ? last(node.rejoin) : node;
     const end = last(tree);
-    // «أربعين ليلة» closes both: it names the ayat ending there, and hangs both sides' ayah after, found after 7:143.
     expect(end.holds).toEqual([['2:51'], ['7:143']]);
     expect(end.ayat).toEqual(['2:51', '7:142']);
     expect(end.through).toEqual({ '2:51': '2:51', '7:142': '7:143' });
@@ -129,7 +124,6 @@ describe('compareTree', () => {
     const all = (node: Branch): Branch[] => [node, ...node.children.flatMap(all), ...(node.rejoin ? all(node.rejoin) : [])];
     const nodes = all(tree).filter(node => node !== tree);
     expect(nodes.flatMap(node => node.words).every(word => !/⋯/.test(word))).toBe(true);
-    // «التي», written «ٱلَّتِى» and «ٱلَّتِىٓ», moves into the parted boxes after «النار», so Al Imran's side is not empty there.
     expect(nodes.every(node => node.words.length > 0)).toBe(true);
     expect(tree.rejoin!.children.map(child => child.words[0])).toEqual([words('2:24')[7], words('3:131')[2]]);
   });

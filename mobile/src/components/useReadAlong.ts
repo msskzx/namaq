@@ -18,12 +18,10 @@ export function nextSpeed() {
   try { deviceStorage.setItem(SPEED_KEY, String(speed)); } catch (error) { reportError('read-along: save speed', error); }
 }
 
-/** The read-along speed every card and the page video share. */
 export const useReadSpeed = () => useSyncExternalStore(subscribe, () => shared).speed;
 
 export type ReadStatus = 'idle' | 'playing' | 'paused' | 'done';
 
-/** A card's read-along, as on the website. Only one card plays at a time: starting one stops the others. */
 export function useReadAlong(card: PairCard) {
   const { active, speed } = useSyncExternalStore(subscribe, () => shared);
   const [studio, setStudio] = useState(false);

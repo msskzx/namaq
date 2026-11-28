@@ -2,26 +2,21 @@ import sizes from './treeSizes.json';
 import { arrayOf, isNumberIn, isRecord, readJson, writeJson } from './storage';
 import type { Presentation } from './branches';
 
-/** A tree's drawn size both ways: [side width, side height, top-down width, top-down height]. */
 export type Sized = [number, number, number, number];
-/** The shipped sizes also keep how many ayat the whole tree holds, to tell a tree a filter cut down. */
 export type Shipped = [number, number, number, number, number];
 export type TreeSizes = Record<string, Sized>;
 
 const bundled = sizes as Record<string, number[]> as Record<string, Shipped>;
-/** Renamed when the tree's words changed size (2026-11-20: the reader's word size), so sizes measured before are dropped. */
 const SAVED = 'tree-sizes-2';
 const KEEP = 400;
 
 export const sizeKey = (id: string, around: boolean) => around ? `${id}+` : id;
 
-/** A tree a filter cut down has another shape, so its size is kept under the ayat it still holds. */
 const cutKey = (id: string, presentation: Presentation, around: boolean) => sizeKey(`${id}|${presentation.ayat.map(ayah => ayah.key).join(',')}`, around);
 
 let saved: TreeSizes | undefined;
 const savedSizes = () => (saved ??= Object.fromEntries(Object.entries(readJson(SAVED, isRecord) ?? {}).filter(([, sized]) => arrayOf(isNumberIn(-Infinity, Infinity))(sized) && sized.length === 4)) as TreeSizes);
 
-/** The tree's sizes: measured by `npm run tree-sizes` for whole trees, or on this phone the first time a filtered one opened. */
 export function sizesOf(id: string, presentation: Presentation, around: boolean): Sized | undefined {
   const whole = bundled[sizeKey(id, around)];
   if (whole && whole[4] === presentation.ayat.length) return whole.slice(0, 4) as Sized;

@@ -6,7 +6,6 @@ const battles = data as unknown as AppBattle[];
 
 const moments = (n: number) => Array.from({ length: n }, () => ({ title: '', quote: '', grading: '', cite: '', url: '', people: [] }));
 
-// A count reads as Arabic counts it (owner, 2026-11-23: the battles line says how many scenes a battle's course has).
 describe('courseLine', () => {
   it('counts one, two, three to ten and eleven on each in its own form', () => {
     const kind = { value: 'غزوة', refs: [] };
@@ -17,7 +16,6 @@ describe('courseLine', () => {
   });
 });
 
-// The Prophet's ﷺ words are set apart only when the report names him as their speaker (owner, 2026-11-23).
 describe('prophetSaying', () => {
   it('takes the first quote when the words just before it name the Prophet ﷺ', () => {
     expect(prophetSaying('أن النبي صلى الله عليه وسلم قال يوم بدر: "هذا جبريل". فخرج.')).toEqual({
@@ -33,7 +31,6 @@ describe('prophetSaying', () => {
   });
 });
 
-// Every battle's larger side fits a hundred dots, and every unit has its words (the page says what a dot stands for).
 describe('unitFor', () => {
   it('keeps every side of every battle under a hundred dots', () => {
     const sides = battles.flatMap(battle => Object.values(battle.counts).map(count => count?.value ?? 0)).filter(Boolean);

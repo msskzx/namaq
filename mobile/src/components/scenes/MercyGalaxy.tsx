@@ -1,17 +1,11 @@
 import Svg, { Circle, Defs, Ellipse, G, Path, RadialGradient, Stop } from 'react-native-svg';
 import { RAHMAN_ART, RAHMAN_PAPER as paper } from '@/lib/theme';
 
-/**
- * Where the one part of mercy spreads: all creation, drawn as a galaxy (owner, 2026-11-25: «الكون… بصورة مميزة»). A still
- * picture (never animated): four arms of small stars around a glowing core, stars scattered over the band, and the one
- * part at its heart in the name's colour. The stars are in the page's inks, so only the part is red.
- */
 const ARMS = 4;
 const PER_ARM = 110;
 const FIELD = 70;
 const SPARKS = 5;
 
-/** The same stars every time: a seeded random (mulberry32), so a picture shared twice is the same picture. */
 function seeded(seed: number) {
   let t = seed;
   return () => {
@@ -52,7 +46,6 @@ function stars(width: number, height: number): { arms: Star[]; field: Star[]; sp
   return { arms, field, sparks };
 }
 
-/** A four-pointed star. */
 const spark = (x: number, y: number, s: number) =>
   `M${x} ${y - s}Q${x} ${y} ${x + s} ${y}Q${x} ${y} ${x} ${y + s}Q${x} ${y} ${x - s} ${y}Q${x} ${y} ${x} ${y - s}Z`;
 

@@ -1,29 +1,17 @@
 import type { AppPerson } from './tarajim';
 import slipsJson from './data/tarajim/nasabSlips.json';
 
-/** Printing slips in a nasab (shared/data/tarajim/nasabSlips.json): the line stops before the slipped name. */
 const SLIPS: Record<string, { at: string; note: string }> = slipsJson.slips;
 
-/**
- * A person's line of fathers for the nasab tree (owner, 2026-11-18), read from the converted entries only.
- * Each entry prints the nasab as far as al-Dhahabi took it: al-Zubayr's stops at «غالب», al-Abbas's heading names no
- * father at all. Where a line stops, it is carried on by another entry that names the same fathers, so al-Zubayr reaches
- * «عدنان» through the Prophet's ﷺ nasab. Names stay as printed; matching ignores vowels and hamza forms.
- */
 export interface LineName {
-  /** The name as the entry prints it. */
   name: string;
-  /** The name bare, for matching (bareName). */
   bare: string;
-  /** The entry whose nasab gave this name. */
   from: string;
 }
 
-/** A name with no vowels, tatweel or hamza seat, for matching («عَمْرٍو» = «عَمْرِو», «أبي» = «ابي», «مرة» = «مره», «لؤي» = «لأي»). */
 export function bareName(name: string) {
   let bare = bareNames.get(name);
   if (bare === undefined) {
-    // Names repeat all through the quizzes and cards (thousands of calls for a few hundred names): worked out once each.
     if (bareNames.size > 50_000) bareNames.clear();
     bare = bareOf(name);
     bareNames.set(name, bare);
@@ -35,41 +23,27 @@ const bareOf = (name: string) =>
   name.replace(/[ً-ْٰـ]/g, '').replace(/[أإآؤ]/g, 'ا').replace(/ئ/g, 'ي').replace(/ة/g, 'ه')
     .replace(/ى$/u, 'ي').replace(/\s+/g, ' ').trim();
 
-/** Each word of a text bare, so a final «ى» inside a phrase («أبو يحيى بن») matches as it does at the end. */
 const bareWords = (text: string) => text.split(/\s+/u).filter(Boolean).map(bareName);
-/** What a people search looks in: the name, full name, kunyas and laqabs, bare. */
 export const namesHay = (person: { name: string; fullName?: { text: string }; kunya: { text: string }[]; laqab: { text: string }[] }) =>
   bareWords([person.name, person.fullName?.text, ...person.kunya.map(k => k.text), ...person.laqab.map(l => l.text)].filter(Boolean).join(' ')).join(' ');
-/** Whether a `namesHay` holds every word typed: the people search of the app and the website. */
 export const matchesQuery = (hay: string, query: string) => bareWords(query).every(word => hay.includes(word));
 
-/** The first word of a name of two words («عبد الله», «أبي طالب»), which is no name with a laqab after it. */
 const COMPOUND = /^(?:عبد|ابي|ابو|ام|ذي|ذو|امري|امرئ)$/u;
 
-/**
- * Two bare names for the same father: the same, or one the other with a laqab after it («مالك الأغر» is «مالك»).
- * Never for a name of two words («عبد الله» is not «عبد»), and the added word must be a laqab («ال…»). A kunya
- * before the name («أبي أحيحة سعيد» is «سعيد») is the same man too.
- */
 export function sameName(a: string, b: string) {
   if (a === b) return true;
   const [short, long] = a.length < b.length ? [a, b] : [b, a];
-  // Both ways below need the longer name to hold the shorter: a quick no for most pairs, asked thousands of times.
   if (!long.includes(short)) return false;
   const words = long.split(' ');
-  // A kunya before the name is the same man: Sa'id ibn al-As's grandfather «أبي أحيحة سعيد» is Khalid's father «سعيد».
   if (words.length > 2 && /^اب[ويا]$/u.test(words[0]) && words.slice(2).join(' ') === short) return true;
   return words.length === 2 && words[0] === short && !COMPOUND.test(short) && words[1].startsWith('ال');
 }
 
-/** The father's name from a link's name: «عبد المطلب بن هاشم» → «عبد المطلب». */
 const firstName = (name: string) => name.split(/\s+(?:بن|ابن|بنت)\s+/u)[0];
 const link = (name: string, from: string): LineName => ({ name, bare: bareName(name), from });
 
 function ownLine(person: AppPerson): LineName[] {
   const line = person.nasab.map((name) => link(name, person.slug));
-  // A heading that names him by his mother («صفوان ابن بيضاء», «ابن أم مكتوم») or a forefather, not his father: when
-  // the entry names his father, his line goes on through him as the entry names him («وهب بن ربيعة بن هلال»).
   const mother = person.parents.find((parent) => parent.sex === 'FEMALE');
   const father = person.parents.find((parent) => parent.sex === 'MALE');
   const notFather = line.length > 1 && father && !sameName(line[1].bare, bareName(firstName(father.name)));
@@ -89,14 +63,8 @@ function ownLine(person: AppPerson): LineName[] {
   return line;
 }
 
-/** How many of a line's last names must match another line's for the line to go on in it. */
 const JOIN = 3;
 
-/**
- * Where `line` can go on in `other`: the index in `other` just after the line's last name, when the line's last three
- * names are three names in a row in `other`. One or two common names («عبد مناف» is two men in the Prophet's ﷺ nasab,
- * «عبد الله» is many) never join two lines alone.
- */
 function continuation(line: LineName[], other: LineName[]) {
   if (line.length < JOIN) return -1;
   const tail = line.slice(-JOIN).map((n) => n.bare);
@@ -108,7 +76,6 @@ function continuation(line: LineName[], other: LineName[]) {
 
 const fatherOf = (person: AppPerson) => person.parents.find((parent) => parent.sex === 'MALE')?.slug;
 
-/** The people's own lines, once per list of people. */
 const ownLines = new WeakMap<readonly AppPerson[], Map<string, LineName[]>>();
 function ownLinesOf(people: readonly AppPerson[]) {
   let lines = ownLines.get(people);
@@ -119,14 +86,7 @@ function ownLinesOf(people: readonly AppPerson[]) {
   return lines;
 }
 
-/**
- * The person's fathers from the person up, carried on through the other converted entries as far as they go. Kin the
- * entries name as the same man come first: the father's own entry always carries the line; else a brother whose entry
- * names the same father (by slug) carries it when his goes further (al-Abbas's heading names no father; Amr ibn Sa'id's
- * stops at «العاص»). Then three names in a row matching another entry's line carry it on.
- */
 export function lineOf(person: AppPerson, people: readonly AppPerson[]): LineName[] {
-  // Each line is looked for among all the others: worked out once for each person of a list (the cards and quizzes ask often).
   let lines = fullLines.get(people);
   if (!lines) fullLines.set(people, lines = new Map());
   let line = lines.get(person.slug);
@@ -140,11 +100,8 @@ function fullLineOf(person: AppPerson, people: readonly AppPerson[]): LineName[]
   const line = [...own.get(person.slug)!];
   const father = fatherOf(person);
   if (father && own.has(father)) {
-    // The father's own entry carries the line, whatever the son's heading prints: a heading may shorten the nasab
-    // («معاذ بن عمرو بن الجموح بن كعب» skips زيد and حرام, which his father's entry prints).
     line.splice(1, line.length - 1, ...own.get(father)!);
   } else if (father) {
-    // A brother whose entry names the same father (by slug, so the same man) carries a line his own stops short of.
     const kin = people.filter((p) => p.slug !== person.slug && fatherOf(p) === father)
       .map((p) => own.get(p.slug)!.slice(1))
       .sort((x, y) => y.length - x.length)[0];
@@ -163,30 +120,20 @@ function fullLineOf(person: AppPerson, people: readonly AppPerson[]): LineName[]
   return line;
 }
 
-/** A father's name after «بن», in the genitive, as a line carried on through his own entry may print him nominative. */
 const afterBin = (name: string) => name.replace(/(^|\s)أبو(?=\s)/gu, '$1أبي').replace(/(^|\s)ذو(?=\s)/gu, '$1ذي').replace(/(^|\s)امرؤ(?=\s)/gu, '$1امرئ');
 
-/** The fathers' chain from a person up to index `to`, unvowelled: «بنت» after a woman's name, «بن» between the rest. */
 export function chainOf(person: { sex?: string }, line: LineName[], to: number) {
   return line.slice(0, to + 1).map((n, k) => { const bare = n.name.replace(/[ً-ْٰـ]/g, ''); return k === 0 ? bare : afterBin(bare); })
     .reduce((text, name, k) => (k === 0 ? name : `${text} ${k === 1 && person.sex === 'FEMALE' ? 'بنت' : 'بن'} ${name}`), '');
 }
 
-/** How many fathers above a meeting must agree for two lines to meet there. */
 const ABOVE = 2;
 
-/**
- * Where two lines meet: the first father of `a` that `b` names too, with the next fathers above him the same in both
- * (two where both lines go that far, at least one). Only the nearest fathers are compared, so a spelling that differs
- * far up the line does not move the meeting. `a` and `b` are the indexes of that father in each line; undefined when
- * they do not meet in what the entries print.
- */
 export function meetingOf(a: LineName[], b: LineName[]): { a: number; b: number } | undefined {
   for (let i = 0; i < a.length; i += 1) {
     for (let j = 0; j < b.length; j += 1) {
       if (!sameName(b[j].bare, a[i].bare)) continue;
       const shared = Math.min(a.length - 1 - i, b.length - 1 - j, ABOVE);
-      // One name alone with nothing above it to agree on is not a meeting.
       if (shared < 1) continue;
       let same = true;
       for (let k = 1; k <= shared; k += 1) if (!sameName(a[i + k].bare, b[j + k].bare)) same = false;
@@ -196,10 +143,6 @@ export function meetingOf(a: LineName[], b: LineName[]): { a: number; b: number 
   return undefined;
 }
 
-/**
- * A father's name standing alone in a box, unvowelled and in the nominative (owner 2026-11-20): the line prints him after
- * «بن», in the genitive («أبي طالب», «أبي قحافة عثمان», «ذي يزن»); the box reads «أبو طالب», «أبو قحافة عثمان», «ذو يزن».
- */
 export function boxName(name: string) {
   let box = boxNames.get(name);
   if (box === undefined) {
@@ -208,27 +151,18 @@ export function boxName(name: string) {
   }
   return box;
 }
-/** Each name as a box shows it, worked out once: the nasab quizzes ask the same fathers many times over. */
 const boxNames = new Map<string, string>();
 const boxOf = (name: string) =>
   name.replace(/[ً-ْٰـ]/g, '').trim()
     .replace(/(^|\s)(?:أبي|أبا)(?=\s)/gu, '$1أبو').replace(/(^|\s)(?:ذي|ذا)(?=\s)/gu, '$1ذو').replace(/(^|\s)امرئ(?=\s)/gu, '$1امرؤ');
 
-/** One father in the nasab tree: his name, the people picked whose line ends at him (they are he), and his sons on the lines. */
 export interface NasabNode {
   key: string;
-  /** As a box shows it (boxName). */
   name: string;
-  /** The picked people this node is. */
   people: string[];
   children: NasabNode[];
 }
 
-/**
- * The picked people's lines as one tree from the top father down (owner's sketch, screen 3): two lines share their
- * nodes from where meetingOf says they meet and up, so they part where the two nasabs part. A line that meets none
- * of the others before it is a root of its own, even when its top father has the same name as another's.
- */
 export function nasabTree(picked: { slug: string; line: LineName[] }[]): NasabNode[] {
   const roots: NasabNode[] = [];
   const parentOf = new Map<NasabNode, NasabNode>();
@@ -240,7 +174,6 @@ export function nasabTree(picked: { slug: string; line: LineName[] }[]): NasabNo
   };
   for (const { slug, line } of picked) {
     const nodes: NasabNode[] = new Array(line.length);
-    // The nearest father this line shares with a line already in the tree.
     let best: { i: number; j: number; with: (typeof placed)[number] } | undefined;
     for (const other of placed) {
       const at = meetingOf(line, other.line);
@@ -248,8 +181,6 @@ export function nasabTree(picked: { slug: string; line: LineName[] }[]): NasabNo
     }
     let top: number;
     if (best) {
-      // From the meeting up, the fathers already drawn above it (another line may have drawn them higher since); above
-      // the tree's top, this line's own fathers, and the old top goes under them.
       const { i, j, with: other } = best;
       let k = i;
       let at: NasabNode | undefined = other.nodes[j];
@@ -282,10 +213,6 @@ export function nasabTree(picked: { slug: string; line: LineName[] }[]): NasabNo
   return roots;
 }
 
-/**
- * Where the drawing starts: the top father who is a parting point or a picked person, so the long shared line above is
- * folded into one line of names. Returns the folded fathers (from the nearest up) and the node to draw from.
- */
 export function foldTop(root: NasabNode): { above: string[]; start: NasabNode } {
   const above: string[] = [];
   let node = root;
@@ -296,14 +223,8 @@ export function foldTop(root: NasabNode): { above: string[]; start: NasabNode } 
   return { above, start: node };
 }
 
-/** The fewest fathers a straight run folds into one «…» box: fewer are drawn as they are. */
 export const FOLD_RUN = 3;
 
-/**
- * The straight run that starts at `node` (owner 2026-11-20): fathers with one son on the drawn lines, no picked person
- * among them, and whose son is no picked person either, so the meeting father above, each person's father and the people
- * stay drawn. The tree folds a run of FOLD_RUN or more into one «…» box that opens in place. Empty when `node` is kept.
- */
 export function straightRun<T extends { children: T[] }>(node: T, picked: (node: T) => boolean): T[] {
   const run: T[] = [];
   for (let at = node; at.children.length === 1 && !picked(at) && !picked(at.children[0]); at = at.children[0]) run.push(at);

@@ -26,14 +26,10 @@ import { num } from '@shared/quran/arabicNumber';
 import BattleMap, { MAP_ASPECT } from '@/components/battles/BattleMap';
 import { Counts, People, Readings, Refs } from '@/components/battles/BattleParts';
 
-/** Where the reader is in a battle's course, and the ways to move through it (the battle screen only). */
 type CourseNav = { current: number; past: boolean; go: (i: number) => void;
-  /** Each scene's view, measured against the page when the reader moves (on the web a scene keeps its first place otherwise). */
   held: (i: number, view: ComponentRef<typeof View> | null) => void; laidOut: () => void;
-  /** The contents' own height, so a scene brought up clears them. */
   sized: (height: number) => void };
 
-/** The battle's head as an article opens: its kind and year, its name large, and its place in its book's words. */
 function HeadBody({ battle, palette }: { battle: AppBattle; palette: Palette }) {
   const said = battle.place?.refs.find(ref => ref.text && placeSayer(ref.cite));
   return (
@@ -43,14 +39,12 @@ function HeadBody({ battle, palette }: { battle: AppBattle; palette: Palette }) 
       {battle.location ? <Text style={{ color: palette.muted, fontSize: 16, textAlign: 'right' }}>{battle.location.value}</Text> : null}
       {said ? <QuoteBar by={placeSayer(said.cite)} pieces={[{ text: said.text, name: false }]} tone={palette.rule} size={17} palette={palette} /> : null}
       <Refs refs={[battle.kind, battle.year, battle.location].flatMap(value => value?.refs ?? [])} palette={palette} />
-      {/* Where the map pins it, in its book's words (owner, 2026-11-23: every place on the map carries its reference). */}
       {placeRefs(battle).map(refs => <Refs key={refs[0]?.cite} refs={refs} palette={palette} />)}
       <Readings values={[battle.kind, battle.year, battle.location]} palette={palette} />
     </View>
   );
 }
 
-/** The head with its share (release 1: every page shares): the map, when it has one, and the head as one picture. */
 function Head({ battle, palette }: { battle: AppBattle; palette: Palette }) {
   return (
     <View style={{ gap: 4 }}>
@@ -66,10 +60,8 @@ function Head({ battle, palette }: { battle: AppBattle; palette: Palette }) {
   );
 }
 
-/** The course's contents: one tab a scene, the one being read underlined and kept in view, and a bar of how far through them the reader is. */
 function Contents({ moments, nav, palette }: { moments: AppMoment[]; nav: CourseNav; palette: Palette }) {
   return (
-    // Past the course the contents step aside (they stay in the page's flow, so nothing under them moves).
     <View style={{ backgroundColor: palette.paper, paddingVertical: 8, opacity: nav.past ? 0 : 1 }} pointerEvents={nav.past ? 'none' : 'auto'}
       onLayout={event => nav.sized(event.nativeEvent.layout.height)}>
       <StripTabs labels={moments.map((moment, i) => `${num(i + 1)} ${moment.title}`)} at={nav.current} onPick={nav.go} progress palette={palette} />
@@ -77,11 +69,6 @@ function Contents({ moments, nav, palette }: { moments: AppMoment[]; nav: Course
   );
 }
 
-/**
- * One scene of the course as a passage of an article: its number and our few words naming it, who the source has it from,
- * the report itself with the Prophet's ﷺ words set apart large in amber where the report gives him as their speaker, its
- * grading and page, the people in it, and the way on to the next scene.
- */
 function Scene({ moment, n, palette, next, head }: { moment: AppMoment; n: number; palette: Palette; next?: () => void; head: React.ReactNode }) {
   const share = <PassageShare label={`شارك ${moment.title}`} head={head} palette={palette} gap={8}
     sources={sourcesOf(uniqueSources([citeSource({ text: '', cite: moment.cite, url: moment.url })]))}>
@@ -98,7 +85,6 @@ function Scene({ moment, n, palette, next, head }: { moment: AppMoment; n: numbe
   );
 }
 
-/** A scene's words, drawn on the page and in its share picture. */
 function SceneBody({ moment, n, palette }: { moment: AppMoment; n: number; palette: Palette }) {
   const split = prophetSaying(moment.quote);
   const body = { color: palette.ink, fontSize: 19, lineHeight: 36, textAlign: 'right' as const };
@@ -119,14 +105,7 @@ function SceneBody({ moment, n, palette }: { moment: AppMoment; n: number; palet
   );
 }
 
-/**
- * A battle as an article (owner, 2026-11-23; sketch tools-design/battles page-v2): its place on the map across the top, its
- * name large with its place in its book's words, then its course scene by scene under contents that follow the reader, then
- * its numbers as dots (after the course, not at the top), and the people. Returned as the page's parts, so the battle
- * screen can keep the contents in view (`stuck`); a quiz that looks it up draws them in a column, the contents without jumps.
- */
 export function battleParts(battle: AppBattle, palette: Palette, nav?: CourseNav): { parts: React.ReactNode[]; stuck?: number } {
-  // Each card shares as a picture under the battle's name (release 1: every page shares).
   const head = <ShareHead title={battle.name} palette={palette} />;
   const course = courseTitle(battle.kind?.value);
   const parts: React.ReactNode[] = [];
@@ -148,15 +127,12 @@ export function battleParts(battle: AppBattle, palette: Palette, nav?: CourseNav
   return { parts, stuck };
 }
 
-/** A battle drawn whole in a column (a quiz's look-up). */
 export function BattleView({ battle, palette }: { battle: AppBattle; palette: Palette }) {
   return <>{battleParts(battle, palette).parts}</>;
 }
 
-/** Room between the contents stuck at the top and the head of the scene they bring up. */
 const UNDER_GAP = 14;
 
-/** A battle (owner, 2026-11-18; as an article 2026-11-23): its course's contents stay at the top once reached and follow the reading. */
 export default function BattleScreen() {
   const palette = usePalette();
   const shrink = useShrinkOnScroll();
@@ -172,7 +148,6 @@ export default function BattleScreen() {
   const { slug = '' } = useLocalSearchParams<{ slug?: string }>();
   const battle = battleOf(slug);
   if (!battle) return <View style={{ flex: 1, backgroundColor: palette.paper }}><TopBar back={back} /></View>;
-  // Where each scene is on the page now: what is above it (the head's fonts, a reference opened) may have moved it.
   const measure = (then?: () => void) => {
     const page = scroll.current?.getInnerViewRef();
     let left = scenes.current.size;

@@ -12,7 +12,6 @@ const surahOf = (key: string) => Number(key.split(':')[0]);
 const isEnd = (word: string) => word === '۝' || word.startsWith('﴿');
 const plain = (words: string[]) => words.filter(word => !isEnd(word)).map(word => normalizeWord(word).replace(/[ؤئء]/g, 'ا').replace(/^[وف](?=..)/, ''));
 
-/** The words read from one ayah to another, with a new surah's basmala before its first ayah, as the trees run on. */
 function reading(first: string, last: string) {
   const from = order.get(first)!;
   const to = order.get(last)!;
@@ -34,7 +33,6 @@ describe('tree labels', () => {
     expect(ayatLabel(['1:2'], { 1: 'الفاتحة' })).toBe('الفاتحة ٢');
     expect(ayatLabel(['37:182', '38:1'], { 37: 'الصافات', 38: 'ص' })).toBe('الصافات ١٨٢ ثم ص ١');
     expect(ayatLabel(['2:4', '2:5'], { 2: 'البقرة' })).toBe('البقرة ٤–٥');
-    // Any ayat: each surah once, with its runs.
     expect(placesLabel(['111:1', '111:4', '111:5'], { 111: 'المسد' })).toBe('المسد ١، ٤–٥');
     expect(placesLabel(['8:2', '28:4', '40:36'], { 8: 'الأنفال', 28: 'القصص', 40: 'غافر' })).toBe('الأنفال ٢، القصص ٤، غافر ٣٦');
   });
@@ -51,7 +49,6 @@ describe('tree labels', () => {
         if (ayat.length > 1 && surahOf(ayat[1]) !== surahOf(key)) grown++;
         const own = node.forms?.[key] ?? node.words;
         const last = ayat[ayat.length - 1];
-        // All the node's words lie between the two ayat named, and the words after its last ayah end lie in the last one.
         const tail = own.slice(own.findLastIndex(isEnd) + 1);
         if (!holds(plain(reading(key, last)), plain(own)) || !holds(plain(reading(last, last)), plain(tail))) wrong.push(`${id} ${key} → ${ayat.join(' ')}: ${node.words.join(' ')}`);
       }

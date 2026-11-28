@@ -1,27 +1,16 @@
 import { num } from './arabicNumber';
 import type { OathKind } from './oaths';
 
-/** A scholar's words with its book and page. */
 export type OathQuote = { text: string; cite: string; url: string };
 
-/**
- * Ibn al-Qayyim, al-Tibyan fi Ayman al-Quran, ed. Abd Allah al-Battati (Dar Ata'at al-Ilm / Dar Ibn Hazm, 4th ed. 1440/2019),
- * one volume. `section` and `id` place the printed page in Quranpedia's copy of that edition. The quotes are his words as
- * printed, with the diacritics, footnote marks and the editor's ayah references left out; «…» marks words skipped.
- * docs/audits/quran-oaths-source-audit.md
- */
+// see docs/audits/quran-oaths-source-audit.md
 const tibyan = (page: number, section: number, id: number) => ({ cite: `ابن القيم، التبيان ص ${num(page)}`, url: `https://quranpedia.app/books/b18337/s${section}.html#p${id}` });
 
-/** What each list rests on, shown at its head. */
 export const KIND_QUOTES: Record<OathKind, OathQuote> = {
   allah: { text: 'اعلم أن الله - سبحانه - يقسم بأمور على أمور، وإنما يقسم بنفسه المقدسة الموصوفة بصفاته، أو آياته المستلزمة لذاته وصفاته، وإقسامه ببعض المخلوقات دليل على أنه من عظيم آياته.', ...tibyan(5, 7, 73) },
   others: { text: 'والقسم لما كان يكثر في الكلام اختصر، فصار فعل القسم يحذف ويكتفى بـ «الباء»، ثم عوض من «الباء»: «الواو» في الأسماء الظاهرة، وبـ «التاء» في اسم الله كقوله تعالى: ﴿وتالله لأكيدن أصنامكم﴾', ...tibyan(7, 7, 75) },
 };
 
-/**
- * Each of Allah's oaths, by its id («surah:first ayah»), with a scholar's sentence on it: Ibn al-Qayyim where he speaks to it;
- * al-Nahl 63 adds al-Nahhas's i'rab (Dar al-Kutub al-'Ilmiyya, 1421); al-Nahl 56 from Ibn Kathir (ed. Sami Salama, Dar Tayba, 2nd ed. 1420/1999) and Maryam 68 from al-Sa'di, which he passes over.
- */
 export const OATH_QUOTES: Record<string, OathQuote[]> = {
   '4:65': [{ text: 'أقسم - سبحانه - بنفسه المقدسة، قسما مؤكدا بالنفي قبله؛ على عدم إيمان الخلق حتى يحكموا رسوله في كل ما شجر بينهم من الأصول، والفروع، وأحكام الشرع، وأحكام المعاد، ومسائل الصفات وغيرها.', ...tibyan(652, 80, 720) }],
   '10:53': [{ text: 'وقد أمر نبيه أن يقسم على الجزاء والمعاد في ثلاث آيات', ...tibyan(9, 7, 77) }],
@@ -94,16 +83,13 @@ export const OATH_QUOTES: Record<string, OathQuote[]> = {
     { text: 'ومن ذلك إقسامه - سبحانه - بـ «العصر» على حال الإنسان في الآخرة … وأكثر المفسرين على أنه الدهر، وهذا هو الراجح.', ...tibyan(133, 21, 201) }],
 };
 
-/** Al-Suyuti, al-Itqan, ed. Abu al-Fadl Ibrahim (1974), vol. 4, type 67 «في أقسام القرآن», linked to the page on Shamela. */
 const itqan = (page: string, sh: number) => ({ cite: `السيوطي، الإتقان ٤/${page}`, url: `https://shamela.ws/book/11728/${sh}` });
 
-/** Ibn al-Qayyim's five things Allah swears on (al-Tibyan p. 8), as al-Suyuti copies them (al-Itqan 4/57). */
 export const ON_QUOTES: OathQuote[] = [
   { text: 'فهو - سبحانه - يقسم على أصول الإيمان، التي يجب على الخلق معرفتها: تارة يقسم على التوحيد، وتارة يقسم على أن القرآن حق، وتارة على أن الرسول حق، وتارة على الجزاء والوعد والوعيد، وتارة على حال الإنسان.', ...tibyan(8, 7, 76) },
   { text: 'ثم هو سبحانه وتعالى يقسم على أصول الإيمان التي تجب على الخلق معرفتها تارة يقسم على التوحيد وتارة يقسم على أن القرآن حق وتارة على أن الرسول حق وتارة على الجزاء والوعد والوعيد وتارة يقسم على حال الإنسان', ...itqan('٥٧', 1215) },
 ];
 
-/** What Allah swears by: al-Suyuti's three (al-Itqan 4/55), with the Prophet ﷺ and the Quran as he and Ibn al-Qayyim name them. */
 export const BY_QUOTES: OathQuote[] = [
   { text: 'وقال غيره: أقسم الله تعالى بثلاثة أشياء بذاته كالآيات السابقة وبفعله نحو: ﴿والسماء وما بناها والأرض وما طحاها ونفس وما سواها﴾ وبمفعوله نحو: ﴿والنجم إذا هوى﴾ ﴿والطور وكتاب مسطور﴾', ...itqan('٥٥', 1213) },
   { text: 'وقال العلماء: أقسم الله تعالى بالنبي صلى الله عليه وسلم في قوله: ﴿لعمرك﴾ لتعرف الناس عظمته عند الله ومكانته لديه', ...itqan('٥٥', 1213) },
@@ -113,12 +99,7 @@ export const BY_QUOTES: OathQuote[] = [
 export type OathOn = 'tawhid' | 'quran' | 'rasul' | 'jaza' | 'insan' | 'unnamed';
 export type OathBy = 'self' | 'speech' | 'act' | 'prophet' | 'made';
 
-/**
- * The sections of Allah's oaths, each with the oaths Ibn al-Qayyim himself puts there (their first quote is where he says so):
- * by one of his five names, or by «المعاد» and «المقسم عليه» for the Day (al-Muddaththir 32, al-Buruj 1), or the messengers sworn
- * upon (al-Nahl 63). Where he names what is sworn upon in other words, or gives two readings, the oath stays in the last section
- * with his words first. docs/audits/2026-11-16-unplaced-oaths.md
- */
+// see docs/audits/2026-11-16-unplaced-oaths.md
 export const OATH_SECTIONS: { on: OathOn; title: string; ours?: true; oaths: string[] }[] = [
   { on: 'tawhid', title: 'على التوحيد', oaths: ['37:1'] },
   { on: 'quran', title: 'على أن القرآن حق', oaths: ['38:1', '43:2', '44:2', '50:1', '56:75', '81:15', '86:11'] },
@@ -128,10 +109,8 @@ export const OATH_SECTIONS: { on: OathOn; title: string; ours?: true; oaths: str
   { on: 'unnamed', title: 'لم يضعه ابن القيم في واحد من الخمسة', ours: true, oaths: ['4:65', '15:72', '15:92', '16:56', '19:68', '51:7', '70:40', '79:1', '84:16', '89:1', '91:1'] },
 ];
 
-/** Our note on the last section: it gathers the oaths he does not place among his five. */
 const UNNAMED_NOTE = 'جمعنا هنا ما لم يضعه ابن القيم في واحد من الخمسة، على ترتيب المصحف. وما ذكر فيه ما أُقسم عليه بغير ألفاظها أو على وجهين قدّمنا كلامه فيه.';
 
-/** What each oath swears by; an oath may have two (al-Shams swears by His making and by what He made). */
 export const OATH_BY: { by: OathBy; label: string; oaths: string[] }[] = [
   { by: 'self', label: 'بذاته', oaths: ['4:65', '10:53', '15:92', '16:56', '16:63', '19:68', '34:3', '51:23', '64:7', '70:40'] },
   { by: 'speech', label: 'بكلامه', oaths: ['36:2', '38:1', '43:2', '44:2', '50:1'] },
@@ -142,22 +121,17 @@ export const OATH_BY: { by: OathBy; label: string; oaths: string[] }[] = [
 
 const BY_OF = new Map(OATH_BY.map(b => [b.by, new Set(b.oaths)]));
 
-/** The sections a chip leaves showing, each with its oaths sworn by that chip's kind, in mushaf order; none picked keeps them all. */
 export const oathSections = (by: OathBy | null) =>
   OATH_SECTIONS.map(section => ({ ...section, oaths: by ? section.oaths.filter(id => BY_OF.get(by)!.has(id)) : section.oaths })).filter(section => section.oaths.length);
 
-/** A reference's title: the books and pages its quotes cite, each once; our own note alone is «من جمعنا». */
 export const citesOf = (quotes: { cite?: string }[]) => [...new Set(quotes.flatMap(q => (q.cite ? [q.cite] : [])))].join('، ') || 'من جمعنا';
 
-/** Our notes on the whole page, once in the help sheet (owner, 2026-11-16: fold the help into the references). */
 const PAGE_NOTES = [
   'جمعنا كل موضع في القرآن جاء فيه القسم بلفظه: بالواو أو التاء أو الباء، أو «لا أقسم»، أو «فلا وربك»، أو «لعمرك»، أو «قل إي وربي». وما أُخبر فيه عن قسم بغير لفظه، كـ«وأقسموا بالله جهد أيمانهم»، لم يدخل.',
   'الكلمة الملوّنة ما أُقسم به. وما أقسم الله به بوصف بلا اسم، كالذاريات والمرسلات والنازعات والعاديات، يبقى بألفاظه ولا نقول ما هو، فذلك من التفسير. ويُعرض القسم وحده دون جوابه.',
   'لم يراجع هذا العرض أحد من أهل العلم. النص برواية حفص، وفي «لا أقسم» (القيامة ١) قراءة أخرى لم تدخل هنا.',
 ];
 
-/** A list's reference under the switch: Ibn al-Qayyim on that kind of oath, then our notes on the page. */
 export const kindQuotes = (kind: OathKind): { text: string; cite?: string; url?: string }[] => [KIND_QUOTES[kind], ...PAGE_NOTES.map(text => ({ text }))];
 
-/** A section's reference: Ibn al-Qayyim's five and al-Suyuti copying them, or our note on the section we gathered. */
 export const sectionQuotes = (section: { ours?: true }): { text: string; cite?: string; url?: string }[] => (section.ours ? [{ text: UNNAMED_NOTE }] : ON_QUOTES);

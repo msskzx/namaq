@@ -21,7 +21,6 @@ const poem = poemData as Poem;
 const chapters = numberVerses(poem);
 const count = chapters.reduce((sum, chapter) => sum + chapter.verses.length, 0);
 
-/** One verse, its first half on the right and its second on the left, its number on the right (a quiz that looks the poem up draws it too). */
 export function TuhfaVerse({ verse, marked, palette, onLayout }: { verse: NumberedVerse; marked: boolean; palette: Palette; onLayout?: (event: LayoutChangeEvent) => void }) {
   return (
     <View accessible accessibilityLabel={`${num(verse.number)}: ${verse.first}، ${verse.second}`} onLayout={onLayout}
@@ -35,10 +34,6 @@ export function TuhfaVerse({ verse, marked, palette, onLayout }: { verse: Number
   );
 }
 
-/**
- * The website's /quran/tajwid/tuhfat-al-atfal on the phone: the whole poem in al-Warraqi's vowelling, one verse under the other,
- * its first half on the right and its second on the left, the verse number on the right. The chapter's name in the top bar opens the chapters.
- */
 export default function TuhfaScreen() {
   const palette = usePalette();
   const shrink = useShrinkOnScroll();
@@ -47,7 +42,6 @@ export default function TuhfaScreen() {
   const tops = useRef<number[]>([]);
   const [chapter, setChapter] = useState(0);
   const [picking, setPicking] = useState(false);
-  // The search opens a verse with ?verse=<number>: scrolled to it once laid out, and marked until the next search.
   const verseY = useRef<Record<number, number>>({});
   const { verse } = useLocalSearchParams<{ verse?: string }>();
   const [marked, setMarked] = useState<number>();
@@ -76,7 +70,6 @@ export default function TuhfaScreen() {
     const y = contentOffset.y + 40;
     let at = 0;
     tops.current.forEach((top, i) => { if (top <= y) at = i; });
-    // The last chapter is too short to reach the top: at the end of the page it is the one being read.
     if (contentOffset.y + layoutMeasurement.height >= contentSize.height - 2) at = chapters.length - 1;
     if (at !== chapter) setChapter(at);
   };
@@ -93,11 +86,9 @@ export default function TuhfaScreen() {
       <ScrollView ref={scroll} onScroll={onScroll} onContentSizeChange={toVerse} scrollEventThrottle={16} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 8, paddingBottom: bottom }}>
         <Text style={{ color: palette.ink, fontSize: 22, fontWeight: '700', textAlign: 'center' }}>{poem.title}</Text>
         <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'center', marginTop: 4 }}>{`${poem.author}، ${num(poem.composed)}هـ، ${num(count)} بيتًا`}</Text>
-        {/* The edition and the transcription it was checked against, on the book line (owner 2026-11-20). */}
         <SourceLine palette={palette} sources={[{ line: poem.title, quotes: [{ text: '', cite: `الضبط: ${poem.edition.name}`, url: poem.edition.url }, { text: '', cite: 'قوبل به كل بيت من نسخة رقمية', url: poem.transcription }] }]} />
         {chapters.map((part, i) => (
           <View key={part.title} onLayout={event => { tops.current[i] = event.nativeEvent.layout.y; toVerse(); }} style={{ marginTop: 18 }}>
-            {/* Each chapter shares as one picture, its verses' numbers and the poem's edition written out (release 1: every page shares). */}
             <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 6 }}>
               <View style={{ width: ICON_BUTTON.bar.box }} />
               <Text accessibilityRole="header" style={{ flex: 1, color: palette.accent, fontSize: 18, fontWeight: '700', textAlign: 'center' }}>{part.title}</Text>

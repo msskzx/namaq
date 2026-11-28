@@ -1,6 +1,5 @@
 import { seg, type Story, type StoryEvent } from './story';
 
-// In surah Yusuf only the ayat where Yaqub is present; the whole telling is in yusuf.ts.
 const events: StoryEvent[] = [
   { phase: 0, title: 'البشرى به', segments: [seg(11, 71)] },
   { phase: 0, title: 'هبة لإبراهيم', segments: [seg(21, 72, 73), seg(19, 49, 50), seg(29, 27), seg(6, 84)] },

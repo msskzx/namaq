@@ -15,16 +15,11 @@ const ROW = 56;
 const SETTLE = 150;
 const STEP = ROW + GAP;
 
-/** Where a row dragged `dy` from slot `from` lands among `count` rows. */
 const landing = (from: number, dy: number, count: number) => {
   'worklet';
   return Math.max(0, Math.min(count - 1, from + Math.round(dy / STEP)));
 };
 
-/**
- * One row, placed by its slot (`slots`, the slot of each choice by its index) rather than by the list's order, so a drop
- * moves the rows on the UI thread and nothing jumps while React catches up.
- */
 function Row({ id, count, label, slots, lifted, dy, palette, locked, onDrop }: {
   id: number; count: number; label: string; slots: SharedValue<number[]>; lifted: SharedValue<number>; dy: SharedValue<number>;
   palette: Palette; locked: boolean; onDrop: (slots: number[]) => void;
@@ -37,19 +32,16 @@ function Row({ id, count, label, slots, lifted, dy, palette, locked, onDrop }: {
     const from = slots.value[id];
     const to = landing(from, dy.value, count);
     const next = slots.value.map(slot => slot === from ? to : from < to && slot > from && slot <= to ? slot - 1 : to < from && slot >= to && slot < from ? slot + 1 : slot);
-    // The dragged row settles from where the finger left it into its slot; the others are already there.
     dy.value = (from - to) * STEP + dy.value;
     slots.value = next;
     dy.value = withTiming(0, { duration: SETTLE }, () => { lifted.value = -1; });
     scheduleOnRN(onDrop, next);
   };
-  // From the grip the row moves at once; from anywhere else after a short hold, so a finger can still scroll the screen.
   const grip = Gesture.Pan().enabled(!locked).minDistance(1).onStart(start).onUpdate(event => move(event.translationY)).onFinalize(drop);
   const hold = Gesture.Pan().enabled(!locked).activateAfterLongPress(180).onStart(start).onUpdate(event => move(event.translationY)).onFinalize(drop);
   const style = useAnimatedStyle(() => {
     const slot = slots.value[id];
     if (lifted.value === id) return { top: slot * STEP, transform: [{ translateY: dy.value }], zIndex: 2, borderColor: palette.accent, borderWidth: 1.5 };
-    // While another row is dragged, the rows between it and where it would land make room.
     let shift = 0;
     if (lifted.value >= 0 && dy.value !== 0) {
       const from = slots.value[lifted.value];
@@ -62,7 +54,6 @@ function Row({ id, count, label, slots, lifted, dy, palette, locked, onDrop }: {
   return (
     <GestureDetector gesture={hold}>
       <Animated.View accessible accessibilityLabel={label}
-        // A screen reader moves a row a place up or down.
         accessibilityActions={locked ? undefined : [{ name: 'up', label: 'إلى أعلى' }, { name: 'down', label: 'إلى أسفل' }]}
         onAccessibilityAction={event => {
           const from = slots.value[id];
@@ -87,16 +78,8 @@ function Row({ id, count, label, slots, lifted, dy, palette, locked, onDrop }: {
   );
 }
 
-/**
- * A question that puts its choices in order («رتّب السور», owner 2026-11-20; sketch surah-order-quiz/sketch-dark.png): rows
- * dragged into place, the row following the finger and the others making room, the first in the mushaf on top; then
- * «تحقق». Once answered the rows stand in the right order with each surah's number, green where the reader put it,
- * otherwise saying where he put it. Solo, the feed card and a party draw it (the website's OrderRows); a party sends each
- * move as a draft (`onDraft`), so the time running out grades the order as it stands.
- */
 export default function OrderRows({ question, picked, palette, onPick, onDraft }: {
   question: { key: string; choices: Choice[]; order?: string[]; whereOf?: Record<string, string> };
-  /** The order given, joined; undefined while it is still being put in order. */
   picked: string | undefined;
   palette: Palette;
   onPick?: (value: string) => void;
@@ -104,7 +87,6 @@ export default function OrderRows({ question, picked, palette, onPick, onDraft }
 }) {
   const answered = picked !== undefined && !!question.order?.length;
   const first = question.choices.map(choice => choice.value);
-  // The order as it stands (drawn with `key={question.key}`, so the next question starts afresh), and each choice's slot.
   const [values, setValues] = useState(first);
   const slots = useSharedValue(first.map((_, i) => i));
   const lifted = useSharedValue(-1);

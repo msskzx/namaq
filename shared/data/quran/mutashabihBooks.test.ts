@@ -17,7 +17,6 @@ const words = (text: string) => (text.replace(/[ً-ْٰـ]/g, '').replace(/[أإ
 describe.each(Object.keys(BOOKS))('the book of mutashabih %s', id => {
   const { entries, pages } = built[id];
 
-  // AGENTS.md: an old author's book ships with his words only. Each wrote his numbers in words, so a digit or a square bracket is the editor's.
   it("holds no number or square bracket of the editor's", () => {
     for (const entry of entries) expect(entry.text).not.toMatch(/[٠-٩0-9[\]]/);
   });
@@ -34,9 +33,6 @@ describe.each(Object.keys(BOOKS))('the book of mutashabih %s', id => {
   });
 });
 
-// «اقرأ في الكتاب» on a branch card opens the book at the citation's page: the words it quotes are on it or on a page beside it
-// (a quote can start on the page before, or be a later question of the section that starts there). The books spell out the
-// signs the quotes keep («﵎»), as scripts/quran/signs.ts does.
 describe("a branch card's citation of these books", () => {
   const cited = evidence.cases.filter(row => citationInBook(row));
 

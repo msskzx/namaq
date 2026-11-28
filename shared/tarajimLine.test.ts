@@ -44,7 +44,6 @@ describe('meetingOf', () => {
   });
 
   it('meets at a father one line names by kunya and name and the other by his name alone', () => {
-    // Sa'id ibn al-As's grandfather is «أبي أحيحة سعيد»; Khalid ibn Sa'id is that Sa'id's son.
     expect(meet('said-ibn-al-as-ibn-said', 'khalid-ibn-said')).toBe('أبي أحيحة سعيد');
   });
 });
@@ -69,7 +68,6 @@ describe('safeguards', () => {
   } as AppPerson);
 
   it('never carries a line of two names on by a common name alone', () => {
-    // «جابر بن عبد الله» must not become the Prophet's ﷺ brother through «عبد الله».
     const jabir = man('jabir', ['جابر', 'عبد الله'], 'abdullah-ibn-amr');
     const all = [...people, jabir];
     expect(lineOf(jabir, all).map((n) => n.bare)).toEqual(['جابر', 'عبد الله']);
@@ -106,7 +104,6 @@ describe('safeguards', () => {
     ]);
     expect(roots.map((r) => r.key).sort()).toEqual(['n', 'u']);
     const count = (n: NasabNode): number => 1 + n.children.reduce((sum, c) => sum + count(c), 0);
-    // u v w z y x a b c, each once.
     expect(count(roots.find((r) => r.key === 'u')!)).toBe(9);
   });
 });
@@ -174,14 +171,12 @@ describe('the tree as drawn (owner, 2026-11-20)', () => {
       const roots = tree(...slugs);
       const start = slugs.length > 1 ? foldTop(roots[0]).start : roots[0];
       const runs = all(start).filter((node) => node !== start).map((node) => straightRun(node, picked)).filter((run) => run.length >= FOLD_RUN);
-      // A long nasab has something to fold, and nothing folded is a person, his father, or a father where lines part.
       expect(runs.length).toBeGreaterThan(0);
       for (const run of runs) for (const node of run) {
         expect(node.people).toEqual([]);
         expect(node.children).toHaveLength(1);
         expect(node.children[0].people).toEqual([]);
       }
-      // Each picked person and his father stay drawn.
       const folded = new Set(runs.flat());
       for (const node of all(start).filter(picked)) {
         expect(folded.has(node)).toBe(false);

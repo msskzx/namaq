@@ -71,3 +71,13 @@ types, but the import no longer says what it is. Each got its `type` mark back. 
   the error can be dropped. That is the pattern from the talk: the comment makes the shortcut look reviewed.
   The stricter rule from the review (a catch block holding only a comment counts as empty) flagged both, and
   they now report what failed.
+
+## A comment that was really a setting (step 4, tests)
+
+- **Where:** four test files in `shared/` that start with `// @vitest-environment jsdom`.
+- **Wrong:** the first pass removed every comment, and this one is not a note but a switch: it tells Vitest to
+  run the file with a browser `localStorage`.
+- **Effect:** 22 tests failed with "localStorage is not defined".
+- **Found by:** the tests, right after the strip.
+- **Fix:** `@vitest-environment` joined the lint directives the rule keeps. Comments that switch a tool on or
+  off are code, and they stay.

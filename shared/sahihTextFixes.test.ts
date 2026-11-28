@@ -3,8 +3,6 @@ import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { findHadith, type SahihText } from './sahih';
 
-// A slip of the export fixed from the printed page (owner, 2026-11-25: «بيني وبين عبدي» in Muslim 395): the built text
-// holds every fix in data/hadith/sahih-text-fixes.json and none of the slips, so a rebuild cannot bring one back.
 const ROOT = join(__dirname, '..');
 type TextFix = { book: string; n: number; route?: string; wrong: string; right: string; witness: string };
 const fixes = JSON.parse(readFileSync(join(ROOT, 'data/hadith/sahih-text-fixes.json'), 'utf8')) as TextFix[];

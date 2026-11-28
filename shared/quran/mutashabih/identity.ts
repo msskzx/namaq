@@ -28,5 +28,4 @@ export function canonicalGroups(groups: Group[]): Group[] {
 
 export const groupHasId = (group: Group, id: string) => group.id === id || !!group.aliases?.includes(id);
 
-/** A group's tree keeps its group's id (`cmp:`, or a surah-order book's `tanasub:`); a word tree is named by its places. */
 export const phraseTreeId = (tree: PhraseGroup & { family?: boolean }) => tree.family || tree.id.startsWith('cmp:') || tree.id.startsWith('tanasub:') ? tree.id : `tree:${comparisonId(tree.occurrences).slice(4)}`;

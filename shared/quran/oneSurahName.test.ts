@@ -2,15 +2,6 @@ import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
-/**
- * One surah-name list (owner, 2026-11-17; AGENTS.md "One entry for each shared thing"). Every surah name shown in the app
- * or on the website comes from shared/quran/surahNames.ts: `surahName` / `SURAH_NAMES` (the pause form with tashkeel,
- * «البَقَرَةْ») everywhere, `SURAH_TITLES` (the mushaf's own «سُورَةُ البَقَرَةِ») only for the surah headers on a mushaf
- * page. The plain `name` of surahs.json and of the database is for matching only (search, typed references).
- *
- * Each rule below fails on a line that takes a name another way. An exception names its file AND the line's text, so a
- * file with real matching code cannot hide a display path beside it.
- */
 const ROOT = join(__dirname, '..', '..');
 const HOME = 'shared/quran/surahNames.ts';
 
@@ -23,16 +14,13 @@ function walk(dir: string): string[] {
   });
 }
 
-/** Comments name the rule without breaking it. */
 const withoutComments = (text: string) => text.replace(/\/\*[\s\S]*?\*\//g, match => match.replace(/[^\n]/g, '')).replace(/(^|[^:'"])\/\/.*$/gm, '$1');
 
 const files = ['shared', 'src', 'mobile/src', 'party/src'].flatMap(walk).filter(path => path !== HOME)
   .map(path => ({ path, lines: withoutComments(readFileSync(join(ROOT, path), 'utf8')).split('\n') }));
 
-/** The name surahs.json is imported under in a file, if it is. */
 const surahRowsName = (lines: string[]) => lines.map(line => line.match(/^import (\w+) from '[^']*surahs\.json'/)?.[1]).find(Boolean);
 
-/** Files that draw the surah headers of a mushaf page, the only place the mushaf title is shown. */
 const MUSHAF_HEADERS = [
   'src/app/quran/read/[page]/page.tsx',
   'src/lib/homepageData.ts',
@@ -45,7 +33,6 @@ const MUSHAF_HEADERS = [
   'mobile/src/components/Tour.tsx',
 ];
 
-/** Matching only: a plain name compared with what was typed, never shown. */
 const MATCHING: { path: string; line: RegExp }[] = [
   { path: 'shared/quran/surahSearch.ts', line: /keysOf\(surah\.name\)/ },
   { path: 'mobile/src/lib/compare.ts', line: /const surahMatches = .*plainName\(surahName\(n\)\)/ },

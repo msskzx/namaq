@@ -15,7 +15,6 @@ import { EMPTY_LIST, type ListState } from './branchList';
 import { sharedOf, type Shared } from './branches';
 export { braidOf, type BraidStrand, type BraidWord } from '@shared/quran/braid';
 
-/** The website's compare cards, as built by `npm run quran:compare-cards`: only the cards a reader kept. */
 const stored = generated as unknown as StoredCards;
 export const listedPairs: SurahPair[] = stored.listed;
 
@@ -23,7 +22,6 @@ let words: Map<string, string[]> | undefined;
 const wordsOf = (key: string) => (words ??= new Map((corpus.ayat as { key: string; words: string[] }[]).map(ayah => [ayah.key, ayah.words]))).get(key);
 
 const cache = new Map<string, PairCard[]>();
-/** The cards of two surahs in mushaf order. */
 export function cardsFor(a: number, b: number): PairCard[] {
   const key = `${Math.min(a, b)}:${Math.max(a, b)}`;
   let cards = cache.get(key);
@@ -36,23 +34,17 @@ export function cardsFor(a: number, b: number): PairCard[] {
 }
 
 export { surahName };
-/** «سورة البقرة وسورة آل عمران», or «سورة الشعراء مع نفسها» for a surah compared with itself. */
 export const pairTitle = (lead: number, other: number) => (lead === other ? `سورة ${surahName(lead)} مع نفسها` : `سورة ${surahName(lead)} وسورة ${surahName(other)}`);
 export const visitKey = (visit: Pick<Visit, 'lead' | 'other'>) => `${visit.lead}·${visit.other}`;
 
 export { runsLabel };
 
-/** "البقرة ٢٥٥–٢٦٠" for a card side, each stretch named when a story part skips ayat; a side silent here is its surah alone. */
 export const sideLabel = (side: CardSide) => sideTitle({ surah: side.surah, numbers: side.ayat.map(ayah => ayah.number) }, surahName);
 
-/** What a side says in a story part its surah does not tell. */
 export const silentNote = (surah: number) => `لا تذكر سورة ${surahName(surah)} هذا الجزء`;
-/** A side-by-side separator's label: the surah, then the ayat its part holds. */
 export const partLabel = (surah: number, numbers: number[]) => `${surahName(surah)} ${runsLabel(numbers)}`.trim();
-/** The note at the end of a part's separator when the other surah does not tell it (owner, 2026-11-16). */
 export const aloneNote = (surah: number) => `سورة ${surahName(surah)} لا تذكر هذا الجزء`;
 
-/** A side-by-side row: both surahs in lanes, or one surah across the card when the other does not tell that part. */
 export type BesideRow = { lanes: [CardSide, CardSide] } | { alone: CardSide; side: 0 | 1; silent: number };
 
 export function besideRows(sides: [CardSide, CardSide]): BesideRow[] {
@@ -64,7 +56,6 @@ export function besideRows(sides: [CardSide, CardSide]): BesideRow[] {
   });
 }
 
-/** A story card as one pair of sides per row, each row lined up across the two surahs; any other card as itself. */
 export function rowSides(sides: [CardSide, CardSide]): [CardSide, CardSide][] {
   const rows = sides[0].rows;
   if (!rows) return [sides];
@@ -75,7 +66,6 @@ export function rowSides(sides: [CardSide, CardSide]): [CardSide, CardSide][] {
 }
 
 let spans: SurahSpans | undefined;
-/** The first and last juz and mushaf page each surah reaches, for the juz filter. */
 export function surahSpans(): SurahSpans {
   if (spans) return spans;
   const next: SurahSpans = { juz: {}, page: {} };
@@ -93,16 +83,13 @@ export function surahSpans(): SurahSpans {
 
 export type PairFilter = { scope?: CompareScope; savedOnly?: boolean };
 
-/** The surah pairs left by the filter: both surahs inside the juz range, and with a saved card when asked. */
 export function filteredPairs(filter: PairFilter, bookmarks: readonly Pick<Bookmark, 'id'>[] = readBookmarks()): SurahPair[] {
   const saved = filter.savedOnly ? savedSurahPairs(bookmarks) : undefined;
   return listedPairs.filter(pair => (!filter.scope || pageInScope(pair, surahSpans(), filter.scope)) && (!saved || saved.has(`${pair.a}:${pair.b}`)));
 }
 
-/** The pages swiping walks: under each surah in mushaf order, every pair it is in (a pair comes once under each of its surahs). */
 export const visitsOf = (pairs: SurahPair[]) => surahOrder(pairs);
 
-/** Where to land after the list changed: the same page, else the same pair seen from its other surah, else the first. */
 export function landingIndex(visits: Visit[], at: Pick<Visit, 'lead' | 'other'> | undefined) {
   if (!at) return 0;
   const same = visits.findIndex(visit => visit.lead === at.lead && visit.other === at.other);
@@ -114,13 +101,11 @@ export function landingIndex(visits: Visit[], at: Pick<Visit, 'lead' | 'other'> 
 const terms = (query: string) => query.trim().split(/\s+/).filter(Boolean).map(term => normalizeWord(term.replace(/[٠-٩]/g, d => String(d.charCodeAt(0) - 0x660))));
 const surahMatches = (n: number, term: string) => (/^\d+$/.test(term) ? String(n) === term : normalizeWord(plainName(surahName(n))).includes(term));
 
-/** A pair matches a search when every word names one of its surahs (by name or number) or its story. */
 export function pairMatches(pair: { a: number; b: number }, query: string) {
   const story = curatedComparisons.find(item => item.a === pair.a && item.b === pair.b);
   return terms(query).every(term => surahMatches(pair.a, term) || surahMatches(pair.b, term) || (!!story && normalizeWord(story.name.ar).includes(term)));
 }
 
-/** The stories pinned at the top of the list, when the filter keeps them. */
 export const storiesIn = (pairs: SurahPair[], query: string) => {
   const listed = new Set(pairs.map(pair => `${pair.a}:${pair.b}`));
   return curatedComparisons.filter(story => listed.has(`${story.a}:${story.b}`) && pairMatches(story, query));
@@ -134,10 +119,8 @@ export function toggleCardSaved(card: PairCard, list: readonly Pick<Bookmark, 'i
   return toggleBookmark({ id: compareBookmarkId(card.id), text, href: `/quran/compare?a=${Math.min(a.surah, b.surah)}&b=${Math.max(a.surah, b.surah)}` }, savedAs(card.id, list));
 }
 
-/** The ayah keys a card side shows, for the ayah screen. */
 export const sideKeys = (side: CardSide) => side.ayat.map(ayah => `${side.surah}:${ayah.number}`);
 
-/** The compare filter as the branches filter sheet's state, so both tabs share one sheet. */
 export function listOfFilter(filter: PairFilter): ListState {
   const scope = filter.scope;
   const filters: ListState['filters'] = {};
@@ -153,7 +136,6 @@ export function listOfFilter(filter: PairFilter): ListState {
 
 const listIn = (value: string | undefined) => (value ?? '').split(',').map(Number).filter(n => Number.isInteger(n) && n > 0);
 
-/** The compare filter from a submitted filter sheet. */
 export function filterOfList(state: ListState): PairFilter {
   const { filters, range } = state;
   const number = (value: string | undefined, fallback: number) => (value ? Number(value) : fallback);
@@ -167,14 +149,8 @@ export function filterOfList(state: ListState): PairFilter {
 }
 
 let pairsByAyah: Map<string, { id: string; a: number; b: number }[]> | undefined;
-/** One way from a tree into compare: a listed surah pair holding a kept card of two of its ayat, and those ayah numbers. */
 export type CompareTarget = { lead: number; other: number; ayat: [number, number] };
 
-/**
- * Every listed surah pair holding a kept card of two of these ayat, one each, in mushaf order (the website's
- * compareLinksFor): a tree across two surahs opens its pair, one across more lists them to choose from.
- * Seen from the surah of the first shown ayah when it is one of the two, as the tree reads.
- */
 function hitsOf(key: string) {
   if (!pairsByAyah) {
     pairsByAyah = new Map();
@@ -182,7 +158,6 @@ function hitsOf(key: string) {
       const engine = (stored.cards[`${a}:${b}`] ?? []).filter(item => !item.x);
       const story = stored.stories?.[`${a}:${b}`];
       const ids = new Set(engine.flatMap(item => item.p));
-      // On a story page only the engine pairs whose two ayat a shown card holds link in, as on the website.
       const shown = story?.flatMap(item => item.p.filter(id => ids.has(id) && (!item.a || id.split('|').every((key, s) => item.a![s].includes(Number(key.split(':')[1]))))));
       for (const id of shown ?? engine.flatMap(item => item.p)) for (const key of id.split('|')) pairsByAyah.set(key, [...(pairsByAyah.get(key) ?? []), { id, a, b }]);
     }
@@ -207,10 +182,6 @@ export function compareTargetsFor(keys: string[]): CompareTarget[] {
   }).map(([, target]) => target);
 }
 
-/**
- * Every listed surah pair holding a kept card of this one ayah (the reader's ayah menu), in mushaf order:
- * seen from the ayah's own surah, with the ayah and its partner as `ayat`.
- */
 export function compareTargetsOfAyah(key: string): CompareTarget[] {
   const [own, number] = key.split(':').map(Number);
   const bySurahs = new Map<string, CompareTarget>();
@@ -223,7 +194,6 @@ export function compareTargetsOfAyah(key: string): CompareTarget[] {
   return [...bySurahs.values()].sort((p, q) => Math.min(p.lead, p.other) - Math.min(q.lead, q.other) || Math.max(p.lead, p.other) - Math.max(q.lead, q.other));
 }
 
-/** Whether a card shows this ayah on either side, or as one of its one-to-many partners. */
 export const holdsAyah = (card: PairCard, key: string) =>
   card.sides.some(side => side.ayat.some(ayah => `${side.surah}:${ayah.number}` === key)) ||
   !!card.many?.options.some(option => `${card.sides[card.many!.side].surah}:${option.ayah.number}` === key);
@@ -234,11 +204,6 @@ const sideOf = (card: PairCard, key: string) => {
   return at < 0 && card.many?.options.some(option => `${card.sides[card.many!.side].surah}:${option.ayah.number}` === key) ? card.many.side : at;
 };
 
-/**
- * The card a page opens on for these ayat: the smallest one showing them across its two sides (so a saved card opens
- * on itself, not on a one-to-many card or a story part that also holds them), else the one holding them all, else the first
- * holding the first; -1 for none.
- */
 export function focusIndex(cards: PairCard[], ayat: string[]) {
   let across = -1;
   cards.forEach((card, at) => {
@@ -250,7 +215,6 @@ export function focusIndex(cards: PairCard[], ayat: string[]) {
   return all >= 0 ? all : cards.findIndex(card => holdsAyah(card, ayat[0]));
 }
 
-/** The ayat each side of a card shows: a one-to-many card shows its picked partner against the shared ayah. */
 export function shownAyat(card: PairCard, picked = 0): [CardSide, CardSide] {
   const option = card.many?.options[picked];
   if (!card.many || !option) return card.sides;
@@ -264,11 +228,9 @@ export function shownAyat(card: PairCard, picked = 0): [CardSide, CardSide] {
 let ayahByKey: Map<string, BranchAyah> | undefined;
 const ayahAt = (key: string) => (ayahByKey ??= new Map((corpus.ayat as BranchAyah[]).map(ayah => [ayah.key, ayah]))).get(key);
 
-/** An ayah around a card side, with the words the other side's ayah there shares (exact) or shares a root with. */
 export type AroundAyah = Shared & { key: string; number: number; words: string[] };
 export type Around = { before: (AroundAyah | null)[]; after: (AroundAyah | null)[] };
 
-/** The matrix's ayah before and after each side, coloured where the two sides' neighbours share words. */
 export function aroundOf(sides: [CardSide, CardSide]): Around {
   const at = (side: CardSide, step: -1 | 1) => {
     const numbers = side.ayat.map(ayah => ayah.number);

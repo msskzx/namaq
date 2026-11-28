@@ -4,10 +4,6 @@ import { Tap } from '@/ui/Tap';
 import { Text } from '@/ui/Text';
 import type { Palette } from '@/lib/theme';
 
-/**
- * A counter drawn as a ring that fills as it counts (an open dhikr, owner 2026-11-24): the number in the middle, a word
- * under it, the whole ring one big button. Done, it turns green and takes no more taps.
- */
 export default function CountRing({ count, target, shown, done, label, hint, onPress, palette, size = 168 }: {
   count: number; target: number; shown: string; done: boolean; label: string; hint: string; onPress: () => void; palette: Palette; size?: number;
 }) {

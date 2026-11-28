@@ -12,7 +12,6 @@ describe('sharePages', () => {
   });
 
   it('evens the pages out instead of leaving the last with one block', () => {
-    // Greedy filling would give [0,1,2] [3] : the balanced layout splits them two and two.
     const heights = [100, 100, 90, 100];
     const pages = sharePages({ heights, room: 300, firstRoom: 300, gap: 0 });
     expect(pages).toEqual([[0, 1], [2, 3]]);

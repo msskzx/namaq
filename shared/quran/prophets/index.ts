@@ -1,7 +1,6 @@
-export type Prophet = { slug: string; name: string; nameEn: string; /** The name after «قصة» where it changes case: ذو → ذي. */ of?: string; /** The page heading, where «قصة … عليه السلام» does not fit. */ title?: string; /** Said after the name, «عليه السلام» unless given. */ honor?: string };
+export type Prophet = { slug: string; name: string; nameEn: string; of?: string; title?: string; honor?: string };
 
 export const PROPHETS: Prophet[] = [
-  // Ibn Kathir's order in Qisas al-Anbiya (Yunus, Ilyas and al-Yasa' are dated differently by others).
   { slug: 'adam', name: 'آدم', nameEn: 'Adam' },
   { slug: 'idris', name: 'إدريس', nameEn: 'Idris' },
   { slug: 'nuh', name: 'نوح', nameEn: 'Nuh' },
@@ -27,10 +26,8 @@ export const PROPHETS: Prophet[] = [
   { slug: 'muhammad', name: 'محمد', honor: 'ﷺ', nameEn: 'Muhammad', title: 'سيرة النبي ﷺ في القرآن' },
 ];
 
-/** The name as lists and pickers show it, with «عليه السلام», or ﷺ for the Prophet. */
 export const prophetName = (prophet: Prophet) => `${prophet.name} ${prophet.honor ?? 'عليه السلام'}`;
 
 export const findProphet = (slug: string) => PROPHETS.find(p => p.slug === slug);
 
-/** The story page's heading. */
 export const storyTitle = (prophet: Prophet) => prophet.title ?? `قصة ${prophet.of ?? prophet.name} عليه السلام في القرآن`;

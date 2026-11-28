@@ -4,7 +4,7 @@ import { searchable } from './searchText';
 import { surahName } from './surahNames';
 import type { AdhkarOccasion } from '../adhkar';
 
-/** One search across the app (owner, 2026-11-13): surah names always first, since they are few. docs/plans/search-everything.md */
+// see docs/plans/search-everything.md
 export type SearchHit =
   | { kind: 'surah'; number: number; name: string }
   | { kind: 'ayah'; key: string; words: string[]; from: number; to: number }
@@ -23,12 +23,10 @@ export type SearchGroup = { kind: SearchKind; hits: SearchHit[] };
 
 export type CompareItem = { a: number; b: number; title: string };
 export type EventItem = { slug: string; event: number; title: string; prophet: string };
-/** A sira story's chapter (`chapter`) or a story (`slug`), by its name (owner, 2026-11-23: «الوفود», «حجة الوداع»). */
 export type SiraItem = { title: string; chapter?: string; slug?: string };
 export type TuhfaItem = { chapter: number; verse: number; first: string; second: string };
 export type AdhkarItem = { id: string; occasion: AdhkarOccasion; text: string };
 
-/** What each page can be searched in. The big indexes (ayat, trees, words) come as finders, so each side loads them its own way. */
 export type SearchSources = {
   surahs: SearchableSurah[];
   ayat?: (query: string) => Extract<SearchHit, { kind: 'ayah' }>[];
@@ -36,27 +34,22 @@ export type SearchSources = {
   trees?: (query: string) => Extract<SearchHit, { kind: 'tree' }>[];
   compare?: CompareItem[];
   events?: EventItem[];
-  /** The sira stories' chapters, then the stories. */
   sira?: SiraItem[];
   tuhfa?: TuhfaItem[];
   notes?: { key: string; text: string }[];
-  /** The adhkar (shared/adhkar.ts), each opening its card in the utilities. */
   adhkar?: AdhkarItem[];
 };
 
 const loose = (text: string) => normalizeWord(plainName(text)).replace(/[«»،؛؟.,:;!?()\-]/g, ' ');
 const terms = (query: string) => loose(query).split(/\s+/).filter(Boolean);
 
-/** Whether every typed word is somewhere in the text, ignoring marks, hamza seats and a typed article. */
 export function holdsTerms(text: string, query: string) {
   const wanted = terms(query);
   if (!wanted.length) return false;
   const hay = loose(text);
-  // «الإدغام» also finds «إدغامٌ»: the article typed out of habit is not needed.
   return wanted.every(term => hay.includes(term) || (term.length > 4 && term.startsWith('ال') && hay.includes(term.slice(2))));
 }
 
-/** Every group with results, in SEARCH_ORDER. Each finder runs only for a query it can use (two letters or more). */
 export function searchAll(sources: SearchSources, query: string): SearchGroup[] {
   const typed = query.trim();
   if (!typed) return [];

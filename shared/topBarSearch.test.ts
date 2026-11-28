@@ -1,13 +1,9 @@
-// Guard (owner sign-off 2026-11-19, docs/plans/guard-proposals.md no. 16): a search goes in the top bar only through
-// the bar's own `search` prop in the app (mobile/src/ui/TopBar.tsx) and NavSearch on the website (through NavActions or
-// NavButtons), so every bar's
-// search keeps one size and place (a full-width search box once pushed the bar's buttons away).
+// see docs/plans/guard-proposals.md
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
 const ROOT = join(__dirname, '..');
-/** A field, or a search of the page's own (BranchSearch, PeopleSearch…); the bar's own NavSearch is not one. */
 const FIELDS = /<(SearchField|SearchOpener|Field|TextInput|input|SearchBox|(?!Nav)[A-Z]\w*Search)\b/;
 const topBars = (source: string) => elements(source, 'TopBar');
 
@@ -20,7 +16,6 @@ function walk(dir: string): string[] {
   });
 }
 
-/** Each `<Name …>` element in a file, through its closing tag (or the end of a self-closing one): props and children. */
 export function elements(source: string, name: string): string[] {
   const bars: string[] = [];
   const start = new RegExp(`<${name}\\b`, 'g');

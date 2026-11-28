@@ -12,26 +12,15 @@ import { QURAN_FONT, type Palette } from '@/lib/theme';
 import { breakLines, FLOW_LINE, flowSize } from '@/lib/pageZoom';
 
 const BASMALA = 'بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ';
-/** Lines are measured once at this size, then drawn at the size that fits the screen (the website's fit() in MushafPage.tsx). */
 const BASE = 40;
-/** The end-of-ayah ornament with no number in it (U+06DD in the Hafs font). */
 const EMPTY_END = '\u06DD';
 const GAP = 0.2;
 const SQUEEZE = 0.9;
 const STRETCH = 1.15;
-/** A slice's line height for its text size: about a phone reader's line, and the website's slice (MushafPage `--one-line`). */
 const SLICE_LINE = 1.9;
-/**
- * The most a printed line's text may be for its line's height. The Hafs font's marks reach far above and below its
- * letters: at 0.72 an iPad page, wider for its height than a phone's, drew each line's marks into the next (owner,
- * 2026-11-23). A standing phone's page is fitted by its width, under it (only the opening oval on the smallest
- * phones reaches it); a page that reaches it narrows its text block instead.
- */
 const TEXT_HEIGHT = 0.55;
 
-/** Natural width of each word group at BASE, by line, per page; the same on every screen, so measured once per page. */
 const naturals = new Map<number, Record<number, number[]>>();
-/** A line's natural width at BASE: its groups and the gaps between them. */
 const lineWidth = (groups: number[] | undefined) => (groups ? groups.reduce((sum, w) => sum + w, 0) + Math.max(0, groups.length - 1) * GAP * BASE : 0);
 
 export type Touch = 'tap' | 'long';
@@ -44,51 +33,31 @@ type Props = {
   palette: Palette;
   width: number;
   height: number;
-  /** The surah running at the top of the page. */
   top?: number;
   names: Record<number, string>;
   mark?: string | null;
-  /** The ayah being recited aloud (listening): a band in the accent, over the selection. */
   playing?: string | null;
-  /** The words of the marked ayah a long press selected (their places in the ayah, from 0, the ۞ mark not counted): lit inside the ayah's band. */
   markWords?: { from: number; to: number } | null;
   recite?: Recite | null;
   forgot: Readonly<Record<string, unknown>>;
   saved: ReadonlySet<string>;
-  /** A touch on a word gives its ayah and the word's place in it (from 0, the ۞ mark not counted); a touch elsewhere on the page (or on a hidden word) gives null. */
   onTouch: (touch: Touch, key: string | null, x: number, y: number, word?: number) => void;
-  /** After a long press on a word, the finger dragged over its ayah's words: the pressed word to the one under the finger,
-   * and where the finger is; `done` when it lifts (owner, 2026-11-19: several words are selected this way). */
   onSelect?: (key: string, anchor: number, now: number, x: number, y: number, done: boolean) => void;
-  /** Write mode: the next ayah's words to write (by place in the ayah, from 0), what each holds, and the box being written; a tap on a box picks it. */
   write?: Write | null;
-  /** The last written ayah once shown: its written words, right ones green and wrong ones amber. */
   checked?: Checked | null;
-  /** The text size: 1 is the printed page, fitted to `height`; bigger sets the words as flowing lines and the page runs as long as they need. */
   zoom?: number;
-  /** The page's drawn height, told whenever it changes (a page with bigger text is taller than the screen). */
   onHeight?: (page: number, height: number) => void;
-  /** With bigger text: an ayah to keep in sight (the one selected, or the next to recite), and where its first line is on the screen. */
   focus?: string | null;
   onFocus?: (y: number, height: number) => void;
-  /**
-   * Only these rows of the page (item indexes, both ends kept), set as on the printed page with no frame, header or page
-   * number: a few lines around an ayah, as the home recall card shows them. `height` is then the whole page's text height,
-   * so the lines keep the page's size.
-   */
   slice?: { from: number; to: number };
-    /** A quiz page that must not say where it is (owner, 2026-11-17): no juz, surah name, marks or page number around the text. */
   anonymous?: boolean;
 };
 
 
 export type Write = { key: string; targets: number[]; typed: Record<number, string>; current: number | null; onBox: (word: number) => void;
-  /** Where the box being written is on the screen (its top and height), so the page can scroll it into sight above the keyboard. */
   onActive?: (y: number, height: number) => void };
-/** A checked ayah: its right and wrong words, and what was typed for each wrong one (shown struck through above it). */
 export type Checked = { key: string; right: number[]; wrong: number[]; typed: Record<number, string> };
 
-/** How far a finger selecting words may go from the word it pressed: anywhere on the screen. */
 const HOLD = { top: 4000, bottom: 4000, left: 4000, right: 4000 };
 
 function Word({ press, onLayout, hold, children }: { press?: object; onLayout?: (event: LayoutChangeEvent) => void; hold?: (view: ComponentRef<typeof View> | null) => void; children: React.ReactNode }) {
@@ -96,34 +65,27 @@ function Word({ press, onLayout, hold, children }: { press?: object; onLayout?: 
 }
 
 type Box = { x: number; y: number; w: number; h: number };
-/** The text body's size, and the page size (`WxH`) it was measured at. */
 type Body = { width: number; height: number; of?: string };
 
-/** The header's and page number's text size, by the page's width. */
 const smallOf = (width: number) => Math.max(11, width * 0.026);
 const headerOf = (width: number) => Math.ceil(Math.max(20, smallOf(width) * 1.6)) + 4;
 const footerOf = (width: number) => Math.ceil(smallOf(width) * 1.25) + 4;
-/** The printed page's text body inside its paddings, header, double frame and page number, as the layout below sets it. */
 const bodyOf = (width: number, height: number): Body => ({
   width: width * (1 - 0.04 - 0.025) - 8,
   height: height - width * (0.03 + 0.02 + 0.015) - headerOf(width) - footerOf(width) - 8,
 });
-/** A band behind the words: the selected ayah (neutral), or a forgotten one (the accent, faint). */
 type Band = 'playing' | 'mark' | 'forgot' | null;
 const BAND_TINT: Record<NonNullable<Band>, (palette: Palette) => string> = {
   playing: palette => palette.bands.playing,
   mark: palette => palette.bands.mark,
   forgot: palette => palette.bands.forgot,
 };
-/** `word`: the long-pressed word, a stronger box laid over the ayah's unbroken band. */
 type Cell = { band: Band; word?: boolean };
 
 const groupText = (word: string, marks: number[]) => `${word}${marks.map(end => `${word ? ' ' : ''}${num(end)}`).join('')}`;
 
-/** The surah number's ring, as a share of the title line, so it scales with the page, a slice and flowing text alike. */
 const NUMBER_RING = 0.5;
 
-/** The surah's place in the mushaf, small and muted in a ring at the right end of its title box (owner, 2026-11-20); the name stays centred. */
 function SurahNumber({ surah, ring, palette }: { surah: number; ring: number; palette: Palette }) {
   return (
     <View accessible={false} importantForAccessibility="no-hide-descendants" pointerEvents="none"
@@ -135,16 +97,11 @@ function SurahNumber({ surah, ring, palette }: { surah: number; ring: number; pa
 
 function MushafPageView({ page, data, model, palette, width, height, top, names, mark, playing = null, markWords = null, recite, forgot, saved, onTouch, onSelect, write, checked, zoom = 1, onHeight, focus, onFocus, slice, anonymous = false }: Props) {
   const flowing = zoom > 1;
-  // The body's size at the printed page and with flowing text, each kept, so a pinch back to the printed page sets its
-  // lines at once at the size they had (record R0058).
-  // Each kept with the page size it was measured at: once the screen turns, the page is set at once at the size its frame
-  // will have (owner, 2026-11-23: a turned iPad drew the old size, or nothing, until the frame was measured again).
+  // see R0058
   const [bodies, setBodies] = useState<{ page?: Body; flow?: Body }>({});
   const estimate = slice ? null : bodyOf(width, height);
-  // A layout measured before the turn can arrive after it: one far from the estimate is not this size's.
   const fresh = (one?: Body) => (one && one.of === `${width}x${height}` && (!estimate || Math.abs(one.width - estimate.width) < 2) ? one : undefined);
   const laid = (flowing ? fresh(bodies.flow) ?? fresh(bodies.page) : fresh(bodies.page)) ?? estimate ?? bodies.page ?? null;
-  // A slice is laid out at its own height, but sized as the whole page is.
   const body = useMemo(() => (laid && slice ? { width: laid.width, height } : laid), [laid, slice, height]);
   const [measured, setMeasured] = useState(() => naturals.get(page));
   const lineAt = useMemo(() => data.items.flatMap((item, at) => ('line' in item ? [at] : [])), [data]);
@@ -161,12 +118,9 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
   }, [page, pending, groupCount]);
 
   const itemCount = data.items.length;
-  // A full page has 15 lines; a surah title or basmala takes one of them, even on the short opening pages, and the ayah lines share the rest.
-  // A slice's lines are always a full page's lines, so a slice of a short page (1, 2) is not drawn bigger.
   const oneLine = body ? body.height / 15 : 0;
   const rowHeight = body ? (slice ? oneLine : body.height / itemCount) : 0;
   const pageLine = body && lineAt.length ? (body.height - oneLine * (itemCount - lineAt.length)) / lineAt.length : rowHeight;
-  // Pages 1 and 2 set their lines inside an oval, as the printed mushaf does: each line fills the oval's width at its height (the website's fitOpening()).
   const opening = page <= 2;
   const oval = useMemo(() => {
     if (!opening || !body || flowing || slice) return null;
@@ -193,7 +147,6 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
     const typical = [...widths].sort((a, b) => a - b)[Math.floor(widths.length * 0.6)] ?? 1;
     return Math.max(1, Math.min((BASE * body.width) / typical, (BASE * body.width) / (widest * SQUEEZE), rowHeight * (slice ? 0.72 : TEXT_HEIGHT)));
   }, [body, measured, lineAt, page, rowHeight, oval, oneLine, flowing, zoom, slice]); // eslint-disable-line react-hooks/exhaustive-deps
-  // The printed text block: the body's width, or narrower and centred where the line height held the text smaller.
   const block = useMemo(() => {
     if (!body || !measured || !size || flowing || oval || slice) return body?.width ?? 0;
     const widths = lineAt.map(at => lineWidth(measured[at]) || 1);
@@ -201,16 +154,11 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
     return Math.min(body.width, (size * Math.max(typical, Math.max(1, ...widths) * SQUEEZE)) / BASE);
   }, [body, measured, size, flowing, oval, slice, lineAt]);
   const inBlock = block < (body?.width ?? 0) - 0.5 ? { width: block, alignSelf: 'center' as const } : null;
-  // A surah title or basmala row: one of the page's 15 lines, or with flowing text one flowing line.
-  // A slice's lines are as tall for their text as the reader's lines on a phone (and the website's slice), so the marks
-  // over the first line are not cut (owner, 2026-11-15); until the words are measured, the most a slice's text can be.
   const sliceLine = (size || rowHeight * 0.72) * SLICE_LINE;
   const lineHeight = slice ? sliceLine : pageLine;
   const titleLine = flowing ? size * FLOW_LINE : slice ? sliceLine : oneLine;
   const sliceHeight = slice ? data.items.slice(slice.from, slice.to + 1).reduce((sum, item) => sum + ('line' in item ? lineHeight : titleLine), 0) : 0;
 
-  // The rows drawn: the page's own lines, or with bigger text its words wrapped again at the page's width, each run
-  // of lines between two titles one paragraph.
   type Row = { id: string; item: number } | { id: string; groups: WordGroup[]; natural: number; index?: number; last?: boolean; single?: boolean };
   const rows = useMemo<Row[]>(() => {
     if (!measured) return [];
@@ -240,7 +188,6 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
     return out;
   }, [measured, flowing, data, model, body, size, zoom, slice]);
 
-  // With bigger text the page runs past the screen: the row holding the ayah to keep in sight says where it is.
   const focused = { taken: false };
   const focusRow = useRef<ComponentRef<typeof View>>(null);
   const findFocus = useCallback(() => {
@@ -262,12 +209,9 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
   const veiled = { color: 'transparent', backgroundColor: tint(palette.muted, 0.1), borderRadius: 4 } as const;
   const upcoming = { backgroundColor: palette.paper } as const;
   const small = smallOf(width);
-  // Each pressable word by its ayah and place, so a drag after a long press can tell which word the finger is on.
   const wordViews = useRef<Record<string, ComponentRef<typeof View> | null>>({});
   const holdWord = (key: string, word: number) => (view: ComponentRef<typeof View> | null) => { wordViews.current[`${key}:${word}`] = view; };
-  /** The drag after a long press: the pressed word, the one under the finger now, and the ayah's words' boxes on screen. */
   const dragging = useRef<{ key: string; anchor: number; now: number; boxes: (Box | null)[] } | null>(null);
-  // While it drags, the pressed word keeps the finger however far it goes: a press lets go once the finger leaves its box.
   const [selecting, setSelecting] = useState<string | null>(null);
   const startDrag = (key: string, anchor: number) => {
     setSelecting(key);
@@ -304,7 +248,6 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
     ...(key && selecting === key ? { pressRetentionOffset: HOLD } : {}),
   });
 
-  // A highlighted ayah is one band behind its words on each line (the gaps between words included), not a box per word.
   const [boxes, setBoxes] = useState<Record<string, Box>>({});
   const place = (id: string) => (event: LayoutChangeEvent) => {
     const { x, y, width: w, height: h } = event.nativeEvent.layout;
@@ -313,7 +256,6 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
       return old && old.x === x && old.y === y && old.w === w && old.h === h ? prev : { ...prev, [id]: { x, y, w, h } };
     });
   };
-  /** The lit words' runs on a line: words side by side. */
   const litRuns = (cells: Cell[]) => {
     const runs: number[][] = [];
     cells.forEach((cell, at) => {
@@ -341,7 +283,6 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
       const bottom = Math.max(...found.map(box => box.y + box.h));
       return <View key={`b${run[0]}`} pointerEvents="none" style={{ position: 'absolute', left, top, width: right - left, height: bottom - top, borderRadius: 4, backgroundColor: BAND_TINT[cells[run[0]].band!](palette) }} />;
     }).concat(litRuns(cells).map(run => {
-      // The selected words on a line are one band, the gaps between them included, as the ayah's is.
       const found = run.map(at => boxes[`${line}:${at}`]).filter(Boolean);
       if (!found.length) return null;
       const left = Math.min(...found.map(box => box.x)), right = Math.max(...found.map(box => box.x + box.w));
@@ -350,18 +291,15 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
     }));
   };
 
-  // A titled surah's title (and basmala) are the first words of its first ayah, so that ayah's own words count after them.
   const counts: Record<string, number> = {};
   titled?.forEach((steps, surah) => { counts[`${surah}:1`] = steps - 1; });
   const plain: Record<string, number> = {};
   let surahHere = top;
 
   return (
-    // Drawn anew when the text starts or stops flowing: on a phone the page changed its styles in place (minHeight to
-    // height, flexGrow to flex: 1) and kept its tall flowing height at the printed size (owner, 2026-11-17; record R0058).
+    // see R0058
     <View key={flowing ? 'flow' : 'page'} onLayout={onHeight ? event => onHeight(page, event.nativeEvent.layout.height) : undefined}
       style={slice ? { width } : { width, ...(flowing ? { minHeight: height } : { height }), backgroundColor: palette.card, paddingTop: width * 0.03, paddingHorizontal: width * 0.02, paddingBottom: width * 0.02 }}>
-      {/* One height on every page, chip or not, so facing pages' frames line up. */}
       {!slice && <View style={{ height: headerOf(width), flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: width * 0.025, paddingBottom: 4, gap: 6 }}>
         <Text style={{ color: palette.muted, fontSize: small }}>{anonymous ? '' : `الجزء ${juzName(data.juz)}`}</Text>
         <View style={{ flexDirection: 'row', justifyContent: 'center', gap: 6, flexShrink: 1 }}>
@@ -371,9 +309,6 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
         </View>
         <Text style={[{ color: palette.muted, fontSize: small }, current && surahHidden(current) ? veiled : null]}>{!anonymous && current && names[current] ? names[current] : ''}</Text>
       </View>}
-      {/* The double rule around the text. With flowing text the frames grow with it (flexGrow, not flex: 1): on a phone
-          flex: 1 is a zero basis, so the page stayed the screen's height, the words ran out past the frame and there was
-          nothing to scroll (owner, 2026-11-17). The web export grows them anyway, as browsers keep a flex item's content height. */}
       <View style={slice ? undefined : { ...(flowing ? { flexGrow: 1 } : { flex: 1 }), borderWidth: 1, borderColor: palette.rule }}>
         <View style={slice ? undefined : { ...(flowing ? { flexGrow: 1 } : { flex: 1 }), margin: 2, borderWidth: 1, borderColor: palette.rule, paddingHorizontal: width * 0.0125, paddingTop: width * 0.015 }}>
           <Pressable {...press(null)} style={slice ? { height: sliceHeight, overflow: 'hidden' } : flowing ? { flexGrow: 1 } : { flex: 1, overflow: 'hidden' }} onLayout={event => { const { width: w, height: h } = event.nativeEvent.layout; setBodies(prev => ({ ...prev, [flowing ? 'flow' : 'page']: { width: w, height: h, of: `${width}x${height}` } })); }}>
@@ -421,11 +356,8 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
                   </View>
                 );
               }
-              // A printed line is fitted to the page's width, squeezed or stretched a little; a flowing line spreads its
-              // words across the page's width, all but a paragraph's last line, which starts at the right.
               const drawn = (row.natural * size) / BASE;
               const width = oval && row.index !== undefined ? oval.chords[row.index] : block;
-              // In the oval a line too short to reach its chord is centred, not spread with wide gaps (its text held by the line's height).
               const centred = flowing ? !!row.last && !row.single : drawn < width * (oval ? 1 / STRETCH : 0.7);
               const scale = flowing ? Math.min(1, width / drawn) : centred ? 1 : Math.min(STRETCH, Math.max(oval ? 0 : SQUEEZE, width / drawn));
               const cells = row.groups.map(group => {
@@ -433,10 +365,7 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
                 const word = group.word ? (counts[key] = (counts[key] ?? -1) + 1) : 0;
                 const wordHidden = !!hidden?.(key, word);
                 const at = group.word && group.word !== '۞' ? (plain[key] = (plain[key] ?? -1) + 1) : undefined;
-                // The word's place in its ayah, past a titled surah's title and basmala steps (write mode counts words only).
                 const rel = word - (group.ayah === 1 && group.surah !== undefined ? titled?.get(group.surah) ?? 0 : 0);
-                // A selected ayah sits on a neutral band and keeps its ink (owner, 2026-11-14); a forgotten one on a faint accent band.
-                // The selection is over the forgotten band, as on the website: a tap on a forgotten ayah showed no change.
                 const lit = mark === key && !!markWords && at !== undefined && at >= markWords.from && at <= markWords.to;
                 const band: Band = wordHidden ? null : playing === key ? 'playing' : mark === key ? 'mark' : forgot[key] || (at !== undefined && forgot[`${key}:${at}`]) ? 'forgot' : null;
                 return { group, key, wordHidden, rel, at, band, word: band === 'mark' && lit };
@@ -455,25 +384,18 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
                       const graded = !wordHidden && checked?.key === key ? (checked.right.includes(rel) ? palette.green : checked.wrong.includes(rel) ? palette.amber : null) : null;
                       const mistyped = graded === palette.amber && group.word ? checked!.typed[rel] : '';
                       return (
-                        // A hidden word is no target: a touch on it goes to the page, as on the website.
-                        // Every word tells its place, so a band that appears later (a tap) is laid at once where the words are now.
                         <Word key={at} press={wordHidden ? undefined : press(key, wordAt)} hold={wordHidden || wordAt === undefined ? undefined : holdWord(key, wordAt)} onLayout={place(`${row.id}:${at}`)}>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        {/* While hidden, the word and its ayah number are separate boxes, so an empty page still shows where each ayah ends. */}
                         {writing && write.targets.includes(rel)
                           ? <WriteBox text={group.word} size={size} palette={palette} typed={write.typed[rel] ?? ''} active={write.current === rel} onPress={() => write.onBox(rel)} onActive={write.onActive} />
                           : wordHidden && group.word ? <Veil text={group.word} size={size} palette={palette} faint={writing} next={next === key && !(group.ayah === 1 && group.surah !== undefined && firstHidden(group.surah))} /> : null}
-                        {/* A wrong word keeps what was typed, struck through above it, so the reader sees the mistake. */}
                         {mistyped ? <Mistyped text={mistyped} size={size} palette={palette} /> : null}
                         <Text style={{ fontFamily: QURAN_FONT, fontSize: size, color: graded ?? palette.ink }}>
                           {wordHidden ? '' : group.word}
                           {group.marks.map(end => (
                             <Text key={end}>
                               {group.word ? ' ' : ''}
-                              {/* The number and its sign are quiet, neither the text's colour nor the accent; a saved ayah's take the bookmark
-                                  colour and a forgotten one's the accent (owner, 2026-11-14). */}
                               <Text style={{ color: endHidden(end) ? palette.muted : saved.has(`${group.surah}:${end}`) ? palette.root : forgot[`${group.surah}:${end}`] ? palette.accent : palette.muted }}>
-                                {/* A hidden ayah's end shows the empty ayah ornament, so the reader sees where each ayah ends. */}
                                 {endHidden(end) ? EMPTY_END : num(end)}
                               </Text>
                             </Text>

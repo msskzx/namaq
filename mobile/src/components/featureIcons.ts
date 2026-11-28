@@ -7,11 +7,6 @@ import LifeIcon from './LifeIcon';
 
 type Icon = (props: LucideProps) => React.ReactNode;
 
-/**
- * One icon for each feature (owner, 2026-11-22): its page's tile, its feed card's head and its question card's head all
- * take it from here, so they never drift apart. The mushaf has the open book with lines of the tab bar; a commentary
- * (al-Sa'di's tafsir, Ibn Rajab's sharh) the notebook; who recorded a hadith and who narrated it share the chain.
- */
 export const FEATURE_ICON = {
   mushaf: BookOpenText, tafsir: NotebookText, trees: TreeIcon, compare: ArrowLeftRight, openings: DoorOpen, order: OrderIcon,
   oaths: SunMoon, words: TextSearch, balagha: Gem, qiraat: Layers, irab: ListTree, tuhfa: BookMarked, prophets: ScrollText,
@@ -19,7 +14,6 @@ export const FEATURE_ICON = {
   chain: GitCommitVertical, stories: ScrollText, adhkar: SunMoon, atlas: MapIcon,
 } satisfies Record<string, Icon>;
 
-/** Each question kind wears the icon of the feature it asks about. */
 export const QUIZ_ICON = {
   SURAH: FEATURE_ICON.mushaf, RECITE: FEATURE_ICON.mushaf, ORDER: FEATURE_ICON.order, ORDER_JUZ: FEATURE_ICON.order,
   SURAH_AIM: FEATURE_ICON.order, BRANCHES: FEATURE_ICON.trees, COMPARE: FEATURE_ICON.compare, OPENINGS: FEATURE_ICON.openings,

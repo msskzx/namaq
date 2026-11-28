@@ -1,36 +1,19 @@
 import { bareHadith, type AppIsnad } from './hadith';
 
-/**
- * An isnad as a metro line (owner 2026-11-24, sketch hadith-design/sketch3): a station for each narrator, the collector
- * on top, each route from him a line of its own colour; where routes meet at one narrator they run on as one line.
- * Where the isnad has tabaqat (Ibn Hajar's, in Taqrib al-Tahdhib), each tabaqa is one level and its people stand on it
- * side by side; without them each narrator is a level of his own. The line carries the narrators and the words they
- * narrated with only: what a narrator tells is the hadith's text (owner 2026-11-24), never the line.
- */
 export interface MetroStation {
   id: string;
   label: string;
-  /** Its column from the right, 0 first. */
   col: number;
-  /** How far across it stands, 0 the right edge and 1 the left, as far apart as the website's layout sets them. */
   across: number;
-  /** Its level from the top, 0 the collector's. */
   level: number;
-  /** The route it is on, 0 for the first; a station on more than one route is on the first's line. */
   route: number;
   kind: 'collector' | 'companion' | 'narrator';
 }
 
 export interface MetroLeg {
-  /** The station of the one who heard (above). */
   from: string;
-  /** The station of the one he heard from. */
   to: string;
   route: number;
-  /**
-   * The word he narrated with, once when every route over the leg says it (owner 2026-11-24: «عَنْ» and «عَنِ» are one
-   * word); where routes say different words, one for each, and the leg is drawn as their lines side by side.
-   */
   words: { route: number; label: string }[];
 }
 
@@ -47,7 +30,6 @@ export interface Metro {
   routes: number;
 }
 
-/** A word with its vowels set aside, so «عَنْ» and «عَنِ» (one word, the second voweled for the next) count as one. */
 const bare = (word: string) => bareHadith(word).trim();
 
 export function isnadMetro(isnad: AppIsnad): Metro {
@@ -58,7 +40,6 @@ export function isnadMetro(isnad: AppIsnad): Metro {
   const xs = [...new Set(isnad.nodes.map(node => node.x))].sort((a, b) => a - b);
   const rowOf = new Map(isnad.rows.map(row => [row.y, row]));
 
-  // Each route is followed from the collector's narrator down: the people each one reaches.
   const heardFrom = (id: string) => isnad.edges.filter(edge => edge.to === id).map(edge => edge.from);
   const starts = [...new Set(isnad.edges.filter(edge => edge.to === collector.id).map(edge => edge.from))];
   const routesOf = new Map<string, Set<number>>();
@@ -88,7 +69,6 @@ export function isnadMetro(isnad: AppIsnad): Metro {
   });
 
   const legs: MetroLeg[] = [];
-  // The edges come route by route, each route from its edge to the collector: an edge's route is the one it is listed under.
   let listed = -1;
   for (const edge of isnad.edges) {
     if (edge.to === collector.id) listed = starts.indexOf(edge.from);
@@ -109,17 +89,14 @@ export function isnadMetro(isnad: AppIsnad): Metro {
   return { stations, legs, levels, cols: xs.length, routes: Math.max(1, starts.length) };
 }
 
-/** A plain chain (one line, no ح) as an isnad: the collector, then each narrator under the one who narrated from him. */
 export function chainIsnad(collector: string, chain: { name: string; mode: string }[]): AppIsnad {
   const nodes = [{ id: 'c', label: collector, x: 0, y: 0 }, ...chain.map((link, i) => ({ id: `n${i}`, label: link.name, x: 0, y: i + 1 }))];
   const edges = chain.map((link, i) => ({ from: `n${i}`, to: i === 0 ? 'c' : `n${i - 1}`, label: link.mode }));
   return { nodes, edges, rows: [], width: 0, height: 0 };
 }
 
-/** The order to read the stations in: level by level, right to left. */
 export const metroOrder = (metro: Metro) => [...metro.stations].sort((a, b) => a.level - b.level || a.col - b.col).map(station => station.label);
 
-/** A plain chain's links as printed, from the collector's sheikh down: each narrator after the words he narrated with. */
 export function chainLinks(isnad: AppIsnad): { name: string; mode: string }[] {
   const top = Math.min(...isnad.nodes.map(node => node.y));
   const links: { name: string; mode: string }[] = [];

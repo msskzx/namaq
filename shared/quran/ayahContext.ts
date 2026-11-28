@@ -1,11 +1,10 @@
-// docs/plans/quran-shared-openings.md
+// see docs/plans/quran-shared-openings.md
 import wordKeys from '../data/quran/wordKeys.json';
 import type { BranchAyah } from './branches';
 import { likeness, type Likeness } from './wordMatch';
 import { wordTokens } from './compare';
 import { normalizeWord } from './normalize';
 
-/** `written`: words every ayah has in the same letters but writes differently; `rooted`: the rest every ayah shares by root. */
 export type AyahContext = { ayah: BranchAyah; before: BranchAyah | null; after: BranchAyah | null; match?: { exact: number[]; written?: number[]; rooted: number[]; links?: Record<number, WordLink> } };
 
 export function isAyahKey(key: string) {
@@ -34,7 +33,6 @@ const tokens = (ayah: BranchAyah) => {
   return { norm, keys: norm.map((_, i) => ayah.roots?.[i] ? `r:${ayah.roots[i]}` : ayah.lemmas?.[i] ? `p:${ayah.lemmas[i]!.replace(/\d+$/, '')}` : fallback[i]) };
 };
 
-/** The longest LCS lining up of `a[ai..aj)` with `b[bi..bj)`, added to `pairs`. */
 function lcsPairs(a: string[], b: string[], ai: number, aj: number, bi: number, bj: number, pairs: Map<number, number>) {
   const n = aj - ai, m = bj - bi;
   const table = Array.from({ length: n + 1 }, () => new Array<number>(m + 1).fill(0));
@@ -45,11 +43,6 @@ function lcsPairs(a: string[], b: string[], ai: number, aj: number, bi: number, 
   }
 }
 
-/**
- * Lines up two ayat word by word. The longest run of words they share in a row is lined up first, then the words before and
- * after it, the same way: so where a word repeats, the one inside the shared phrase is the one paired (al-Ma'ida 17's «ولله ملك»,
- * not its earlier «إن الله»). Single words left over are lined up as a plain longest common subsequence.
- */
 function alignedPairs(a: string[], b: string[]) {
   const pairs = new Map<number, number>();
   const split = (ai: number, aj: number, bi: number, bj: number) => {
@@ -72,7 +65,6 @@ function alignedPairs(a: string[], b: string[]) {
 type Lined = { forms: string[]; lined: Map<number, number>[] };
 type Match = { indices: (number | undefined)[]; rows: number; kind: Likeness };
 
-/** Matches for a word with no root: each occurrence in a pivot row, with the occurrences the LCS lines up with it in the other rows. */
 function particleMatches(lists: number[][], all: Lined[]): Match[] {
   const used = lists.map(() => new Set<number>());
   const matches: Match[] = [];
@@ -91,18 +83,11 @@ function particleMatches(lists: number[][], all: Lined[]): Match[] {
   return matches;
 }
 
-/** A word's partners in the other rows: words lined up together share a `link`; `rows` counts the rows that have it, `kind` says how alike they are and `exact` that they are all written alike. */
 export type WordLink = { link: string; rows: number; exact: boolean; kind: Likeness };
 
-/**
- * Words the ayat share, lined up across them. `exact` and `rooted` are the words every ayah has (spelled alike, or only the
- * same root or lemma); `links` also holds words only some of the ayat share, so the matrix can colour and light them too.
- */
 export function sharedByAll(contexts: AyahContext[]): AyahContext[] {
   if (contexts.length < 2) return contexts;
   const raw = contexts.map(context => tokens(context.ayah).keys);
-  // A word with no corpus key falls back to its letters, so «وفي» would miss «في»: drop a leading و/ف
-  // when the rest is a word every other ayah has (the branches rule merges leading و/ف too).
   const sets = raw.map(keys => new Set(keys));
   const tokenised = raw.map((keys, n) => keys.map(key => {
     if (!/^[وف]./.test(key) || sets.every((set, m) => m === n || set.has(key))) return key;
@@ -114,7 +99,6 @@ export function sharedByAll(contexts: AyahContext[]): AyahContext[] {
     const forms = context.ayah.words;
     const byKey = new Map<string, number[]>();
     keys.forEach((key, i) => byKey.set(key, [...(byKey.get(key) ?? []), i]));
-    // Lined up with every other ayah: where a word repeats, these occurrences are the ones the ayat share.
     const lined = tokenised.map((other, m) => m === n ? new Map<number, number>() : alignedPairs(keys, other));
     const rank = (i: number) => -lined.filter(pairs => pairs.has(i)).length;
     return { forms, byKey, rank, lined };
@@ -122,16 +106,11 @@ export function sharedByAll(contexts: AyahContext[]): AyahContext[] {
   const shared = [...new Set(all.flatMap(ayah => [...ayah.byKey.keys()]))].flatMap(key => {
     const lists = all.map(ayah => ayah.byKey.get(key) ?? []);
     const count = Math.min(...lists.map(list => list.length));
-    // The occurrences every ayah shares first, in reading order; the rest after, best lined up first.
-    // A form written alike in the other ayat goes before one only of the same root: «العليم» pairs with «العليم», not with «علم»
-    // that happens to line up (owner 2026-11-23, 2:32 and 51:30). Occurrences written alike keep the lining up.
     const alike = (n: number, i: number) => -lists.filter((other, m) => m !== n && other.some(j => likeness([all[n].forms[i], all[m].forms[j]]) === 'exact')).length;
     const ordered = lists.map((list, n) => {
       const ranked = [...list].sort((x, y) => alike(n, x) - alike(n, y) || all[n].rank(x) - all[n].rank(y) || x - y);
       return [...ranked.slice(0, count).sort((x, y) => x - y), ...ranked.slice(count)];
     });
-    // A word with a root («ألقوا», «ملقون») may sit anywhere in the other ayah; a particle with none («من», «لا»)
-    // is only paired where the ayat line up in order with one row's occurrence, so a stray «من» is not tied to a «ومنهم» far away.
     if (!key.startsWith('r:')) return particleMatches(lists, all);
     return Array.from({ length: Math.max(...lists.map(list => list.length)) }, (_, at) => {
       const indices = ordered.map(list => list[at]);
@@ -205,7 +184,6 @@ export function surrounding(all: BranchAyah[], before: string[], after: string[]
   };
 }
 
-/** How alike word `i` is in every ayah, from a context's match; none when not every ayah has it. */
 export function likenessOf(match: AyahContext['match'], i: number): Likeness | undefined {
   if (!match) return undefined;
   return match.rooted.includes(i) ? 'root' : match.written?.includes(i) ? 'written' : match.exact.includes(i) ? 'exact' : undefined;

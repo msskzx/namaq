@@ -1,12 +1,6 @@
-// What the reader came for (owner, 2026-11-19; plan «Plan: a better home feed with interests»): the home feed comes in turns
-// by these, and every feed card and question kind belongs to exactly one of them (shared/interests.test.ts).
 import { keyStore } from './storage';
 import { FEED_QUIZ_KINDS, type FeedQuizKind } from './quiz/feedQuiz';
 
-/**
- * The sections, as Ibn Khaldun names the transmitted and language sciences in the Muqaddimah (book 1, chapter 6, sections 4
- * to 6). «السيرة والتاريخ» is ours: he does not count history among them.
- */
 export const SECTIONS = [
   { id: 'quran', name: 'علوم القرآن', ours: false },
   { id: 'lisan', name: 'علوم اللسان العربي', ours: false },
@@ -15,43 +9,28 @@ export const SECTIONS = [
 ] as const;
 export type SectionId = (typeof SECTIONS)[number]['id'];
 
-/** The cards of the drawings built for their pages (owner, 2026-11-20; their items in shared/drawingCards.ts). */
 export const DRAWING_CARD_KINDS = ['nasab', 'ties', 'battle', 'hadith-scene', 'opening', 'oath', 'event', 'surah-link', 'surah-aim'] as const;
 export type DrawingCardKind = (typeof DRAWING_CARD_KINDS)[number];
 
-/**
- * Cards on the phone alone for now (owner, 2026-11-21: phone first while the site is down; the website lists no items for
- * them, src/lib/feedLists.ts): «مشاهد», the battle year and the two armies, and the people drawings of the feed-visuals
- * sketch (/mnt/project-files/feed-visuals/sketch-dark.png): ties among a group, two lives side by side, where nasabs meet,
- * and a ring of one kind of tie or of one title. The adhkar too: the website's adhkar page has no feed.
- */
 export const PHONE_ONLY_KINDS = ['adhkar', 'gharib', 'tuhfa', 'mashahid', 'battle-year', 'battle-armies', 'group', 'lives', 'meet', 'ring'] as const;
 
-/** The feed's content cards, by kind; each app card (mobile/src/components/HomeFeed.tsx) draws one. */
 export const FEED_CARD_KINDS = ['pair', 'tree', 'note-tafsir', 'note-qiraat', 'note-irab', 'note-balagha', 'term', 'scene',
   'hadith', 'rajab', 'recorded', 'isnad', 'bukhari', 'muslim', 'prophets', 'sira', 'moment', 'tarajim', 'tie', 'life', 'laqab', 'kunya', ...DRAWING_CARD_KINDS,
   ...PHONE_ONLY_KINDS] as const;
 export type FeedCardKind = (typeof FEED_CARD_KINDS)[number];
 
-/**
- * The cards whose body is a drawing (owner, 2026-11-21: the feed was mostly text): an interest with drawings and text cards
- * gives them in turn (shared/homeFeed.ts feedRound).
- */
-/** An interest as the website deals it: without the cards only the phone draws, so no turn falls on a blank. */
 export const onWebsite = (interest: Interest): Interest => ({ ...interest, cards: interest.cards.filter(kind => !(PHONE_ONLY_KINDS as readonly FeedCardKind[]).includes(kind)) });
 
 export const DRAWN_KINDS: readonly FeedCardKind[] = ['pair', 'tree', 'isnad', 'recorded', 'prophets', 'tie', 'life', ...DRAWING_CARD_KINDS, ...PHONE_ONLY_KINDS];
 
 export type Interest = {
   id: string; name: string; section: SectionId;
-  /** A chip of ours, not a science's own heading (marked in the plan). */
   ours?: boolean;
   cards: readonly FeedCardKind[]; quizzes: readonly FeedQuizKind[];
 };
 
 export const INTERESTS: readonly Interest[] = [
   { id: 'hifz', name: 'الحفظ والمراجعة', section: 'quran', ours: true, cards: ['opening'], quizzes: ['RECITE', 'OPENINGS', 'SURAH', 'ORDER', 'ORDER_JUZ'] },
-  // «علم المناسبات»: al-Biqa'i's aims and al-Suyuti's links of the surah-order page (owner, 2026-11-21).
   { id: 'tanasub', name: 'تناسب السور', section: 'quran', cards: ['surah-link', 'surah-aim'], quizzes: ['SURAH_AIM'] },
   { id: 'mutashabih', name: 'المتشابه اللفظي', section: 'quran', ours: true, cards: ['pair', 'tree'], quizzes: ['BRANCHES', 'COMPARE'] },
   { id: 'tafsir', name: 'التفسير', section: 'quran', cards: ['note-tafsir', 'oath', 'mashahid'], quizzes: ['TAFSIR'] },
@@ -61,21 +40,17 @@ export const INTERESTS: readonly Interest[] = [
   { id: 'irab', name: 'الإعراب', section: 'lisan', cards: ['note-irab'], quizzes: ['IRAB'] },
   { id: 'balagha', name: 'البلاغة', section: 'lisan', cards: ['note-balagha', 'term', 'scene'], quizzes: ['BALAGHA', 'TERM'] },
   { id: 'hadith', name: 'الحديث', section: 'hadith', cards: ['hadith', 'rajab', 'recorded', 'isnad', 'bukhari', 'muslim', 'hadith-scene'], quizzes: ['HADITH_NARRATOR', 'HADITH_COMPLETE', 'HADITH_BOOK', 'HADITH_CHAIN', 'SAHIH_KITAB'] },
-  // al-Nawawi's al-Adhkar, from the utilities' adhkar page (owner, 2026-11-23: every feature a feed card and a quiz kind).
   { id: 'adhkar', name: 'الأذكار', section: 'hadith', cards: ['adhkar'], quizzes: ['ADHKAR_COMPLETE'] },
   { id: 'prophets', name: 'قصص الأنبياء', section: 'history', ours: true, cards: ['prophets', 'event'], quizzes: ['PROPHET_STORY'] },
   { id: 'sira', name: 'السيرة والمغازي', section: 'history', cards: ['sira', 'moment', 'battle', 'battle-year', 'battle-armies'], quizzes: ['SIRA', 'PROPHET_NAMES', 'ATLAS_WHERE'] },
   { id: 'tarajim', name: 'التراجم', section: 'history', cards: ['tarajim', 'tie', 'life', 'nasab', 'ties', 'group', 'lives', 'meet', 'ring'], quizzes: ['TARAJIM_NASAB', 'TARAJIM_NASAB_FILL', 'TARAJIM_VIRTUE', 'TARAJIM_TIE', 'TARAJIM_LIFE'] },
-  // Each thing about a person its own interest (owner, 2026-11-19), so a reader who does not want kunyas turns them off alone.
   { id: 'laqab', name: 'الألقاب', section: 'history', cards: ['laqab'], quizzes: ['TARAJIM_LAQAB'] },
   { id: 'kunya', name: 'الكنى', section: 'history', cards: ['kunya'], quizzes: ['TARAJIM_KUNYA'] },
 ];
 
 export const interestById = (id: string) => INTERESTS.find(interest => interest.id === id);
-/** The interest a card or question kind belongs to. */
 export const interestOf = (kind: FeedCardKind | FeedQuizKind) => INTERESTS.find(interest => (interest.cards as readonly string[]).includes(kind) || (interest.quizzes as readonly string[]).includes(kind));
 
-/** Every question kind the feed asks is some interest's (the guard reads this). */
 export const UNPLACED_QUIZ_KINDS = FEED_QUIZ_KINDS.filter(kind => !interestOf(kind));
 
 const ids = new Set(INTERESTS.map(interest => interest.id));
@@ -89,22 +64,16 @@ const picked = keyStore('interests', parsePicked);
 const asked = keyStore('interests-asked', raw => raw === '1');
 const surprise = keyStore('interests-surprise', raw => raw !== '0');
 
-/** The interests picked on this device, in the list's order; none picked means all of them. */
 export const pickedInterests = {
   read: picked.read, subscribe: picked.subscribe, server: () => [] as readonly string[],
   write: (list: readonly string[]) => picked.write(JSON.stringify(INTERESTS.filter(interest => list.includes(interest.id)).map(interest => interest.id))),
 };
-/** The first-open picker was answered or skipped. */
 export const interestsAsked = { read: asked.read, subscribe: asked.subscribe, server: () => true, write: () => asked.write('1') };
-/** «فاجئني من غير اهتماماتي» (owner, 2026-11-19: on by default): one card a round from an interest not picked. */
 export const surpriseMe = { read: surprise.read, subscribe: surprise.subscribe, server: () => true, write: (on: boolean) => surprise.write(on ? '1' : '0') };
 
-/** Picks `id` or puts it back, keeping the rest. */
 export const toggledInterest = (list: readonly string[], id: string) => (list.includes(id) ? list.filter(other => other !== id) : [...list, id]);
-/** The picks with `id` back in, after «ليس من اهتماماتي» took it out: undone twice, or once it was picked again, it stays in. */
 export const restoredInterest = (list: readonly string[], id: string) => (list.includes(id) ? [...list] : [...list, id]);
 
-/** The interests the feed brings: those picked, or all when none is. */
 export const activeInterests = (list: readonly string[], kinds: (interest: Interest) => boolean = () => true) => {
   const usable = INTERESTS.filter(kinds);
   const chosen = usable.filter(interest => list.includes(interest.id));

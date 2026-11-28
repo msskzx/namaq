@@ -1,4 +1,3 @@
-// The host's tree filters in one line, for the other players of a party.
 import surahRows from '../data/quran/surahs.json';
 import { num } from '../quran/arabicNumber';
 import { QUIZ_CATEGORIES, type ScopeFilters } from './scopeParams';
@@ -7,7 +6,6 @@ import { SURAH_NAMES } from '../quran/surahNames';
 const KINDS: Record<string, { ar: string; en: string }> = { mutashabeh: { ar: 'في كتب المتشابهات', en: 'In the mutashabih books' }, pondering: { ar: 'تدبّر', en: 'Pondering' }, words: { ar: 'أشجار الكلمات', en: 'Word trees' } };
 const surahName = (n: number, ar: boolean) => { const row = surahRows.find(item => item.number === n); return ar ? SURAH_NAMES[n] ?? String(n) : row?.nameTransliterated ?? String(n); };
 
-/** Without trees (`trees` false) only the part of the Quran is named. */
 export function scopeSummary({ juzFrom, juzTo, filters = {} }: { juzFrom: number; juzTo: number; filters?: ScopeFilters }, ar: boolean, trees = true) {
   const n = (value: number | string) => ar ? num(Number(value)) : String(value);
   const list = (value: string, name: (x: number) => string) => value.split(',').map(Number).map(name).join(ar ? '، ' : ', ');

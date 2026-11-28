@@ -1,6 +1,5 @@
 import { compactKeys, compactQuery } from './searchText';
 
-/** One surah search for the reader index, the branches pane and the compare pickers. */
 export type SearchableSurah = { number: number; name: string; nameTransliterated?: string | null };
 
 const westernDigits = (text: string) => text.replace(/[٠-٩]/g, d => String(d.charCodeAt(0) - 0x660)).replace(/[۰-۹]/g, d => String(d.charCodeAt(0) - 0x6f0));
@@ -27,12 +26,6 @@ const keysOf = (name: string) => {
   return keys;
 };
 
-/**
- * Rank of a surah for a query, or null when it does not match: 0 whole name or
- * number, 1 name or number starting with the query, 2 name holding it, 3 a
- * transliteration match. Names match by their Quran spellings (الرحمن,
- * الرحمان) with or without the article or the word سورة.
- */
 export function surahRank(surah: SearchableSurah, query: string): number | null {
   const trimmed = westernDigits(query.trim());
   if (!trimmed) return 0;
@@ -69,5 +62,4 @@ export function searchSurahs<T extends SearchableSurah>(surahs: T[], query: stri
     .map(found => found.surah);
 }
 
-/** Is the query the surah's whole name, article aside? */
 export const sameSurahName = (surah: SearchableSurah, query: string) => surahRank(surah, query) === 0 && !/^\d+$/.test(westernDigits(query.trim()));

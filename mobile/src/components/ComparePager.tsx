@@ -14,10 +14,8 @@ import type { Link } from '@shared/quran/surahOrder';
 
 const GAP = 14;
 
-/** A pair page to open on the card of these ayat (see focusIndex). */
 export type Focus = { visit: string; ayat: string[] };
 
-/** What a surah-order book says joins two neighbouring surahs when it names no ayah pair: a note atop their page, tied to no ayah. */
 function PairNote({ link, palette }: { link: Link; palette: Palette }) {
   const sources = sourcesOf([tanasubSource(link)]);
   return (
@@ -29,7 +27,6 @@ function PairNote({ link, palette }: { link: Link; palette: Palette }) {
   );
 }
 
-/** One page: the cards of a surah pair, scrolled up and down; `focus` scrolls to the card of those ayat. */
 const PairPage = memo(function PairPage({ visit, width, height, palette, savedOnly, savedIds, focus, onLanded }: { visit: Visit; width: number; height: number; palette: Palette; savedOnly: boolean; savedIds: (id: string) => boolean; focus?: string[]; onLanded?: () => void }) {
   const all = cardsFor(visit.lead, visit.other);
   const cards = savedOnly ? all.filter(card => savedIds(card.id)) : all;
@@ -38,12 +35,8 @@ const PairPage = memo(function PairPage({ visit, width, height, palette, savedOn
   const target = focus ? focusIndex(cards, focus) : -1;
   const landed = useRef(onLanded);
   landed.current = onLanded;
-  // Cards differ in height, so the scroll waits for the cards above it to be drawn and adds up their heights,
-  // and for the list to get its height on screen (before that it is as tall as its cards and cannot scroll).
-  // They keep arriving for a moment after the page opens, so it lands again each time, until the reader scrolls or the moment passes.
   const pending = useRef(target);
   const heights = useRef<number[]>([]);
-  /** The note atop the page, with its gap: the cards start below it. */
   const header = useRef(0);
   useEffect(() => {
     pending.current = target;
@@ -58,9 +51,7 @@ const PairPage = memo(function PairPage({ visit, width, height, palette, savedOn
     list.current?.scrollToOffset({ offset, animated: false });
   }, []);
   const stop = useCallback(() => { pending.current = -1; landed.current?.(); }, []);
-  // The top bar and the progress slide away while the cards scroll down and come back on the way up.
   const shrink = useShrinkOnScroll();
-  // The whole page's video opens from any card's share sheet, beside that card's own video.
   const [video, setVideo] = useState(false);
   const pageVideo = useCallback(() => setVideo(true), []);
   return (
@@ -77,17 +68,12 @@ const PairPage = memo(function PairPage({ visit, width, height, palette, savedOn
 
 export type PagerHandle = { goTo: (index: number, animated?: boolean) => void };
 
-/** The surah pairs side by side: swiping right brings the next pair from the left, as on the website in Arabic. */
 const ComparePager = forwardRef<PagerHandle, { visits: Visit[]; index: number; onIndex: (index: number) => void; palette: Palette; savedOnly: boolean; savedIds: (id: string) => boolean; focus?: Focus; onLanded?: () => void }>(
   function ComparePager({ visits, index, onIndex, palette, savedOnly, savedIds, focus, onLanded }, ref) {
     const list = useRef<FlatList<Visit>>(null);
     const [size, setSize] = useState({ width: 0, height: 0 });
     const { width, height } = size;
     useImperativeHandle(ref, () => ({ goTo: (to, animated = true) => list.current?.scrollToIndex({ index: to, animated }) }), []);
-    // The page grows and shrinks as the top bar hides and comes back. On the web that can throw the pager to a
-    // neighbouring pair with no finger on it (the long story compare test's flake, 2026-11-24, as the adhkar pager in
-    // #1204). A rest elsewhere that no swipe brought, right after such a change, goes back to the open pair. The mark
-    // lasts a moment only: a desktop swipe (trackpad, wheel) makes no touch to clear it, and the bar resizes the page often.
     const resized = useRef(0);
     const settle = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
       if (!width) return;
@@ -97,10 +83,8 @@ const ComparePager = forwardRef<PagerHandle, { visits: Visit[]; index: number; o
         resized.current = 0;
         if (fresh && at !== index) { list.current?.scrollToIndex({ index, animated: false }); return; }
       }
-      // Another pair opens at its own top, so the bars come back with it.
       if (at !== index && at >= 0 && at < visits.length) { setCompact(false); onIndex(at); }
     }, [width, index, visits.length, onIndex]);
-    // The web build snaps with CSS and sends no momentum event, so it settles when scrolling stops.
     const quiet = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
     const scrolled = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
       if (Platform.OS !== 'web') return;

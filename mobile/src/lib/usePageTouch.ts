@@ -2,16 +2,10 @@ import { useCallback, useEffect, useRef } from 'react';
 import type { Gesture } from '@shared/readerGestures';
 import type { Touch } from '@/components/MushafPageView';
 
-/** How long (ms) a first tap waits for a second one, when a double tap does something. */
 export const DOUBLE_TAP = 260;
 
 type OnGesture = (gesture: Gesture, key: string | null, x: number, y: number, word?: number) => void;
 
-/**
- * Tap, double tap and long press on a mushaf page (MushafPageView's onTouch), as the reader takes them. A first tap waits
- * for a second only when `waitForDouble()` says a double tap does something, so a plain tap stays instant otherwise.
- * `cancel` drops a waiting tap (a scroll began).
- */
 export function usePageTouch(onGesture: OnGesture, waitForDouble: () => boolean) {
   const latest = useRef({ onGesture, waitForDouble });
   latest.current = { onGesture, waitForDouble };

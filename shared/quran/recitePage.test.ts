@@ -7,7 +7,6 @@ import { joinModels, pageModel, reciteView } from './recitePage';
 
 const page = (n: number): MushafPage => JSON.parse(readFileSync(join(__dirname, '../data/quran/mushaf', `${n}.json`), 'utf8'));
 
-/** Steps a recitation forward with the main button until the page is done. */
 function steps(model: ReturnType<typeof pageModel>, from: RecitePosition) {
   const seen: RecitePosition[] = [];
   for (let at: RecitePosition | null = from; at; at = reciteView(model, at).nextAyah()) seen.push(at);
@@ -15,7 +14,6 @@ function steps(model: ReturnType<typeof pageModel>, from: RecitePosition) {
 }
 
 describe('reciting one mushaf page', () => {
-  // Page 580 ends Al-Insan (76:31), then opens Al-Mursalat with its title and basmala.
   const model = pageModel(page(580), 76);
 
   it('makes the next surah\'s title and basmala steps of their own before its first ayah', () => {
@@ -23,11 +21,11 @@ describe('reciting one mushaf page', () => {
     const [, title, basmala, first] = steps(model, start);
     const before = reciteView(model, start);
     expect(before.upcoming).toBe('77:1');
-    expect(before.hidden('77:1', 0)).toBe(true); // title
+    expect(before.hidden('77:1', 0)).toBe(true);
     expect(reciteView(model, title).hidden('77:1', 0)).toBe(false);
-    expect(reciteView(model, title).hidden('77:1', 1)).toBe(true); // basmala
+    expect(reciteView(model, title).hidden('77:1', 1)).toBe(true);
     expect(reciteView(model, basmala).hidden('77:1', 1)).toBe(false);
-    expect(reciteView(model, basmala).hidden('77:1', 2)).toBe(true); // first word of 77:1
+    expect(reciteView(model, basmala).hidden('77:1', 2)).toBe(true);
     expect(first).toEqual({ start: '76:31', shown: '77:1', words: 0 });
   });
 
@@ -39,7 +37,6 @@ describe('reciting one mushaf page', () => {
 
   it('reveals an ayah word by word, the last word completing it', () => {
     let at: RecitePosition = { start: '77:1', shown: null, words: 0 };
-    // 77:1 is two words: وَٱلۡمُرۡسَلَٰتِ عُرۡفٗا
     at = reciteView(model, at).nextWord()!;
     expect(at).toEqual({ start: '77:1', shown: null, words: 1 });
     expect(reciteView(model, at).hidden('77:1', 0)).toBe(false);
@@ -69,7 +66,6 @@ describe('a two-page spread', () => {
 
 
 describe('reviewing forgotten words (owner, 2026-11-21)', () => {
-  // 2:2 on page 2: ذَٰلِكَ ٱلۡكِتَٰبُ لَا رَيۡبَۛ فِيهِۛ هُدٗى لِّلۡمُتَّقِينَ
   const model = pageModel(page(2));
 
   it('hides the ayah and the page after it, then shows it up to each forgotten word, then the word, to its end', () => {
@@ -79,16 +75,13 @@ describe('reviewing forgotten words (owner, 2026-11-21)', () => {
     expect(view.hidden('2:2', 0)).toBe(true);
     expect(view.hidden('2:3', 0)).toBe(true);
     expect(view.hidden('2:5', 0)).toBe(true);
-    // A review stops once its ayah shows (useRecite's `until`).
     const seen = steps(model, start).slice(0, 5);
-    // Up to رَيۡبَۛ, then رَيۡبَۛ, then up to لِّلۡمُتَّقِينَ, then لِّلۡمُتَّقِينَ, which completes the ayah.
     expect(seen.map(at => at.shown ?? at.words)).toEqual([0, 3, 4, 6, '2:2']);
     const upToFirst = reciteView(model, seen[1]);
     expect(upToFirst.hidden('2:2', 2)).toBe(false);
     expect(upToFirst.hidden('2:2', 3)).toBe(true);
     expect(upToFirst.gap).toEqual({ place: 3, at: 3 });
     expect(reciteView(model, seen[2]).gap).toBeNull();
-    // Once the ayah shows, the rest of the page stays hidden.
     expect(reciteView(model, seen[4]).hidden('2:3', 0)).toBe(true);
   });
 

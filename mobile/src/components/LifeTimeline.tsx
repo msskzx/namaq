@@ -17,14 +17,11 @@ import ExternalLink from '@/ui/ExternalLink';
 import type { Palette } from '@/lib/theme';
 import { toTab } from '@/lib/ways';
 
-/** Each kind's dot: raids the Prophet ﷺ led in the accent, those he sent blue, later battles purple, events and stories, the person's own fact amber. */
 export const lifeColor = (palette: Palette, kind: LifeKind) =>
   ({ ghazwah: palette.accent, sariyyah: palette.path, battle: palette.root, event: palette.muted, story: palette.green, own: palette.amber })[kind];
 
-/** «قبل الهجرة», «٢», or nothing for the undated rows. */
 export const placeLabel = (place: { year?: number; before?: boolean }) => (place.before ? 'قبل الهجرة' : place.year !== undefined ? num(place.year) : 'بلا سنة');
 
-/** A row's page: a battle or a story opens it; an event or the person's own fact shows its sentences instead. */
 export function openItem(item: LifeItem, show: (item: LifeItem) => void) {
   if (item.open?.to === 'battle') toTab({ pathname: '/battle', params: { slug: item.open.slug } });
   else if (item.open?.to === 'story') router.push({ pathname: '/story', params: { slug: item.open.slug } });
@@ -32,13 +29,8 @@ export function openItem(item: LifeItem, show: (item: LifeItem) => void) {
 }
 
 const DOT = 9;
-/**
- * A folded rail shows this many of its rows (owner, 2026-11-23: the Prophet's ﷺ life is long on his page): enough to
- * read as a line, short enough that the sections under it stay near. The strip above still shows every year.
- */
 const FOLDED_ROWS = 6;
 
-/** The rail past its first `rows` rows: a year cut by the fold goes on with its own label. */
 function railRest(rail: ReturnType<typeof lifeRail>, rows: number) {
   const rest: ReturnType<typeof lifeRail> = [];
   let seen = 0;
@@ -50,7 +42,6 @@ function railRest(rail: ReturnType<typeof lifeRail>, rows: number) {
   return rest;
 }
 
-/** The rail's first `rows` rows, its years cut where they run out. */
 function railStart(rail: ReturnType<typeof lifeRail>, rows: number) {
   const start: ReturnType<typeof lifeRail> = [];
   for (const place of rail) {
@@ -60,10 +51,8 @@ function railStart(rail: ReturnType<typeof lifeRail>, rows: number) {
   }
   return start;
 }
-/** Room a year's label takes under the strip: two digits at its size with a little air, so labels never touch. */
 const LABEL_W = 22;
 
-/** A dot of the strip or the rail, filled, or a ring for a row of another kind than the one picked. */
 function Dot({ color, hollow = false }: { color: string; hollow?: boolean }) {
   return (
     <Svg width={DOT} height={DOT} style={{ opacity: hollow ? 0.6 : 1 }}>
@@ -72,17 +61,14 @@ function Dot({ color, hollow = false }: { color: string; hollow?: boolean }) {
   );
 }
 
-/** The strip's frame: its own card on a page; inside a card (a feed post, a quiz's look-up) only its padding, no card in a card. */
 function Frame({ inCard, palette, children }: { inCard: boolean; palette: Palette; children: React.ReactNode }) {
   return inCard ? <View style={{ paddingVertical: 4, paddingHorizontal: 18 }}>{children}</View> : <Card palette={palette} pad={[10, 18]}>{children}</Card>;
 }
 
-/** The strip (sketch screen 1): a column per year, a dot per thing in it, filled when it is of the kind picked. */
 function Strip({ items, on, palette, inCard }: { items: LifeItem[]; on: (item: LifeItem) => boolean; palette: Palette; inCard: boolean }) {
   const [width, setWidth] = useState(0);
   const columns = lifeStrip(items);
   if (columns.length === 0) return null;
-  // The before-hijra column is twice as wide as a year's.
   const named = stripLabels(columns, width / (columns.length + (columns[0].before ? 1 : 0)), LABEL_W);
   return (
     <Frame inCard={inCard} palette={palette}>
@@ -92,7 +78,6 @@ function Strip({ items, on, palette, inCard }: { items: LifeItem[]; on: (item: L
             {column.items.slice().reverse().map(item => (
               <Dot key={item.key} color={on(item) ? lifeColor(palette, item.kind) : palette.muted} hollow={!on(item)} />
             ))}
-            {/* A year with something in it is named where its label has room; an empty year keeps its place unnamed. */}
             <Text style={{ width: 40, marginHorizontal: -20, flexShrink: 0, color: palette.muted, fontSize: 12, marginTop: 2, minHeight: 16, textAlign: 'center' }}>
               {named.has(column.key) ? (column.before ? 'قبل' : num(column.year!)) : ''}
             </Text>
@@ -103,7 +88,6 @@ function Strip({ items, on, palette, inCard }: { items: LifeItem[]; on: (item: L
   );
 }
 
-/** One row on the rail: its dot on the line, its name; tapped it opens, held it shows the sentences that place the person there. */
 function Item({ item, palette, show, last, linked, marked }: { item: LifeItem; palette: Palette; show: (item: LifeItem) => void; last: boolean; linked: boolean; marked: boolean }) {
   const color = lifeColor(palette, item.kind);
   const body = <>
@@ -124,7 +108,6 @@ function Item({ item, palette, show, last, linked, marked }: { item: LifeItem; p
     : <View style={{ flexDirection: 'row', alignItems: 'stretch', minHeight: MIN_TAP }}>{body}</View>;
 }
 
-/** A year on the compact rail: one dot, its things in one line, each in its kind's colour. */
 function Line({ items, palette, last }: { items: LifeItem[]; palette: Palette; last: boolean }) {
   return (
     <View style={{ flexDirection: 'row', alignItems: 'stretch', minHeight: 36 }}>
@@ -141,7 +124,6 @@ function Line({ items, palette, last }: { items: LifeItem[]; palette: Palette; l
   );
 }
 
-/** The sentences that place the person in a row, with their pages, and where the sources give its year otherwise. */
 export function LifeSheet({ item, onClose, palette }: { item?: LifeItem; onClose: () => void; palette: Palette }) {
   return (
     <Sheet open={!!item} onClose={onClose} palette={palette} title={item?.name}>
@@ -168,22 +150,12 @@ export function LifeSheet({ item, onClose, palette }: { item?: LifeItem; onClose
   );
 }
 
-/**
- * A person's «حياته» drawn (owner, 2026-11-18; sketch timeline-events/sketch-dark.png, screen 1): the strip of years,
- * chips for the kinds he has and «+ قارن», then the rail by year. The person page draws it; `onCompare` opens the
- * «حياتهما» screen (screens/life.tsx) with him first.
- */
 export default function LifeTimeline({ items, palette, onCompare, inCard = false, compact = false, linked = true, marked, foldable = false }: {
   items: LifeItem[]; palette: Palette; onCompare?: () => void;
-  /** Inside a card (a feed post, a quiz's look-up): the strip draws no card of its own. */
   inCard?: boolean;
-  /** The feed card's rail: a year a line, its things side by side («غزوة أحد · غزوة حمراء الأسد»), as on the sketch. */
   compact?: boolean;
-  /** Rows open their pages; not inside a quiz, which would close under them. */
   linked?: boolean;
-  /** A row lit in green: a quiz's answer, once shown. */
   marked?: string;
-  /** The rail opens folded to its first years when it has more, with a row that opens and folds it (the person page). */
   foldable?: boolean;
 }) {
   const [filter, setFilter] = useState<number | undefined>();
@@ -193,10 +165,8 @@ export default function LifeTimeline({ items, palette, onCompare, inCard = false
   const on = (item: LifeItem) => !picked || picked.kinds.includes(item.kind) || item.kind === 'own';
   const whole = lifeRail(items.filter(on));
   const total = whole.reduce((sum, place) => sum + place.items.length, 0);
-  // Folded only when what it hides is more than a couple of rows.
   const folds = foldable && total > FOLDED_ROWS + 2;
   if (items.length === 0) return null;
-  /** Years of the rail; `ends` when the rail's line stops at its last row. */
   const railRows = (rail: ReturnType<typeof lifeRail>, ends: boolean) => (
     <View>
       {rail.map((place, p) => (
@@ -222,7 +192,6 @@ export default function LifeTimeline({ items, palette, onCompare, inCard = false
           {onCompare && <Chip Icon={Plus} label="قارن" on={false} palette={palette} onPress={onCompare} />}
         </View>
       )}
-      {/* A long life (the person page) shows its first rows and folds the rest under the shared fold row. */}
       {railRows(folds ? railStart(whole, FOLDED_ROWS) : whole, !folds)}
       {folds && (
         <Folded credit={`أظهر البقية (${num(total - FOLDED_ROWS)})`} openCredit="اطوِ" palette={palette}>

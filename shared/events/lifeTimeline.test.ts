@@ -34,7 +34,6 @@ describe('a life on the timeline', () => {
 
   it('names a strip column only where its label does not touch the last one named', () => {
     const strip = lifeStrip(lifeItems([entry('a', 'event', 1), entry('b', 'event', 2), entry('c', 'event', 3), entry('d', 'event', 9)], () => undefined));
-    // Wide columns: every year with something is named; narrow ones: 2 sits under 1's label and is skipped, 3 is clear.
     expect([...stripLabels(strip, 40, 22)]).toEqual(['1', '2', '3', '9']);
     expect([...stripLabels(strip, 12, 22)]).toEqual(['1', '3', '9']);
   });

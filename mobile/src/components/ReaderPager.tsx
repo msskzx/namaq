@@ -11,53 +11,31 @@ const PULL_FLICK = 600;
 const TURN = 220;
 
 type Props = {
-  /** Current page, from 1. */
   page: number;
   count: number;
   width: number;
-  /** The row's height: the screen's, or the current page's when its text is bigger and it runs longer. */
   height: number;
-  /** Called when a swipe lands on another page. */
   onPage: (page: number) => void;
-  /** Told when a finger starts moving the pages, so the lifted finger is not read as a tap. */
   onMove: () => void;
   render: (page: number) => ReactNode;
-  /** A downward swipe on the page: the reader's main action (the index and search). Off while the page scrolls. */
   onPull?: () => void;
-  /** The text size: 1 is the printed page. */
   zoom?: number;
-  /** A pinch's new text size, and where the fingers were (from the row's top), so the reader keeps those words in sight. A host
-   * without it has no pinch. */
   onZoom?: (zoom: number, focalY: number) => void;
-  /** A pushed screen's pager leaves the right edge to the back swipe, as the tree and matrix pagers do. */
   backEdge?: boolean;
-  /** How far the reader scrolled down the current page: a neighbour sliding in shows its top there. */
   scrollTop?: number;
-  /** The scroll view the row sits in, as a gesture: the pinch runs alongside it, so two fingers on a zoomed page pinch. */
   scroll?: GestureType;
-  /** Told when two fingers start and stop pinching, so the reader holds the page still meanwhile. */
   onPinch?: (on: boolean) => void;
-  /** A finger is selecting words on the page (a drag after a long press): the pages hold still under it. */
   hold?: boolean;
 };
 
-/**
- * The mushaf as a row of pages, the next page on the left as in a printed mushaf: a finger moving right turns forward.
- * The neighbour follows the finger; the current page and both neighbours stay mounted.
- * A pinch changes the text size. While the fingers are down the page is only stretched as a preview; when they lift
- * the page is set again at the new size, sharp.
- */
 export default function ReaderPager({ page, count, width, height, onPage, onMove, render, onPull, zoom = 1, onZoom, backEdge, scrollTop = 0, scroll, onPinch, hold = false }: Props) {
   const offset = useSharedValue((page - 1) * width);
   const from = useSharedValue(0);
   const settled = useRef(page);
   const pinching = useSharedValue(false);
-  /** The pinch preview: how much bigger than the drawn size, around the point between the fingers. */
   const stretch = useSharedValue(1);
   const focal = useSharedValue({ x: 0, y: 0 });
 
-  // A page chosen from outside (index, recite, restore) slides there; one reached by a swipe is already there.
-  // Before the paint, so a turned screen never shows a frame at the old width's offset.
   const laidOut = useRef(width);
   useLayoutEffect(() => {
     if (!width) return;
@@ -71,10 +49,8 @@ export default function ReaderPager({ page, count, width, height, onPage, onMove
     settled.current = page;
   }, [page, width, offset]);
 
-  // A pager taken away mid-pinch lets the scroll go again.
   useEffect(() => () => onPinch?.(false), [onPinch]);
 
-  // The page set at the new size replaces the preview.
   useLayoutEffect(() => { stretch.value = 1; }, [zoom, stretch]);
 
   const arrive = useCallback((next: number) => {
@@ -95,13 +71,11 @@ export default function ReaderPager({ page, count, width, height, onPage, onMove
     })
     .onUpdate(event => {
       const next = from.value + event.translationX;
-      // Past the first or last page the row only gives a little.
       offset.value = next < 0 ? next / 4 : next > last ? last + (next - last) / 4 : next;
     })
     .onEnd((event, success) => {
       scheduleOnRN(onMove);
       const at = Math.round(from.value / width);
-      // A second finger (a pinch) cancels the swipe: the row goes back.
       const target = success && !pinching.value ? landingPage(at, event.translationX, event.velocityX, width, count) : at;
       offset.value = withTiming(target * width, { duration: TURN });
       if (target !== at) scheduleOnRN(arrive, target + 1);
@@ -130,7 +104,6 @@ export default function ReaderPager({ page, count, width, height, onPage, onMove
       stretch.value = Math.min(MAX_ZOOM, Math.max(0.9, zoom * event.scale)) / zoom;
     })
     .onFinalize(() => {
-      // Only a pinch that started: a one-finger touch also ends here.
       if (pinching.value && onPinch) scheduleOnRN(onPinch, false);
       pinching.value = false;
     })
@@ -153,7 +126,6 @@ export default function ReaderPager({ page, count, width, height, onPage, onMove
       <View style={{ width, height, overflow: 'hidden' }}>
         <Animated.View style={[{ position: 'absolute', left: 0, top: 0, width, height, direction: 'ltr' }, track]}>
           {shown.map(at => (
-            // A neighbour shows its top where the reader is on the current page, so it slides in from its start.
             <View key={at} style={{ position: 'absolute', top: at === page ? 0 : scrollTop, left: -(at - 1) * width, width, height: at === page ? height : height - scrollTop, overflow: 'hidden' }}>
               <Animated.View style={[{ width, transformOrigin: 'left top', direction: 'rtl' }, at === page ? preview : null]}>
                 {render(at)}

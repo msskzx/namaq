@@ -25,7 +25,6 @@ vi.mock('expo-file-system', () => {
   return { Directory, File, Paths: { document: 'doc' } };
 });
 
-// Shaped as the served books are: KashshafEntry = [surah, from, to, part, first, last, text, lit].
 const book = (text: string) => JSON.stringify({ source: { version: '1', book: 346 }, entries: [[1, 1, 1, 1, 1, 8, text, []]] });
 
 beforeEach(() => { disk.clear(); store.clear(); vi.resetModules(); });

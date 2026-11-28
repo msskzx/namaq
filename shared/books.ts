@@ -1,11 +1,5 @@
 import { BOOK_SOURCE, GITHUB_FILES, WEBSITE, type BookSource } from './downloadSources';
 
-/**
- * The books the reader's sheets draw on (owner, 2026-11-15). On the phone each one is the person's to keep or remove:
- * a built-in book ships with the app and can be hidden and brought back without a connection; any other is downloaded
- * (bookUrl) and kept on the phone. The website fetches what a sheet shows, so it has nothing to manage.
- * The default tafsir can change later to a better book.
- */
 export type BookKind = 'tafsir' | 'irab' | 'balagha' | 'gharib' | 'mutashabih' | 'hadith';
 export type BookId = 'sadi' | 'irab-words' | 'ukbari' | 'itqan' | 'kashshaf' | 'gharib' | 'mufradat' | 'bukhari' | 'muslim' | 'kirmani' | 'iskafi' | 'zubayr';
 export type Book = { id: BookId; kind: BookKind; title: string; by: string; builtIn: boolean; megabytes: number };
@@ -18,11 +12,9 @@ export const BOOKS: Book[] = [
   { id: 'kashshaf', kind: 'balagha', title: 'الكشاف عن حقائق التنزيل', by: 'الزمخشري (ت ٥٣٨هـ)', builtIn: false, megabytes: 2.2 },
   { id: 'gharib', kind: 'gharib', title: 'تفسير غريب القرآن', by: 'ابن قتيبة (ت ٢٧٦هـ)', builtIn: true, megabytes: 0.8 },
   { id: 'mufradat', kind: 'gharib', title: 'المفردات في غريب القرآن', by: 'الراغب الأصفهاني (ت ٥٠٢هـ)', builtIn: true, megabytes: 2.9 },
-  // The books of mutashabih whole (scripts/quran/buildMutashabihBooks.ts), in the order they were written.
   { id: 'iskafi', kind: 'mutashabih', title: 'درة التنزيل وغرة التأويل', by: 'الخطيب الإسكافي (ت ٤٢٠هـ)', builtIn: false, megabytes: 0.6 },
   { id: 'kirmani', kind: 'mutashabih', title: 'أسرار التكرار في القرآن', by: 'تاج القراء الكرماني', builtIn: false, megabytes: 0.3 },
   { id: 'zubayr', kind: 'mutashabih', title: 'ملاك التأويل', by: 'ابن الزبير الغرناطي (ت ٧٠٨هـ)', builtIn: false, megabytes: 1 },
-  // The Sahihayn whole (owner, 2026-11-19): their kitabs and babs ship with the app, their text is downloaded once.
   { id: 'bukhari', kind: 'hadith', title: 'صحيح البخاري', by: 'البخاري (ت ٢٥٦هـ)', builtIn: false, megabytes: 10.9 },
   { id: 'muslim', kind: 'hadith', title: 'صحيح مسلم', by: 'مسلم (ت ٢٦١هـ)', builtIn: false, megabytes: 7 },
 ];
@@ -39,15 +31,9 @@ export const BOOK_KINDS: { kind: BookKind; title: string }[] = [
 export const bookOf = (id: BookId) => BOOKS.find(book => book.id === id)!;
 export const isBookId = (value: unknown): value is BookId => BOOKS.some(book => book.id === value);
 
-/**
- * Where a book that does not ship with the app lives in the repository as plain JSON: a Quran book's copy under
- * data/books/ (scripts/books/writeBookFiles.ts), a Sahih's own file under data/hadith/sahih/.
- */
 export const bookFile = (id: BookId) => (bookOf(id).kind === 'hadith' ? `data/hadith/sahih/${id}.json` : `data/books/${id}.json`);
-/** Each place a book can be downloaded from (shared/downloadSources.ts): the website's /api/books, or its file on GitHub. */
 export const BOOK_SOURCES: Record<BookSource, (id: BookId) => string> = {
   website: id => `${WEBSITE}/api/books/${id}`,
   github: id => `${GITHUB_FILES}${bookFile(id)}`,
 };
-/** Where the phone downloads that book, from the source in use. */
 export const bookUrl = (id: BookId) => BOOK_SOURCES[BOOK_SOURCE](id);

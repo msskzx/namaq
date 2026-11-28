@@ -4,7 +4,6 @@ import { clock, CITIES, DEFAULT_PRAYER_SETTINGS, hijriMonth, inRamadan, isPlace,
 
 const lib = adhan as unknown as Adhan;
 const city = (name: string) => CITIES.find(place => place.name === name)!;
-/** «16:56» in the city's own zone, whatever zone the tests run in. */
 const at = (date: Date, zone: string) => date.toLocaleTimeString('en-GB', { timeZone: zone, hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
 const day = (place: Place, iso: string, settings: PrayerSettings = DEFAULT_PRAYER_SETTINGS) => {
   const [y, m, d] = iso.split('-').map(Number);
@@ -13,7 +12,7 @@ const day = (place: Place, iso: string, settings: PrayerSettings = DEFAULT_PRAYE
 const six = (times: ReturnType<typeof day>, zone: string) => (['fajr', 'sunrise', 'dhuhr', 'asr', 'maghrib', 'isha'] as const).map(key => at(times[key], zone)).join(' ');
 
 describe('prayerDay against the Egyptian General Authority for Survey', () => {
-  // Official tables as printed by Sada El Balad and Egypt Telegraph (docs/prayer-times.md). Within a minute: their rounding and city points differ slightly.
+  // see docs/prayer-times.md
   const official: [string, string, string][] = [
     ['القاهرة', '2025-11-22', '04:55 06:26 11:41 14:36 16:56 18:17'],
     ['القاهرة', '2026-01-11', '05:20 06:52 12:03 14:55 17:14 18:36'],
@@ -101,15 +100,15 @@ describe('Hijri calendar', () => {
     const month = hijriMonth(new Date(2026, 10, 13, 9))!;
     expect(month.title).toBe('جمادى الآخرة ١٤٤٨ هـ');
     expect(month.days).toHaveLength(29);
-    expect(month.days[0].gregorian.getDate()).toBe(11); // Wednesday 11 November
-    expect(month.lead).toBe(4); // Saturday, Sunday, Monday, Tuesday empty
+    expect(month.days[0].gregorian.getDate()).toBe(11);
+    expect(month.lead).toBe(4);
     expect(month.days.find(d => d.today)?.day).toBe(3);
     expect(month.gregorian).toBe('نوفمبر – ديسمبر ٢٠٢٦');
   });
   it('steps to the next and previous months', () => {
     const today = new Date(2026, 10, 13, 9);
     expect(hijriMonth(today, 1)!.title).toBe('رجب ١٤٤٨ هـ');
-    expect(hijriMonth(today, 1)!.days[0].gregorian.getDate()).toBe(10); // 10 December
+    expect(hijriMonth(today, 1)!.days[0].gregorian.getDate()).toBe(10);
     expect(hijriMonth(today, -1)!.title).toBe('جمادى الأولى ١٤٤٨ هـ');
     expect(hijriMonth(today, -1)!.days.every(d => !d.today)).toBe(true);
     expect(hijriMonth(today, 12)!.title).toBe('جمادى الآخرة ١٤٤٩ هـ');

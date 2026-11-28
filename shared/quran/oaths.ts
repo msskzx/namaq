@@ -2,22 +2,10 @@ import { normalizeWord } from './normalize';
 import type { AyahWordsOf } from './quranText/ayahWords';
 import { SURAH_NAMES } from './surahNames';
 
-/**
- * Every oath in the Quran (owner, 2026-11-13: the oaths page covers the whole Quran, app and website).
- * An oath counts when the text swears with an oath form: و / ت / ب before what is sworn by, «لا أقسم», «فلا وربك»,
- * «لعمرك», «فوربك», «قل إي وربي». Reported oaths with no form («وأقسموا بالله», «يحلفون بالله», 5:106-107) and a bare
- * lam of oath («لنبلونكم») are left out. docs/plans/quran-oaths-full.md
- */
+// see docs/plans/quran-oaths-full.md
 export type OathKind = 'allah' | 'others';
 export type Oath = { surah: number; range: [number, number]; by: string[]; who?: string };
 
-/**
- * Allah's oaths, in mushaf order. `by` names what is sworn by, as the text writes it (a test finds each in its range).
- * Oaths by participles with no noun (الذاريات، المرسلات، النازعات، العاديات، الخنس) keep their own words: what they are
- * is a tafsir question the page does not answer. An oath by the Lord («فورب»، «وربك») carries «رب». A word sworn by more
- * than once in one oath («وما» in 91:5-7) is listed as often; only that many of its first occurrences are coloured, so
- * «ٱلطَّارِقُ» in the question of 86:2 stays plain.
- */
 export const ALLAH_OATHS: Oath[] = [
   { surah: 4, range: [65, 65], by: ['رب'] },
   { surah: 10, range: [53, 53], by: ['رب'], who: 'النبي ﷺ بأمر ربه' },
@@ -62,7 +50,6 @@ export const ALLAH_OATHS: Oath[] = [
   { surah: 103, range: [1, 1], by: ['العصر'] },
 ];
 
-/** Oaths the Quran quotes from others, in mushaf order; `who` is the speaker, as the ayah or the ayat before it say. */
 export const OTHER_OATHS: Oath[] = [
   { surah: 6, range: [23, 23], by: ['الله'], who: 'المشركون يوم القيامة' },
   { surah: 6, range: [30, 30], by: ['رب'], who: 'الكافرون إذ وقفوا على ربهم' },
@@ -84,14 +71,12 @@ const names: Record<number, string> = SURAH_NAMES;
 export type OathWord = { text: string; sworn: boolean };
 export type OathView = { id: string; kind: OathKind; surah: number; name: string; range: [number, number]; who?: string; by: string[]; lines: { ayah: number; words: OathWord[] }[] };
 
-/** A word reduced to its letters for matching: the article set apart, long vowels and hamza dropped, a final ta' marbuta read as ta'. */
 const skeleton = (x: string) => {
   const n = normalizeWord(x).replace(/ء/g, '');
   const art = n.startsWith('ال');
   return { art, core: (art ? n.slice(2) : n).replace(/[اي]/g, '').replace(/^لل/, 'ل').replace(/ه$/, 'ت') };
 };
 
-/** A token with its attached letters taken off: و ف ب ل ك (and ت of «تالله») before, a pronoun after. */
 const variants = (token: string) => {
   const n = normalizeWord(token).replace(/ء/g, '');
   const ends = [n, n.replace(/(ها|نا|كم|ك|ي)$/, '')];
@@ -99,7 +84,6 @@ const variants = (token: string) => {
   return ends.flatMap(fronts);
 };
 
-/** Whether a token of the text is the word sworn by, written with its attached letters. */
 export function isSworn(token: string, word: string) {
   const b = skeleton(word);
   return variants(token).some(v => {
@@ -108,7 +92,6 @@ export function isSworn(token: string, word: string) {
   });
 }
 
-/** The oaths of one kind with their words, the sworn ones marked. */
 export function buildOaths(kind: OathKind, ayahWords: AyahWordsOf): OathView[] {
   return OATHS[kind].map(({ surah, range: [lo, hi], by, who }) => ({
     id: `${surah}:${lo}`,
@@ -124,7 +107,6 @@ export function buildOaths(kind: OathKind, ayahWords: AyahWordsOf): OathView[] {
       return { ayah: lo + k, words: words.filter(word => normalizeWord(word) !== '').map(word => ({ text: word, sworn: false })) };
     }),
   })).map(oath => {
-    // Each listed word colours its first unmarked occurrence.
     const words = oath.lines.flatMap(l => l.words);
     for (const w of oath.by) {
       const hit = words.find(word => !word.sworn && isSworn(word.text, w));
@@ -134,10 +116,8 @@ export function buildOaths(kind: OathKind, ayahWords: AyahWordsOf): OathView[] {
   });
 }
 
-/** An oath's place, as «الطور ١–٦». */
 export const oathPlace = (o: Pick<OathView, 'name' | 'range'>, num: (n: number) => string) =>
   `${o.name} ${num(o.range[0])}${o.range[1] > o.range[0] ? `–${num(o.range[1])}` : ''}`;
 
-/** The text an oath is shared as: its ayat, then its place. */
 export const oathShareText = (o: OathView, num: (n: number) => string) =>
   `${o.lines.map(l => l.words.map(w => w.text).join(' ')).join(' ')}\n${oathPlace(o, num)}`;

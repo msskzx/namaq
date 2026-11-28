@@ -19,19 +19,12 @@ const named = (key: string) => {
   const [surah, ayah] = key.split(':').map(Number);
   return `${surahName(surah)} ${num(ayah)}`;
 };
-/** «من البقرة ٣ إلى ٥», or with the surah again when the range crosses into another. */
 export const rangeText = (from: string, to: string) =>
   from.split(':')[0] === to.split(':')[0] ? `من ${named(from)} إلى ${num(Number(to.split(':')[1]))}` : `من ${named(from)} إلى ${named(to)}`;
 
-/**
- * The recitation playing, as a frosted bar floating over the mushaf (owner's sketch, 2026-11-17; floating, 2026-11-19):
- * pause or play, the repeat settings, the ayah being read with its reciter and range, fold, and stop. No counts.
- * The reader floats it in ui/FloatingBar, which places it.
- */
 export default function ListenBar({ width, onRepeat, onFold, palette }: { width: number; onRepeat: () => void; onFold: () => void; palette: Palette }) {
   const listening = useListening();
   const plan = useSyncExternalStore(subscribeListenPlan, readListenPlan, serverListenPlan);
-  // A file that starts at once (downloaded) never shows that it was loading; a slow stream does after a moment.
   const loading = !!listening?.loading;
   const [slow, setSlow] = useState(false);
   useEffect(() => {
@@ -49,7 +42,6 @@ export default function ListenBar({ width, onRepeat, onFold, palette }: { width:
       style={{ width, height: LISTEN_BAR, flexDirection: 'row', alignItems: 'center', paddingHorizontal: 6, borderRadius: 16, overflow: 'hidden', borderWidth: 1, borderColor: palette.glassEdge }}>
       <BlurView intensity={40} tint={palette.scheme} style={StyleSheet.absoluteFill} />
       <View pointerEvents="none" style={[StyleSheet.absoluteFill, { backgroundColor: palette.glass }]} />
-      {/* A failed ayah shows play, not a retry arrow: pressing it plays the ayah again, and the line beside it says why. */}
       <IconButton Icon={playing ? Pause : Play} label={failed ? 'أعد المحاولة' : playing ? 'إيقاف مؤقت' : 'استمع'} onPress={togglePlaying} round />
       <IconButton Icon={Repeat} label="التكرار والقارئ" onPress={onRepeat} on={repeating} tone="ink" />
       <Tap onPress={onRepeat} accessibilityRole="button" accessibilityLabel={`${named(listening.key)}، ${reciterName(reciterOf(listening.reciter))}`} style={{ flex: 1, paddingHorizontal: 4 }}>

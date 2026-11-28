@@ -31,14 +31,12 @@ const isScope = (value: unknown): value is CompareScope => isRecord(value) && (
     : ['surahs', 'juzs'].includes(value.unit as string) && Array.isArray(value.list) && value.list.every(isNumberIn(1, 114)));
 const isFilter = (value: unknown): value is PairFilter => isRecord(value) && (value.scope === undefined || isScope(value.scope)) && (value.savedOnly === undefined || isBoolean(value.savedOnly));
 
-/** The website's compare page on the phone: surah pairs side by side, their cards scrolled, the pair list in a bottom sheet. */
 export default function CompareScreen() {
   const palette = usePalette();
   const bottom = useTabBarSpace();
   const [help, setHelp] = useState(false);
   const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks);
   const [filter, setFilter] = useState<PairFilter>(() => readJson(FILTER, isFilter) ?? {});
-  // The saved-only list follows the bookmarks only when the filter changes, so unsaving a card doesn't pull the page away.
   const pairs = useMemo(() => filteredPairs(filter), [filter]);
   const visits = useMemo(() => visitsOf(pairs), [pairs]);
   const [index, setIndex] = useState(() => landingIndex(visits, readJson(PLACE, isPlace)));
@@ -60,7 +58,6 @@ export default function CompareScreen() {
     setFilter(next);
     setIndex(at);
   };
-  // The compare tab tapped again: back to the first pair, then (tapped again there) the filter cleared.
   useTabRetap('compare', () => {
     if (index > 0) go(0);
     else if (filter.scope || filter.savedOnly) { writeJson(FILTER, {}); setFilter({}); setIndex(0); setJumps(value => value + 1); }
@@ -70,10 +67,7 @@ export default function CompareScreen() {
     setSheet(false);
     if (at >= 0) { pager.current?.goTo(at, false); arrive(at); }
   };
-  // The homepage opens a surah's first pair, or the pair of a saved card; a filter that hides it is cleared.
-  // The pager remounts on the pair, so it lands there whether the tab was open or opens now.
   const [jumps, setJumps] = useState(0);
-  /** The pair page that opens on the card of these ayat (the reader's ayah menu, a saved card); cleared once it has landed. */
   const [focus, setFocus] = useState<Focus | undefined>(undefined);
   useIntent('compare', ({ lead, other, ayat }) => {
     const find = (list: typeof visits) => list.findIndex(item => (item.lead === lead && (!other || item.other === other)) || (!!other && item.lead === other && item.other === lead));
@@ -90,7 +84,6 @@ export default function CompareScreen() {
     setIndex(at);
     setJumps(value => value + 1);
   });
-  // A new list (after a filter) remounts the pager at the kept page.
   const listKey = useMemo(() => `${filter.savedOnly ? 's' : ''}${filter.scope ? JSON.stringify(filter.scope) : ''}`, [filter]);
   useEffect(() => { if (visit) writeJson(PLACE, { lead: visit.lead, other: visit.other }); }, [listKey]); // eslint-disable-line react-hooks/exhaustive-deps
 

@@ -10,11 +10,6 @@ export type AdhkarCitation = {
 };
 
 export type DhikrGrade = {
-  /**
-   * `isnad-sahih` is a judgment on the chain alone («بإسناد صحيح», «صحيح الإسناد»), not on the hadith.
-   * `in-sahih` is the compiler's own judgment by placing it in his Sahih («صحيح البخاري», «صحيح مسلم», «الصحيحين»), as
-   * al-Nawawi names the book; used only where Ibn Hajar's Nata'ij has no sentence of its own on that route.
-   */
   rank: 'sahih' | 'hasan' | 'hasan-sahih' | 'isnad-sahih' | 'in-sahih';
   scholar: string;
   quote: string;
@@ -25,10 +20,6 @@ export type DhikrGrade = {
 export type Dhikr = {
   id: string;
   occasions: readonly AdhkarOccasion[];
-  /**
-   * `parts`: where the book breaks the words (a narrator's remark, a line end), the pieces as printed, in order;
-   * `text` is them joined by spaces, after any `fixes`.
-   */
   content: { kind: 'text'; text: string; parts?: readonly string[] } | {
     kind: 'quran';
     ranges: readonly { surah: number; from: number; to: number }[];
@@ -40,17 +31,8 @@ export type Dhikr = {
   repeat?: { count: number; quote: string; scope: 'whole-selection' };
   instructionQuote?: string;
   virtueQuote?: string;
-  /**
-   * The whole report as al-Nawawi gives it at the same page and number, his words only, shown when the dhikr is open
-   * (owner, 2026-11-24: a sample on one or two adhkar first, the rest later).
-   */
   fullReport?: string;
-  /** A remark in the report shown with the reference (a narrator's doubt, the Prophet ﷺ as the source of a companion's words). */
   noteQuote?: string;
-  /**
-   * Printing slips corrected in the shown text, each from a named source (owner, 2026-11-19: every fix comes from a
-   * source): `printed` is in the book, `reads` is what is shown, `quote` at `citation` gives the right reading.
-   */
   fixes?: readonly { printed: string; reads: string; quote: string; citation: AdhkarCitation }[];
 };
 

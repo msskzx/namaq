@@ -2,7 +2,6 @@
 import surahRows from '@shared/data/quran/surahs.json';
 import { ayahWords, mushafPages, type MushafPage } from '@shared/quran/readerPage';
 
-/** The 604 pages of the 1441 Madinah mushaf, bundled with the app; each file is read the first time its page is shown. */
 const files = require.context('../../../shared/data/quran/mushaf', false, /^\.\/\d+\.json$/);
 
 export const PAGES = 604;
@@ -15,20 +14,16 @@ export function pageData(page: number): MushafPage {
 }
 
 export const surahs = surahRows;
-/** Surah names as the mushaf writes them in the title boxes, with tashkeel (the website reads them from the database). */
 export const ayahCounts: ReadonlyMap<number, number> = new Map(surahs.map(row => [row.number, row.numberOfAyat]));
 
-/** The surah running at the top of a page that opens mid-surah. */
 export const surahBefore = (page: number) => surahs.findLast(row => row.page != null && row.page < page)?.number;
 
 let starts: Map<string, number> | undefined;
-/** The page an ayah starts on. */
 export function pageOfAyah(key: string): number | undefined {
   starts ??= mushafPages(Array.from({ length: PAGES }, (_, i) => pageData(i + 1)));
   return starts.get(key);
 }
 
-/** The first ayah that starts on a page (the page's فاصلة names it), or the ayah running onto it when none starts there. */
 export function firstAyahOfPage(page: number): string {
   starts ??= mushafPages(Array.from({ length: PAGES }, (_, i) => pageData(i + 1)));
   let before = '1:1';
@@ -40,7 +35,6 @@ export function firstAyahOfPage(page: number): string {
   return before;
 }
 
-/** One ayah's words as the mushaf writes them, looked for from its surah's first page so that only a few pages are read. */
 export function ayahText(key: string): string {
   const surah = surahs.find(row => row.number === Number(key.split(':')[0]));
   for (let page = surah?.page ?? PAGES + 1; page <= PAGES; page++) {
@@ -50,10 +44,8 @@ export function ayahText(key: string): string {
   return '';
 }
 
-/** All of an ayah's words as the mushaf writes them, the ۞ mark left out, across a page turn when the ayah runs over one. */
 export const ayahMushafWords = (key: string): string[] => ayahMushafTokens(key).filter(word => word !== '۞');
 
-/** The same with the ۞ mark kept, as the built data counts an ayah's words (qiraat.json). */
 export function ayahMushafTokens(key: string): string[] {
   const start = pageOfAyah(key);
   if (!start) return [];

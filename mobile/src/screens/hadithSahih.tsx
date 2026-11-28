@@ -26,13 +26,11 @@ import HadithBooks from '@/components/HadithBooks';
 import { recordedIn, type BookBox } from '@shared/hadith';
 import { openBab, openKitab, openSahih } from './hadith';
 
-/** A box of «من أخرجه» opens that hadith's page when it is in the Sahihayn. */
 const openBox = (box: BookBox) => {
   const [book, n] = box.key.split(':');
   if (isSahihSlug(book) && n) openSahih(book, Number(n));
 };
 
-/** One hadith's page: where it sits (kitab › bab, a tap opens the kitab), its words and chain, and the ones of the Forty that hold it. */
 function SahihPage({ book, hadith, width, palette }: { book: SahihIndex; hadith: SahihHadith; width: number; palette: Palette }) {
   const onScroll = useShrinkOnScroll();
   const bottom = useTabBarSpace();
@@ -61,10 +59,6 @@ function SahihPage({ book, hadith, width, palette }: { book: SahihIndex; hadith:
   );
 }
 
-/**
- * «في هذا الحديث» (owner, 2026-11-24, sketch data-plan/links-sketch design أ): the stories this hadith tells, from the one
- * links file, each with its people (a name with a page opens it), the story itself and the ayat it turns on.
- */
 function InHadith({ book, n, palette }: { book: string; n: number; palette: Palette }) {
   const stories = storiesOfHadith(book, n);
   if (!stories.length) return null;
@@ -73,7 +67,6 @@ function InHadith({ book, n, palette }: { book: string; n: number; palette: Pale
       <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 17, fontWeight: '700', textAlign: 'right' }}>في هذا الحديث</Text>
       {stories.map(story => (
         <CardWithRow key={story.slug} palette={palette} pad={[10, 14]} gap={8} source={sourcesOf(uniqueSources([
-          // The report that is this hadith names the story's people; the ayat carry the words that tie them to it.
           ...story.reports.filter(report => reportHadith(report)?.n === n && reportHadith(report)?.book === book).map(report => citeSource({ text: '', cite: report.cite, url: report.url })),
           ...story.ayat.flatMap(ayat => ayat.refs).map(citeSource)]))}>
           <People people={story.people} palette={palette} />
@@ -88,11 +81,6 @@ function InHadith({ book, n, palette }: { book: string; n: number; palette: Pale
   );
 }
 
-/**
- * One hadith of a Sahih (owner's sketch, 2026-11-19): its place, the narrator, its words large, its chain drawn or read whole,
- * Muslim's other routes folded, the ones of the Forty that hold it. A swipe brings the hadith before or after it, across
- * kitab ends, following the finger (owner: swipes, not step buttons, on the phone).
- */
 export default function HadithSahihScreen() {
   const palette = usePalette();
   const { book: slug = '', n: at = '' } = useLocalSearchParams<{ book?: string; n?: string }>();
@@ -114,7 +102,6 @@ export default function HadithSahihScreen() {
     const to = Math.round(Math.abs(event.nativeEvent.contentOffset.x) / width);
     if (to >= 0 && to < all.length) setIndex(to);
   }, [width, all.length]);
-  // The web build snaps with CSS and sends no momentum event, so it settles when scrolling stops.
   const quiet = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const scrolled = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
     if (Platform.OS !== 'web') return;

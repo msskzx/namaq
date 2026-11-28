@@ -21,14 +21,12 @@ describe('chainBetween', () => {
     const chain = chainBetween(graph, 'az-zubayr-ibn-al-awwam', 'aisha-bint-abi-bakr')!;
     expect(chain[0].from).toBe('az-zubayr-ibn-al-awwam');
     expect(chain.at(-1)!.to).toBe('aisha-bint-abi-bakr');
-    // It reads along the chain: the first clause starts from Aisha, each next one from the person the last one ended on.
     const sentence = chainSentence(graph, chain);
     expect(sentence.startsWith('عائشة')).toBe(true);
     expect(sentence.endsWith('الزبير بن العوام')).toBe(true);
   });
 
   it('prefers family to companionship', () => {
-    // al-Zubayr is the Prophet's ﷺ cousin and his companion: the chain is the one step of kinship.
     expect(chainBetween(graph, 'az-zubayr-ibn-al-awwam', 'prophet-muhammad')!.map((s) => s.kind)).toEqual(['cousin']);
   });
 

@@ -1,4 +1,4 @@
-// docs/quiz-ayah-branches.md
+// see docs/quiz-ayah-branches.md
 import { keys, ownAyat, type Branch, type BranchAyah, type Variant } from '../quran/branches';
 import { inJuzRange, type JuzRange } from '../quran/juz';
 import { ownAyatOnly } from '../quran/branchVerdicts';
@@ -22,30 +22,23 @@ export interface BranchQuestion {
   correctAnswer: string;
   branches: BranchAnswer[];
   tree: Branch;
-  /** How hard the tree is (difficulty.ts). */
   level: Difficulty;
   variants: Variant[];
   prefixes: Variant[];
-  /** The mushaf the leaves are written from, then the mutashabih books that set the ayat side by side (shared/quiz/sources.ts). */
   sources: QuizSource[];
   evidence: { claimKeys: string[] };
 }
 
 const nextClass = (ayah: BranchAyah, at: number) => at >= ayah.words.length ? '۝' : `${ayah.roots?.[at] ?? ''}:${ayah.words[at].replace(/[\u064B-\u065F\u0670\u06D6-\u06EDـ]/g, '')}`;
 
-/** The trees a quiz may ask, and how to turn one into a question; building a question costs time, so callers build only what they ask. */
 export function branchQuestionPool(all: BranchAyah[], range: JuzRange | null = null, supplied?: (TreeGroup & { sources?: QuizSource[]; cited?: boolean })[]) {
   const ayat = range ? all.filter(entry => inJuzRange(entry.key, range)) : all;
   const byKey = new Map(ayat.map(entry => [entry.key, entry]));
-  // Supplied trees keep only their places inside the range.
   const trees = supplied ? supplied.map(group => ({ ...group, occurrences: group.occurrences.filter(occurrence => byKey.has(occurrence.key)) })) : buildTreeGroups(ayat);
-  // Built as the branches tab builds the same tree (createTreePresenter, the owner's curated ends), so a quiz tree is the tree.
   const present = createTreePresenter(ayat, true, !range);
-  // A book's tree keeps to the ayat the book names, never reading on into the next (owner, 2026-11-20; groupPresentation).
   const presentBook = createTreePresenter(ayat, true, false);
   const candidates = trees.filter(group => !group.family && new Set(group.occurrences.map(occurrence => occurrence.key)).size >= 2 && new Set(group.occurrences.map(occurrence => occurrence.key)).size <= MAX_BRANCHES && new Set(group.occurrences.map(occurrence => nextClass(byKey.get(occurrence.key)!, occurrence.end))).size >= 2);
   const levels = new Map<TreeGroup, Difficulty>();
-  /** A tree's difficulty, from its whole ayat. */
   const level = (group: TreeGroup) => {
     let found = levels.get(group);
     if (!found) levels.set(group, (found = levelOf(treeScore([...new Set(group.occurrences.map(occurrence => occurrence.key))].map(key => byKey.get(key)!.words)))));
@@ -86,24 +79,15 @@ export function branchQuestions(all: BranchAyah[], range: JuzRange | null = null
   return candidates.flatMap(group => build(group) ?? []);
 }
 
-/**
- * A harder quiz (more answers per tree) picks bigger trees: trees with at least `leaves` leaves first, then the
- * biggest of the rest. Until each tree has its own difficulty, size stands in for it. Keeps the order otherwise.
- */
 export function biggerFirst<T>(items: T[], leaves: number, size: (item: T) => number): T[] {
   return [...items.filter(item => size(item) >= leaves), ...items.filter(item => size(item) < leaves).sort((a, b) => size(b) - size(a))];
 }
 
 export type AskedBranchQuestion = BranchQuestion & { asked: number[] };
 
-/**
- * A quiz of tree questions only, built on the device: random trees from the pool, of the chosen difficulty first, each with
- * `leaves` of its leaves to type. Only the trees it asks are built.
- */
 export function branchQuiz(pool: ReturnType<typeof branchQuestionPool>, length: number, leaves: number, random: Random, difficulty: Difficulty = DEFAULT_DIFFICULTY): AskedBranchQuestion[] {
   const picked: AskedBranchQuestion[] = [];
   const ayat = (group: TreeGroup) => new Set(group.occurrences.map(occurrence => occurrence.key)).size;
-  // The chosen level first; within each level, trees big enough for the leaves asked first.
   for (const group of byDifficulty(biggerFirst(shuffle(pool.candidates, random), leaves, ayat), difficulty, pool.level)) {
     if (picked.length >= length) break;
     const question = pool.build(group);

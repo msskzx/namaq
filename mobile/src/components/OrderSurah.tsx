@@ -15,15 +15,9 @@ import IconButton from '@/ui/IconButton';
 import { CardWithRow } from '@/ui/Card';
 import { FEATURE_ICON } from '@/components/featureIcons';
 
-/**
- * The surah-order page's pieces (owner, 2026-11-13), shared with the quizzes that order surahs: a surah's card (its opening
- * ayat and al-Biqa'i's aim) and the link between two surahs (al-Suyuti's words), all quoted from the books with their pages.
- */
 let surahs: OrderSurah[] | null = null;
-/** Every surah's card, built once when first asked for (the openings take the Quran's pages). */
 export const orderSurahList = () => (surahs ??= orderSurahs(ayahMushafWords, num));
 
-/** A quote's book as the line under it (owner 2026-11-20): its page and full title in the line's sheet. */
 function Source({ cite, palette }: { cite: Cite; palette: Palette }) {
   const source = [orderSource(cite, num)];
   return <SourceLine named={source} sources={source} palette={palette} />;
@@ -31,7 +25,6 @@ function Source({ cite, palette }: { cite: Cite; palette: Palette }) {
 
 const quote = (palette: Palette) => ({ color: palette.ink, fontSize: 17, lineHeight: 31, textAlign: 'justify' as const, writingDirection: 'rtl' as const });
 
-/** A book's words with the Quran it quotes set from the mushaf's page words, an ayah's number where a quote runs past its end. */
 function BookWords({ runs, palette, style }: { runs: QuoteRun[]; palette: Palette; style?: TextStyle }) {
   return (
     <Text style={[quote(palette), style]}>
@@ -54,9 +47,7 @@ function PairAyah({ ayah, palette }: { ayah: OrderAyah; palette: Palette }) {
   );
 }
 
-/** al-Suyuti's words on what joins a surah to the one before it, and under them the two ayat each pair of his names. */
 export function LinkWords({ link, palette, barred = false }: { link: OrderLinkView; palette: Palette;
-  /** Each pair behind a line of its own (the feed card), where no line already runs beside the whole link (the page). */
   barred?: boolean }) {
   return (
     <View style={{ gap: 2 }}>
@@ -80,7 +71,6 @@ export function LinkBlock({ link, palette }: { link: OrderLinkView; palette: Pal
   );
 }
 
-/** A surah's name and number, its opening ayat and al-Biqa'i's aim: the card's inside, as the page, a sheet and the feed show it. */
 export function SurahBody({ s, palette }: { s: OrderSurah; palette: Palette }) {
   return (
     <>
@@ -108,10 +98,6 @@ export function SurahCard({ s, palette }: { s: OrderSurah; palette: Palette }) {
   );
 }
 
-/**
- * A surah's card in a sheet (owner, 2026-11-21; sketch surah-order-tray/sketch-home-dark.png): what «ابحث عن الجواب» opens
- * for a box of «رتّب سور الجزء», and what a box opens once checked, so the reader learns the surah with its sources.
- */
 export function SurahSheet({ surah, onClose, palette, top }: { surah: number | null; onClose: () => void; palette: Palette; top?: React.ReactNode }) {
   const s = surah === null ? undefined : orderSurahList().find(each => each.surah === surah);
   return (

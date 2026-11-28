@@ -1,7 +1,4 @@
-// «ما معنى؟» (owner, 2026-11-18; docs/plans/alfaz-al-quran.md): a word of an ayah and four meanings to pick from, every one
-// Ibn Qutaybah's own words in «تفسير غريب القرآن»: the right one his meaning of the word, the wrong ones his meanings of
-// other words of the same surah or the surahs beside it. Each question was read by hand and those where a wrong choice
-// could also be right were dropped (scripts/quran/meaningReview.json). After answering, each wrong choice names its word.
+// see docs/plans/alfaz-al-quran.md
 import gharib from '../data/quran/gharib';
 import corpus from '../quran/quranText/corpus';
 import type { BranchAyah } from '../quran/branches';
@@ -19,7 +16,6 @@ export const MEANING_NAME = 'ما معنى؟';
 let ayat: Map<string, BranchAyah> | undefined;
 const ayatByKey = () => (ayat ??= new Map((corpus.ayat as BranchAyah[]).map(ayah => [ayah.key, ayah])));
 
-/** The ayah an entry asks about and the mushaf words it quotes there. */
 function placeOf(entry: GharibEntry) {
   const [ayah, from, to] = entry[4][0];
   const key = `${entry[0]}:${ayah}`;
@@ -38,7 +34,6 @@ function question(asked: number, others: number[], random: Random): ChoiceQuesti
   return {
     key: `${MEANING}:${asked}`,
     family: MEANING,
-    // The words asked are coloured in the ayah below, in the mushaf's font, so the prompt does not copy them in the text font.
     promptArabic: 'ما معنى ما لُوِّن من الآية؟',
     quran: place.words,
     number: place.ayah,
@@ -48,25 +43,16 @@ function question(asked: number, others: number[], random: Random): ChoiceQuesti
     ayahKey: place.key,
     look: { view: 'word', key: place.key, word: place.from },
     explains,
-    // His meaning of the asked word; each wrong choice names its own word above (explains).
     sources: [{ book: GHARIB_BOOK, author: 'ابن قتيبة', at: `ص ${num(entry[1])}`, quote: gharib.meanings[asked], url: gharibPage({ id: entry[2] }) }],
     evidence: { claimKeys: [] },
   };
 }
 
-/**
- * The questions whose word is in the scope, in random order; the wrong meanings' words too (owner, 2026-11-19: a quiz on
- * juz 30 offers nothing from juz 29), as each question's choices were read by hand and are not swapped.
- */
 function candidates(scope: ChoiceScope, random: Random) {
   const inScope = filteredAyat(ayatByKey(), scope.filters, scope.range);
   return shuffle(gharib.questions.filter(question => question.every(at => inScope.has(placeOf(gharib.entries[at]).key))), random);
 }
 
-/**
- * Not asked: a meaning the ayah already says beside its word («فرات» is «العذب» in «هذا عذب فرات»، «قبس» is «النار» after
- * «آنست نارا»; owner, 2026-11-19: no question holds its answer). Worked out once a question.
- */
 const told = new Map<number, boolean>();
 const tellsItself = (row: number[]) => {
   let found = told.get(row[0]);

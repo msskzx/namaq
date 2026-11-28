@@ -11,7 +11,6 @@ const SHOWN = 5;
 
 type ListProps = { value: number; onPick: (value: number) => void; max: number; min?: number; nameOf?: (n: number) => string; palette: Palette; shown?: number };
 
-/** The scrolling list a picker drops down, opened on the current number. */
 export function NumberList({ value, onPick, max, min = 1, nameOf, palette, shown = SHOWN }: ListProps) {
   const items = Array.from({ length: max - min + 1 }, (_, i) => min + i);
   const index = Math.max(0, Math.min(items.length - 1, value - min));
@@ -34,11 +33,6 @@ export function NumberList({ value, onPick, max, min = 1, nameOf, palette, shown
   );
 }
 
-/**
- * A number chosen from a list that drops down under the field, so the keyboard never opens.
- * Each row can carry what the number means (a surah's name, where a juz starts).
- * With `open` and `onOpen` the parent holds the open state and draws the list itself (full width, under a pair of pickers).
- */
 export default function NumberPicker({ value, onChange, max, min = 1, label, nameOf, palette, open: shownOpen, onOpen }: {
   value: number; onChange: (value: number) => void; max: number; min?: number; label: string;
   nameOf?: (n: number) => string; palette: Palette; open?: boolean; onOpen?: (open: boolean) => void;

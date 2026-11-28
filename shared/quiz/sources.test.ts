@@ -1,6 +1,3 @@
-// The guard on owner's rule (2026-11-19, "every quiz shows its references"): every question of every kind, and every
-// tree, says where its answer comes from. Every kind in CHOICE_KINDS is run whole, so a new kind is checked the day it is
-// registered.
 import { describe, expect, it } from 'vitest';
 import { CHOICE_KINDS } from './kinds';
 import { seededRandom } from './feedQuiz';
@@ -11,7 +8,6 @@ import corpus from '../quran/quranText/corpus';
 import type { BranchAyah } from '../quran/branches';
 
 const ALL = { range: null, filters: {} };
-/** A source a reader can find: a book, and where in it. */
 const findable = (source: QuizSource) => !!source.book.trim() && !!source.at?.trim();
 
 describe('every quiz question cites where its answer comes from', () => {
@@ -29,7 +25,6 @@ describe('every quiz question cites where its answer comes from', () => {
       const [mushaf, ...books] = tree.sources;
       expect(mushaf.book).toBe(MUSHAF_BOOK);
       for (const branch of tree.branches) for (const ayah of branch.ayat) expect(mushaf.at).toContain(ayahPlace(ayah.key));
-      // Quiz trees are the books' pairs only (owner, 2026-11-19), so each has a book's entry.
       expect(books.length, tree.key).toBeGreaterThan(0);
       expect(books.every(findable), tree.key).toBe(true);
     }
@@ -40,7 +35,6 @@ describe('how a reference is written', () => {
   it('names the mushaf by its ayat on a card\'s line, and a book by its name and author (owner, 2026-11-20)', () => {
     const groups = referenceGroups([{ book: 'تيسير الكريم الرحمن', author: 'السعدي', at: 'ص ٩٣٧' }, mushafSource('112:3', 604)]);
     expect(groups.map(group => group.title)).toEqual([`المصحف · ${ayahPlace('112:3')}`, 'تيسير الكريم الرحمن · السعدي']);
-    // Opened, the mushaf names its printing and the page.
     expect(groups[0].lines.map(line => line.text)).toEqual([MUSHAF_BOOK, `${ayahPlace('112:3')}، ص ٦٠٤`]);
   });
 

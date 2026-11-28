@@ -4,32 +4,18 @@ import { FLOW_LINE } from '@shared/quran/quranText/flow';
 
 export { VIDEO_TYPES } from '@shared/video/recorder';
 
-/** A box's words and labels, as the video draws them. */
 export type SceneText = { size: number; words: { text: string; color: string }[]; header?: string; footer?: string; muted?: boolean; bare?: boolean; keys?: string[];
-  /** Each label and run of words where the app laid it out in the box; without them the words are centred in the box. */
   parts?: ScenePart[] };
-/** A label (a reference, `rule` when a line runs under it, `tab` on a tab over the box's edge) or the box's words, at its place in the tree, in tree points. */
 export type ScenePart = { x: number; y: number; w: number; h: number; size: number; label?: string; align?: 'center' | 'right'; rule?: boolean;
-  /** A label on a tab over the box's edge, outlined as the box is: 'dashed' on a surrounding ayah's box. */
   tab?: boolean | 'dashed';
   words?: { text: string; color: string }[]; lineHeight?: number;
-  /** A braid's strand: its outline, round at 10, in the rule colour (its words and references are parts of their own). */
   frame?: boolean;
-  /** The lines into (`join` false) or out of a braid, one per strand, as BranchTree's BraidEdge draws them. */
   braid?: { count: number; join: boolean } };
 export type SceneBox = SceneText & { id: string; x: number; y: number; w: number; h: number };
-/** A connector from a box to one in its fan; `back` fans open before the root (words and ayat before the phrase). */
 export type SceneEdge = { from: string; to: string; back: boolean };
-/** The drawn tree, measured in its own points. */
 export type TreeScene = { width: number; height: number; down: boolean; boxes: SceneBox[]; edges: SceneEdge[] };
 
-/** A vertical story frame, as Instagram and WhatsApp status show it. */
 export const FRAME = { width: 1080, height: 1920 };
-/**
- * Where the tree sits in the frame (scaled to fill its middle, centred), and each connector's corners in tree points:
- * out of the parent's side (or foot, top down), along the spine, into the child, matching BranchTree's stub and elbow.
- * Plain JavaScript, since the recorder runs it inside a web view (the phone's engine cannot hand a function's source over).
- */
 const GEOMETRY = String.raw`
 // BranchTree's measures: the stub out of a box (14) meets the spine's 2-point line at its middle; the first and last child's
 // lines curve into the spine with a radius of 10. Boxes are round at 14 on every corner, as CARD.
@@ -57,34 +43,20 @@ function edgePath(from, to, down, back) {
 type Point = [number, number];
 type Area = { x: number; y: number; width: number; height: number };
 type Geometry = { placeTree: (scene: Pick<TreeScene, 'width' | 'height'>, area?: Area) => { scale: number; x: number; y: number }; edgePath: (from: SceneBox, to: SceneBox, down: boolean, back: boolean) => Point[] };
-/** The recorder's geometry, run here for the tests. */
 export const geometry = (): Geometry => new Function(`${GEOMETRY}; return { placeTree: placeTree, edgePath: edgePath };`)();
 
-/** The app's colours; `lit` is a box on the lit path, the path's blue over the paper as BranchTree blends it. */
 export type Look = { paper: string; ink: string; muted: string; rule: string; accent: string; path: string; green: string; deep: string; card: string; lit: string; font: string; ui: string; logo: string;
-  /** The read-along's highlight, as the app's: the word read on it. */
   highlight?: string; onHighlight?: string };
-/**
- * An ayah of the tree as the video's chip and card show it, as the matrix's ayah card does in the app: the chip's surah and number,
- * the card's surah name and «الآية …» line, and its words coloured as the matrix colours them, each ayah's number at its end.
- */
 export type VideoAyah = { key: string; chip: string; name: string; label: string; words: { text: string; color: string; end?: boolean; id?: string }[] };
 export type VideoInput = { scene: TreeScene; beats: Beat[]; look: Look; speed: number; ask: boolean; timer: number; types: string[]; ayat: VideoAyah[] };
 
 
-/**
- * The page that records the video: it grows the tree on a canvas with the beats the studio plays, records it,
- * and posts the file back as base64 (to the app's WebView, or to the web build's parent page).
- * Plain JavaScript in a string, since it runs inside a web view.
- */
-/** What the recorder page says back, checked: a finished video (base64 of a video type) or a failure, an empty recording included; anything else is nothing. */
 export type RecorderMessage = { type: 'video'; data: string; mime: string } | { type: 'error' | 'warning'; reason: string };
 export function readRecorderMessage(text: string): RecorderMessage | null {
   let parsed: unknown;
   try { parsed = JSON.parse(text); } catch { return null; }
   if (!parsed || typeof parsed !== 'object') return null;
   const { type, data, mime, message } = parsed as { type?: unknown; data?: unknown; mime?: unknown; message?: unknown };
-  // A recording with no data is a failed one: there is nothing to share.
   if (type === 'error') return { type: 'error', reason: typeof message === 'string' && message ? message : 'the recorder failed without a message' };
   if (type === 'video' && data === '') return { type: 'error', reason: 'the recording is empty' };
   if (type === 'warning' && typeof message === 'string') return { type, reason: message };

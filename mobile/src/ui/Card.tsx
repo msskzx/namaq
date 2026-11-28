@@ -14,57 +14,31 @@ import { InsideCard, RowSlot, type Slot } from '@/ui/cardContext';
 
 export { OutsideCard, useCardRow, useInsideCard } from '@/ui/cardContext';
 
-/**
- * A feature's own buttons (a quiz's hint, a checked tree's save and share): in the row under the card when the card has one
- * (a feed post, owner 2026-11-18 and 2026-11-19: buttons sit under the card, never in it), else where they are drawn.
- */
 export function UnderCard({ children }: { children: React.ReactNode }) {
   const slot = useContext(RowSlot);
   const id = useId();
-  // Each render hands the row the buttons as they are now; the card's content does not draw again for it (same elements).
   useLayoutEffect(() => { slot?.set(id, children); });
   useLayoutEffect(() => () => slot?.set(id, null), [slot, id]);
   return slot ? null : <>{children}</>;
 }
 
-/** What a feature hands up with `UnderCard`, by id, and the slot that takes it. */
 function useLifted() {
   const [lifted, setLifted] = useState<[string, React.ReactNode][]>([]);
   const slot = useMemo<Slot>(() => ({ set: (id, node) => setLifted(now => keyed(now, id, node)) }), []);
   return [lifted, slot] as const;
 }
 
-/** In the sheet that shows a capped card whole, the card's references stay on the source line at the sheet's foot. */
 const NO_SOURCES = { set: () => {} };
 
-/** How tall the fade at the foot of a capped card is. */
 const FADE = 72;
 
-/**
- * A card with the row of buttons under it (the feed post's shape): `row` is the post's own buttons, after what its content
- * hands up with `UnderCard`. The row starts on the right, as across the app, and the «⋯» of `menu` sits alone at its far left.
- * With `cap`, content taller than CARD_CAP_SHARE of the screen stops there with a fade (owner, 2026-11-20). The open button
- * (`lead`) opens the item's page, where it shows whole; a card with no page gets the one open button (ui/OpenButton), which
- * opens it whole in a sheet with the same buttons and source line at its foot (owner, 2026-11-22: one open button, no
- * «اقرأ كاملًا» link). Every feed card and every
- * section of a page (owner, 2026-11-20: one look).
- */
 export function CardWithRow({ lead, row, menu, cap = false, source, sourceLine, bar, children, ...card }: Omit<React.ComponentProps<typeof Card>, 'children'> & {
-  /** The button that opens the item in its own reader, first in the row before the card's own tools (owner 2026-11-20). */
   lead?: React.ReactNode;
   row?: React.ReactNode;
-  /** The choices of the «⋯» alone at the row's far left (owner 2026-11-20: «ليس من اهتماماتي»); none, no «⋯». */
   menu?: MoreItem[];
-  /** Content that can run long stops at CARD_CAP_SHARE of the screen, the rest one tap away in a sheet. */
   cap?: boolean;
-  /** The card's sources, named on the line under its buttons (owner 2026-11-20); a `Reference` inside the card joins the sheet. */
   source?: Source[];
-  /**
-   * Draws the source line (ui/SourceLine.tsx unless given): `named` are the card's own sources, or what its content handed
-   * up when it gives none; `all` are both, for the sheet.
-   */
   sourceLine?: (named: Source[], all: Source[]) => React.ReactNode;
-  /** A bar of the feature's own on a line above the row (recite mode's bar, on the recall card). */
   bar?: React.ReactNode; children: React.ReactNode }) {
   const [lifted, slot] = useLifted();
   const [liftedWhole, slotWhole] = useLifted();
@@ -79,7 +53,6 @@ export function CardWithRow({ lead, row, menu, cap = false, source, sourceLine, 
   const [whole, setWhole] = useState(false);
   const { palette } = card;
   const inside = useContext(InsideCard);
-  // The feature's bar has a line of its own, at its full size, with the card's buttons on the line under it (owner, 2026-11-23).
   const buttonRow = (handedUp: [string, React.ReactNode][], more?: MoreItem[], first: React.ReactNode = lead) => (bar || first || row || handedUp.length > 0 || !!more?.length) && (<>
     {bar && <View style={{ flexDirection: 'row', justifyContent: 'flex-start', marginTop: 4 }}>{bar}</View>}
     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', flexWrap: 'wrap', gap: 8 }}>
@@ -88,11 +61,8 @@ export function CardWithRow({ lead, row, menu, cap = false, source, sourceLine, 
     </View>
   </>);
   const named = own.length ? own : inner;
-  // Drawn inside another card (a page's section in a quiz's look-up, a feed post): no second card and no second row; its
-  // buttons join that card's row and its books that card's line, or show as collapsed references where it has none.
   if (inside) return <>{children}<UnderCard>{lead}{row}</UnderCard>{own.map(given => <Reference key={given.line} title={given.line} quotes={given.quotes} links={given.links} places={given.places} editions={given.editions} palette={palette} />)}</>;
   const sources = own.length + inner.length > 0 && (sourceLine ? sourceLine(named, [...own, ...inner]) : <SourceLine named={named} sources={[...own, ...inner]} palette={palette} />);
-  // One block, so a page's gaps part its sections, not a card from its own row and line.
   return (
     <View style={{ gap: 4 }}>
       <SourceSlotContext.Provider value={sourceSlot}>
@@ -125,7 +95,6 @@ export function CardWithRow({ lead, row, menu, cap = false, source, sourceLine, 
   );
 }
 
-/** A list of entries by id, with one set (a new one last), changed in place or (null) taken out; the same list when nothing changes. */
 function keyed<T>(now: [string, T][], id: string, value: T | null): [string, T][] {
   const rest = now.filter(([at]) => at !== id);
   if (value === null) return rest.length === now.length ? now : rest;
@@ -133,41 +102,22 @@ function keyed<T>(now: [string, T][], id: string, value: T | null): [string, T][
   return at < 0 ? [...now, [id, value]] : now.map(entry => (entry[0] === id ? [id, value] : entry));
 }
 
-/**
- * The one card (owner: round 14, one card colour, a rule border, no card in a card): screens put their content in it and
- * never draw a box of their own. With `onPress` the whole card is one button (a scroll over it never presses, ui/Tap)
- * and dims while pressed; without it, it is a plain box, so a screen reader reaches the buttons inside it.
- * `style` is for the card's place only (width, height, flex, alignment), never for its look.
- */
-/** A card's room inside its frame, unless it says otherwise. */
 export const CARD_PAD = 14;
 
 export default function Card({ palette, pad = CARD_PAD, gap, spine = false, picked = false, dashed = false, outline, faded = false, clip = false, node = false, style, children, testID,
   onPress, onLongPress, onLayout, ref, accessibilityRole, accessibilityLabel, accessibilityState }: {
   palette: Palette;
-  /** Room inside the card: 14, 0 for content that runs to its edges (a mushaf slice, a list of rows), or [top and bottom, sides] for rows of text. */
   pad?: number | [number, number];
-  /** The one picked among cards side by side (a place on the map, a paragraph): an ink border (same width, so nothing moves). */
   picked?: boolean;
   gap?: number;
-  /** A thick start edge, like a book's spine (the saved and forgotten shelves). */
   spine?: boolean;
-  /** A dashed border: an invitation, not content yet («ما أحفظه»). */
   dashed?: boolean;
-  /** A coloured border and no fill, for a card that calls (an unfinished quiz). */
   outline?: string;
-  /** Dimmed: a card that cannot open yet. */
   faded?: boolean;
-  /** Clip what runs past the round corners. */
   clip?: boolean;
-  /**
-   * A box of a drawing (a narrator in an isnad, a book in «من أخرجه»): part of the drawing, not a card, so it keeps its frame
-   * inside a card (owner, 2026-11-20: the isnad is boxes joined by lines).
-   */
   node?: boolean;
   style?: StyleProp<ViewStyle>;
   children?: React.ReactNode;
-  /** Finds the card in a UI test (a feed post's card is `feed-card`). */
   testID?: string;
   onPress?: (event: GestureResponderEvent) => void;
   onLongPress?: (event: GestureResponderEvent) => void;
@@ -177,7 +127,6 @@ export default function Card({ palette, pad = CARD_PAD, gap, spine = false, pick
   accessibilityLabel?: string;
   accessibilityState?: { selected?: boolean; disabled?: boolean; expanded?: boolean };
 }) {
-  // A card in a card draws flat (owner: no card in a card): no fill, no round frame, a rule above to part it from what is before.
   const inside = useContext(InsideCard);
   const look: ViewStyle = inside && !node ? {
     borderTopWidth: 1, borderColor: palette.rule, gap,

@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { fitted, REST } from './sourceFit';
 
-// Owner, 2026-11-23: a line of books names as many as fit whole, then «وغيرها», never a name cut with «…».
 describe('the books on a source line', () => {
   const names = ['سير أعلام النبلاء', 'صحيح البخاري', 'الطبقات الكبرى'];
   const widths = { 'سير أعلام النبلاء، ': 100, 'صحيح البخاري، ': 80, 'الطبقات الكبرى، ': 90, [REST]: 40 };

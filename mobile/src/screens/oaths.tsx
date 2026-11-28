@@ -30,11 +30,8 @@ const KINDS: { kind: OathKind; label: string }[] = [{ kind: 'allah', label: 'أ�
 const BUILT = { allah: buildOaths('allah', ayahMushafWords), others: buildOaths('others', ayahMushafWords) };
 const BY_ID = new Map(BUILT.allah.map(oath => [oath.id, oath]));
 
-/** A row of the list: a section's heading with its reference, or an oath's card. */
 type Row = { head: ReturnType<typeof oathSections>[number] } | { oath: OathView };
-/** What the search reads in an oath: its surah and ayah, who swears, what is sworn by, and the ayat's words. */
 const oathText = (oath: OathView) => [oathPlace(oath, num), oath.who ?? '', ...oath.by, ...oath.lines.flatMap(line => line.words.map(word => word.text))].join(' ');
-/** The rows, searched: the oaths that hold every word typed, each section's heading kept only over oaths found. */
 const rowsOf = (kind: OathKind, by: OathBy | null, query = ''): Row[] => {
   const held = (oath: OathView) => !query.trim() || holdsTerms(oathText(oath), query);
   if (kind === 'others') return BUILT.others.filter(held).map(oath => ({ oath }));
@@ -53,12 +50,10 @@ function OathCard({ oath, palette }: { oath: OathView; palette: Palette }) {
   const quotes = OATH_QUOTES[oath.id];
   return (
     <View style={{ gap: 2 }}>
-      {/* The home feed's head (owner, 2026-11-16): a bold title, a muted line under it, then the card. */}
       <View style={{ paddingHorizontal: 4 }}>
         <Text accessibilityRole="header" style={{ fontSize: 16, fontWeight: '700', color: palette.ink }}>{place}</Text>
         {oath.who && <Text style={{ color: palette.muted, fontSize: 14 }}>{oath.who}</Text>}
       </View>
-      {/* The home card's shape (owner 2026-11-20): the mushaf first in the row, share last, the books on the line. */}
       <CardWithRow palette={palette} pad={[6, 14]} source={[...(quotes ? [{ line: citesOf(quotes), quotes }] : []), ...sourcesOf([mushafSource(oath.id)])]}
         lead={<IconButton Icon={FEATURE_ICON.mushaf} label={`افتح ${place} في المصحف`} onPress={() => readAyah(oath.id)} />}
         row={<IconButton Icon={Send} label={`شارك ${place}`} onPress={() => shareOath(oath)} />}>
@@ -68,25 +63,19 @@ function OathCard({ oath, palette }: { oath: OathView; palette: Palette }) {
   );
 }
 
-/**
- * The website's /quran/oaths on the phone (owner, 2026-11-13): every oath in the Quran, Allah's or those it quotes from others,
- * the words sworn by in colour. Allah's are grouped by what He swears on, as Ibn al-Qayyim names it, and a chip keeps only those
- * sworn by one of al-Suyuti's kinds (owner, 2026-11-16). docs/plans/quran-oaths-full.md
- */
+// see docs/plans/quran-oaths-full.md
 export default function OathsScreen() {
   const palette = usePalette();
   const shrink = useShrinkOnScroll();
   const bottom = useTabBarSpace();
   const list = useRef<ComponentRef<typeof FlatList<Row>>>(null);
   const top = useRef(0);
-  // Opened at an oath (`at`, its id: the home feed's card), on its kind's tab and scrolled to it.
   const { at } = useLocalSearchParams<{ at?: string }>();
   const [kind, setKind] = useState<OathKind>(() => (BUILT.others.some(oath => oath.id === at) ? 'others' : 'allah'));
   const [by, setBy] = useState<OathBy | null>(null);
   const [query, setQuery] = useState('');
   const typed = useDeferredValue(query);
   const rows = useMemo(() => rowsOf(kind, by, typed), [kind, by, typed]);
-  // Scrolled to once per opening, not again as a search moves its row.
   const reached = useRef<string | undefined>(undefined);
   const atRow = at && reached.current !== at && !typed.trim() ? rows.findIndex(row => 'oath' in row && row.oath.id === at) : -1;
   useEffect(() => {
@@ -103,11 +92,9 @@ export default function OathsScreen() {
       <View style={{ paddingHorizontal: 16, paddingTop: 8, gap: 10 }}>
         <Tabs options={KINDS.map(option => ({ key: option.kind, label: option.label }))} value={kind} onChange={pick} palette={palette} fill />
       </View>
-      {/* The references and chips scroll with the list, as on the website, so an open reference never pins the cards down. */}
       <FlatList ref={list} data={rows} keyExtractor={row => ('head' in row ? row.head.on : row.oath.id)} onScroll={event => { top.current = event.nativeEvent.contentOffset.y; shrink(event); }} scrollEventThrottle={16}
         keyboardShouldPersistTaps="handled" keyboardDismissMode="on-drag" contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 10, paddingBottom: bottom, gap: 10 }}
         ListEmptyComponent={<Empty text="لا قسم فيه هذه الكلمات" palette={palette} />}
-        // The rows are not all drawn yet: go near it, then to it once drawn.
         onScrollToIndexFailed={({ index, averageItemLength }) => {
           list.current?.scrollToOffset({ offset: index * averageItemLength, animated: false });
           setTimeout(() => list.current?.scrollToIndex({ index, animated: false, viewOffset: 8 }), 50);
@@ -117,7 +104,6 @@ export default function OathsScreen() {
             <SourceLine key={kind} sources={[{ line: citesOf(kindQuotes(kind)), quotes: kindQuotes(kind) }]} palette={palette} />
             {kind === 'allah' && (
               <>
-                {/* Inverted in a left-to-right box, as the home shelves, so «الكل» sits on the right on every platform. */}
                 <View style={{ direction: 'ltr', marginHorizontal: -16 }}>
                   <FlatList data={[null, ...OATH_BY.map(b => b.by)]} horizontal inverted showsHorizontalScrollIndicator={false} keyExtractor={value => value ?? 'all'}
                     style={{ flexGrow: 0, flexShrink: 0 }} contentContainerStyle={{ paddingHorizontal: 16, paddingTop: 8, paddingBottom: 4, gap: 6 }}

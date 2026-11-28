@@ -45,7 +45,6 @@ describe('the battle map', () => {
     });
   });
 
-  // Owner, 2026-11-22: a year's battles on one map; places drawn on top of each other share a pin and its name.
   it('joins places too close to tell apart into one pin, each name once, and keeps the others apart', () => {
     const pins = pinsOf([
       { name: 'أحد', x: 100, y: 100 }, { name: 'المدينة', x: 104, y: 101 }, { name: 'المدينة', x: 104, y: 101 }, { name: 'حمراء الأسد', x: 160, y: 140 },
@@ -54,7 +53,6 @@ describe('the battle map', () => {
   });
 });
 
-// Owner, 2026-11-23: where places are close, their names must not cover each other.
 describe('the names on a map', () => {
   const overlap = (a: readonly number[], b: readonly number[]) => a[0] < b[2] && b[0] < a[2] && a[1] < b[3] && b[1] < a[3];
 
@@ -76,13 +74,11 @@ describe('the names on a map', () => {
   });
 
   it('lets a pin with no name (a quiz\'s choice) take only its own room, so a name beside it still shows', () => {
-    // The small pin sits just under where the name goes; a name of its own there would push the name to the other side.
     const [, named] = placeLabels([{ x: 215, y: 112, text: '', size: 16, r: 2 }, { x: 200, y: 100, text: 'دمشق', size: 16 }], 400, 300);
     expect(named?.anchor).toBe('start');
   });
 
   it('still names a town that sits under another pin\'s halo, a little further out', () => {
-    // Makkah under Nakhla's lit pin on the atlas (2026-11-24): every spot beside the town touched the halo, so its name was dropped.
     const [, town] = placeLabels([{ x: 200, y: 100, text: 'نخلة', size: 16, r: 16 }, { x: 196, y: 104, text: 'مكة', size: 14, r: 4 }], 400, 300);
     expect(town).not.toBeNull();
     expect(overlap(town!.box, [184, 84, 216, 116])).toBe(false);

@@ -4,14 +4,9 @@ import { Text } from '@/ui/Text';
 import Card from '@/ui/Card';
 import type { Palette } from '@/lib/theme';
 
-/**
- * A hub's way into one feature: the feature's icon (components/featureIcons) over its name, two to a row (the Quran tab,
- * owner 2026-11-13; the tarajim tab, 2026-11-23). `wide` lays the icon beside the name across the row, with an optional line.
- */
 export default function IconTile({ label, Icon, onPress, palette, wide = false, line }: {
   label: string; Icon: (props: LucideProps) => React.ReactNode; onPress: () => void; palette: Palette;
   wide?: boolean;
-  /** One short muted line under the name (wide tiles only). */
   line?: string;
 }) {
   if (wide) return (

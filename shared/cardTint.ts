@@ -1,5 +1,3 @@
-// Card and reading-area tint (reader pages, matrix, compare cards): one choice per light/dark mode.
-// Shared by the website (src/lib/cardTint.ts) and the phone app (mobile/src/lib/settings.ts).
 
 export const CARD_TINTS = {
   light: [
@@ -12,7 +10,6 @@ export const CARD_TINTS = {
   ],
 } as const;
 
-/** Page colours behind each mode's preview tile (the feature palette in src/app/theme.css). */
 export const MODE_PREVIEW = {
   light: { page: '#f8f6f0', ink: '#202c35', accent: '#783d49', rule: '#b9a386' },
   dark: { page: '#15191b', ink: '#edeae2', accent: '#d9a6b0', rule: '#88775f' },
@@ -20,7 +17,6 @@ export const MODE_PREVIEW = {
 
 export type CardMode = keyof typeof CARD_TINTS;
 
-/** The tint for a mode, or the first (default) one when the value is missing or unknown. */
 export function parseCardTint(mode: CardMode, value: unknown): string {
   const tints = CARD_TINTS[mode];
   return tints.some(tint => tint.key === value) ? value as string : tints[0].key;
@@ -28,11 +24,9 @@ export function parseCardTint(mode: CardMode, value: unknown): string {
 
 export const cardColour = (mode: CardMode, key: string) => CARD_TINTS[mode].find(tint => tint.key === parseCardTint(mode, key))!.color;
 
-/** The black tint turns the page, sheets and bars black too, not only the cards (owner, 2026-11-17); other tints keep the mode's own. */
 const SURFACES: Partial<Record<string, { paper: string; paperDeep: string }>> = { black: { paper: '#000000', paperDeep: '#0b0b0b' } };
 export const tintSurfaces = (mode: CardMode, key: string) => SURFACES[parseCardTint(mode, key)];
 
-/** The settings sheet's theme tiles, in order: light tints, device, dark tints. */
 export type ThemeTile = { key: string; mode: CardMode | 'system'; ar: string; en: string };
 export const THEME_TILES: ThemeTile[] = [
   ...CARD_TINTS.light.map(({ key, ar, en }) => ({ key, mode: 'light' as const, ar, en })),
@@ -40,6 +34,5 @@ export const THEME_TILES: ThemeTile[] = [
   ...CARD_TINTS.dark.map(({ key, ar, en }) => ({ key, mode: 'dark' as const, ar, en })),
 ];
 
-/** Which tile is chosen: device when following the phone, else the chosen mode's tint. */
 export const currentTile = (theme: string | undefined, tints: Record<CardMode, string>) =>
   theme === 'light' || theme === 'dark' ? parseCardTint(theme, tints[theme]) : 'device';

@@ -20,11 +20,6 @@ import { idKey, inAyat, linksOf } from './links';
 import { PEOPLE } from './tarajim';
 import { bookState } from './books';
 
-/**
- * Everything the app holds on one ayah, for its page (owner, 2026-11-22; /mnt/project-files/ayah-page/agreed.md), in the
- * page's order. Only what has something on this ayah is listed; the books the person took off the phone are left out by
- * the page, which knows them. The person's own notes come first on the page and are not here.
- */
 export type AyahSection =
   | { id: 'tafsir'; passage: NonNullable<ReturnType<typeof tafsirSadiOf>> }
   | { id: 'gharib'; entries: GharibAt[] }
@@ -36,9 +31,7 @@ export type AyahSection =
   | { id: 'opening'; card: string; title: string }
   | { id: 'oath'; oath: string; kind: OathKind; by: string[]; range: [number, number] }
   | { id: 'prophet'; slug: string; at: number; event: StoryEvent }
-  /** A sira story, with the ayat of it that hold this ayah (a story may give several sets, «نزل فيه» more than once). */
   | { id: 'sira'; story: AppStory; ayat: AppStoryAyat }
-  /** A person whose entry ties him to the ayah, with how it ties them («نزلت فيه», or named in it). */
   | { id: 'person'; slug: string; kind: string }
   | { id: 'topic'; section: number; title: string; from?: number; to?: number };
 
@@ -46,7 +39,6 @@ export type AyahSectionId = AyahSection['id'];
 
 const holds = (surah: number, ayah: number, at: { surah: number; range: [number, number] }) => at.surah === surah && ayah >= at.range[0] && ayah <= at.range[1];
 
-/** The deepest topic of the surah that holds the ayah: a section, or its part when the section is divided. */
 function topicOf(surah: number, ayah: number): Extract<AyahSection, { id: 'topic' }> | null {
   const topics = surahTopicsOf(surah);
   const section = sectionAt(surah, ayah);
@@ -57,7 +49,6 @@ function topicOf(surah: number, ayah: number): Extract<AyahSection, { id: 'topic
   return { id: 'topic', section, title: shown.title, from: shown.from, to: shown.to };
 }
 
-/** Each ayah a person's entry ties him to, with the people it ties and how, built once. */
 let byAyah: Map<string, { slug: string; kind: string }[]> | undefined;
 function personAyat() {
   if (byAyah) return byAyah;
@@ -65,7 +56,6 @@ function personAyat() {
   for (const person of PEOPLE) {
     for (const fact of person.ayat) {
       if (typeof fact.value !== 'string') continue;
-      // One section per person: an ayah he has two quotes on (al-Abbas and al-Anfal 70) is one card with both.
       const here = byAyah.get(fact.value) ?? [];
       const same = here.find(each => each.slug === person.slug);
       if (same) { if (fact.kind === 'REVEALED_ABOUT') same.kind = fact.kind; } else byAyah.set(fact.value, [...here, { slug: person.slug, kind: fact.kind }]);
@@ -74,7 +64,6 @@ function personAyat() {
   return byAyah;
 }
 
-/** What the built-in books and lists hold on the ayah; the scan walks every tree and story, so each ayah is scanned once. */
 const scanned = new Map<string, AyahSection[]>();
 function scan(key: string): AyahSection[] {
   const known = scanned.get(key);
@@ -107,18 +96,12 @@ function scan(key: string): AyahSection[] {
       if (event.segments.some(segment => holds(surah, ayah, segment))) sections.push({ id: 'prophet', slug, at, event });
     });
   }
-  // The stories and people tied to the ayah, from the one links file (shared/data/links.json).
   const links = linksOf(`ayah:${key}`);
   for (const slug of new Set(links.filter(link => link.to.startsWith('event:')).map(link => idKey(link.to)))) {
     const story = storyOf(slug);
     for (const ayat of story?.ayat.filter(each => inAyat(key, each.from, each.to)) ?? []) sections.push({ id: 'sira', story: story!, ayat });
   }
-  // A person the story itself names as the one it was revealed about is on its card, with his entry's words among its
-  // sources (screens/ayah.tsx), not on a second card.
   const named = new Set(sections.flatMap(section => (section.id === 'sira' && revealedIn(section.ayat) && section.ayat.about ? [section.ayat.about.slug] : [])));
-  // A person his entry ties to the ayah has his own section, from the entry his page shows it from (the person page's
-  // «آيات فيه»), so the two pages show the same tie both ways. The catalog's own person-to-ayah links are a second record
-  // of these ties until the data plan makes them one (/mnt/project-files/data-plan/debate.md).
   for (const { slug, kind } of personAyat().get(key) ?? []) if (!named.has(slug)) sections.push({ id: 'person', slug, kind });
   const topic = topicOf(surah, ayah);
   if (topic) sections.push(topic);
@@ -126,10 +109,6 @@ function scan(key: string): AyahSection[] {
   return sections;
 }
 
-/**
- * Everything on the ayah, in page order. Al-Kashshaf is a download the page reads itself (`readBook`), so its passage
- * comes in when it has been read; the built-in books stay in the app.
- */
 export function ayahSections(key: string, kashshaf?: KashshafData | null): AyahSection[] {
   const sections = scan(key);
   const passage = kashshaf ? kashshafAt(kashshaf, key) : null;
@@ -141,10 +120,8 @@ export function ayahSections(key: string, kashshaf?: KashshafData | null): AyahS
   return before < 0 ? [...sections, balagha] : [...sections.slice(0, before), balagha, ...sections.slice(before)];
 }
 
-/** The page's order of sections. */
 export const ORDER: AyahSectionId[] = ['tafsir', 'gharib', 'irab', 'balagha', 'qiraat', 'trees', 'compare', 'opening', 'oath', 'prophet', 'sira', 'person', 'topic'];
 
-/** The book a section reads from is on the phone (the person may take a book off; the readings and lists are built in). */
 export const sectionOn = (section: AyahSection) =>
   section.id === 'tafsir' ? bookState('sadi') === 'on'
     : section.id === 'gharib' ? bookState('gharib') === 'on'
@@ -152,7 +129,6 @@ export const sectionOn = (section: AyahSection) =>
     : section.id === 'balagha' ? (section.itqan.length > 0 && bookState('itqan') === 'on') || (!!section.kashshaf && bookState('kashshaf') === 'on')
     : true;
 
-/** The short names of what an ayah's page holds, for a saved card's line («تفسير · إعراب · قصة»), each once, in page order. */
 const SHORT: Record<AyahSectionId, string> = {
   tafsir: 'تفسير', gharib: 'معاني', irab: 'إعراب', balagha: 'بلاغة', qiraat: 'قراءات', trees: 'متشابهات', compare: 'مقارنة',
   opening: 'افتتاح', oath: 'قسم', prophet: 'قصة', sira: 'سيرة', person: 'تراجم', topic: 'موضوع',

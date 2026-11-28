@@ -16,12 +16,10 @@ import PathAyat from './PathAyat';
 import SurahChips, { CHIPS_HEIGHT, TUCK } from './SurahChips';
 import { BACK_EDGE_SLOP } from '@/lib/stackOptions';
 
-/** What the pager lends the card that has the focus, so one finger either moves the zoomed tree or the row of cards. */
 export type Lane = {
   offset: SharedValue<number>;
   width: number;
   count: number;
-  /** Called on the UI thread when a sideways swipe ends, with where the row stood when the finger came down. */
   settle: (from: number, dx: number, velocity: number) => void;
 };
 
@@ -31,53 +29,30 @@ type Props = {
   palette: Palette;
   view: Size;
   lane?: Lane;
-  /** The surrounding-ayat switch. */
   around: boolean;
-  /** The rotate button: the open tree drawn the other way from the one it picked. */
   rotated?: boolean;
   growth?: TreeGrowth;
   sceneRef?: React.MutableRefObject<(() => Promise<TreeScene | null>) | null>;
-  /** Filled with the tree as share as image draws it: the way it is shown, its lit paths kept. */
   shareRef?: React.MutableRefObject<(() => React.ReactNode) | null>;
   initialCamera?: Camera;
   onCamera?: (camera: Camera) => void;
   onTap: (ayahKeys: string[] | null, lightPath?: () => void) => void;
-  /** The buttons under each node. */
   actions?: NodeActions;
-  /** Told when a finger starts and stops moving the tree or the cards, so the lifted finger is not read as a tap. */
   onMove: () => void;
-  /** A downward swipe on a tree that is not zoomed in: the page's main action (search). */
   onPull?: () => void;
-  /** The bookmark row, drawn right under the tree so it follows it; the tree fits in the space left above it. */
   footer?: React.ReactNode;
   footHeight?: number;
-  /** The tree's surahs as chips under the bookmark row. */
   chips?: boolean;
-  /** A gesture around the card that should still see sideways drags (the tour's step swipe). */
   alongside?: GestureType;
-  /** Inside a page that scrolls up and down (the home feed): an unzoomed tree takes only sideways drags, so the page still scrolls. */
   inScroll?: boolean;
-  /**
-   * A fixed frame (owner, 2026-11-14): the tree fits a box that never changes size, the buttons, chips and ayah card sit at
-   * fixed places under it, so zooming or lighting a path moves nothing but the tree.
-   */
   fixed?: boolean;
-  /** Ayat whose paths open lit, as a search lights them (the reader's ayah in its trees sheet). */
   lit?: string[];
-  /**
-   * In a feed (home): the room under the chips for a lit path's ayat is added below by the page (`height`, asked for with
-   * `set`) instead of kept empty, so the card is short until a path is lit and the tree never changes size.
-   */
   ayatRoom?: { height: number; set: (height: number) => void;
-    /** The most room the cards take before they scroll inside: the page's own height, where the page is shorter than the screen. */
     most?: number };
-  /** The tree in a card's own frame (home), its buttons under the frame, as the compare card has them. */
   framed?: boolean;
 };
 
-/** The room the fixed frame keeps under the chips for the lit ayat; more than fit there scroll. */
 export const AYAH_SPACE = 184;
-/** The most of the screen's height a lit path's ayat take below the tree before they scroll inside. */
 const AYAH_SCREEN = 0.85;
 const AYAH_GAP = 8;
 
@@ -88,43 +63,28 @@ const SETTLE = { duration: 220 };
 const HIDDEN = { position: 'absolute', left: 0, top: 0, opacity: 0 } as const;
 
 export default function TreeCard({ piece, list, palette, view: full, lane, around, rotated = false, growth, sceneRef, shareRef, initialCamera, onCamera, onTap, onMove, onPull, footer, footHeight: rowHeight = 0, actions, chips = false, alongside, inScroll = false, fixed = false, lit, ayatRoom, framed = false }: Props) {
-  // The paths lit on this tree, as on the website: tapping a node, several at once, gone with the card.
   const card = useMemo(() => cardOf(piece, list), [piece, list]);
-  // A search lights the ayat that hold its words, when they are only some of the tree's (as on the website).
   const [pinned, setPinned] = useState(() => {
     const found = lit?.length ? lit : searchLit(card.presentation, list.query);
     return new Map<string, string[]>(found.length ? [['search', found]] : []);
   });
   const paths = useMemo<Paths>(() => ({ lit: litPaths(pinned), pinned, pin: (id, ayahKeys) => setPinned(current => togglePath(current, id, ayahKeys)) }), [pinned]);
-  // The ayat a tap lit (not a search), in the tree's order, read in full under the tree.
   const tappedKeys = useMemo(() => {
     const lit = new Set([...pinned].flatMap(([id, ayahKeys]) => id === 'search' ? [] : ayahKeys));
     return card.presentation.ayat.map(ayah => ayah.key).filter(key => lit.has(key));
   }, [pinned, card]);
   const ayahKeys = useMemo(() => card.presentation.ayat.map(ayah => ayah.key), [card]);
-  // In the studio the chips and the ayah card show for the ayah growing (owner, 2026-11-15): its card's words come with the
-  // boxes that draw them, then once the tree has grown, for the ayah whose path is lit, in full.
   const touring = !!growth?.tour && !!growth.lit;
-  // Only the fixed frame keeps room for the card while the tree grows; elsewhere the card comes with the tour, so nothing jumps.
   const growing = !!growth?.lit && (touring || fixed);
   const showChips = chips && (!growth || growing);
   const shownWords = growth && !touring ? growth.words : undefined;
-  // The fixed frame keeps the chips' whole row, since the studio's bar has no room for them to rise into.
-  // With the studio closed its bar's room is empty, so the chips and the ayah card rise into it (owner, 2026-11-15); the tree's
-  // frame keeps its size either way.
   const rise = fixed && !growth ? TUCK : 0;
   const footHeight = rowHeight + (fixed ? (chips ? CHIPS_HEIGHT : 0) : showChips ? CHIPS_HEIGHT - TUCK : 0);
   const [stripHeight, setStripHeight] = useState(0);
   const readKeys = growth ? (growing ? [growth.lit!] : []) : tappedKeys;
-  // The fixed frame's room for the lit path's ayat (owner, 2026-11-15): as tall as they are, from AYAH_SPACE up to half the frame,
-  // so a long ayah or several read whole and the tree gives up only what they need; more than that scrolls. In the studio it
-  // stays AYAH_SPACE, so the tree keeps still while the ayat take turns.
   const [ayatHeight, setAyatHeight] = useState(0);
   const { height: screen } = useWindowDimensions();
-  // When the page adds the room below (a feed, the branches tab), the cards grow the page instead (owner, 2026-11-19): the tree keeps
-  // its size, the ayat read whole and the page scrolls; only more than about a screen of them scrolls inside.
   const grown = Math.round(ayatHeight ? Math.min(ayatHeight + AYAH_GAP + 8, ayatRoom?.most ?? screen * AYAH_SCREEN) : AYAH_SPACE);
-  // In the fixed frame alone the tree gives the cards what they need, up to half the frame.
   const fitted = ayatRoom ? grown : Math.round(Math.min(Math.max(AYAH_SPACE, ayatHeight + AYAH_GAP + 8), Math.max(AYAH_SPACE, full.height * 0.5)));
   const room = growth || !readKeys.length ? AYAH_SPACE : fitted;
   const strip = fixed ? ayatRoom?.height ?? room : readKeys.length ? stripHeight : 0;
@@ -132,9 +92,6 @@ export default function TreeCard({ piece, list, palette, view: full, lane, aroun
   useEffect(() => { askRoom?.(readKeys.length ? room : 0); }, [askRoom, readKeys.length > 0, room]); // eslint-disable-line react-hooks/exhaustive-deps
   const view = useMemo(() => ({ width: full.width, height: Math.max(1, full.height - footHeight - strip) }), [full.width, full.height, footHeight, strip]);
   const surrounding = useMemo(() => around ? aroundOf(card.presentation) : undefined, [around, card]);
-  // The tree opens the way it fits bigger, as on the website. Its sizes both ways are known ahead (or kept from the
-  // first time it opened), so the tree shows at once; a tree with no sizes yet shows sideways while both ways are
-  // measured out of sight, then turns if top down fits better.
   const [measuredSizes, setMeasuredSizes] = useState<Sized | undefined>(undefined);
   const sizes = useMemo(() => sizesOf(piece.id, card.presentation, around), [piece, card, around, measuredSizes]); // eslint-disable-line react-hooks/exhaustive-deps
   const own: Direction = sizes ? pickDirection({ width: sizes[0], height: sizes[1] }, { width: sizes[2], height: sizes[3] }, view) : 'side';
@@ -212,12 +169,10 @@ export default function TreeCard({ piece, list, palette, view: full, lane, aroun
       scheduleOnRN(onMove);
     })
     .onUpdate(event => {
-      // The web build starts the pan before the finger has moved, so the way it goes is read from the first move.
       if (mode.value === 'pending') {
         if (Math.max(Math.abs(event.translationX), Math.abs(event.translationY)) < 8) return;
         mode.value = Math.abs(event.translationX) >= Math.abs(event.translationY) ? 'swipe' : 'none';
         if (mode.value === 'swipe' && lane) {
-          // A swipe that starts while the row is still settling carries on from where it is.
           cancelAnimation(lane.offset);
           from.value = Math.round(lane.offset.value / lane.width);
         }
@@ -225,7 +180,6 @@ export default function TreeCard({ piece, list, palette, view: full, lane, aroun
       if (mode.value === 'move') {
         camera.value = clampCamera({ s: start.value.s, x: start.value.x + event.translationX, y: start.value.y + event.translationY }, contentSize.value, viewSize.value);
       } else if (mode.value === 'swipe' && lane) {
-        // Arabic order: the next tree waits on the left, so a drag to the right brings it in.
         const forward = event.translationX > 0;
         const open = forward ? from.value + 1 < lane.count : from.value > 0;
         lane.offset.value = from.value * lane.width + (open ? event.translationX : event.translationX / 4);
@@ -244,7 +198,6 @@ export default function TreeCard({ piece, list, palette, view: full, lane, aroun
       mode.value = 'idle';
     });
 
-  // On the ayah card only a sideways drag is taken, as a swipe to the next tree; up and down stay the page's.
   const cardSwipe = Gesture.Pan()
     .activeOffsetX([-10, 10]).failOffsetY([-10, 10])
     .onStart(() => {
@@ -270,14 +223,11 @@ export default function TreeCard({ piece, list, palette, view: full, lane, aroun
   else pan.minDistance(8);
   if (alongside) pan.simultaneousWithExternalGesture(alongside);
   const gesture = Gesture.Simultaneous(pinch, pan);
-  // Under the tree's last row: it moves with the tree when it is zoomed or moved.
   const foot = useAnimatedStyle(() => ({ transform: [{ translateY: camera.value.y + contentSize.value.height * camera.value.s }] }));
   const style = useAnimatedStyle(() => ({
     transform: [{ translateX: camera.value.x }, { translateY: camera.value.y }, { scale: camera.value.s }],
   }));
 
-  // The fixed frame's ayah card is outside the tree's gestures, so a drag up or down on it scrolls the page (or the cards) and never
-  // moves a zoomed tree; a sideways swipe on it still brings the next tree (owner, 2026-11-19).
   const ayahCard = fixed && (
     <GestureDetector gesture={cardSwipe} touchAction="pan-y">
     <View style={{ position: 'absolute', left: 0, right: 0, top: view.height + footHeight + AYAH_GAP - rise, direction: 'ltr', opacity: content ? 1 : 0 }}>

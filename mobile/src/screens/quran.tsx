@@ -15,7 +15,6 @@ import Empty from '@/ui/Empty';
 import { SearchResults, useAppSearch } from '@/components/SearchResults';
 import { FEATURE_ICON } from '@/components/featureIcons';
 
-/** The Quran button's tools; each opens inside the tab, with a back arrow to this grid. */
 export const QURAN_TILES: { route: string; label: string; Icon: (props: LucideProps) => React.ReactNode }[] = [
   { route: '/read', label: 'المصحف', Icon: FEATURE_ICON.mushaf },
   { route: '/branches', label: 'متشابهات القرآن', Icon: FEATURE_ICON.trees },
@@ -31,24 +30,16 @@ export const QURAN_TILES: { route: string; label: string; Icon: (props: LucidePr
   { route: '/order', label: 'ترتيب السور', Icon: FEATURE_ICON.order },
 ];
 
-/** A tool's tile; it opens the tool inside the tab. */
 const ToolTile = ({ tile: { route, label, Icon }, palette }: { tile: (typeof QURAN_TILES)[number]; palette: Palette }) => (
   <IconTile label={label} Icon={Icon} palette={palette} onPress={() => toTab(route as Parameters<typeof toTab>[0])} />
 );
 
 const loose = (text: string) => normalizeWord(text).replace(/\s+/g, ' ').trim();
 
-/** The tools whose name holds what is typed, hamza, alif and ta marbuta forms forgiven («بلاغه» finds «مصطلحات البلاغة»). */
 export const toolsNamed = (query: string) => { const typed = loose(query); return typed ? QURAN_TILES.filter(tile => loose(tile.label).includes(typed)) : []; };
 
-/** The adhkar are not of the Quran: the home search finds them. */
 const quranKind = (kind: SearchKind) => !['adhkar', 'person', 'battle', 'hadith'].includes(kind);
 
-/**
- * The Quran tab (owner, 2026-11-13): a grid of the Quran tools, two to a row, the mushaf first (owner, 2026-11-18: it lost its own button).
- * Search in the top bar, as on the Hadith and Tarajim tabs (owner, 2026-11-23): typing shows the tools named so, then the one search's
- * Quran groups (surah names first, owner's rule for every search), in place of the grid.
- */
 export default function QuranHub() {
   const palette = usePalette();
   const onScroll = useShrinkOnScroll();

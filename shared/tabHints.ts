@@ -1,8 +1,3 @@
-/**
- * The one-time tip a page shows the first time it opens (owner, 2026-11-13): one line naming the touch the page hides.
- * Minimal text, no counts. The app (mobile/src/components/TabHint.tsx) and the website (src/components/common/PageHint.tsx)
- * keep the pages already shown under HINTS_SEEN; replaying the tour clears it.
- */
 export type HintId = 'read' | 'branches' | 'compare' | 'prophets' | 'utilities';
 
 export const HINT_IDS: HintId[] = ['read', 'branches', 'compare', 'prophets', 'utilities'];
@@ -17,7 +12,6 @@ export const HINTS: Record<HintId, { ar: string; en: string }> = {
   utilities: { ar: 'اسحب جانبًا أو اختر من الأعلى لتنتقل بين الأدوات.', en: 'Swipe sideways, or tap the top, to move between the tools.' },
 };
 
-/** The page's tip on the website, by its path; none elsewhere. */
 export function hintOfPath(path: string): HintId | null {
   if (path === '/quran/read' || path.startsWith('/quran/read/')) return 'read';
   if (path === '/quran/branches' || path.startsWith('/quran/branches/')) return 'branches';
@@ -27,7 +21,6 @@ export function hintOfPath(path: string): HintId | null {
   return null;
 }
 
-/** The stored list, read leniently: anything unreadable counts as nothing seen. */
 export function parseHintsSeen(raw: string | null): HintId[] {
   try {
     const value: unknown = raw ? JSON.parse(raw) : [];

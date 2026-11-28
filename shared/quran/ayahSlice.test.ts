@@ -8,12 +8,10 @@ const slice = (data: MushafPage, key: string, top?: number) => ayahSlice(pageGro
 
 describe('the rows that show an ayah with what comes before it', () => {
   it('shows two lines of the ayah before, then every line of the ayah', () => {
-    // al-Kahf 10 runs over lines 6 and 7 of page 294; al-Kahf 9 starts at the end of line 4.
     expect(slice(page294 as MushafPage, '18:10', 18)).toEqual({ from: 4, to: 7, before: false });
   });
 
   it('starts where the ayah before starts when that is nearer', () => {
-    // al-Kahf 8 is all on line 4, where al-Kahf 9 starts.
     expect(slice(page294 as MushafPage, '18:9', 18)).toEqual({ from: 4, to: 5, before: false });
   });
 

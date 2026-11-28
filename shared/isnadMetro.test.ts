@@ -14,7 +14,6 @@ describe('isnad metro', () => {
     expect(metro.routes).toBe(2);
     expect(station('وَكِيعٌ').route).not.toBe(station('أَبِي').route);
     expect(station('كَهْمَسٍ').route).toBe(0);
-    // The same tabaqa stands on one level: the two narrators Muslim heard from.
     expect(station('أَبُو خَيْثَمَةَ').level).toBe(station('عُبَيْدُ اللَّهِ').level);
     expect(metro.levels[station('عُبَيْدُ اللَّهِ').level].tabaqa).toBe(10);
   });
@@ -27,7 +26,6 @@ describe('isnad metro', () => {
   it('keeps each word with the route that says it where the routes differ', () => {
     const twice = { ...isnad, edges: isnad.edges.map((edge, i) => (i === isnad.edges.length - 3 ? { ...edge, label: 'حَدَّثَنَا' } : edge)) };
     const leg = isnadMetro(twice).legs.find(each => each.words.length > 1)!;
-    // Muslim's edition prints this «عن» without vowels.
     expect(leg.words).toEqual([{ route: 0, label: 'عن' }, { route: 1, label: 'حَدَّثَنَا' }]);
   });
 

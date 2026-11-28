@@ -10,7 +10,6 @@ describe('«ما معنى؟»', () => {
   it('asks every question of the bank over the whole Quran but those whose ayah says the meaning («هذا عذب فرات»)', () => {
     const asked = new Set(meaningQuiz.questions(whole, 'medium', seeded(1)).map(question => Number(question.correctAnswer)));
     expect(asked.size).toBe(meaningQuiz.count(whole));
-    // «فرات» (al-Furqan 53, its seventh word) is «العذب», said just before it.
     const furat = gharib.questions.find(([at]) => gharib.entries[at][0] === 25 && gharib.entries[at][4][0][0] === 53 && gharib.entries[at][4][0][1] === 6)!;
     expect(furat).toBeDefined();
     expect(asked.has(furat[0])).toBe(false);
@@ -28,7 +27,6 @@ describe('«ما معنى؟»', () => {
       }
       expect(question.marked!.length).toBeGreaterThan(0);
       expect(question.marked!.every(at => question.quran![at])).toBe(true);
-      // His own words for the right choice, at his page.
       expect(question.sources).toEqual([expect.objectContaining({ book: 'تفسير غريب القرآن', quote: question.choices.find(choice => choice.value === question.correctAnswer)!.labelArabic })]);
     }
   });

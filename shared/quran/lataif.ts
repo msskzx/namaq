@@ -1,16 +1,9 @@
 import { itqanAt, itqanCredit, itqanPage, type ItqanData, type ItqanParagraph } from './itqanBalagha';
 import type { ExampleView } from './iltifat';
 
-/**
- * The lata'if page (owner, 2026-11-16; docs/plans/balagha.md): a gallery of curated examples on any topic (a turn of
- * address, a choice between near-synonyms, the kinds of a word's meanings), each drawn with a picture of its own and
- * maybe animated later. Never a complete set, unlike compare and branches; a topic that grows can get a page of its
- * own. Each topic and each example carries its reference: a scholar's own words where he gives the example (al-Suyuti
- * in al-Itqan for iltifat), otherwise the note it came with.
- */
+// see docs/plans/balagha.md
 export type LataifQuote = { text: string; cite?: string; url?: string };
 export type LataifReference = { title: string; quotes: LataifQuote[] };
-/** A topic: its name, al-Suyuti's heading for it in al-Itqan's balagha chapters, and its reference. */
 export type Topic = { name: string; heading: string; reference: LataifReference };
 
 export const TOPICS: Topic[] = [
@@ -27,15 +20,9 @@ export const TOPICS: Topic[] = [
   },
 ];
 
-/** Every example on the page so far is an iltifat; the view picks the topic once others come. */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const topicOf = (_view: Pick<ExampleView, 'key'>): Topic => TOPICS[0];
 
-/**
- * An example's reference: al-Suyuti's paragraphs under the topic's heading that quote one of its ayat, whole, each
- * with its page, then the note the example came with (it names the other books it is drawn from); with none, that
- * note alone, its first clause as the title.
- */
 export function exampleReference(view: Pick<ExampleView, 'key' | 'surah' | 'from' | 'to' | 'source'>, data: ItqanData): LataifReference {
   const topic = topicOf(view);
   const seen = new Set<string>();

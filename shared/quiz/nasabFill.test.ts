@@ -12,7 +12,6 @@ const personOf = (key: string) => people.find(p => p.slug === key.split(':')[1])
 const bare = (name: string) => bareName(boxName(name));
 const shape = (name: string) => `${/^(?:أبو|ذو|عبد|امرؤ) /u.exec(name)?.[0] ?? ''}${name.split(' ').length}`;
 
-// «أكمل النسب» (owner, 2026-11-20): the boxes of a person's nasab, every other one blank, one asked at a time.
 describe('«أكمل النسب»', () => {
   it('asks the name the nasab prints at the box, in the nominative', () => {
     expect(questions.length).toBeGreaterThan(0);
@@ -23,13 +22,11 @@ describe('«أكمل النسب»', () => {
       expect(question.boxes![k]).toBe(BOX_ASKED);
       expect(question.correctAnswer).toBe(boxName(line[k].name));
     }
-    // Abu Bakr's father stands alone in his box: «أبو قحافة», as one says it, never the genitive the line prints.
     const father = questions.find(q => q.key === 'TARAJIM_NASAB_FILL:abu-bakr-as-siddiq:1');
     expect(father?.correctAnswer).toMatch(/^أبو قحافة/u);
   });
 
   it('names the person in his own box without his fathers: they are the boxes after it', () => {
-    // Owner, 2026-11-23: «حفصة بنت عمر» then «عمر» said her father twice; her box is «حفصة».
     for (const question of questions) {
       expect(question.boxes![0], question.key).not.toMatch(/\s(?:بن|بنت)\s/u);
     }
@@ -52,17 +49,14 @@ describe('«أكمل النسب»', () => {
       const answer = bare(question.correctAnswer);
       const shown = ` ${bare(personOf(question.key).name)} `;
       expect(shown.includes(` ${answer} `), question.key).toBe(false);
-      // «أبو ذر الغفاري» is never asked «غفار».
       expect(shown.includes(` ال${answer.replace(/^ال/u, '').replace(/[هي]$/u, '')}ي `), question.key).toBe(false);
       expect(question.boxes!.some(box => sameName(bare(box), answer)), question.key).toBe(false);
       for (const choice of question.choices) expect(shape(choice.labelArabic), question.key).toBe(shape(question.correctAnswer));
     }
-    // «عمرو بن سعيد الأموي» is never asked «أمية».
     expect(questions.filter(q => /الأموي/u.test(personOf(q.key).name) && q.correctAnswer === 'أمية')).toEqual([]);
   });
 
   it('asks no father the entries disagree on', () => {
-    // Khalid's entry prints «يقظة بن كعب», al-Arqam's «يقظة بن مرة»: neither is one answer.
     const khalid = lineOf(personOf('x:khalid-ibn-al-walid'), people).map(n => bare(n.name));
     const at = khalid.indexOf(bare('كعب'));
     expect(at).toBeGreaterThan(0);

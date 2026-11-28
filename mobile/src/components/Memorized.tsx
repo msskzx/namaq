@@ -15,17 +15,12 @@ import SettingRow from '@/ui/SettingRow';
 
 const useMemorized = () => useSyncExternalStore(subscribeMemorized, readMemorized);
 
-/** How many pickers are open now: while one is, the home feed keeps what was picked before (useSettledMemorized). */
 let picking = 0;
 const pickingListeners = new Set<() => void>();
 const subscribePicking = (listener: () => void) => { pickingListeners.add(listener); return () => { pickingListeners.delete(listener); }; };
 const isPicking = () => picking > 0;
 const setPicking = (change: number) => { picking += change; pickingListeners.forEach(listener => listener()); };
 
-/**
- * What is memorized, as the home feed uses it: each tap in the picker is kept at once, but the feed takes the new pick only
- * when the picker closes, so a tap on a juz answers at once instead of drawing the feed again for each one (owner, 2026-11-23).
- */
 export function useSettledMemorized() {
   const memorized = useMemorized();
   const open = useSyncExternalStore(subscribePicking, isPicking);
@@ -34,7 +29,6 @@ export function useSettledMemorized() {
   return open ? settled : memorized;
 }
 
-/** A short line for what is picked: «القرآن كله», «الأجزاء ٢٧، ٢٨…», or a nudge while nothing is picked. */
 export function memorizedLabel(memorized: Memorized | null) {
   if (!memorized) return 'لم تختر بعد';
   if ('all' in memorized) return 'القرآن كله';
@@ -42,15 +36,10 @@ export function memorizedLabel(memorized: Memorized | null) {
   return `${memorized.unit === 'juz' ? 'الأجزاء' : 'السور'} ${names.join('، ')}`;
 }
 
-/**
- * Picking what is memorized: juz or surahs, any number of them, or the whole Quran. Each tap is kept at once, on the device only.
- * Shown in the settings sheet and in the sheet the home card opens.
- */
 export function MemorizedPicker({ palette }: { palette: Palette }) {
   const memorized = useMemorized();
   useEffect(() => { setPicking(1); return () => setPicking(-1); }, []);
   const [unit, setUnit] = useState<'juz' | 'surah'>(() => (memorized && 'unit' in memorized ? memorized.unit : 'juz'));
-  // The grid follows what is kept (another picker may have changed it); the last juz or surahs come back when «القرآن كله» is switched off.
   const last = useRef(memorized && 'unit' in memorized ? memorized : null);
   useEffect(() => { if (memorized && 'unit' in memorized) { last.current = memorized; setUnit(memorized.unit); } }, [memorized]);
   const all = !!memorized && 'all' in memorized;
@@ -111,7 +100,6 @@ export function MemorizedPicker({ palette }: { palette: Palette }) {
   );
 }
 
-/** The settings section «ما أحفظه»: what is picked (tap to change), and the two preferences that use it. */
 export function MemorizedSetting({ palette }: { palette: Palette }) {
   const memorized = useMemorized();
   const questions = useSyncExternalStore(memorizedQuestions.subscribe, memorizedQuestions.read);
@@ -127,7 +115,6 @@ export function MemorizedSetting({ palette }: { palette: Palette }) {
   );
 }
 
-/** The home card that asks once what is memorized; «اختر» opens the picker, × closes it for good (settings keep the choice). */
 export function MemorizedPrompt({ palette }: { palette: Palette }) {
   const memorized = useMemorized();
   const asked = useSyncExternalStore(subscribeMemorizedAsked, readMemorizedAsked);

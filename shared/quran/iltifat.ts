@@ -1,16 +1,13 @@
-// The iltifat page's seven examples (owner, 2026-11-13): each card draws its own picture. docs/plans/quran-within-surah.md
+// see docs/plans/quran-within-surah.md
 import { num } from './arabicNumber';
 import { normalizeWord } from './normalize';
 import type { AyahWordsOf } from './quranText/ayahWords';
 import { SURAH_NAMES } from './surahNames';
 
-/** هو (غيبة), نحن or أنا (تكلم), أنت (خطاب). */
 export type Voice = 'he' | 'we' | 'you';
 export type Range = [number, number];
-/** A phrase in the normalized words of its ayah; `within` places it when it occurs more than once. */
 export type Mark = [phrase: string, voice: Voice, within?: string];
 export type Step = { voice: Voice; label: string; at?: Range; note?: string; count?: number };
-/** Words of one ayah, from the first word of `from` to the last word of `to`; either end left out runs to the ayah's edge. */
 export type Span = { ayah: number; from?: string; to?: string };
 export type Turn =
   | { cut: string }
@@ -73,7 +70,6 @@ export const EXAMPLES: Example[] = [
 
 const find = (hay: string[], needle: string[]) => hay.flatMap((_, i) => (needle.every((w, k) => hay[i + k] === w) ? [i] : []));
 
-/** The word positions of a marked phrase; it must occur exactly once. */
 export function resolve(norm: string[], [phrase, , within = phrase]: readonly [string, unknown, string?]): number[] {
   if (phrase === '*') return norm.map((_, i) => i);
   const [outer, inner] = [within.split(' '), phrase.split(' ')];
@@ -84,7 +80,6 @@ export function resolve(norm: string[], [phrase, , within = phrase]: readonly [s
 }
 
 export type Word = { text: string; voice?: Voice };
-/** Words of one ayah; `end` is set when the line reaches the ayah's last word, where its number goes. */
 export type Line = { ayah: number; words: Word[]; end: boolean };
 export type TurnView =
   | { cut: string }
@@ -120,7 +115,6 @@ function spanLine(of: AyahWordsOf, surah: number, { ayah, from, to }: Span, mark
   return { ayah, words: voiced(of, surah, ayah, marks).slice(start, stop), end: stop === norm.length };
 }
 
-/** «٢–٧», or «٢٢» for one ayah. */
 export const rangeLabel = ({ from, to }: { from: number; to: number }) => (from === to ? num(from) : `${num(from)}–${num(to)}`);
 
 export const exampleKey = (example: { surah: number; from: number }) => `${example.surah}:${example.from}`;
@@ -149,10 +143,8 @@ export function exampleView(example: Example, of: AyahWordsOf): ExampleView {
   return { ...base, kind: 'dialog', turns };
 }
 
-/** In mushaf order. */
 export const examples = (of: AyahWordsOf): ExampleView[] => [...EXAMPLES].sort((a, b) => a.surah - b.surah || a.from - b.from).map(example => exampleView(example, of));
 
-/** The two words split into the letters they share and the letter that differs, each letter with its marks. */
 export function letterDiff(a: string, b: string): [before: string, differ: string, after: string][] {
   const letters = (word: string) => word.match(/[^ً-ٰٟۖ-ۭ࣓-ࣿ][ً-ٰٟۖ-ۭ࣓-ࣿ]*/gu) ?? [];
   const [x, y] = [letters(a), letters(b)];

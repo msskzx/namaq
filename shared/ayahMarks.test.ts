@@ -149,7 +149,6 @@ describe('forgotten word positions', () => {
     restoreMark('57:3', before);
     expect(readAyahMarks()['57:3']).toEqual(before);
     expect(Object.keys(readDueMarks(1))).toEqual(['57:3']);
-    // An ayah with no mark before «نسيتها» has none after the tick is taken back.
     markForgotten('2:255', 0);
     restoreMark('2:255', undefined);
     expect(readAyahMarks()['2:255']).toBeUndefined();

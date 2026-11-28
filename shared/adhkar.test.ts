@@ -6,7 +6,6 @@ import { SOURCES } from './sources';
 const reports = new Map(Object.entries(witness.reports));
 const grading = new Map(Object.entries(witness.grading));
 
-/** The words as printed: the parts, or the shown text with each fix undone. */
 function printed(item: Dhikr): string[] {
   if (item.content.kind !== 'text') return [];
   if (item.content.parts) return [...item.content.parts];
@@ -46,7 +45,6 @@ describe('the al-Adhkar selection', () => {
       for (const part of printed(item)) expect(report).toContain(part);
       expect(report).toContain(item.occasionQuote);
       if (item.noteQuote) expect(report).toContain(item.noteQuote);
-      // The whole report is the report itself, its number left out.
       if (item.fullReport) expect(report).toBe(`${report.split(' - ')[0]} - ${item.fullReport}`);
       if (item.virtueQuote) expect(report).toContain(item.virtueQuote);
       if (item.instructionQuote) expect(report).toContain(item.instructionQuote);
@@ -79,7 +77,6 @@ describe('the al-Adhkar selection', () => {
     const pages = new Map(Object.entries(witness.gradingPages));
     for (const item of ADHKAR) {
       for (const grade of item.grades.filter(grade => grade.rank === 'in-sahih')) {
-        // The Sahih as al-Nawawi names it, or, where Ibn Hajar answers that, his own word on who put it out.
         if (grade.citation.source === 'adhkar-nawawi') {
           expect(item.collections, `${item.id}: the Sahih al-Nawawi names`).toContain(grade.quote);
           expect(grade.reportedBy).toBe('النووي');
@@ -121,7 +118,6 @@ describe('the al-Adhkar selection', () => {
       expect(item.repeat!.scope).toBe('whole-selection');
       expect(authorReport(item.citation.report)).toContain(item.repeat!.quote);
     }
-    // Abu Bakrah's three times is his own practice, quoted in the reference: no counter.
     expect(dhikrById('morning-evening-wellness')?.repeat).toBeUndefined();
     expect(dhikrById('prayer-peace')?.repeat).toBeUndefined();
     expect(dhikrById('sleep-side')?.repeat).toBeUndefined();

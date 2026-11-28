@@ -24,24 +24,18 @@ describe('tafsirSadiOf', () => {
   it('follows the book’s own passages, not the dump’s pages', () => {
     expect(tafsirSadiOf('1:3')).toEqual(tafsirSadiOf('1:7'));
     expect(tafsirSadiOf('1:1')).toMatchObject({ from: 1, to: 7, pages: [39, 39] });
-    // 2:11 opens on its own quote, not on the end of 2:8–10 that shares its page.
     expect(tafsirSadiOf('2:11')).toMatchObject({ from: 11, to: 12 });
     expect(text('2:11')).toMatch(/^﴿وَإِذَا قِيلَ لَهُمْ لا تُفْسِدُوا/);
     expect(tafsirSadiOf('2:67')).toMatchObject({ from: 67, to: 74 });
     expect(tafsirSadiOf('5:109')).toMatchObject({ from: 109, to: 110 });
-    // An ayah he takes without a marker of its own belongs to the passage it is in.
     expect(tafsirSadiOf('2:121')).toMatchObject({ from: 120, to: 123 });
-    // A marker that starts inside a wider one cuts it: «{١ - ٥١}» then «{٣٠ - ٥١}».
     expect(tafsirSadiOf('28:35')).toMatchObject({ from: 30, to: 51 });
     expect(tafsirSadiOf('28:1')).toMatchObject({ from: 1, to: 29 });
-    // Where he splits an ayah, both halves come: 2:219's second passage («{٢١٩ - ٢٢٠}») ends on the opening words of
-    // 2:220, so 2:220 gets it too, before its own passage on the orphans.
     expect(tafsirSadiOf('2:219')).toMatchObject({ from: 219, to: 220 });
     expect(text('2:219')).toContain('الخمر');
     expect(text('2:219')).toContain('مَاذَا يُنْفِقُونَ');
     expect(tafsirSadiOf('2:220')).toMatchObject({ from: 219, to: 220, pages: [98, 99] });
     expect(text('2:220')).toMatch(/^﴿وَيَسْأَلُونَكَ مَاذَا يُنْفِقُونَ/);
-    // The quote runs on into 2:220 («… تَتَفَكَّرُونَ * فِي الدُّنْيَا وَالآخِرَةِ»).
     expect(text('2:220').split('\n')[0]).toMatch(/ \* \S+ \S+ \S+﴾\.$/);
     expect(text('2:220')).toContain('لكي تتفكروا في الدنيا وسرعة انقضائها');
     expect(text('2:220')).toContain('﴿وَيَسْأَلُونَكَ عَنِ الْيَتَامَى');
@@ -50,7 +44,6 @@ describe('tafsirSadiOf', () => {
     expect(tafsirSadiOf('30:16')).toMatchObject({ from: 11, to: 16 });
     expect(tafsirSadiOf('38:49')).toMatchObject({ from: 48, to: 54 });
     expect(tafsirSadiOf('18:34')).toMatchObject({ from: 32 });
-    // A passage that quotes the next ayah up front but stops before explaining it keeps to its own ayah.
     expect(tafsirSadiOf('4:30')).toMatchObject({ from: 30 });
     expect(tafsirSadiOf('72:2')).toMatchObject({ from: 2, to: 4 });
   });
@@ -68,14 +61,12 @@ describe('tafsirSadiOf', () => {
 
   it('has no footnote marks, page or range markers, or HTML, and no passage cut short', () => {
     for (const key of keys) expect(text(key), key).not.toMatch(/[^\n]\([٠-٩]+\)|-\[[٠-٩]+\]-|⦗|<[a-z/]|[{﴿]\s*[٠-٩]|\[…\]/);
-    // Where the dump's piece breaks off, Shamela's copy of the same edition gives the rest (scripts/quran/sadiShamela.ts).
     expect(text('3:96')).toContain('وهل بعد الطواف تداني\nوألثم منه الركن');
     expect(text('3:96')).toMatch(/انتهى كلامه رحمه الله تعالى\.$/);
     expect(tafsirSadiOf('3:96')).toMatchObject({ pages: [138, 141] });
     expect(text('12:110')).toMatch(/تم تفسير سورة يوسف وأبيه وإخوته عليهم الصلاة والسلام، والحمد لله رب العالمين\.$/);
     expect(text('48:29')).toMatch(/وهذا آخر تفسير سورة الفتح ولله الحمد والمنة$/);
     expect(text('48:29')).not.toContain('بقلم');
-    // A gap that was only a page break keeps the paragraph break before the next quote.
     expect(text('27:1')).toContain('السفسطة.\n﴿');
     expect(text('7:103')).toMatch(/ذنوبهم\.\s+وقال موسى/);
   });

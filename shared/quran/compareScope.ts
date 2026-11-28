@@ -1,5 +1,4 @@
 export type ScopeUnit = 'juz' | 'surah' | 'page' | 'surahs' | 'juzs';
-/** What the side pane is narrowed to: one range, or a list of chapters or juz. */
 export type CompareScope = { unit: 'juz' | 'surah' | 'page'; from: number; to: number } | { unit: 'surahs' | 'juzs'; list: number[] };
 export type SurahSpans = { juz: Record<number, [number, number]>; page: Record<number, [number, number]> };
 
@@ -8,7 +7,6 @@ const PARAMS = { juz: 'juz', surah: 'surah', page: 'page', surahs: 'surahs', juz
 
 const one = (value: string | string[] | undefined) => (Array.isArray(value) ? value[0] : value);
 
-/** The filter in the address (`juz=26-30`, `surahs=2,3`), or nothing when it is absent or invalid. */
 export function parseScope(query: Record<string, string | string[] | undefined>): CompareScope | undefined {
   for (const unit of ['juz', 'surah', 'page'] as const) {
     const match = one(query[PARAMS[unit]])?.match(/^(\d+)-(\d+)$/);
@@ -33,7 +31,6 @@ export function scopeParam(scope: CompareScope | undefined) {
 
 const overlaps = (span: [number, number] | undefined, from: number, to: number) => !!span && span[0] <= to && from <= span[1];
 
-/** A page belongs to the filter when both of its surahs fall inside it. */
 export function pageInScope(page: { a: number; b: number }, spans: SurahSpans, scope: CompareScope) {
   return [page.a, page.b].every(surah => {
     switch (scope.unit) {

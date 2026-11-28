@@ -1,11 +1,6 @@
-/**
- * Prayer times and the qibla, worked out on the device with the adhan library (adhan-js).
- * Code in shared/ imports no packages, so each side passes its own `adhan` module in.
- * The checks behind the choices below are in docs/prayer-times.md.
- */
+// see docs/prayer-times.md
 
 export type PrayerKey = 'fajr' | 'sunrise' | 'dhuhr' | 'asr' | 'maghrib' | 'isha';
-/** The five prayers; sunrise is shown only on the prayer page, faintly. */
 export const FIVE: Exclude<PrayerKey, 'sunrise'>[] = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha'];
 export const ALL: PrayerKey[] = ['fajr', 'sunrise', 'dhuhr', 'asr', 'maghrib', 'isha'];
 export const PRAYER_NAMES: Record<PrayerKey, string> = {
@@ -33,7 +28,6 @@ export const DEFAULT_PRAYER_SETTINGS: PrayerSettings = { method: 'Egyptian', han
 export const isPrayerSettings = (value: unknown): value is PrayerSettings =>
   !!value && typeof value === 'object' && isMethod((value as PrayerSettings).method) && typeof (value as PrayerSettings).hanafi === 'boolean';
 
-/** Where the times are for: the phone's location («موقعي») or a city picked from the list. */
 export type Place = { name: string; lat: number; lng: number };
 export const isPlace = (value: unknown): value is Place =>
   !!value && typeof value === 'object' && typeof (value as Place).name === 'string'
@@ -41,7 +35,6 @@ export const isPlace = (value: unknown): value is Place =>
   && Math.abs((value as Place).lat) <= 90 && Math.abs((value as Place).lng) <= 180;
 export const MY_LOCATION = 'موقعي';
 
-/** The parts of adhan used here, so shared/ needs no package. */
 type Params = {
   madhab: string;
   highLatitudeRule: string;
@@ -59,7 +52,6 @@ export type Adhan = {
 
 export type PrayerDay = Record<PrayerKey, Date>;
 
-/** Is this day in Ramadan in the Umm al-Qura calendar? null when the platform has no Hijri calendar. */
 export function inRamadan(date: Date): boolean | null {
   try {
     const format = new Intl.DateTimeFormat('en-u-ca-islamic-umalqura', { month: 'numeric' });
@@ -70,54 +62,42 @@ export function inRamadan(date: Date): boolean | null {
   }
 }
 
-/** The six times of the local day that `date` falls on. */
 export function prayerDay(adhan: Adhan, place: Place, date: Date, settings: PrayerSettings): PrayerDay {
   const coordinates = new adhan.Coordinates(place.lat, place.lng) as never;
   const params = adhan.CalculationMethod[settings.method]();
   params.madhab = settings.hanafi ? adhan.Madhab.Hanafi : adhan.Madhab.Shafi;
-  // Above 48° the default (middle of the night) puts Fajr and Isha both near 1 AM in summer; one seventh of the night is what adhan recommends.
   params.highLatitudeRule = adhan.HighLatitudeRule.recommended(coordinates);
-  // adhan adds a minute to Dhuhr for the Egyptian method; the Egyptian Survey Authority's own tables don't.
   if (settings.method === 'Egyptian') params.methodAdjustments = { ...params.methodAdjustments, dhuhr: 0 };
-  // Umm al-Qura: Isha is two hours after Maghrib in Ramadan instead of an hour and a half.
   if (settings.method === 'UmmAlQura' && inRamadan(date)) params.adjustments = { ...params.adjustments, isha: 30 };
-  // adhan reads the date's local year, month and day.
   const times = new adhan.PrayerTimes(coordinates, date, params as never);
   return Object.fromEntries(ALL.map(key => [key, times[key]])) as PrayerDay;
 }
 
-/** The next of the five prayers today, or null after Isha (the row then shades nothing). */
 export function nextPrayer(day: PrayerDay, now: Date): Exclude<PrayerKey, 'sunrise'> | null {
-  return FIVE.find(key => day[key].getTime() > now.getTime()) ?? null; // an invalid time compares false, so it is never shaded
+  return FIVE.find(key => day[key].getTime() > now.getTime()) ?? null;
 }
 
-/** The qibla's bearing from true north, in degrees clockwise. */
 export const qiblaBearing = (adhan: Adhan, place: Place) => adhan.Qibla(new adhan.Coordinates(place.lat, place.lng) as never);
 
 const DIGITS = '٠١٢٣٤٥٦٧٨٩';
 const arabic = (text: string) => text.replace(/\d/g, digit => DIGITS[Number(digit)]);
 
-/** «٥:٠٠» in the phone's own clock, twelve-hour; with `half`, «٥:٠٠ م». Done by hand: Intl differs between phones. */
 export function clock(date: Date, half = false) {
-  // Near the poles some days have no sunrise or sunset, and adhan gives no time.
   if (Number.isNaN(date.getTime())) return '—';
   const hours = date.getHours();
   const text = `${hours % 12 || 12}:${String(date.getMinutes()).padStart(2, '0')}`;
   return arabic(text) + (half ? (hours < 12 ? ' ص' : ' م') : '');
 }
 
-/** Turn from where the phone points to the qibla, in -180…180 (positive = turn right). */
 export function turnTo(heading: number, bearing: number) {
   return ((bearing - heading + 540) % 360) - 180;
 }
-/** What a screen reader says for the compass: the bearing, and which way to turn while the compass runs. */
 export function qiblaLabel(bearing: number, turn: number | null) {
   const base = `القبلة ${arabic(String(Math.round(bearing)))}° من الشمال`;
   if (turn === null) return base;
   if (Math.abs(turn) <= FACING) return `${base}، أنت متجه إليها`;
   return `${base}، استدر ${turn > 0 ? 'يمينًا' : 'يسارًا'} ${arabic(String(Math.round(Math.abs(turn))))}°`;
 }
-/** Close enough to say «أنت متجه إلى القبلة». */
 export const FACING = 5;
 
 export type HijriDay = { day: number; gregorian: Date; today: boolean };
@@ -130,18 +110,12 @@ const hijriParts = (date: Date) => {
 };
 const addDays = (date: Date, days: number) => new Date(date.getFullYear(), date.getMonth(), date.getDate() + days, 12);
 
-/**
- * The Hijri month `offset` months from today's, laid out from Saturday, with the Gregorian day under each.
- * null where the platform has no Hijri calendar.
- */
 export function hijriMonth(today: Date, offset = 0): HijriMonth | null {
   try {
     if (!new Intl.DateTimeFormat('en-u-ca-islamic-umalqura').resolvedOptions().calendar.startsWith('islamic')) return null;
     const noon = addDays(today, 0);
-    // Walk to the first day of this month, then a month at a time.
     let first = addDays(noon, 1 - hijriParts(noon).day);
     for (let step = 0; step < Math.abs(offset); step++) {
-      // A Hijri month has 29 or 30 days, so 30 days on lands in the next month, and a day back in the one before.
       const inside = addDays(first, offset > 0 ? 30 : -1);
       first = addDays(inside, 1 - hijriParts(inside).day);
     }
@@ -161,10 +135,8 @@ export function hijriMonth(today: Date, offset = 0): HijriMonth | null {
   }
 }
 
-/** Arabic digits for a day number. */
 export const dayDigits = (day: number) => arabic(String(day));
 
-/** Cities to pick when the phone's location is refused or not wanted. */
 export const CITIES: Place[] = [
   { name: 'القاهرة', lat: 30.0444, lng: 31.2357 },
   { name: 'الجيزة', lat: 30.0131, lng: 31.2089 },
@@ -243,7 +215,6 @@ export const CITIES: Place[] = [
   { name: 'سيدني', lat: -33.8688, lng: 151.2093 },
 ];
 
-/** Arabic letters folded so «اسكندرية» finds «الإسكندرية». */
 const fold = (text: string) => text.replace(/[ً-ٰٟـ]/g, '').replace(/[أإآٱ]/g, 'ا').replace(/ة/g, 'ه').replace(/ى/g, 'ي').replace(/^ال/, '').trim();
 export function searchPlaces(query: string, places: Place[] = CITIES) {
   const needle = fold(query);

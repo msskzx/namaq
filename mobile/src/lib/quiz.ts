@@ -1,5 +1,3 @@
-// The solo quiz on the phone: tree questions built on the device from the bundled متشابهات,
-// graded with the website's rules (shared/quiz), and kept so a quiz survives leaving the app.
 import corpus from '@shared/quran/quranText/corpus';
 import type { BranchAyah } from '@shared/quran/branches';
 import { branchQuestionPool, branchQuiz, type AskedBranchQuestion } from '@shared/quiz/branchQuestions';
@@ -26,18 +24,14 @@ import { orders, recited, ticks } from '@shared/quiz/choiceKinds';
 import { writeAsk } from '@shared/quiz/writeAsk';
 import { surahName } from '@shared/quran/surahNames';
 
-/** Which trees the quiz asks, with the branches tab's filters: kinds, differences, part of the Quran, saved only. */
 export type QuizList = { filters: GroupFilters; range: JuzRange | null; saved: boolean };
-/** The kinds of question a solo quiz mixes (owner, 2026-11-13): the trees and the Quran choice kinds (shared/quiz/kinds.ts). */
 export const SOLO_KINDS: QuizTopic[] = ['BRANCHES', ...CHOICE_TOPICS];
-/** `apart`: «رتّب السور» asks surahs spread apart instead of neighbours (owner, 2026-11-20). */
 export type SoloSettings = { kinds: QuizTopic[]; list: QuizList; difficulty: Difficulty; leaves: number; length: number; apart?: boolean };
 export const DEFAULT_LIST: QuizList = { filters: { categories: QUIZ_CATEGORIES }, range: null, saved: false };
 export const DEFAULT_SOLO: SoloSettings = { kinds: ['BRANCHES'], list: DEFAULT_LIST, difficulty: DEFAULT_DIFFICULTY, leaves: DEFAULT_LEAVES, length: 5 };
 
 const juz = (value: unknown, fallback: number) => Number.isInteger(value) && (value as number) >= 1 && (value as number) <= 30 ? value as number : fallback;
 
-/** A stored list, or the juz range older settings kept. */
 function cleanList(settings: Partial<SoloSettings> & { juzFrom?: number; juzTo?: number } | undefined): QuizList {
   const list = settings?.list;
   if (list && typeof list === 'object' && list.filters && typeof list.filters === 'object') {
@@ -49,7 +43,6 @@ function cleanList(settings: Partial<SoloSettings> & { juzFrom?: number; juzTo?:
   return { ...DEFAULT_LIST, range: range.from === 1 && range.to === 30 ? null : range };
 }
 
-/** Settings read back from storage or typed in: anything out of range falls back. */
 export function cleanSolo(settings: Partial<SoloSettings> & { juzFrom?: number; juzTo?: number } | undefined): SoloSettings {
   const kinds = Array.isArray(settings?.kinds) ? SOLO_KINDS.filter(kind => settings!.kinds!.includes(kind)) : [];
   return {
@@ -65,11 +58,9 @@ export function cleanSolo(settings: Partial<SoloSettings> & { juzFrom?: number; 
 type Pool = ReturnType<typeof branchQuestionPool>;
 const pools = new Map<string, Pool>();
 
-/** The trees the filters keep, as the branches tab lists them; saved only keeps just the saved ones. */
 const treesFor = (list: QuizList, bookmarks: Bookmark[]) =>
   quizTrees(list.range, { filters: list.filters, saved: list.saved ? bookmarks.filter(item => !isCompareBookmark(item)).map(item => item.id) : undefined });
 
-/** The questions the filters hold; kept for the last few filters, since working them out takes a moment on a phone. */
 function poolFor(list: QuizList, bookmarks: Bookmark[] = readBookmarks()): Pool {
   const id = JSON.stringify([list, list.saved ? bookmarks.map(item => item.id) : []]);
   let pool = pools.get(id);
@@ -84,32 +75,24 @@ function poolFor(list: QuizList, bookmarks: Bookmark[] = readBookmarks()): Pool 
 const scopeOf = (settings: Pick<SoloSettings, 'list' | 'apart'>): ChoiceScope => ({ range: settings.list.range, filters: { ...settings.list.filters, ...(settings.apart && { apart: '1' }) } });
 const kindsOf = (settings: Pick<SoloSettings, 'kinds'>) => CHOICE_KINDS.filter(kind => settings.kinds.includes(kind.id));
 
-/** How many questions the kinds hold over the filters, and the quiz lengths they fill. */
 export function availability(settings: Pick<SoloSettings, 'kinds' | 'list' | 'apart'>, bookmarks?: Bookmark[]) {
   const trees = settings.kinds.includes('BRANCHES') ? poolFor(settings.list, bookmarks).candidates.length : 0;
   const available = trees + kindsOf(settings).reduce((sum, kind) => sum + kind.count(scopeOf(settings)), 0);
   return { available, lengths: QUIZ_LENGTHS.filter(length => length <= available) };
 }
 
-/** A question of the solo quiz: a tree to complete, or one to answer from its choices. */
 export type SoloQuestion = AskedBranchQuestion | ChoiceQuestion;
 export const isTree = (question: SoloQuestion): question is AskedBranchQuestion => 'tree' in question && !!question.tree;
 export const isCompare = (question: SoloQuestion): question is ChoiceQuestion & { compare: CompareAsk } => 'compare' in question && !!question.compare;
-/** A question answered by typing: a tree's nodes or a compare card's blanks. */
 const typedIn = (question: SoloQuestion) => isTree(question) || isCompare(question);
-/** What a typed question holds before anything is typed; a choice question holds nothing until one is picked. */
 const emptyOf = (question: SoloQuestion) => isTree(question) ? emptyBranchAnswers(question) : emptyCompareAnswers(question);
 
 export type SoloRun = {
   settings: SoloSettings;
   questions: SoloQuestion[];
-  /** What was typed in each node of each tree question (given nodes hold their words); the choice picked, alone, in a choice question. */
   typed: string[][];
-  /** A recited snippet whose rest was shown, so its choices come up. */
   shown?: boolean[];
-  /** A question is checked once its answer was graded, or its answer shown. */
   checked: boolean[];
-  /** The hints shown in each question (older runs have none). */
   hints?: Hints[];
   current: number;
   submitted: boolean;
@@ -122,13 +105,11 @@ export function startSolo(settings: SoloSettings, random: Random = Math.random, 
   return { settings, questions, typed: questions.map(emptyOf), checked: questions.map(() => false), current: 0, submitted: false };
 }
 
-/** Picking a choice answers the question for good. */
 export const pick = (run: SoloRun, value: string): SoloRun =>
   run.checked[run.current] ? run : { ...run, typed: at(run.typed, run.current, [value]), checked: at(run.checked, run.current, true) };
 
 export const reveal = (run: SoloRun): SoloRun => ({ ...run, shown: run.questions.map((_, i) => i === run.current || !!run.shown?.[i]) });
 
-/** The answer as the shared scoring reads it: a tree's typed nodes, or the choice picked. */
 const answerOf = (question: SoloQuestion, typed: string[]) => typedIn(question) ? typed : typed[0];
 
 const at = <T,>(list: T[], index: number, value: T) => list.map((item, i) => i === index ? value : item);
@@ -142,7 +123,6 @@ export const setHints = (run: SoloRun, hints: Hints): SoloRun =>
 export const clearAnswers = (run: SoloRun): SoloRun =>
   run.checked[run.current] ? run : { ...run, typed: at(run.typed, run.current, emptyOf(run.questions[run.current])) };
 
-/** Something was typed in at least one asked node, so checking means something. */
 export const hasTyped = (run: SoloRun, index = run.current) =>
   isTree(run.questions[index]) ? run.typed[index].some((text, node) => isAsked(run.questions[index] as AskedBranchQuestion, node) && text.trim() !== '')
     : isCompare(run.questions[index]) ? run.typed[index].some(text => text.trim() !== '') : run.typed[index].length > 0;
@@ -151,7 +131,6 @@ export const check = (run: SoloRun): SoloRun => ({ ...run, checked: at(run.check
 
 export const goTo = (run: SoloRun, index: number): SoloRun => ({ ...run, current: Math.max(0, Math.min(run.questions.length - 1, index)) });
 
-/** Submitting grades what was typed in every question, checked or not. */
 export const submit = (run: SoloRun): SoloRun => ({ ...run, submitted: true, checked: run.checked.map((done, i) => done || hasTyped(run, i)) });
 
 export type QuestionState = 'unanswered' | 'correct' | 'partial' | 'incorrect';
@@ -172,7 +151,6 @@ export function questionState(run: SoloRun, index: number): QuestionState {
   return questionPoints(question, run.typed[index]).earned > 0 ? 'partial' : 'incorrect';
 }
 
-/** One point per asked leaf typed right; a question never checked scores nothing. */
 export function soloScore(run: SoloRun) {
   const points = run.questions.map((question, i) => run.checked[i] ? questionPoints(question, answerOf(question, run.typed[i])) : { earned: 0, total: questionPoints(question, typedIn(question) ? [] : undefined).total });
   const score = points.reduce((sum, point) => sum + point.earned, 0);
@@ -180,17 +158,11 @@ export function soloScore(run: SoloRun) {
   return { points, score, total, percent: total ? Math.round((score / total) * 100) : 0 };
 }
 
-/**
- * A party's questions built on the host's phone, as the website's /api/quiz builds them (src/lib/quiz/assemble.ts):
- * the app needs no website, so the host sends these with «ابدأ» and the party worker asks them.
- */
 export function partyQuiz(settings: PartySettings, random: Random = Math.random): { questions: PartyQuestion[]; surahNames: Record<number, string> } {
-  // The settings read back exactly as the website reads the party's request.
   const params = new URLSearchParams(quizQuery(settings));
   const range = parseJuzRange(params.get('juzFrom'), params.get('juzTo'));
   const scope = parseTreeScope(params);
   const choiceScope: ChoiceScope = { range, filters: scope.filters ?? {} };
-  // Spare trees, as the website draws: a tree sharing an ayah with one already picked is skipped, and the quiz still fills.
   const trees = settings.topics.includes('BRANCHES')
     ? branchQuiz(branchQuestionPool(corpus.ayat as BranchAyah[], range, quizTrees(range, scope)), settings.length * 3, settings.leaves, random, settings.difficulty)
     : [];

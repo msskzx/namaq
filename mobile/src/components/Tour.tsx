@@ -29,7 +29,6 @@ import { SURAH_TITLES } from '@shared/quran/surahNames';
 type Size = { width: number; height: number };
 const noop = () => {};
 
-/** One instruction at a time, where the thumb is: a small pill in the card colour with a thin terracotta edge. */
 function Pill({ text, palette }: { text: string; palette: Palette }) {
   return (
     <Animated.View entering={FadeIn.duration(500)} exiting={FadeOut.duration(200)} pointerEvents="none"
@@ -39,7 +38,6 @@ function Pill({ text, palette }: { text: string; palette: Palette }) {
   );
 }
 
-/** Fills the space it is given and tells its child how big that is, for the cards that draw to a size. */
 function Fit({ children }: { children: (size: Size) => React.ReactNode }) {
   const [size, setSize] = useState<Size | null>(null);
   const measured = (event: LayoutChangeEvent) => {
@@ -64,14 +62,12 @@ function Opening({ palette, onStart }: { palette: Palette; onStart: () => void }
   );
 }
 
-/** Adam's story map; a tapped dot shows that event's ayat right under it (as the prophets tab does). */
 function Timeline({ palette, onPick }: { palette: Palette; onPick: () => void }) {
   const prophet = useMemo(() => prophetStory('adam'), []);
   const map = useMemo(() => (prophet ? storyMap(prophet.events) : undefined), [prophet]);
   const [open, setOpen] = useState<{ event: number; surah: number }>();
   const scroll = useRef<ComponentRef<typeof ScrollView>>(null);
   const placesY = useRef(0);
-  // The ayat sit under the map, below the screen's edge: bring them up once they are drawn.
   useEffect(() => { if (open) setTimeout(() => scroll.current?.scrollTo({ y: placesY.current, animated: true }), 80); }, [open]);
   if (!prophet || !map) return null;
   const { story, events } = prophet;
@@ -85,17 +81,9 @@ function Timeline({ palette, onPick }: { palette: Palette; onPick: () => void })
   );
 }
 
-/** A flick this fast turns the step even when it moved less than a quarter of the width. */
 const FLICK = 500;
-/** The tree opens at reading size, scrolled to its right edge (the root); TreeCard keeps it inside the card. */
 const READING = { s: 1, x: -100000, y: 0 };
 
-/**
- * The first-launch tour: the opening, then the matrix of «إن المتقين في», the same ayat as a tree (tap a branch), the
- * Adam's story map, and recite on the last mushaf page. Swiping sideways or «التالي» turns the
- * step (in Arabic the next one comes from the left, so a swipe to the right moves on); «تخطَّ» ends the tour, and the
- * settings sheet plays it again.
- */
 export default function Tour({ palette, onDone }: { palette: Palette; onDone: () => void }) {
   const insets = useSafeAreaInsets();
   const [step, setStep] = useState<TourStep>('opening');
@@ -112,10 +100,6 @@ export default function Tour({ palette, onDone }: { palette: Palette; onDone: ()
   const last = at === steps.length - 1;
   const did = (which: TourStep) => setDone(current => (current[which] ? current : { ...current, [which]: true }));
 
-  // The steps sit side by side, each at its own place (step i at i widths to the left, as the next step comes from the
-  // left in Arabic), and the strip slides under the finger: dragging right pulls the next step in. Letting go past a
-  // quarter of the width (or with a flick) finishes the turn, else it springs back. Pages never move, so turning a step
-  // only moves the strip; nothing is reset and nothing jumps.
   const [width, setWidth] = useState(0);
   const offset = useSharedValue(0);
   const start = useSharedValue(0);
@@ -134,7 +118,6 @@ export default function Tour({ palette, onDone }: { palette: Palette; onDone: ()
     .onStart(() => { start.value = offset.value; })
     .onUpdate(event => {
       const x = event.translationX;
-      // Past the first or last step the page only gives a little.
       offset.value = start.value + ((x > 0 && !hasNext) || (x < 0 && !hasBack) ? x / 4 : x);
     })
     .onEnd(event => {
@@ -148,10 +131,8 @@ export default function Tour({ palette, onDone }: { palette: Palette; onDone: ()
   const title: Record<TourStep, string> = { opening: '', matrix: '', tree: '', timeline: 'قصص الأنبياء', recite: 'سمّع من المصحف' };
   const hint: Partial<Record<TourStep, string>> = { tree: 'اسحب الشجرة واضغط غصنًا', timeline: 'اضغط نقطة لترى آياتها', recite: 'اضغط لتظهر الآية التالية' };
 
-  /** One step's page: its title and its card. Neighbours are drawn too, so they can peek in while dragging. */
   const pageOf = (which: TourStep) => (
     <View style={{ flex: 1 }}>
-      {/* No textAlign: in a right-to-left row the title starts on the right by itself. */}
       <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 16, minHeight: 44 }}>
         {title[which] ? <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 20, fontWeight: '700' }}>{title[which]}</Text> : null}
       </View>
@@ -159,15 +140,12 @@ export default function Tour({ palette, onDone }: { palette: Palette; onDone: ()
         {which === 'matrix' && card && (
           <View style={{ flex: 1 }}>
             <Fit>{size => <MatrixCard presentation={card.presentation} palette={palette} view={size} around={false} onTap={noop} onMove={noop} alongside={swipe} />}</Fit>
-            {/* More cards wait below: the bottom edge fades out instead of cutting the last card flat. */}
             <Svg pointerEvents="none" style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: 40 }} width="100%" height={40}>
               <Defs><LinearGradient id="below" x1="0" y1="0" x2="0" y2="1"><Stop offset="0" stopColor={palette.paper} stopOpacity={0} /><Stop offset="1" stopColor={palette.paper} stopOpacity={1} /></LinearGradient></Defs>
               <Rect x="0" y="0" width="100%" height="40" fill="url(#below)" />
             </Svg>
           </View>
         )}
-        {/* The tree at reading size, dragged around inside its card, its root (right) in view first. Its own drag wins
-            here, so on this step a swipe on the title or the buttons' row turns the step. */}
         {which === 'tree' && card && (
           <View style={{ flex: 1, backgroundColor: palette.card, overflow: 'hidden' }}>
             <Fit>{size => <TreeCard piece={card.piece} list={EMPTY_LIST} palette={palette} view={size} around={false} onMove={noop}
@@ -190,7 +168,6 @@ export default function Tour({ palette, onDone }: { palette: Palette; onDone: ()
       </View>
     </View>
   );
-  // The current page and its two neighbours are drawn; the rest wait until they are next to the current one.
   const pages = [at - 1, at, at + 1].filter(index => index >= 1 && index < steps.length);
 
   return (
@@ -198,9 +175,7 @@ export default function Tour({ palette, onDone }: { palette: Palette; onDone: ()
       <GestureHandlerRootView style={{ flex: 1 }}>
         <View style={{ flex: 1, direction: 'rtl', backgroundColor: palette.paper, paddingTop: insets.top + 8, paddingBottom: insets.bottom + 12 }}>
           {step === 'opening' ? <Opening palette={palette} onStart={next} /> : <GestureDetector gesture={swipe}><View style={{ flex: 1 }}>
-            {/* The whole screen takes the swipe, the buttons' row too, so a step turns even where a card keeps its drags. */}
             <View style={{ flex: 1, overflow: 'hidden' }} onLayout={event => setWidth(Math.round(event.nativeEvent.layout.width))}>
-                {/* All three pages are keyed siblings, so a page that slides in stays mounted as it becomes the current one. */}
                 <Animated.View style={[{ flex: 1 }, strip]}>
                   {width > 0 && pages.map(index => (
                     <View key={steps[index]} pointerEvents={index === at ? 'auto' : 'none'} accessibilityElementsHidden={index !== at}
@@ -213,7 +188,6 @@ export default function Tour({ palette, onDone }: { palette: Palette; onDone: ()
               <View style={{ minHeight: 40, justifyContent: 'center' }}>
                 {hint[step] && !done[step] ? <Pill text={hint[step]!} palette={palette} /> : null}
               </View>
-              {/* Next where the thumb is (right), skip beside it. */}
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
                 <Button variant="primary" label={last ? 'إلى الرئيسية' : 'التالي'} onPress={next} />
                 {!last && <Button variant="plain" Icon={ChevronsLeft} label="تخطَّ" accessibilityLabel="تخطَّ" onPress={onDone} />}

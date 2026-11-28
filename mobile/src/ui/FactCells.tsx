@@ -3,16 +3,9 @@ import type { LucideIcon } from 'lucide-react-native';
 import { Text } from '@/ui/Text';
 import type { Palette } from '@/lib/theme';
 
-/** One reading of a fact, with who gives it written out («عند خليفة بن خياط»). */
 export type Reading = { value: string; by?: string };
 export type FactCell = { key: string; Icon?: LucideIcon; label: string; readings: Reading[] };
 
-/**
- * A few short facts side by side, ruled apart (owner, 2026-11-23: the person's card, sketch tarajim-feed-card/sketch
- * design أ): a small label with its icon, then each reading with who gives it under it in words a reader new to the books
- * follows. Ruled above and below, edge to edge of its card; `open` leaves those rules out, under a rule of the card's own
- * (a mutashabih card's ayat, components/MutashabihFace.tsx).
- */
 export default function FactCells({ cells, palette, open = false }: { cells: FactCell[]; palette: Palette; open?: boolean }) {
   if (!cells.length) return null;
   return (

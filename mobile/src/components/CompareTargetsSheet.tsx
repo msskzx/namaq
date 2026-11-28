@@ -6,7 +6,6 @@ import { surahName, type CompareTarget } from '@/lib/compare';
 import type { Palette } from '@/lib/theme';
 import Sheet from '@/ui/Sheet';
 
-/** A tree across three or more surahs: the surah pairs compare holds a card of, to pick the one to open. */
 export default function CompareTargetsSheet({ targets, onPick, onClose, palette }: { targets: CompareTarget[] | null; onPick: (target: CompareTarget) => void; onClose: () => void; palette: Palette }) {
   return (
     <Sheet open={!!targets} onClose={onClose} palette={palette}>

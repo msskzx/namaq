@@ -11,12 +11,6 @@ import { citationInBook } from '@shared/readerBooks';
 
 const arabicDigits = (text: string) => text.replace(/\d/g, digit => '٠١٢٣٤٥٦٧٨٩'[Number(digit)]);
 
-/**
- * The website's details under a tree (src/app/quran/branches/GroupDetails.tsx): the kinds of difference the books name,
- * each with its example words, then each book's citation with its quote, a link to the page and, for a book the reader holds, the
- * book itself at that page.
- * `group` is already cut to the ayat shown (evidenceGroup).
- */
 export default function EvidenceSheet({ group, onClose, palette }: { group: Group | null; onClose: () => void; palette: Palette }) {
   return (
     <Sheet open={!!group} onClose={onClose} palette={palette}>

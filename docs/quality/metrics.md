@@ -32,3 +32,7 @@ Counts are of product code: test files are left out. "Empty catch blocks" counts
 | 2026-11-28 | 2 errors show their cause | app + shared | failures that dropped their reason | 14 | 0 | a refused storage save, adhan scheduling and permission, book download and open, party questions, location, audio download (each ayah and the pack), video font, share and recording, home card warm-up, screen preload |
 | 2026-11-28 | 2 errors show their cause | app + shared | catches that recover without the error (judged expected) | 26 | 23 | parsing a saved value or a URL, reading storage; a failure here is an expected answer, not an error |
 | 2026-11-28 | 2 errors show their cause | website | empty catch blocks | 44 | 44 | the website is paused; its turn comes when it returns |
+| 2026-11-28 | 4 no comments | app | comment lines | 4477 | 20 | the 20 left are "see docs/… / see R00xx" pointers and `@vitest-environment` lines |
+| 2026-11-28 | 4 no comments | shared | comment lines | 3511 | 62 | pointers, plus the header of each generated `.d.ts` data file |
+| 2026-11-28 | 4 no comments | app + shared | comments turned into a doc or record pointer | 0 | 87 | a removed comment that named docs/… or R00xx kept only that name |
+| 2026-11-28 | 4 no comments | website | comment lines | 4443 | 4443 | the website is paused; the rule reaches it when it returns |

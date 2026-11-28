@@ -5,10 +5,6 @@ import Svg, { Circle } from 'react-native-svg';
 const DOT = 9;
 const GAP = 4;
 
-/**
- * A count drawn as dots, `count` of them in rows from the right, wrapping to the width it is given (owner, 2026-11-23:
- * a battle's numbers as dots, sketch tools-design/battles). What a dot stands for is said beside it by the caller.
- */
 export default function UnitDots({ count, color }: { count: number; color: string }) {
   const [width, setWidth] = useState(0);
   const across = Math.max(1, Math.floor((width + GAP) / (DOT + GAP)));

@@ -1,15 +1,9 @@
-// The static map behind a battle (owner, 2026-11-18): land drawn from Natural Earth in the app's own colours, no map
-// service, so it works offline. The land rings are written by scripts/battles/buildLand.ts.
 
-/** Places drawn closer than this (in points) share one pin (`pinsOf`), so no two pins sit on each other. */
 export const PIN_JOIN = 24;
 
-/** [longitude, latitude] */
 export type LonLat = readonly [number, number];
-/** West, south, east, north, in degrees. */
 export type Box = readonly [number, number, number, number];
 
-/** Cuts a closed ring to a box (Sutherland-Hodgman), so a coast that runs off the map ends at its edge. */
 export function clipRing(ring: readonly LonLat[], [west, south, east, north]: Box): LonLat[] {
   const edges: [(p: LonLat) => boolean, (a: LonLat, b: LonLat) => LonLat][] = [
     [p => p[0] >= west, (a, b) => [west, a[1] + ((b[1] - a[1]) * (west - a[0])) / (b[0] - a[0])]],
@@ -33,10 +27,6 @@ export function clipRing(ring: readonly LonLat[], [west, south, east, north]: Bo
   return points;
 }
 
-/**
- * The box a map shows around its places: every place with a margin, at least `least` degrees across, widened on the short
- * side to the map's `aspect` (height over width) so nothing is stretched.
- */
 export function frameOf(places: readonly LonLat[], aspect: number, least = 3): Box {
   const lons = places.map(p => p[0]);
   const lats = places.map(p => p[1]);
@@ -51,7 +41,6 @@ export function frameOf(places: readonly LonLat[], aspect: number, least = 3): B
   return [lon - wide / squeeze / 2, lat - tall / 2, lon + wide / squeeze / 2, lat + tall / 2];
 }
 
-/** Where a place falls on a map `width` wide showing `box`, and how tall that map is. */
 export function projector([west, south, east, north]: Box, width: number) {
   const squeeze = Math.cos((((south + north) / 2) * Math.PI) / 180);
   const scale = width / ((east - west) * squeeze);
@@ -61,7 +50,6 @@ export function projector([west, south, east, north]: Box, width: number) {
   };
 }
 
-/** The land inside `box` as one SVG path, `width` wide. */
 export function landPath(land: readonly (readonly LonLat[])[], box: Box, width: number): string {
   const { at } = projector(box, width);
   const margin = 0.2;
@@ -73,10 +61,6 @@ export function landPath(land: readonly (readonly LonLat[])[], box: Box, width: 
     .join('');
 }
 
-/**
- * The pins of a map holding several places (owner, 2026-11-22: a year's battles on one map), in drawn points: places
- * closer than `near` points share one pin, named by all of them («أحد، المدينة»), so no two pins sit on each other.
- */
 export function pinsOf<P extends { name: string }>(places: readonly (P & { x: number; y: number })[], near: number) {
   const pins: { x: number; y: number; names: string[] }[] = [];
   for (const place of places) {
@@ -87,20 +71,12 @@ export function pinsOf<P extends { name: string }>(places: readonly (P & { x: nu
   return pins.map(pin => ({ x: pin.x, y: pin.y, name: pin.names.join('، ') }));
 }
 
-/** A name on the map: its pin, the box its letters take, and where they start. */
 export type PlacedLabel = { x: number; y: number; anchor: 'start' | 'middle' | 'end'; box: [number, number, number, number] };
 
-/** About how wide a run of Arabic letters is in the Amiri face, per point of font size. */
 const LETTER = 0.5;
 
 const overlaps = (a: readonly number[], b: readonly number[]) => a[0] < b[2] && b[0] < a[2] && a[1] < b[3] && b[1] < a[3];
 
-/**
- * Where each pin's name goes so no two names cover each other or another pin (owner, 2026-11-23: places close together
- * must not have their names on top of one another). A pin with no name takes only its own room. Each name tries beside its pin on the right, on the left, above,
- * then below, then the same a line further out (a town under another pin's halo, owner 2026-11-24), and takes the first spot inside the map that is free; the pins are taken in the given order, so the ones
- * that matter most come first. A name with no free spot is left off (null): the pin still opens its sheet by name.
- */
 export function placeLabels(pins: readonly { x: number; y: number; text: string; size: number; r?: number }[], width: number, height: number): (PlacedLabel | null)[] {
   const taken: number[][] = pins.map(({ x, y, r = 8 }) => [x - r, y - r, x + r, y + r]);
   return pins.map(({ x, y, text, size, r = 8 }, own) => {

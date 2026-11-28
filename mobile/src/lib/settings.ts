@@ -9,7 +9,6 @@ import { isAdhanAlerts, isAdhkarAlerts, NO_ADHKAR_ALERTS, NO_ALERTS, type AdhanA
 import { isSaidToday, type SaidToday } from '@shared/adhkarCount';
 import { DEFAULT_PRAYER_SETTINGS, isPlace, isPrayerSettings, type Place, type PrayerSettings } from '@shared/prayer';
 
-/** A value kept on the phone that every screen reading it follows. */
 function setting<T>(key: string, fallback: T, valid: (value: unknown) => value is T) {
   const listeners = new Set<() => void>();
   let value: T | undefined;
@@ -30,81 +29,53 @@ function setting<T>(key: string, fallback: T, valid: (value: unknown) => value i
 }
 
 
-/** The first-launch tour ran or was skipped; the settings sheet clears it to play the tour again. */
 export const tourSeen = setting('tour-seen', false, isBoolean);
 
-/** The first-visit hints already shown (TabHint.tsx), by page; replaying the tour clears them too. */
 export type { HintId };
 export const hintsSeen = setting<HintId[]>(HINTS_SEEN, [], (value): value is HintId[] => Array.isArray(value) && value.every(item => HINT_IDS.includes(item)));
 
-/** A tablet lying down shows the mushaf's two facing pages, the odd one on the right, as the printed mushaf does (owner, 2026-11-23); off, one page. */
 export const mushafSpread = setting('mushaf-spread', true, isBoolean);
 
-/** A light tap from the phone when a card's or an ayah's icon menu opens. */
 export const haptics = setting('haptics', true, isBoolean);
 
-/**
- * A recite or which-surah question's mushaf page (owner, 2026-11-17): every other word an empty box by default, with no
- * surah name or juz; on, the ayat before the asked one are written as in recite mode.
- */
 export const quizPageBefore = setting('quiz-page-before', false, isBoolean);
 
-/** What recite mode's pen writes everywhere (owner, 2026-11-17): an ayah's first and last words, or all of it. */
 export const penRule = setting<PenRule>('pen-rule', 'whole', isPenRule);
-/** The quizzes' own pen rule, or `same` to follow the one for everything (owner, 2026-11-17: global, and per quiz). */
 export const quizPen = setting<PenRule | 'same'>('quiz-pen', 'same', (value): value is PenRule | 'same' => value === 'same' || isPenRule(value));
-/** The pen rule a quiz writes with. */
 export function useQuizPen(): PenRule {
   const [rule] = penRule.use();
   const [quiz] = quizPen.use();
   return quiz === 'same' ? rule : quiz;
 }
 
-/**
- * Tree or matrix. Every card opens as its matrix and its own button shows the tree where it has one; there is no setting for
- * it any more (owner, 2026-11-23: not every card has a tree). A `branches-view` value an older version saved is never read.
- */
 export type BranchView = 'tree' | 'matrix';
 
-/** How words the ayat share are coloured: by how alike they are, one colour, or none (owner, 2026-11-14). */
 export const markMode = setting<MarkMode>('word-marks', 'kinds', isMarkMode);
 
-/** The website's «ربط الكلمات المتشابهة بخطوط تلقائيًا»: a matrix of a book group opens with its word connections drawn. */
 export const connectors = setting('branches-connectors', false, isBoolean);
 
-/** Compare cards in the matrix: the two surahs one under the other, or side by side; each card's own button switches it there. */
 export const besideLayout = setting('compare-beside', false, isBoolean);
 
-/** The surrounding-ayat switch: one setting for every tree and matrix on the branches tab. */
 export const around = setting('branches-surround', false, isBoolean);
 
-/** The filters, search and surah narrowing the trees, kept so the tab opens as it was left. */
 export const listState = setting<ListState>('branches-list', EMPTY_LIST, (value): value is ListState =>
   isRecord(value) && isString(value.query) && isRecord(value.filters) && (value.range == null || isRecord(value.range)) && (value.saved === undefined || isBoolean(value.saved)));
 
-/** The settings sheet's look: light, dark, or as the phone is set. */
 export type ThemeChoice = 'light' | 'dark' | 'system';
 export const themeChoice = setting<ThemeChoice>('theme', 'system', (value): value is ThemeChoice => value === 'light' || value === 'dark' || value === 'system');
 
-/** The card colour chosen for each mode on the theme tiles (shared/cardTint.ts). */
 export type CardTints = Record<CardMode, string>;
 export const cardTints = setting<CardTints>('card-tints', { light: 'paper', dark: 'dim' }, (value): value is CardTints =>
   !!value && typeof value === 'object' && parseCardTint('light', (value as CardTints).light) === (value as CardTints).light && parseCardTint('dark', (value as CardTints).dark) === (value as CardTints).dark);
 
-/** The utilities tab: where the prayer times are for (null until the person picks), the method and Asr school, and the view last open. */
 export const prayerPlace = setting<Place | null>('prayer-place', null, (value): value is Place | null => value === null || isPlace(value));
 export const prayerSettings = setting<PrayerSettings>('prayer-settings', DEFAULT_PRAYER_SETTINGS, isPrayerSettings);
-/** Which of the five prayers ring a notification at their time; all off until the person turns one on. */
 export const adhanAlerts = setting<AdhanAlerts>('adhan-alerts', NO_ALERTS, isAdhanAlerts);
-/** The morning adhkar reminder after fajr and the evening one after asr; both off until the person turns one on. */
 export const adhkarAlerts = setting<AdhkarAlerts>('adhkar-alerts', NO_ADHKAR_ALERTS, isAdhkarAlerts);
-/** The prayer times drawn round a 24-hour dial or down the day's line (owner, 2026-11-24: a switch, the last choice kept). */
 export type PrayerView = 'dial' | 'line';
 export const prayerView = setting<PrayerView>('prayer-view', 'dial', (value): value is PrayerView => value === 'dial' || value === 'line');
-/** The utilities' two pages (owner, 2026-11-23): the tools (Hijri date, prayer times, qibla) and the adhkar. */
 export type UtilityView = 'tools' | 'adhkar';
 export const utilityView = setting<UtilityView>('utilities-view', 'tools', (value): value is UtilityView => value === 'tools' || value === 'adhkar');
 
 
-/** The adhkar said today, kept until the day ends (owner, 2026-11-24); lib/adhkar.ts reads it for today only. */
 export const adhkarSaid = setting<SaidToday | null>('adhkar-said', null, (value): value is SaidToday | null => value === null || isSaidToday(value));
