@@ -1,4 +1,8 @@
-const ALLOWED = /^(\s*(eslint-|@ts-|@vitest-environment|prettier-ignore|global\s)|\s*see (docs\/[\w./-]+\.md|R\d{4}|ADR[ -]?\d{3,4})(, (docs\/[\w./-]+\.md|R\d{4}|ADR[ -]?\d{3,4}))*\s*$|\/\s*<reference)/;
+const POINTER = String.raw`(docs\/[\w./-]+\.md|R\d{4}|ADR[ -]?\d{3,4})`;
+const DIRECTIVE = new RegExp(String.raw`^\*?\s*(eslint-(disable|enable)(-next-line|-line)?\b|eslint\s|@ts-(expect-error|ignore|nocheck|check)\b|prettier-ignore\s*$|@vitest-environment\s+\w+\s*$)`);
+const SEE = new RegExp(String.raw`^\s*see ${POINTER}(, ${POINTER})*\s*$`);
+const REFERENCE = /^\/\s*<reference\s+(path|types|lib)=/;
+const allowed = comment => DIRECTIVE.test(comment.value) || SEE.test(comment.value) || REFERENCE.test(comment.value) || (comment.type === 'Block' && /^\s*global\s/.test(comment.value));
 
 const quality = {
   rules: {
@@ -13,7 +17,7 @@ const quality = {
         return {
           Program() {
             for (const comment of context.sourceCode.getAllComments()) {
-              if (!ALLOWED.test(comment.value)) context.report({ loc: comment.loc, messageId: 'comment' });
+              if (!allowed(comment)) context.report({ loc: comment.loc, messageId: 'comment' });
             }
           },
         };
