@@ -7,10 +7,11 @@ import { brokenRules } from './featureRules.mjs';
 const BASELINE = path.join(__dirname, 'featureRules.baseline.json');
 const rules: Record<string, string[]> = brokenRules(mapData());
 const broken = Object.fromEntries(Object.entries(rules).map(([rule, list]) => [rule, [...new Set(list)].sort()]));
-const known: Record<string, string[]> = JSON.parse(fs.readFileSync(BASELINE, 'utf8'));
+let known: Record<string, string[]> = JSON.parse(fs.readFileSync(BASELINE, 'utf8'));
 if (process.env.UPDATE_BASELINE) {
   const shrunk = Object.fromEntries(Object.entries(broken).map(([rule, list]) => [rule, list.filter(item => (known[rule] ?? []).includes(item))]));
   fs.writeFileSync(BASELINE, `${JSON.stringify(shrunk, null, 1)}\n`);
+  known = shrunk;
 }
 
 describe('the rules of the feature map', () => {

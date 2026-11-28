@@ -123,7 +123,7 @@ flowchart RL
 |  | افتح المكتبة | [المكتبة](books.md) | [components/HomeFeed.tsx:1333](../../mobile/src/components/HomeFeed.tsx#L1333) |
 |  | افتح القراءات | [القراءات](qiraat.md) | [components/HomeFeed.tsx:1334](../../mobile/src/components/HomeFeed.tsx#L1334) |
 | `AyahNotePost` | افتح صفحة الآية، ‹› | [صفحة الآية](ayah.md) | [components/HomeFeed.tsx:1347](../../mobile/src/components/HomeFeed.tsx#L1347) |
-| `DhikrPost` | adhkar | [الأدوات والأذكار](utilities.md) | [components/HomeFeed.tsx:1387](../../mobile/src/components/HomeFeed.tsx#L1387) |
+| `DhikrPost` | افتح الأذكار | [الأدوات والأذكار](utilities.md) | [components/HomeFeed.tsx:1387](../../mobile/src/components/HomeFeed.tsx#L1387) |
 |  | افتح الذكر في الأذكار | [الذكر](dhikr.md) | [components/HomeFeed.tsx:1388](../../mobile/src/components/HomeFeed.tsx#L1388) |
 | `Cell` | (onPress) | [الغزوة](battle.md) | [components/LifeColumns.tsx:17](../../mobile/src/components/LifeColumns.tsx#L17) |
 |  | (onPress) | [القصة](story.md) | [components/LifeColumns.tsx:17](../../mobile/src/components/LifeColumns.tsx#L17) |

@@ -15,6 +15,7 @@ const TAB_OF = { trees: '/branches', read: '/read' };
 export function toTab(href) { router.navigate(href, { withAnchor: true }); }
 export const openIntent = intent => toTab(TAB_OF[intent.tab]);
 export const topic = (href, label) => ({ onPress: () => toTab(href), label });
+export const openTool = key => toTab('/tools');
 export const openBoth = slug => (slug ? toTab({ pathname: '/battle', params: { slug } }) : router.push({ pathname: '/person', params: { slug } }));
 `);
 write('components/Sheets.tsx', `
@@ -24,7 +25,7 @@ export function TieSheet() { return <Button label="افتح الغزوة" onPres
 write('components/Again.tsx', `export { TieSheet } from './Sheets';\n`);
 write('screens/one.tsx', `
 import { router } from 'expo-router';
-import { openIntent, topic, openBoth } from '@/lib/ways';
+import { openIntent, topic, openBoth, openTool } from '@/lib/ways';
 import { TieSheet } from '@/components/Again';
 export default function One() {
   const open = () => router.push('/two');
@@ -33,6 +34,7 @@ export default function One() {
     <Button label="الثانية" onPress={open} />
     <Button label="في المصحف" onPress={() => openIntent({ tab: 'read' })} />
     <Row onPress={() => openBoth('x')} />
+    <Action label="القبلة" onPress={() => openTool('qibla')} />
     <TieSheet />
   </>;
 }
@@ -52,6 +54,10 @@ describe('finding links in the code', () => {
 
   it('labels a function kept in a variable by the button that calls it', () => {
     expect(found('/two')).toMatchObject([{ how: 'push', label: 'الثانية' }]);
+  });
+
+  it('labels a call by its button, not by a key passed to it', () => {
+    expect(found('/tools')).toMatchObject([{ label: 'القبلة' }]);
   });
 
   it('picks the route a keyed map gives for the key passed in', () => {

@@ -49,8 +49,8 @@ flowchart RL
 | `EventPlaces` | ‹›:‹› | [المصحف](read.md) | [components/EventPlaces.tsx:92](../../mobile/src/components/EventPlaces.tsx#L92) |
 |  | (onPick) | [مقارنة السور](compare.md) | [components/EventPlaces.tsx:106](../../mobile/src/components/EventPlaces.tsx#L106) |
 | `CompareButton` | قارن ‹› | [مقارنة السور](compare.md) | [components/EventPlaces.tsx:116](../../mobile/src/components/EventPlaces.tsx#L116) |
-| `BUTTONS` | tools | [الأدوات والأذكار](utilities.md) | [components/HomeButtons.tsx:10](../../mobile/src/components/HomeButtons.tsx#L10) |
-|  | adhkar | [الأدوات والأذكار](utilities.md) | [components/HomeButtons.tsx:11](../../mobile/src/components/HomeButtons.tsx#L11) |
+| `BUTTONS` | القبلة | [الأدوات والأذكار](utilities.md) | [components/HomeButtons.tsx:10](../../mobile/src/components/HomeButtons.tsx#L10) |
+|  | الأذكار | [الأدوات والأذكار](utilities.md) | [components/HomeButtons.tsx:11](../../mobile/src/components/HomeButtons.tsx#L11) |
 |  | المكتبة | [المكتبة](books.md) | [components/HomeButtons.tsx:12](../../mobile/src/components/HomeButtons.tsx#L12) |
 |  | مشاهد | [مشاهد](lataif.md) | [components/HomeButtons.tsx:13](../../mobile/src/components/HomeButtons.tsx#L13) |
 |  | مدونتي | [مدونتي](library.md) | [components/HomeButtons.tsx:14](../../mobile/src/components/HomeButtons.tsx#L14) |
@@ -138,8 +138,8 @@ flowchart RL
 | `KahfPost` | اقرأ سورة الكهف | [المصحف](read.md) | [components/HomeFeed.tsx:995](../../mobile/src/components/HomeFeed.tsx#L995) |
 |  | افتح القرآن | [القرآن](quran.md) | [components/HomeFeed.tsx:997](../../mobile/src/components/HomeFeed.tsx#L997) |
 | `PrayerPost` | افتح مواقيت الصلاة | [الأدوات والأذكار](utilities.md) | [components/HomeFeed.tsx:1013](../../mobile/src/components/HomeFeed.tsx#L1013) |
-|  | tools | [الأدوات والأذكار](utilities.md) | [components/HomeFeed.tsx:1016](../../mobile/src/components/HomeFeed.tsx#L1016) |
-|  | tools | [الأدوات والأذكار](utilities.md) | [components/HomeFeed.tsx:1017](../../mobile/src/components/HomeFeed.tsx#L1017) |
+|  | مواقيت الصلاة | [الأدوات والأذكار](utilities.md) | [components/HomeFeed.tsx:1016](../../mobile/src/components/HomeFeed.tsx#L1016) |
+|  | القبلة | [الأدوات والأذكار](utilities.md) | [components/HomeFeed.tsx:1017](../../mobile/src/components/HomeFeed.tsx#L1017) |
 | `BooksPost` | افتح المكتبة | [المكتبة](books.md) | [components/HomeFeed.tsx:1066](../../mobile/src/components/HomeFeed.tsx#L1066) |
 |  | (onPress) | [تحفة الأطفال](tuhfa.md) | [components/HomeFeed.tsx:1069](../../mobile/src/components/HomeFeed.tsx#L1069) |
 | `ScenePost` | افتح المشاهد | [مشاهد](lataif.md) | [components/HomeFeed.tsx:1082](../../mobile/src/components/HomeFeed.tsx#L1082) |
@@ -173,7 +173,7 @@ flowchart RL
 |  | افتح المكتبة | [المكتبة](books.md) | [components/HomeFeed.tsx:1333](../../mobile/src/components/HomeFeed.tsx#L1333) |
 |  | افتح القراءات | [القراءات](qiraat.md) | [components/HomeFeed.tsx:1334](../../mobile/src/components/HomeFeed.tsx#L1334) |
 | `AyahNotePost` | افتح صفحة الآية، ‹› | [صفحة الآية](ayah.md) | [components/HomeFeed.tsx:1347](../../mobile/src/components/HomeFeed.tsx#L1347) |
-| `DhikrPost` | adhkar | [الأدوات والأذكار](utilities.md) | [components/HomeFeed.tsx:1387](../../mobile/src/components/HomeFeed.tsx#L1387) |
+| `DhikrPost` | افتح الأذكار | [الأدوات والأذكار](utilities.md) | [components/HomeFeed.tsx:1387](../../mobile/src/components/HomeFeed.tsx#L1387) |
 |  | افتح الذكر في الأذكار | [الذكر](dhikr.md) | [components/HomeFeed.tsx:1388](../../mobile/src/components/HomeFeed.tsx#L1388) |
 | `Feed` | (review) | [المصحف](read.md) | [components/HomeFeed.tsx:1646](../../mobile/src/components/HomeFeed.tsx#L1646) |
 | `Cell` | (onPress) | [الغزوة](battle.md) | [components/LifeColumns.tsx:17](../../mobile/src/components/LifeColumns.tsx#L17) |

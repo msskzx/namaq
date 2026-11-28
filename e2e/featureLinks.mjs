@@ -74,7 +74,7 @@ const attrText = (element, names) => {
 
 function labelNear(node) {
   if (ts.isCallExpression(node)) {
-    const words = node.arguments.map(textOf).filter(text => text && !routeLiteral(text));
+    const words = node.arguments.map(textOf).filter(text => text && !routeLiteral(text) && /[^\x00-\x7F]/.test(text));
     if (words.length) return words[0];
   }
   for (let n = node.parent; n; n = n.parent) {
