@@ -30,7 +30,7 @@ screen closes.
 
 ## Exceptions
 
-There are no inline exceptions: lint rejects an `eslint-disable` that names one of these rules or names no rule, and an `/* eslint … */` comment that turns one off. When a case fits
+There are no inline exceptions: lint rejects an `eslint-disable` that names one of these rules or names no rule, and an `/* eslint … */` comment that turns one off. A directive can switch off the rule that would report it, so `npm run lint` in `mobile/` runs a second pass (`eslint.unlocks.config.js`) with inline config turned off, where no directive can hide one. When a case fits
 none of the hooks above, it gets a new hook in `mobile/src/lib/hooks/` with a test. The lint rule does not
 reach that folder. A new hook is accepted when:
 

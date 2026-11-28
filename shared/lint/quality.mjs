@@ -2,11 +2,11 @@ const POINTER = String.raw`(docs\/[\w./-]+\.md|R\d{4}|ADR[ -]?\d{3,4})`;
 const DIRECTIVE = new RegExp(String.raw`^\*?\s*(eslint-(disable|enable)(-next-line|-line)?\b|eslint\s|@ts-(expect-error|ignore|nocheck|check)\b|prettier-ignore\s*$|@vitest-environment\s+\w+\s*$)`);
 const SEE = new RegExp(String.raw`^\s*see ${POINTER}(, ${POINTER})*\s*$`);
 const REFERENCE = /^\/\s*<reference\s+(path|types|lib)=/;
-const LOCKED = /\b(quality\/no-raw-effects|no-restricted-globals|no-restricted-properties|react-hooks\/(set-state-in-effect|refs|immutability|preserve-manual-memoization|purity|use-memo))\b/;
+const LOCKED = /\b(quality\/(no-raw-effects|no-comments)|no-restricted-globals|no-restricted-properties|react-hooks\/(set-state-in-effect|refs|immutability|preserve-manual-memoization|purity|use-memo))\b/;
 const unlocks = comment => {
-  const directive = comment.value.replace(/^\*?\s*/, '').split(/\s--\s/)[0];
-  const disable = directive.match(/^eslint-(disable|enable)(-next-line|-line)?(\s+(.*))?$/);
-  if (disable) return !disable[4]?.trim() || LOCKED.test(disable[4]);
+  const directive = comment.value.trim().replace(/^\*\s*/, '').split(/\s-{2,}\s/)[0];
+  const disable = directive.match(/^eslint-(disable|enable)(-next-line|-line)?(\s+([\s\S]*))?$/);
+  if (disable) return disable[1] === 'disable' && (!disable[4]?.trim() || LOCKED.test(disable[4]));
   return /^eslint\s/.test(directive) && LOCKED.test(directive);
 };
 const allowed = comment => DIRECTIVE.test(comment.value) || SEE.test(comment.value) || REFERENCE.test(comment.value) || (comment.type === 'Block' && /^\s*global\s/.test(comment.value));
