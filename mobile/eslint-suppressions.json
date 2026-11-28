@@ -101,31 +101,6 @@
       "count": 1
     }
   },
-  "src/lib/keyboard.ts": {
-    "react-hooks/set-state-in-effect": {
-      "count": 1
-    }
-  },
-  "src/lib/party.ts": {
-    "react-hooks/set-state-in-effect": {
-      "count": 1
-    }
-  },
-  "src/lib/prayer.ts": {
-    "react-hooks/set-state-in-effect": {
-      "count": 1
-    }
-  },
-  "src/lib/readerBook.ts": {
-    "react-hooks/set-state-in-effect": {
-      "count": 1
-    }
-  },
-  "src/lib/sahih.ts": {
-    "react-hooks/set-state-in-effect": {
-      "count": 1
-    }
-  },
   "src/lib/tabRetap.ts": {
     "react-hooks/refs": {
       "count": 1
@@ -138,11 +113,6 @@
   },
   "src/lib/usePageTouch.ts": {
     "react-hooks/refs": {
-      "count": 1
-    }
-  },
-  "src/lib/useWriteBoxes.tsx": {
-    "react-hooks/set-state-in-effect": {
       "count": 1
     }
   },

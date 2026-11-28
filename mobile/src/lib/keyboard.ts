@@ -15,11 +15,11 @@ export function useKeyboardShown() {
 export function useKeyboardHeight(active: boolean) {
   const [height, setHeight] = useState(0);
   useEffect(() => {
-    if (!active) { setHeight(0); return; }
+    if (!active) return;
     const ios = Platform.OS === 'ios';
     const show = Keyboard.addListener(ios ? 'keyboardWillShow' : 'keyboardDidShow', event => setHeight(event.endCoordinates.height));
     const hide = Keyboard.addListener(ios ? 'keyboardWillHide' : 'keyboardDidHide', () => setHeight(0));
-    return () => { show.remove(); hide.remove(); };
+    return () => { show.remove(); hide.remove(); setHeight(0); };
   }, [active]);
-  return height;
+  return active ? height : 0;
 }

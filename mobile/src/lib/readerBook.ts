@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { bookPagesOf, type BookEntry, type BookPage, type PageBreak, type ReaderBookId } from '@shared/bookReader';
 import { kashshafEntries, mutashabihEntries, sadiEntries, ukbariEntries, type MutashabihBookData } from '@shared/readerBooks';
 import type { KashshafData } from '@shared/quran/kashshaf';
@@ -7,6 +6,7 @@ import breaks from '@shared/data/quran/bookPages.json';
 import sadiFile from '@shared/data/quran/tafsirSadi.json';
 import { bookRevision, bookState, readBook, useBooks } from './books';
 import { dataOf } from '@shared/appData';
+import { useLoaded } from './hooks/useLoaded';
 
 const sadi = dataOf(sadiFile);
 
@@ -40,13 +40,7 @@ async function load(id: ReaderBookId): Promise<ReaderBook | null> {
 export function useReaderBook(id: ReaderBookId): ReaderBook | null | false {
   useBooks();
   const on = bookState(id) === 'on';
-  const [state, setState] = useState<{ id: ReaderBookId; book: ReaderBook | null | false }>(() => ({ id, book: on ? madeOf(id) ?? null : false }));
-  useEffect(() => {
-    let live = true;
-    if (!on) { madeOf(id); setState({ id, book: false }); return; }
-    setState({ id, book: madeOf(id) ?? null });
-    load(id).then(found => { if (live) setState({ id, book: found && found.pages.length ? found : false }); }, () => { if (live) setState({ id, book: false }); });
-    return () => { live = false; };
-  }, [id, on]);
-  return state.id === id ? state.book : null;
+  const loaded = useLoaded(on ? id : null, asked => load(asked as ReaderBookId).then(found => (found && found.pages.length ? found : false), () => false as const));
+  if (!on) return false;
+  return loaded ?? madeOf(id) ?? null;
 }
