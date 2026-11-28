@@ -1,6 +1,7 @@
 import type { Beat } from './growth';
 import { OUTRO, PAUSE, READY } from '@shared/video/recorder';
 import { FLOW_LINE } from '@shared/quran/quranText/flow';
+import { mushafMarkOrder } from '@shared/quran/quranText/markOrder';
 
 export { VIDEO_TYPES } from '@shared/video/recorder';
 
@@ -68,7 +69,7 @@ export function recorderPage(input: VideoInput, fontFace = '') {
   return `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <style>${fontFace}html,body{margin:0;height:100%;background:${input.look.paper};overflow:hidden}canvas{display:block;height:100%;width:auto;margin:0 auto;max-width:100%;object-fit:contain}</style></head>
 <body><canvas width="${FRAME.width}" height="${FRAME.height}"></canvas><script>
-var INPUT = ${JSON.stringify(input).replace(/</g, '\\u003c')};
+var INPUT = ${mushafMarkOrder(JSON.stringify(input)).replace(/</g, '\\u003c')};
 ${GEOMETRY}
 ${READY}
 ${OUTRO}
