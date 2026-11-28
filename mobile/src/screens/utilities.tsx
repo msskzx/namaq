@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState, type ComponentRef } from 'react';
+import { useCallback, useRef, useState, type ComponentRef } from 'react';
 import { Animated, FlatList, ScrollView, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
 import { useIsFocused } from 'expo-router';
 import TabHint from '@/components/TabHint';
@@ -10,13 +10,15 @@ import { setCompact, useShrinkOnScroll } from '@/lib/chrome';
 import { utilityView, type UtilityView } from '@/lib/settings';
 import { usePalette, type Palette } from '@/lib/theme';
 import { useWebScrollEnd } from '@/lib/hooks/useWebScrollEnd';
+import { useAdjustOn } from '@/lib/hooks/useAdjustOn';
+import { useOnChange } from '@/lib/hooks/useOnChange';
 
 type Scroller = ComponentRef<typeof ScrollView>;
 
 function Page({ view, width, height, palette, on, current, bottom, onPlace, scrollers, query }: { view: UtilityView; width: number; height: number; palette: Palette; on: boolean; current: boolean; bottom: number; onPlace: () => void; scrollers: Map<UtilityView, Scroller>; query: string }) {
   const shrink = useShrinkOnScroll();
   const [reach, setReach] = useState(height);
-  useEffect(() => { setReach(seen => Math.max(seen, height)); }, [height]);
+  useAdjustOn([height], () => setReach(seen => Math.max(seen, height)));
   const scrolled = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     shrink(event);
     const bottom = Math.ceil((event.nativeEvent.contentOffset.y + height) / 50) * 50;
@@ -46,12 +48,12 @@ export default function UtilitiesTab() {
   const scrollers = useRef(new Map<UtilityView, Scroller>()).current;
   const shown = useRef(index);
   const resized = useRef(false);
-  useEffect(() => {
+  useOnChange([index, width], () => {
     if (!width || shown.current === index) return;
     shown.current = index;
     setCompact(false);
     list.current?.scrollToIndex({ index, animated: true });
-  }, [index, width]);
+  });
   const settle = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
     if (!width) return;
     const at = Math.round(Math.abs(event.nativeEvent.contentOffset.x) / width);

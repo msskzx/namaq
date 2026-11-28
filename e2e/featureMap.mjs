@@ -1,10 +1,4 @@
 // See docs/feature-map.md.
-import fs from 'node:fs';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-const self = fileURLToPath(import.meta.url);
-
 export const SECTIONS = ['القرآن', 'الحديث', 'الرئيسية', 'التراجم', 'الاختبارات', 'خارج الشريط'];
 
 export const SCREENS = [
@@ -68,16 +62,6 @@ export const SCREENS = [
   { file: 'attributions', name: 'المصادر والتراخيص', section: 'خارج الشريط', from: [['الرئيسية', 'الإعدادات', 'المصادر والتراخيص']] },
   { file: 'tree-sizes', name: 'مقاسات الأشجار', section: 'خارج الشريط', unlinked: 'npm run tree-sizes opens it to measure every tree' },
 ];
-
-const APP = path.join(path.dirname(self), '../mobile/src/app');
-
-export function routeFiles(dir = APP, prefix = '') {
-  return fs.readdirSync(dir, { withFileTypes: true }).flatMap(entry => {
-    const rel = prefix ? `${prefix}/${entry.name}` : entry.name;
-    if (entry.isDirectory()) return routeFiles(path.join(dir, entry.name), rel);
-    return entry.name.endsWith('.tsx') && entry.name !== '_layout.tsx' ? [rel.slice(0, -4)] : [];
-  }).sort();
-}
 
 export const urlOf = file => `/${file.split('/').filter(part => !/^\(.*\)$/.test(part) && part !== 'index').join('/')}`;
 

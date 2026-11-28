@@ -54,6 +54,13 @@ Counts are of product code: test files are left out. "Empty catch blocks" counts
 | 2026-11-28 | 7 no raw effects or timers | app | React Compiler findings | 168 | 166 | now errors; the 166 left are frozen in eslint-suppressions.json (set-state-in-effect 54, immutability 53, refs 50, preserve-manual-memoization 7, purity 1, use-memo 1) |
 | 2026-11-28 | 7 no raw effects or timers | app | lint warnings | 169 | 0 | the compiler rules became errors and a type that shared its name with an icon (`Send`) was renamed |
 | 2026-11-28 | 7 no raw effects or timers | app | files on the shrink-only list | 0 | 89 | |
+| 2026-11-28 | 7, screens | app screens and routes | useEffect calls | 28 | 0 | `screens/` and `app/`; route params now go through `useAdjustOn` (state) and `useOnChange` (scroll, clearing the params) |
+| 2026-11-28 | 7, screens | app screens and routes | setTimeout / requestAnimationFrame | 13 | 0 | moved to `useLater` |
+| 2026-11-28 | 7, screens | app screens and routes | timers never cleared when the screen closed | 6 | 0 | the oaths retry and first scroll, the openings scroll, the home refresh spinner, the solo quiz build, the tree-size batches |
+| 2026-11-28 | 7, screens | app | effects on the shrink-only list | 138 | 110 | |
+| 2026-11-28 | 7, screens | app | timers on the shrink-only list | 40 | 27 | |
+| 2026-11-28 | 7, screens | app | React Compiler findings | 166 | 151 | 15 set-state-in-effect went with the effects |
+| 2026-11-28 | 7, screens | app | shared hooks | 5 | 9 | useAdjustOn, useOnChange, useLoaded, useLater, with tests |
 | 2026-11-28 | 8 scripts lint | scripts | comment lines | 1030 | 54 | 740 comments removed; the 54 lines left are "see docs/… / R00xx" pointers. `npm run lint` now checks `scripts/` |
 | 2026-11-28 | 8 scripts lint | scripts | empty catch blocks | 1 | 0 | a download-size retry that dropped every error; it now keeps the last one as the cause |
 | 2026-11-28 | 8 scripts lint | scripts | lint errors | 8 | 0 | 5 unused (cleared by allowing `_` names and unused caught errors, as the app does), 1 empty catch (counted twice), 1 expression used as a statement |

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from 'react';
+import { useCallback, useMemo, useRef, useState, useSyncExternalStore } from 'react';
 import { View } from 'react-native';
 import { List, Search, type LucideProps } from 'lucide-react-native';
 import type { BranchPiece } from '@shared/quran/branchInventory';
@@ -25,6 +25,8 @@ import { usePalette, type Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
 import Chip from '@/ui/Chip';
 import Empty from '@/ui/Empty';
+import { useLater } from '@/lib/hooks/useLater';
+import { useOnChange } from '@/lib/hooks/useOnChange';
 
 function BarButton({ label, onPress, Icon, on, dot }: { label: string; onPress: () => void; Icon: (props: LucideProps) => React.ReactNode; palette: Palette; on?: boolean; dot?: boolean }) {
   return <IconButton Icon={Icon} label={label} onPress={onPress} on={on} dot={dot} />;
@@ -45,13 +47,10 @@ export default function BranchesScreen() {
   const [start, setStart] = useState<Opening | undefined>(undefined);
   const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks);
   const [pieces, setPieces] = useState<BranchPiece[] | null>(null);
-  useEffect(() => loadPrefs(readJson('branches-grow', isRecord) as Partial<Prefs> | undefined, prefs => writeJson('branches-grow', prefs)), []);
+  useOnChange([], () => loadPrefs(readJson('branches-grow', isRecord) as Partial<Prefs> | undefined, prefs => writeJson('branches-grow', prefs)));
   const savedKey = list.saved ? bookmarks : null;
-  useEffect(() => {
-    let timer: ReturnType<typeof setTimeout> | undefined;
-    const frame = requestAnimationFrame(() => { timer = setTimeout(() => setPieces(branchList(list, bookmarks)), 0); });
-    return () => { cancelAnimationFrame(frame); clearTimeout(timer); };
-  }, [list, savedKey, start]); // eslint-disable-line react-hooks/exhaustive-deps
+  const build = useLater();
+  useOnChange([list, savedKey, start], () => build.afterPaint(() => setPieces(branchList(list, bookmarks))));
 
   const change = useCallback((next: ListState, opening?: Opening) => {
     closeStudio();
@@ -97,12 +96,12 @@ export default function BranchesScreen() {
   };
   const openCard = (piece: BranchPiece, surah: number) => { setIndexSurah(surah); change(list, { id: piece.id }); };
   const { tree, view } = useLocalSearchParams<{ tree?: string; view?: string }>();
-  useEffect(() => {
+  useOnChange([tree], () => {
     if (!tree) return;
     const found = listShowing(list, tree, bookmarks);
     if (found) change(found.list, { id: found.piece.id, view: view === 'tree' ? 'tree' : undefined });
     router.setParams({ tree: undefined, view: undefined });
-  }, [tree]); // eslint-disable-line react-hooks/exhaustive-deps
+  });
   const listKey = JSON.stringify([list, start, jumps]);
 
   return (

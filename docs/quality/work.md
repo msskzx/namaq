@@ -19,6 +19,7 @@ over all review cycles of the PR. Optional notes are not counted.
 | 1253 | 2026-11-28 | 7 no raw effects or timers | No raw useEffect or timers in screens; shared hooks | merged | 5 | 3 |
 | 1254 | 2026-11-28 | 5 feature map | Every break of the navigation rules fixed | merged | 1 | 2 |
 | 1256 | 2026-11-28 | 8 scripts lint, 9 import rules | Lint scripts/, add import boundaries, and log the quality work | merged | 4 | 2 |
+| 1257 | 2026-11-28 | tests | Two e2e breakages fixed: journeys load, party tests ask their own questions | merged | 1 | 1 |
 
 ## Bugs found
 

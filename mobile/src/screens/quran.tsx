@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type ComponentRef } from 'react';
+import { useMemo, useRef, useState, type ComponentRef } from 'react';
 import { ScrollView, View } from 'react-native';
 import { LayoutGrid, type LucideProps } from 'lucide-react-native';
 import { normalizeWord } from '@shared/quran/normalize';
@@ -14,6 +14,7 @@ import IconTile from '@/ui/IconTile';
 import Empty from '@/ui/Empty';
 import { SearchResults, useAppSearch } from '@/components/SearchResults';
 import { FEATURE_ICON } from '@/components/featureIcons';
+import { useAdjustOn } from '@/lib/hooks/useAdjustOn';
 
 export const QURAN_TILES: { route: string; label: string; Icon: (props: LucideProps) => React.ReactNode }[] = [
   { route: '/read', label: 'المصحف', Icon: FEATURE_ICON.mushaf },
@@ -48,7 +49,7 @@ export default function QuranHub() {
   useTabRetap('quran', () => scroll.current?.scrollTo({ y: 0, animated: true }));
   const [query, setQuery] = useState('');
   const [open, setOpen] = useState<SearchKind | null>(null);
-  useEffect(() => { setOpen(null); }, [query]);
+  useAdjustOn([query], () => setOpen(null));
   const { found, waiting } = useAppSearch(query, quranKind);
   const tools = useMemo(() => toolsNamed(found.query), [found.query]);
   const surahs = found.groups.filter(group => group.kind === 'surah');

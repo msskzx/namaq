@@ -45,6 +45,7 @@ test('a party quiz: host and guest join, answer each question and see the final 
   await expect(page.getByText('الضيف')).toBeVisible();
 
   await page.getByRole('button', { name: 'ابدأ الاختبار' }).click();
+  await expect.poll(() => server.hostSentQuestions).toBe(true);
   const total = server.state!.settings.length;
   for (let index = 0; index < total; index++) {
     await expect(leaves(page).first()).toBeVisible();

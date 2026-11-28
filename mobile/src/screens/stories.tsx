@@ -1,4 +1,4 @@
-import { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState, type ComponentRef } from 'react';
+import { useCallback, useDeferredValue, useMemo, useRef, useState, type ComponentRef } from 'react';
 import { FlatList, ScrollView, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { ChevronDown, ChevronLeft, ChevronUp, List } from 'lucide-react-native';
@@ -25,6 +25,8 @@ import { storyPages } from '@shared/stories/pages';
 import Chip from '@/ui/Chip';
 import RowScroll from '@/ui/RowScroll';
 import { useWebScrollEnd } from '@/lib/hooks/useWebScrollEnd';
+import { useAdjustOn } from '@/lib/hooks/useAdjustOn';
+import { useOnChange } from '@/lib/hooks/useOnChange';
 
 type Scroller = ComponentRef<typeof ScrollView>;
 
@@ -128,12 +130,12 @@ export default function StoriesScreen() {
   const { chapter } = useLocalSearchParams<{ chapter?: string }>();
   const [contents, setContents] = useState(Boolean(chapter));
   const [startAt, setStartAt] = useState(chapter);
-  useEffect(() => {
+  useAdjustOn([chapter], () => {
     if (!chapter) return;
     setStartAt(chapter);
     setContents(true);
-    router.setParams({ chapter: undefined });
-  }, [chapter]);
+  });
+  useOnChange([chapter], () => { if (chapter) router.setParams({ chapter: undefined }); });
   const [query, setQuery] = useState('');
   const typed = useDeferredValue(query.trim());
   const [tag, setTag] = useState<string | null>(null);

@@ -22,6 +22,7 @@ import { PAGE_TOPICS, RANGED_TOPICS, type QuizTopic } from '@shared/quiz/setting
 import { readSettings, setRun, useRun, writeSettings } from '@/lib/soloStore';
 import { usePalette } from '@/lib/theme';
 import Card from '@/ui/Card';
+import { useLater } from '@/lib/hooks/useLater';
 
 const KIND_NAMES = { BRANCHES: 'متشابهات القرآن', ...Object.fromEntries(CHOICE_KINDS.map(kind => [kind.id, kind.name])) } as Record<QuizTopic, string>;
 
@@ -56,13 +57,14 @@ export default function SoloSetup() {
     if (kinds.length) change({ kinds });
   };
   const length = lengths.includes(settings.length as never) ? settings.length : lengths[0];
+  const later = useLater();
   const start = () => {
     setBuilding(true);
-    requestAnimationFrame(() => setTimeout(() => {
+    later.afterPaint(() => {
       setRun(startSolo({ ...settings, length }));
       setBuilding(false);
       router.push('/quiz/play');
-    }, 0));
+    });
   };
   const resumable = unfinished && !unfinished.submitted && unfinished.questions.length > 0 ? unfinished : null;
 

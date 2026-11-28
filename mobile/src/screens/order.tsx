@@ -1,4 +1,4 @@
-import { useDeferredValue, useEffect, useMemo, useRef, useState, type ComponentRef } from 'react';
+import { useDeferredValue, useMemo, useRef, useState, type ComponentRef } from 'react';
 import { useLocalSearchParams } from 'expo-router';
 import { FlatList, ScrollView, View } from 'react-native';
 import { ArrowDownWideNarrow, X } from 'lucide-react-native';
@@ -17,6 +17,7 @@ import Button from '@/ui/Button';
 import OrderTray from '@/ui/OrderTray';
 import { LinkBlock, orderSurahList, SurahCard, SurahSheet } from '@/components/OrderSurah';
 import { shuffle } from '@shared/quiz/random';
+import { useAdjustOn } from '@/lib/hooks/useAdjustOn';
 
 type Practice = { key: string; choices: { value: string; labelArabic: string }[]; order: string[]; start?: string; sent?: string };
 
@@ -31,7 +32,7 @@ export default function OrderScreen() {
   const asked = Number(useLocalSearchParams<{ juz?: string }>().juz);
   const opened = ORDER_JUZ.includes(asked) ? asked : null;
   const [juz, setJuz] = useState<readonly number[]>(opened ? [opened] : []);
-  useEffect(() => { if (opened) setJuz([opened]); }, [opened]);
+  useAdjustOn([opened], () => { if (opened) setJuz([opened]); });
   const [help, setHelp] = useState(false);
   const [query, setQuery] = useState('');
   const typed = useDeferredValue(query.trim());
