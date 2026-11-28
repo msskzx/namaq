@@ -67,6 +67,8 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   `page.tsx` may only export `default`, `metadata`, and the other names
   Next recognizes; anything else, like a helper function, fails only here)
   — run it before every PR, not just when something feels risky.
+- [docs/feature-map.md](docs/feature-map.md) names every screen of the phone app and the tap that opens it. Use those
+  names when writing about the app; a new screen gets an entry in `e2e/featureMap.mjs` (its test fails until it does).
 - A change to the phone app is used before it merges (owner, 2026-11-21): run
   `npm run phone -- start` and tap through the feature you changed step by step,
   looking at each dark, iPhone-size screenshot as a person would, then save the

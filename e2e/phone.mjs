@@ -7,6 +7,7 @@ import http from 'node:http';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { HELP, controls, launch, run } from './phone/steps.mjs';
+import { nameAt } from './featureMap.mjs';
 
 const self = fileURLToPath(import.meta.url);
 const repo = path.resolve(path.dirname(self), '..');
@@ -55,11 +56,12 @@ async function shot(page, dir, name) {
 /** One step, then what a person would see: the screenshot, what can be tapped, and any error the page raised. */
 async function stepAndLook(page, errors, step, dir, name) {
   const before = errors.length;
-  const seen = { stuck: null, shot: null, controls: [], errors: [] };
+  const seen = { stuck: null, screen: null, shot: null, controls: [], errors: [] };
   try {
     await run(page, step);
   } catch (error) { seen.stuck = error.message.split('\n')[0]; }
   try {
+    seen.screen = nameAt(new URL(page.url()).pathname);
     seen.shot = await shot(page, dir, name);
     seen.controls = await controls(page);
   } catch (error) { seen.stuck ??= `The screen could not be read: ${error.message.split('\n')[0]}`; }
@@ -67,8 +69,9 @@ async function stepAndLook(page, errors, step, dir, name) {
   return seen;
 }
 
-const report = ({ stuck, shot: file, controls: list, errors }) => {
+const report = ({ stuck, screen, shot: file, controls: list, errors }) => {
   if (stuck) console.log(`STUCK: ${stuck}`);
+  if (screen) console.log(`screen: ${screen}`);
   if (file) console.log(`screenshot: ${file}`);
   console.log(`on screen:\n${list.map(item => `  ${item}`).join('\n') || '  nothing to tap'}`);
   if (errors.length) console.log(`ERRORS:\n${errors.map(error => `  ${error}`).join('\n')}`);
