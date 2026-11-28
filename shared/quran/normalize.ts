@@ -28,6 +28,19 @@ function normalizeUncached(token: string): string {
     .replace(/ک/g, 'ك');
 }
 
+const TYPED_ARTICLE = /^ال/;
+const LEADING_NON_LETTERS = /^[^ء-ي]+/;
+const SHORTEST_WITH_ARTICLE = 5;
+
+export type SearchTerm = { term: string; bare?: string };
+
+export function searchTerm(typed: string, normalized: string): SearchTerm {
+  const article = TYPED_ARTICLE.test(plainName(typed).replace(LEADING_NON_LETTERS, '')) && normalized.length >= SHORTEST_WITH_ARTICLE;
+  return article ? { term: normalized, bare: normalized.slice(2) } : { term: normalized };
+}
+
+export const holdsWord = (normalizedHay: string, { term, bare }: SearchTerm) => normalizedHay.includes(term) || (!!bare && normalizedHay.includes(bare));
+
 export type AyahWords = { display: string[]; norm: string[] };
 
 export function ayahWords(text: string, stripBasmala: boolean): AyahWords {

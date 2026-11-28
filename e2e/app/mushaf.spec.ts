@@ -438,6 +438,38 @@ test.describe('the eye with a recitation to continue and a forgotten ayah', () =
   });
 });
 
+const LONG_REVIEWS = [
+  { surahs: [2], shown: 'مراجعة ١ من ٢٨٦' },
+  { surahs: [2, 3, 4, 5, 6, 7], shown: 'مراجعة ١ من ١١٥٣' },
+];
+for (const { surahs, shown } of LONG_REVIEWS) {
+  test.describe(`a review of ${surahs.length} surahs`, () => {
+    const sizes: Record<number, number> = { 2: 286, 3: 200, 4: 176, 5: 120, 6: 165, 7: 206 };
+    const forgot = Object.fromEntries(surahs.flatMap(surah => Array.from({ length: sizes[surah] }, (_, at) => [`${surah}:${at + 1}`, { forgot: 1, at: 1 }])));
+    test.use({ seed: { 'ayah-forgot': forgot } });
+    test('its count fits in the recite bar beside every button on a 360-point phone', async ({ page }) => {
+      await page.setViewportSize({ width: 360, height: 800 });
+      await open(page, '/read');
+      await page.getByText(HAMD, { exact: true }).first().click();
+      await page.getByRole('button', { name: 'تسميع: أخفِ الآيات وأظهرها واحدة واحدة' }).click();
+      await page.getByRole('button', { name: 'راجع ما نسيت' }).click();
+      const bar = page.getByRole('toolbar', { name: 'أدوات التسميع' });
+      const edge = (await bar.boundingBox())!;
+      const inside = (box: { x: number; y: number; width: number; height: number }) => {
+        expect(box.x).toBeGreaterThanOrEqual(edge.x);
+        expect(box.x + box.width).toBeLessThanOrEqual(edge.x + edge.width);
+        expect(box.y + box.height).toBeLessThanOrEqual(edge.y + edge.height);
+      };
+      inside((await bar.getByLabel(shown).boundingBox())!);
+      for (const button of await bar.getByRole('button').all()) {
+        const box = (await button.boundingBox())!;
+        inside(box);
+        expect(box.width).toBeGreaterThanOrEqual(44);
+      }
+    });
+  });
+}
+
 test('recite from an ayah\'s long-press menu starts at that ayah', async ({ page }) => {
   const start = async () => (await stored<{ position: { start: string } }>(page, 'reader-recite-last'))?.position.start;
   await open(page, '/read');

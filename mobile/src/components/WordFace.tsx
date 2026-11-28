@@ -6,7 +6,7 @@ import OpenButton from '@/ui/OpenButton';
 import { CardWithRow } from '@/ui/Card';
 import FactCells from '@/ui/FactCells';
 import QuoteBar from '@/ui/QuoteBar';
-import TraitChips from '@/ui/TraitChips';
+import Pickable from '@/ui/Pickable';
 import type { Source } from '@/ui/sourceSlot';
 import gharib from '@shared/data/quran/gharib';
 import { num } from '@shared/quran/arabicNumber';
@@ -17,6 +17,7 @@ import { ayahMushafWords } from '@/lib/mushaf';
 import type { Palette } from '@/lib/theme';
 import { QuranWord } from './quran/text/AyahFlow';
 import BookRuns from './quran/text/BookRuns';
+import LitAyat from './quran/text/LitAyat';
 import { gharibSource } from './GharibSheet';
 import { FEATURE_ICON } from './featureIcons';
 
@@ -35,7 +36,6 @@ export default function WordFace({ name, root, count, ayat, counts, entries, art
   const branches = useMemo(() => meaningBranches(gharib, entries), [entries]);
   const [picked, setPicked] = useState(0);
   const branch = branches[Math.min(picked, branches.length - 1)];
-  const quoted = (each: GharibPlaced) => { const page = ayahMushafWords(each.key); return each.words.map(([from, to]) => page.slice(from, to + 1).join(' ')).join(' … '); };
   const placeOf = (key: string) => { const [surah, number] = key.split(':').map(Number); return `${surahNames[surah] ?? num(surah)} ${num(number)}`; };
   return (
     <View style={{ gap: 18 }}>
@@ -68,9 +68,14 @@ export default function WordFace({ name, root, count, ayat, counts, entries, art
           <PostHead Icon={FEATURE_ICON.words} title="معانيها في القرآن" sub="عند ابن قتيبة، بلفظه" palette={palette} />
           <CardWithRow palette={palette} pad={[10, 14]} gap={10} source={gharibSource(branch)}
             lead={<OpenButton label={`افتح ${placeOf(branch.key)} في المصحف`} onPress={() => onOpen(branch.key)} />}>
-            {branches.length > 1 && <TraitChips lines palette={palette} picked={picked} onPick={setPicked}
-              quran
-              traits={branches.map(each => ({ label: quoted(each), meaning: each.meaning, names: [], agreed: false, place: placeOf(each.key) }))} />}
+            {branches.length > 1 && branches.map((each, i) => (
+              <Pickable key={`${each.key}/${each.at}`} picked={picked === i} onPick={() => setPicked(i)}>
+                <View style={{ gap: 2, borderTopWidth: i ? 1 : 0, borderTopColor: palette.rule, paddingTop: i ? 10 : 0 }}>
+                  <LitAyat ayat={[{ words: ayahMushafWords(each.key), lit: each.words }]} menu={each.key} palette={palette} />
+                  <Text style={{ color: picked === i ? palette.accent : palette.muted, fontSize: 15, textAlign: 'right' }}>{`${placeOf(each.key)} · معناها: ${each.meaning}`}</Text>
+                </View>
+              </Pickable>
+            ))}
             <QuoteBar by={`قال ابن قتيبة في ${placeOf(branch.key)}:`} palette={palette}>
               <BookRuns text={branch.text.replace(/^[٠-٩]+-\s*/, '')} quran={palette.accent} style={{ ...bookStyle, color: palette.ink }} />
             </QuoteBar>

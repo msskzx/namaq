@@ -15,6 +15,7 @@ import { toTab } from '@/lib/ways';
 import { Tap } from '@/ui/Tap';
 import { useColumnSide } from '@/ui/column';
 import { useOnChange } from '@/lib/hooks/useOnChange';
+import { Text, UI_SCALE } from '@/ui/Text';
 
 const BUTTONS: { key: string; label: string; Icon: (props: LucideProps) => React.ReactNode }[] = [
   { key: '(quran)', label: 'القرآن', Icon: BookOpenText },
@@ -29,6 +30,8 @@ const LIT_BY: Record<string, string> = { read: '(quran)', '(library)': '(home)' 
 const FULL = TAB_BAR.height;
 const SMALL = 44;
 const ICON_SMALL = 0.8;
+const LABEL = 16;
+const LABEL_BOX = Math.ceil(LABEL * UI_SCALE);
 
 export default function TabBar({ state, navigateToTab }: BottomTabBarProps) {
   const palette = usePalette();
@@ -43,6 +46,7 @@ export default function TabBar({ state, navigateToTab }: BottomTabBarProps) {
   useOnChange([page], () => setCompact(false));
   const row = useAnimatedStyle(() => ({ height: interpolate(shrink.value, [0, 1], [FULL, SMALL]) }));
   const icon = useAnimatedStyle(() => ({ transform: [{ scale: interpolate(shrink.value, [0, 1], [1, ICON_SMALL]) }] }));
+  const name = useAnimatedStyle(() => ({ height: interpolate(shrink.value, [0, 1], [LABEL_BOX, 0]), opacity: interpolate(shrink.value, [0, 0.5], [1, 0], 'clamp') }));
   const away = page === 'read' && immersive;
   const slide = useSlideAway(away, 'bottom', FULL + tabBarBottom(insets.bottom) + 24);
   return (
@@ -68,7 +72,10 @@ export default function TabBar({ state, navigateToTab }: BottomTabBarProps) {
             <Tap key={key} onPress={press} accessibilityRole="tab" accessibilityState={{ selected: lit }} aria-selected={lit} accessibilityLabel={label}
               style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
               <Animated.View style={icon}>
-                <Icon size={26} color={lit ? palette.accent : palette.muted} strokeWidth={lit ? 2.25 : 1.75} />
+                <Icon size={24} color={lit ? palette.accent : palette.muted} strokeWidth={lit ? 2.25 : 1.75} />
+              </Animated.View>
+              <Animated.View style={[{ overflow: 'hidden', marginTop: 3 }, name]}>
+                <Text numberOfLines={1} style={{ color: lit ? palette.accent : palette.muted, fontSize: 11, lineHeight: LABEL }}>{label}</Text>
               </Animated.View>
             </Tap>
           );

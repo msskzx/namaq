@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
-import { BookOpenText } from 'lucide-react-native';
+import { FEATURE_ICON } from './featureIcons';
 import { Text } from '@/ui/Text';
 import gharib from '@shared/data/quran/gharib';
 import mufradat from '@shared/data/quran/mufradat';
@@ -59,7 +59,7 @@ export function GharibBody({ target, palette }: { target: GharibTarget; palette:
   return (
     <View style={{ flexShrink: 1 }}>
       <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, paddingHorizontal: 18, paddingBottom: 8 }}>
-        <BookOpenText size={20} color={palette.muted} />
+        <FEATURE_ICON.words size={20} color={palette.muted} />
         <Text accessibilityRole="header" style={{ color: palette.muted, fontSize: 16 }}>{`${surahNames[surah] ?? num(surah)} ${num(ayah)}`}</Text>
       </View>
       <ScrollView style={{ flexShrink: 1 }} contentContainerStyle={{ paddingHorizontal: 16, gap: 10, paddingBottom: 8 }}>

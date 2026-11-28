@@ -38,9 +38,8 @@ export default function SettingsSheet({ open, onClose, palette }: { open: boolea
   const mushafLabel = [spread ? 'صفحتان حين يُمال الجهاز' : 'صفحة واحدة', beside ? 'المقارنة جنبًا إلى جنب' : 'المقارنة بعضها تحت بعض'].join(' · ');
   return (
     <Sheet open={open} onClose={onClose} palette={palette}>
-      <ScrollView stickyHeaderIndices={[1]} contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 16, gap: 14 }}>
+      <ScrollView contentContainerStyle={{ paddingHorizontal: 16, paddingBottom: 16, gap: 14 }}>
         <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 18, fontWeight: '700' }}>الإعدادات</Text>
-        <View style={{ backgroundColor: palette.paper, paddingBottom: 4 }}><LookPreview palette={palette} /></View>
         <Card palette={palette} pad={[6, 14]} gap={6}>
           <InterestsSetting palette={palette} />
           <MemorizedSetting palette={palette} />
@@ -48,6 +47,7 @@ export default function SettingsSheet({ open, onClose, palette }: { open: boolea
         <Card palette={palette} pad={[6, 14]} gap={6}>
           <SettingRow Icon={PaletteIcon} title="المظهر" value={lookLabel} palette={palette}>
             <View style={{ gap: 16, paddingBottom: 8 }}>
+              <LookPreview palette={palette} />
               <ThemeTiles palette={palette} />
               <MarkTiles palette={palette} />
             </View>

@@ -60,6 +60,18 @@ test.describe('a new user', () => {
       await expect(page).toHaveURL(/\/compare/);
     });
 
+    // Owner, 2026-11-28: one mushaf button on the pair card; its sheet names each ayah, and each opens the mushaf.
+    test('the pair card\'s one mushaf button asks which ayah, then opens the mushaf', async ({ page }) => {
+      await open(page, '/');
+      const read = page.getByRole('button', { name: 'اقرأ في المصحف', exact: true }).first();
+      await read.scrollIntoViewIfNeeded();
+      await read.click();
+      const sides = page.getByRole('button', { name: /^اقرأ .+ في المصحف$/ });
+      await expect(sides).toHaveCount(2);
+      await sides.first().click();
+      await expect(page).toHaveURL(/\/read/);
+    });
+
     // Owner, 2026-11-19: no box inside a feed card, and the buttons sit in the row under the card, not in it.
     test('the tree quiz card holds no box and keeps its buttons under the card, before and after the answer', async ({ page }) => {
       await open(page, '/');

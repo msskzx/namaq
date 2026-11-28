@@ -29,6 +29,8 @@ import { toTab } from '@/lib/ways';
 import { readAyah } from '@/lib/openReader';
 import { compareMatrixOnly } from '@shared/quran/compareViews';
 import IconButton from '@/ui/IconButton';
+import Button, { Row } from '@/ui/Button';
+import Sheet from '@/ui/Sheet';
 import { Tap } from '@/ui/Tap';
 import SourceLine, { sourcesOf } from '@/ui/SourceLine';
 import { TANASUB_KIND, tanasubLink, tanasubSource } from '@shared/quran/tanasubCards';
@@ -90,6 +92,22 @@ function RunningAyat({ ayat, surah, before, after, palette, light, lane = false 
 
 const readAt = (name: SideName, side: CardSide, selected: number) =>
   (name.listed ? `${side.surah}:${name.numbers[selected] ?? name.numbers[0]}` : sideKeys(side)[0]);
+
+function ReadWhich({ sides, palette }: { sides: { label: string; at: string }[]; palette: Palette }) {
+  const [open, setOpen] = useState(false);
+  const read = (at: string) => { setOpen(false); readAyah(at); };
+  return (
+    <>
+      <IconButton Icon={FEATURE_ICON.mushaf} label="اقرأ في المصحف" onPress={() => setOpen(true)} />
+      <Sheet open={open} onClose={() => setOpen(false)} palette={palette}>
+        <View style={{ paddingHorizontal: 16, paddingBottom: 16, gap: 10 }}>
+          <Text accessibilityRole="header" style={{ color: palette.muted, fontSize: 16 }}>اقرأ في المصحف</Text>
+          <Row>{sides.map(side => <Button key={side.at} grow Icon={FEATURE_ICON.mushaf} label={side.label} accessibilityLabel={`اقرأ ${side.label} في المصحف`} onPress={() => read(side.at)} />)}</Row>
+        </View>
+      </Sheet>
+    </>
+  );
+}
 
 function SideHead({ label, at, palette, group, bare = false }: { label: string; at: string; palette: Palette; group?: string; bare?: boolean }) {
   const read = `اقرأ ${label} في المصحف`;
@@ -336,11 +354,10 @@ function CompareCard({ card, palette, onPageVideo, onOpen, aside }: { card: Pair
       {read.studio ? <Studio read={read} palette={palette} record={record} /> : (
         <View style={{ flexDirection: 'row', justifyContent: 'flex-start', flexWrap: 'wrap' }}>
           {onOpen && <OpenButton label="افتحها في المقارنة" onPress={onOpen} />}
-          {onOpen && ([0, 1] as const).map(i => {
+          {onOpen && <ReadWhich sides={([0, 1] as const).map(i => {
             const view = sideView(card, i, selected, []);
-            const label = sideTitle(view.name, surahName);
-            return <IconButton key={i} Icon={FEATURE_ICON.mushaf} label={`اقرأ ${label} في المصحف`} onPress={() => readAyah(readAt(view.name, sides[i], selected))} />;
-          })}
+            return { label: sideTitle(view.name, surahName), at: readAt(view.name, sides[i], selected) };
+          })} palette={palette} />}
           {!onOpen && saveButton}
           <IconButton Icon={Clapperboard} label="استوديو القراءة" onPress={read.open} />
           {!parts && <IconButton Icon={UnfoldHorizontal} label="الآيات المحيطة" onPress={() => setAround(!aroundOn)} on={aroundOn} />}
