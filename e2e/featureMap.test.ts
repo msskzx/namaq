@@ -1,7 +1,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { SCREENS, SECTIONS, nameAt, routeFiles, urlNamed, urlOf } from './featureMap.mjs';
+import { SCREENS, SECTIONS, nameAt, urlNamed, urlOf } from './featureMap.mjs';
+import { routeFiles } from './featureMapPages.mjs';
 import { REPO, mapData, renderPages } from './featureMapPages.mjs';
 
 const repo = path.resolve(__dirname, '..');

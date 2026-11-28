@@ -44,12 +44,22 @@ export class PartyServer {
       }
       const entry = { id, ws };
       this.sockets.push(entry);
-      ws.onMessage(message => this.dispatch({ ...JSON.parse(String(message)), playerId: id } as Action, ws));
+      ws.onMessage(message => this.dispatch(this.own({ ...JSON.parse(String(message)), playerId: id } as Action), ws));
       ws.onClose(() => {
         this.sockets = this.sockets.filter(other => other !== entry);
         if (!this.sockets.some(other => other.id === id)) this.dispatch({ type: 'disconnect', playerId: id } as Action);
       });
     });
+  }
+
+  /**
+   * The host's phone sends the questions it built with «ابدأ» (#1246). `trees` keeps them, so that path is tested; the
+   * other kinds drop them, so the party loads this server's fixed questions instead.
+   */
+  private own(action: Action): Action {
+    if (action.type !== 'start' || this.kind === 'trees') return action;
+    const { questions: _questions, surahNames: _surahNames, ...rest } = action;
+    return rest;
   }
 
   /** The question being asked, as the server holds it (with its tree and the leaves asked). */
