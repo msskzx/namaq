@@ -1,4 +1,5 @@
 import { expect, open, tab, test } from './fixtures';
+import { mushafMarkOrder as drawn } from '../../shared/quran/quranText/markOrder';
 
 // The tarajim tab (owner, 2026-11-18; a hub since 2026-11-19, the full list on its own page): only the people whose Siyar
 // entry is converted (shared/data/tarajim/people.json), each with a page built from the entry, and the nasab tree where lines meet.
@@ -95,7 +96,7 @@ test('between two people shows the chain that joins them, with its pages', async
   // The drawing first, in the page's card (owner, 2026-11-20); the sentence that says it on «النص».
   await expect(page.getByRole('button', { name: 'حمزة بن عبد المطلب', exact: true })).toBeVisible();
   await page.getByRole('tab', { name: 'النص' }).click();
-  await expect(page.getByText(/أمُّ الزبير بن العوام/)).toBeVisible();
+  await expect(page.getByText(drawn('أمُّ الزبير بن العوام'), { exact: false })).toBeVisible();
   await page.getByRole('tab', { name: 'الرسم' }).click();
   await page.getByRole('button', { name: 'أضف' }).click();
   await page.getByRole('button', { name: /^العباس/ }).click();
@@ -108,7 +109,7 @@ test('the person page gives his nasab, draws his life and his ties', async ({ pa
   await open(page, '/person?slug=az-zubayr-ibn-al-awwam');
   // His full name as the book gives it, with no drawing of it (owner, 2026-11-23); the tree is for comparing, on the button,
   // which opens the comparison on its list of people.
-  await expect(page.getByText(/الزُّبَيْرُ بنُ العَوَّامِ/).first()).toBeVisible();
+  await expect(page.getByText(drawn('الزُّبَيْرُ بنُ العَوَّامِ'), { exact: false }).first()).toBeVisible();
   await expect(page.getByRole('tab', { name: 'الرسم' })).toHaveCount(1);
   await page.getByRole('button', { name: 'قارن نسبه بغيره' }).click();
   await expect(page).toHaveURL(/\/nasab\?.*pick=1/);
