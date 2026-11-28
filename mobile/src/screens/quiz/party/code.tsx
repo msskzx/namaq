@@ -164,7 +164,7 @@ function PartyLength({ settings, change, palette }: { settings: PartySettings; c
   return (
     <>
       <View style={{ flexDirection: 'row' }}><NumberPicker value={Math.min(settings.length, available)} max={available} label="عدد الأسئلة" palette={palette} onChange={length => change({ length })} /></View>
-      <Label palette={palette} muted>{`حتى ${num(PARTY_MOST)} سؤالًا في الاختبار الجماعي، فهي كل ما تحمله الغرفة. إن قلّت الأسئلة المتاحة عن العدد بدأ بما وُجد.`}</Label>
+      <Label palette={palette} muted>{`حتى ${num(PARTY_MOST)} سؤال في الاختبار الجماعي. إن قلّت الأسئلة المتاحة عن العدد بدأ بما وُجد.`}</Label>
     </>
   );
 }
