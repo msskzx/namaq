@@ -1,4 +1,4 @@
-import { normalizeWord } from './normalize';
+import { holdsWord, normalizeWord } from './normalize';
 
 // see docs/plans/word-counts-app.md
 export type WordsData = {
@@ -58,7 +58,7 @@ export function searchWords(data: WordsData, query: string, limit: number): numb
   if (!needle) return [];
   const found: number[] = [];
   for (let id = 0; id < data.lemmas.length && found.length < limit; id++) {
-    if (normalizeWord(data.lemmas[id][0]).includes(needle)) found.push(id);
+    if (holdsWord(normalizeWord(data.lemmas[id][0]), needle)) found.push(id);
   }
   return found;
 }

@@ -39,6 +39,13 @@ describe('word counts', () => {
     expect(words.lemmas[searchWords(words, 'عصا', 5)[0]][0]).toBe('عَصَا (العصا)');
   });
 
+  it('finds a word typed with «ال» as it finds it without (owner, 2026-11-28: «الرحمن» found nothing)', () => {
+    for (const [withArticle, bare] of [['الرحمن', 'رحمن'], ['الأرض', 'أرض'], ['السماء', 'سماء']]) {
+      expect(searchWords(words, bare, 5).length).toBeGreaterThan(0);
+      expect(searchWords(words, withArticle, 5)).toEqual(searchWords(words, bare, 5));
+    }
+  });
+
   it('gives a word with two lemmas both, and a pronoun none', () => {
     expect(lemmasOfWord(words, '2:3', 5).map(id => words.lemmas[id][0])).toEqual(['مِن', 'مَا']);
     expect(lemmasOfWord(words, '2:29', 0)).toEqual([]);

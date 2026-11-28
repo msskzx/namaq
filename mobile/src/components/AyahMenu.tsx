@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { View } from 'react-native';
-import { ArrowLeftRight, BookOpenText, Bookmark, Copy, EyeOff, FileText, Layers, Lightbulb, LightbulbOff, ListTree, NotebookPen, Play, Send, Sparkles, TableOfContents, TextSearch } from 'lucide-react-native';
+import { Bookmark, Copy, EyeOff, FileText, Lightbulb, LightbulbOff, NotebookPen, Play, ScanSearch, Send, TableOfContents } from 'lucide-react-native';
 import { hasQiraat } from '@shared/quran/qiraatData';
 import { NOTE_NAME } from '@shared/quran/selection';
 import { hasTrees } from '@/lib/branchList';
@@ -11,7 +11,6 @@ import Chip from '@/ui/Chip';
 import { num } from '@shared/quran/arabicNumber';
 import { surahName } from '@shared/quran/surahNames';
 import { FEATURE_ICON } from './featureIcons';
-import TreeIcon from './TreeIcon';
 
 export function useAyahMenuFacts(key: string | null | undefined) {
   const trees = useMemo(() => !!key && hasTrees(key), [key]);
@@ -42,32 +41,28 @@ export function ayahMenuGroups(facts: ReturnType<typeof useAyahMenuFacts>, act: 
       {act.ayat.keys.map(key => <Chip key={key} small role="radio" label={ayahName(key)} on={key === act.ayat!.picked} onPress={() => act.ayat!.onPick(key)} palette={palette}
         accessibilityLabel={`الآية ${ayahName(key)}`} />)}
     </View>] : []),
-    ...(act.page || act.mushaf ? [<>
-      {act.page && <ActButton Icon={FileText} label="صفحة الآية" name="صفحة الآية" palette={palette} onPress={act.page} />}
-      {act.mushaf && <ActButton Icon={FEATURE_ICON.mushaf} label="في المصحف" name="المصحف" palette={palette} onPress={act.mushaf} />}
-    </>] : []),
     <>
+      {act.mushaf && <ActButton Icon={FEATURE_ICON.mushaf} label="في المصحف" name="المصحف" palette={palette} onPress={act.mushaf} />}
       {act.listen && <ActButton Icon={Play} label="استمع من هذه الآية" name="استمع" palette={palette} onPress={act.listen} />}
       {act.recite && <ActButton Icon={EyeOff} label="سمّع من هذه الآية" name="سمّع" palette={palette} onPress={act.recite} />}
       <ActButton Icon={forgot.on ? LightbulbOff : Lightbulb} label={forgot.label ?? (forgot.on ? 'تذكّرتها' : 'نسيت الآية')} name="نسيت" palette={palette} on={forgot.on}
         expanded={forgot.expanded} onPress={forgot.onPress} onPressAt={forgot.onPressAt} />
       <ActButton Icon={Bookmark} label={act.save.on ? 'أزلها من المحفوظات' : 'احفظ الآية'} name="احفظ" palette={palette} on={act.save.on} tint={palette.root} filled onPress={act.save.onPress} />
       <ActButton Icon={NotebookPen} label={act.note.on ? 'ما دوّنته عن الآية' : 'دوّن عن الآية'} name={NOTE_NAME} palette={palette} on={act.note.on} onPress={act.note.onPress} />
-    </>,
-    <>
-      <ActButton Icon={FEATURE_ICON.tafsir} label="تفسير السعدي" name="التفسير" palette={palette} onPress={act.tafsir} />
-      {act.irab && <ActButton Icon={ListTree} label="إعراب الكلمة" name="الإعراب" palette={palette} onPress={act.irab} />}
-      {act.meaning && <ActButton Icon={BookOpenText} label="معنى الكلمة" name="المعنى" palette={palette} onPress={act.meaning} />}
-      <ActButton Icon={Sparkles} label="البلاغة في الآية" name="البلاغة" palette={palette} onPress={act.balagha} />
-      {facts.readings && <ActButton Icon={Layers} label="القراءات العشر في كلمات الآية" name="القراءات" palette={palette} onPress={act.readings} />}
-      {facts.trees && <ActButton Icon={TreeIcon} label="متشابهات الآية" name="المتشابهات" palette={palette} onPress={act.trees} />}
-      {facts.compare && <ActButton Icon={ArrowLeftRight} label="في المقارنة" name="المقارنة" palette={palette} onPress={act.compare} />}
-      {act.places && <ActButton Icon={TextSearch} label={act.places.label} name="المواضع" palette={palette} onPress={act.places.onPress} />}
-      {act.topics && <ActButton Icon={TableOfContents} label="موضوع الآية في السورة" name="الموضوعات" palette={palette} onPress={act.topics} />}
-    </>,
-    <>
       <ActButton Icon={Copy} label="انسخ الآية" name="نسخ" palette={palette} onPress={act.copy} />
       <ActButton Icon={Send} label="مشاركة" name="مشاركة" palette={palette} onPress={act.share} />
+    </>,
+    <>
+      {act.page && <ActButton Icon={FileText} label="صفحة الآية" name="صفحة الآية" palette={palette} onPress={act.page} />}
+      <ActButton Icon={FEATURE_ICON.tafsir} label="تفسير السعدي" name="التفسير" palette={palette} onPress={act.tafsir} />
+      {act.irab && <ActButton Icon={FEATURE_ICON.irab} label="إعراب الكلمة" name="الإعراب" palette={palette} onPress={act.irab} />}
+      {act.meaning && <ActButton Icon={FEATURE_ICON.words} label="معنى الكلمة" name="المعنى" palette={palette} onPress={act.meaning} />}
+      <ActButton Icon={FEATURE_ICON.balagha} label="البلاغة في الآية" name="البلاغة" palette={palette} onPress={act.balagha} />
+      {facts.readings && <ActButton Icon={FEATURE_ICON.qiraat} label="القراءات العشر في كلمات الآية" name="القراءات" palette={palette} onPress={act.readings} />}
+      {facts.trees && <ActButton Icon={FEATURE_ICON.trees} label="متشابهات الآية" name="المتشابهات" palette={palette} onPress={act.trees} />}
+      {facts.compare && <ActButton Icon={FEATURE_ICON.compare} label="في المقارنة" name="المقارنة" palette={palette} onPress={act.compare} />}
+      {act.places && <ActButton Icon={ScanSearch} label={act.places.label} name="المواضع" palette={palette} onPress={act.places.onPress} />}
+      {act.topics && <ActButton Icon={TableOfContents} label="موضوع الآية في السورة" name="الموضوعات" palette={palette} onPress={act.topics} />}
     </>,
   ];
 }

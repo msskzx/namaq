@@ -28,6 +28,12 @@ function normalizeUncached(token: string): string {
     .replace(/ک/g, 'ك');
 }
 
+const ARTICLE = 'ال';
+const SHORTEST_WITH_ARTICLE = 5;
+
+export const holdsWord = (normalizedHay: string, normalizedTerm: string) => normalizedHay.includes(normalizedTerm)
+  || (normalizedTerm.length >= SHORTEST_WITH_ARTICLE && normalizedTerm.startsWith(ARTICLE) && normalizedHay.includes(normalizedTerm.slice(ARTICLE.length)));
+
 export type AyahWords = { display: string[]; norm: string[] };
 
 export function ayahWords(text: string, stripBasmala: boolean): AyahWords {
