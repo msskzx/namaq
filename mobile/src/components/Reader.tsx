@@ -482,7 +482,12 @@ export default function Reader() {
           {fold => (
             <RecitePill recite={recite} writing={writing} onWriting={toggleWriting} onClose={stopRecite} onRestart={reviewing ? undefined : restartPage} palette={palette} onFold={fold}
               more={reviewing ? !!reviewNext : page < PAGES} after={reviewing ? { Icon: ArrowLeft, label: 'الآية المنسية التالية', name: 'آية منسية' } : undefined}
-              lead={reviewing ? <Text numberOfLines={1} style={{ color: palette.muted, fontSize: 13, paddingHorizontal: 8, flexShrink: 0 }}>مراجعة {num(reviewAt)} من {num(reviewTotal)}</Text> : null} />
+              lead={reviewing ? (
+                <View accessible accessibilityLabel={`مراجعة ${num(reviewAt)} من ${num(reviewTotal)}`} style={{ alignItems: 'center', paddingHorizontal: 4, flexShrink: 0 }}>
+                  <Text style={{ color: palette.muted, fontSize: 11 }}>مراجعة</Text>
+                  <Text style={{ color: palette.muted, fontSize: 12 }}>{num(reviewAt)} من {num(reviewTotal)}</Text>
+                </View>
+              ) : null} />
           )}
         </FloatingBar>
       )}

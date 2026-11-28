@@ -436,21 +436,30 @@ test.describe('the eye with a recitation to continue and a forgotten ayah', () =
     await expect.poll(() => readerPage(page)).toBe(2);
     await expect(page.getByText(/مراجعة/)).toBeVisible();
   });
+});
 
-  test('the review count stays on one line beside the bar\'s buttons on a 360-point phone', async ({ page }) => {
+test.describe('a long review', () => {
+  const forgot = Object.fromEntries(Array.from({ length: 120 }, (_, at) => [`2:${at + 5}`, { forgot: 1, at: 1 }]));
+  test.use({ seed: { 'ayah-forgot': forgot } });
+  test('its count fits in the recite bar beside every button on a 360-point phone', async ({ page }) => {
     await page.setViewportSize({ width: 360, height: 800 });
     await open(page, '/read');
     await page.getByText(HAMD, { exact: true }).first().click();
     await page.getByRole('button', { name: 'تسميع: أخفِ الآيات وأظهرها واحدة واحدة' }).click();
     await page.getByRole('button', { name: 'راجع ما نسيت' }).click();
     const bar = page.getByRole('toolbar', { name: 'أدوات التسميع' });
-    const count = bar.getByText(/مراجعة/);
-    const [edge, box] = [(await bar.boundingBox())!, (await count.boundingBox())!];
-    const line = await count.evaluate(node => parseFloat(getComputedStyle(node).lineHeight) || parseFloat(getComputedStyle(node).fontSize) * 2);
-    expect(box.height).toBeLessThan(line * 1.5);
-    expect(box.x).toBeGreaterThanOrEqual(edge.x);
-    expect(box.x + box.width).toBeLessThanOrEqual(edge.x + edge.width);
-    for (const button of await bar.getByRole('button').all()) expect((await button.boundingBox())!.width).toBeGreaterThanOrEqual(44);
+    const edge = (await bar.boundingBox())!;
+    const inside = (box: { x: number; y: number; width: number; height: number }) => {
+      expect(box.x).toBeGreaterThanOrEqual(edge.x);
+      expect(box.x + box.width).toBeLessThanOrEqual(edge.x + edge.width);
+      expect(box.y + box.height).toBeLessThanOrEqual(edge.y + edge.height);
+    };
+    inside((await bar.getByLabel('مراجعة ١ من ١٢٠').boundingBox())!);
+    for (const button of await bar.getByRole('button').all()) {
+      const box = (await button.boundingBox())!;
+      inside(box);
+      expect(box.width).toBeGreaterThanOrEqual(44);
+    }
   });
 });
 
