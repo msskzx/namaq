@@ -54,7 +54,7 @@ export type ChoiceQuestion = {
   note?: { label: string; text: string };
   map?: { layer: 'life' | 'after' };
   compare?: CompareAsk;
-  look?: QuizLook;
+  look: QuizLook;
   witness?: { by: string; text: string; lit?: string };
   sources: QuizSource[];
   evidence: { claimKeys: string[] };
@@ -76,7 +76,12 @@ export type QuizLook =
   | { view: 'irab'; key: string; word: number; mark?: undefined }
   | { view: 'qiraat'; key: string; mark?: undefined }
   | { view: 'tuhfa'; mark?: number }
-  | { view: 'ayat'; keys: string[]; mark?: string };
+  | { view: 'ayat'; keys: string[]; mark?: string }
+  | { view: 'around'; before?: string[]; after?: string[]; mark?: undefined }
+  | { view: 'surahs'; surahs: number[]; mark?: undefined }
+  | { view: 'prompt'; key: string; word: string; first: boolean; mark?: undefined }
+  | { view: 'dhikr'; id: string; mark?: undefined }
+  | { view: 'own'; mark?: undefined };
 
 export const unmarked = (look: QuizLook | undefined): QuizLook | undefined => look && ({ ...look, mark: undefined });
 

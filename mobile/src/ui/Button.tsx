@@ -7,7 +7,7 @@ import { Tap } from '@/ui/Tap';
 type Props = {
   label?: string;
   Icon?: (props: LucideProps) => React.ReactNode;
-  onPress: () => void;
+  onPress?: () => void;
   variant?: 'primary' | 'outline' | 'plain';
   active?: boolean;
   disabled?: boolean;
@@ -24,8 +24,8 @@ export default function Button({ label, Icon, onPress, variant = 'outline', acti
   const filled = !disabled && (variant === 'primary' || (active && !green));
   const color = filled ? palette.onAccent : disabled ? palette.muted : green ? palette.green : palette.ink;
   return (
-    <Tap onPress={onPress} disabled={disabled} accessibilityRole="button" accessibilityLabel={accessibilityLabel ?? label}
-      accessibilityState={{ disabled, selected: active }} hitSlop={6}
+    <Tap onPress={onPress} disabled={disabled || !onPress} accessibilityRole={onPress ? 'button' : 'text'} accessibilityLabel={accessibilityLabel ?? label}
+      accessibilityState={onPress ? { disabled, selected: active } : undefined} hitSlop={6}
       style={({ pressed }) => ({
         flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8,
         minHeight: big ? 50 : 42, minWidth: label ? undefined : 42, paddingHorizontal: label ? (big ? 20 : grow ? 10 : 14) : 8, borderRadius: pill ? (big ? 25 : 21) : 10, flexGrow: grow ? 1 : 0,

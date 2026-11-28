@@ -8,7 +8,6 @@ import type { BranchAyah } from '@shared/quran/branches';
 import corpus from '@shared/quran/quranText/corpus';
 import { isAsked } from '@shared/quiz/score';
 import { DEFAULT_SETTINGS } from '@shared/party/rules';
-import { QUIZ_LENGTHS } from '@shared/quiz/settings';
 import { availability, DEFAULT_SOLO, partyQuiz, check, cleanSolo, DEFAULT_LIST, goTo, hasTyped, isTree, pick, questionState, reveal, setHints, soloScore, startSolo, submit, typeAnswer, type SoloRun } from './quiz';
 import type { AskedBranchQuestion } from '@shared/quiz/branchQuestions';
 
@@ -23,7 +22,8 @@ function typeRight(run: SoloRun) {
 describe('solo quiz on the phone', () => {
   it('keeps settings in range, and turns an older juz range into the filters', () => {
     expect(cleanSolo({ juzFrom: 30, juzTo: 28, leaves: 6, length: 10 })).toEqual({ kinds: ['BRANCHES'], list: { filters: { categories: 'mutashabeh' }, range: { from: 28, to: 30 }, saved: false }, difficulty: 'medium', leaves: 6, length: 10 });
-    expect(cleanSolo({ juzFrom: 0, juzTo: 31, leaves: 11, length: 7 })).toEqual({ kinds: ['BRANCHES'], list: { filters: { categories: 'mutashabeh' }, range: null, saved: false }, difficulty: 'medium', leaves: 3, length: 5 });
+    expect(cleanSolo({ juzFrom: 0, juzTo: 31, leaves: 11, length: 0 })).toEqual({ kinds: ['BRANCHES'], list: { filters: { categories: 'mutashabeh' }, range: null, saved: false }, difficulty: 'medium', leaves: 3, length: 5 });
+    expect(cleanSolo({ length: 37 }).length, 'no cap on how many questions (owner, 2026-11-28)').toBe(37);
     expect(cleanSolo({ kinds: ['RECITE', 'nope' as never, 'SURAH'] }).kinds).toEqual(['SURAH', 'RECITE']);
     expect(cleanSolo({ difficulty: 'hard' }).difficulty).toBe('hard');
     expect(cleanSolo({ difficulty: 'nope' as never }).difficulty).toBe('medium');
@@ -36,7 +36,6 @@ describe('solo quiz on the phone', () => {
       expect(available).toBe(branchQuestionPool(corpus.ayat as BranchAyah[], list.range, trees).candidates.length);
       expect(branchQuestions(corpus.ayat as BranchAyah[], list.range, trees).length).toBeLessThanOrEqual(available);
     }
-    expect(availability({ kinds: ['BRANCHES'], list: DEFAULT_LIST }, []).lengths).toEqual([5, 10, 15]);
   });
 
   it('asks only saved trees when saved only is on', () => {
@@ -137,8 +136,8 @@ describe('party quiz built on the host’s phone', () => {
     expect(Object.keys(surahNames).map(Number).sort((a, b) => a - b)).toEqual([...new Set(ayat.map(key => Number(key.split(':')[0])))].sort((a, b) => a - b));
   });
 
-  it('fills the longest tree quiz, solo or party, though trees sharing an ayah are skipped', () => {
-    const longest = Math.max(...QUIZ_LENGTHS);
+  it('fills a long tree quiz, past the old cap of fifteen, solo or party, though trees sharing an ayah are skipped', () => {
+    const longest = 4 * DEFAULT_SETTINGS.length;
     for (const seed of [1, 2, 3]) {
       expect(partyQuiz({ ...DEFAULT_SETTINGS, length: longest }, seeded(seed)).questions).toHaveLength(longest);
       expect(startSolo({ ...DEFAULT_SOLO, length: longest }, seeded(seed)).questions).toHaveLength(longest);

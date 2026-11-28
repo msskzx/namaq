@@ -5,7 +5,7 @@ import { SAHIH } from '@/lib/sahih';
 import Card, { UnderCard, useCardRow } from '@/ui/Card';
 import { ScrollView, View } from 'react-native';
 import { usePageWidth } from '@/ui/column';
-import { BookSearch, Check, Maximize2 } from 'lucide-react-native';
+import { BookOpenCheck, BookSearch, Check } from 'lucide-react-native';
 import type { QuizLook } from '@shared/quiz/choiceKinds';
 import { LOOKED_POINTS, POINTS } from '@shared/quiz/score';
 import { num } from '@shared/quran/arabicNumber';
@@ -52,6 +52,13 @@ import { TermQuotes } from './BalaghaTerm';
 import LitAyat from './quran/text/LitAyat';
 import { ayahMushafWords } from '@/lib/mushaf';
 import { FortyCard } from '@/components/FortyCard';
+import { orderSurahList, SurahBody, SurahCard } from './OrderSurah';
+import { DhikrBody } from './Adhkar';
+import QuizSources from './QuizSources';
+import AyahFlow, { AyahWords } from './quran/text/AyahFlow';
+import QuranWords from './quran/text/QuranWords';
+import { ADHKAR } from '@shared/adhkar';
+import { adhkarTimes, dhikrHint, dhikrSources } from '@shared/quiz/adhkar';
 
 const FOUND = 20;
 
@@ -193,13 +200,65 @@ function TuhfaLook({ mark, palette }: { mark?: number; palette: Palette }) {
   );
 }
 
+function AroundLook({ before, after, palette }: { before?: string[]; after?: string[]; palette: Palette }) {
+  const side = (label: string, words: string[]) => (
+    <View style={{ gap: 6 }}>
+      <Text accessibilityRole="header" style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>{label}</Text>
+      <Card palette={palette} pad={[10, 14]}>
+        <AyahFlow color={palette.ink} menu={false}><AyahWords>{words.join(' ')}</AyahWords></AyahFlow>
+      </Card>
+    </View>
+  );
+  return (
+    <View style={{ gap: 12 }}>
+      {before && side('الآية التي قبلها', before)}
+      {after && side('الآية التي بعدها', after)}
+    </View>
+  );
+}
+
+function SurahsLook({ surahs, shown, palette }: { surahs: number[]; shown: boolean; palette: Palette }) {
+  const all = orderSurahList();
+  return (
+    <View style={{ gap: 12 }}>
+      {!shown && <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>{surahs.length > 1 ? 'أوائل هذه السور:' : 'أول السورة:'}</Text>}
+      {surahs.map(n => all.find(s => s.surah === n)).filter(s => !!s).map(s => (shown
+        ? <SurahCard key={s.surah} s={s} palette={palette} />
+        : <Card key={s.surah} palette={palette} pad={[6, 14]}><SurahBody s={s} palette={palette} bare /></Card>))}
+    </View>
+  );
+}
+
+function PromptLook({ word, first, palette }: { word: string; first: boolean; palette: Palette }) {
+  return (
+    <Text style={{ color: palette.ink, fontSize: 17, textAlign: 'right' }}>
+      {first ? 'أول كلمة في الآية: ' : 'الكلمة التالية: '}<QuranWords>{`«${word}»`}</QuranWords>
+    </Text>
+  );
+}
+
+function DhikrLook({ id, shown, palette }: { id: string; shown: boolean; palette: Palette }) {
+  const item = ADHKAR.find(each => each.id === id);
+  if (!item) return null;
+  if (shown) return <View style={{ gap: 12 }}><DhikrBody item={item} palette={palette} /><QuizSources sources={dhikrSources(item)} palette={palette} /></View>;
+  return (
+    <View style={{ gap: 10 }}>
+      <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>{`من ${adhkarTimes(item)}`}</Text>
+      {dhikrHint(item).map(quote => <Text key={quote} style={{ color: palette.ink, fontSize: 17, lineHeight: 30, textAlign: 'right' }}>{`«${quote}»`}</Text>)}
+      <QuizSources sources={dhikrSources(item)} palette={palette} />
+    </View>
+  );
+}
+
+export const lookable = (look: QuizLook | undefined): look is QuizLook => !!look && look.view !== 'own';
+
 const bleed = { marginHorizontal: -16 } as const;
 
 export function LookView(props: { look: QuizLook; shown: boolean; palette: Palette }) {
   return <NoShare.Provider value><LookViewOf {...props} /></NoShare.Provider>;
 }
 
-function LookViewOf({ look, shown, palette }: { look: QuizLook; shown: boolean; palette: Palette }) {
+function LookViewOf({ look, shown, palette }: { look: QuizLook; shown: boolean; palette: Palette }): React.ReactNode {
   const width = usePageWidth();
   const drawW = Math.min(width - 32, 480);
   switch (look.view) {
@@ -224,13 +283,20 @@ function LookViewOf({ look, shown, palette }: { look: QuizLook; shown: boolean; 
     case 'tafsir': return <TafsirLook key={`${look.keys.join()}/${look.mark ?? ''}`} keys={look.keys} mark={shown ? look.mark : undefined} palette={palette} />;
     case 'tuhfa': return <TuhfaLook mark={shown ? look.mark : undefined} palette={palette} />;
     case 'ayat': return <AyatLook keys={look.keys} mark={shown ? look.mark : undefined} palette={palette} />;
+    case 'around': return <AroundLook before={look.before} after={look.after} palette={palette} />;
+    case 'surahs': return <SurahsLook surahs={look.surahs} shown={shown} palette={palette} />;
+    case 'prompt': return shown ? <AyatLook keys={[look.key]} palette={palette} /> : <PromptLook word={look.word} first={look.first} palette={palette} />;
+    case 'dhikr': return <DhikrLook id={look.id} shown={shown} palette={palette} />;
+    case 'own': return null;
   }
+  return look satisfies never;
 }
 
 export function LookButton({ look, onLook, costs = false, palette, top }: { look: QuizLook; onLook?: () => void; costs?: boolean; palette: Palette; top?: React.ReactNode }) {
   const [open, setOpen] = useState(false);
   const inRow = useCardRow();
   const press = () => { setOpen(true); onLook?.(); };
+  if (!lookable(look)) return null;
   return (
     <View style={{ gap: 4, alignItems: 'flex-start' }}>
       {inRow ? <UnderCard><Button Icon={BookSearch} label="تلميح" accessibilityLabel="تلميح: ابحث عن الجواب" onPress={press} pill /></UnderCard> : <Button Icon={BookSearch} label="تلميح" accessibilityLabel="تلميح: ابحث عن الجواب" onPress={press} />}
@@ -251,7 +317,8 @@ export function LookButton({ look, onLook, costs = false, palette, top }: { look
 export function PlaceButton({ look, palette }: { look: QuizLook; palette: Palette }) {
   const [open, setOpen] = useState(false);
   const inRow = useCardRow();
-  const button = <Button Icon={Maximize2} label="الموضع كاملًا" onPress={() => setOpen(true)} pill={inRow} />;
+  if (!lookable(look)) return null;
+  const button = <Button Icon={BookOpenCheck} label="الجواب في مصدره" onPress={() => setOpen(true)} pill={inRow} />;
   return (
     <View style={{ alignItems: 'flex-start' }}>
       {inRow ? <UnderCard>{button}</UnderCard> : button}

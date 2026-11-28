@@ -1,7 +1,7 @@
 // see docs/adr/0031-a-live-party-runs-in-one-durable-object.md
 import { partyPoints, questionPoints, share, type QuestionAnswer, type ScoredQuestion } from '../quiz/score';
 import { unmarked, type QuizLook } from '../quiz/choiceKinds';
-import { QUIZ_LEAVES, QUIZ_LENGTHS, QUIZ_TOPICS, RANGED_TOPICS, WRITTEN_TOPICS, type QuizTopic } from '../quiz/settings';
+import { QUIZ_LEAVES, QUIZ_TOPICS, quizLength, RANGED_TOPICS, WRITTEN_TOPICS, type QuizTopic } from '../quiz/settings';
 import { isPenRule, type PenRule } from '../quran/writeAyah';
 import { DEFAULT_DIFFICULTY, DIFFICULTIES, type Difficulty } from '../quiz/difficulty';
 import { QUIZ_CATEGORIES, quizFilters, treeScopeParams, type ScopeFilters } from '../quiz/scopeParams';
@@ -88,13 +88,15 @@ export function createParty(code: string, hostId: string, hostName: string, now:
 const pick = <T,>(options: readonly T[], value: unknown, fallback: T) => options.includes(value as T) ? value as T : fallback;
 const juz = (value: unknown, fallback: number) => Number.isInteger(value) && (value as number) >= 1 && (value as number) <= 30 ? value as number : fallback;
 
+export const PARTY_MOST = 300;
+
 export function cleanSettings(settings: Partial<PartySettings>, base: PartySettings = DEFAULT_SETTINGS): PartySettings {
   const topics = Array.isArray(settings.topics) ? [...new Set(settings.topics.filter(topic => QUIZ_TOPICS.includes(topic)))] : base.topics;
   const from = juz(settings.juzFrom, base.juzFrom);
   const to = juz(settings.juzTo, base.juzTo);
   return {
     topics,
-    length: pick(QUIZ_LENGTHS, settings.length, base.length as (typeof QUIZ_LENGTHS)[number]),
+    length: Math.min(quizLength(settings.length, base.length), PARTY_MOST),
     person: typeof settings.person === 'string' ? settings.person.trim() : base.person,
     juzFrom: Math.min(from, to),
     juzTo: Math.max(from, to),

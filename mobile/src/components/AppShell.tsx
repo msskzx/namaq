@@ -46,6 +46,8 @@ export default function AppShell({ onReady }: { onReady: () => void }) {
             <Stack.Screen name="privacy" />
             <Stack.Screen name="attributions" />
             <Stack.Screen name="prophets/[slug]" />
+            <Stack.Screen name="quiz/play" options={{ gestureEnabled: false }} />
+            <Stack.Screen name="quiz/party/[code]" options={{ gestureEnabled: false }} />
           </Stack>
           </AyahMenuHost>
           <ShareSheet />

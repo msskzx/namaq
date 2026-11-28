@@ -16,7 +16,7 @@ import QuranWords from './quran/text/QuranWords';
 import BookRuns from './quran/text/BookRuns';
 import TermChips from './TermSheet';
 import QuizSources from './QuizSources';
-import { LookButton, PlaceButton } from './QuizLook';
+import { lookable, LookButton, PlaceButton } from './QuizLook';
 import type { WriteAsk } from '@shared/quiz/score';
 import type { PenRule } from '@shared/quran/writeAyah';
 import { num } from '@shared/quran/arabicNumber';
@@ -220,7 +220,7 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
             onPress={() => onPick(several ? joined(ticked) : ticked[0] ?? '')} />
         </View>
       )}
-      {!answered && revealed && question.look && onPick && <View style={{ paddingHorizontal: 16 }}><LookButton look={question.look} onLook={onLook} costs={costs} palette={palette} top={lookTop} /></View>}
+      {!answered && onPick && lookable(question.look) && <View style={{ paddingHorizontal: 16 }}><LookButton look={question.look} onLook={onLook} costs={costs} palette={palette} top={lookTop} /></View>}
       {answered && question.terms && <TermChips names={question.choices.map(choice => question.terms![choice.value]).filter(Boolean)} palette={palette} />}
       {alike && diff && (
         <View style={{ marginHorizontal: 16, borderTopWidth: 1, borderStyle: 'dashed', borderColor: palette.rule, paddingTop: 10, gap: 4 }}>
@@ -237,7 +237,7 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
         </View>
       )}
       {answered && !!question.sources?.length && <View style={{ paddingHorizontal: 16 }}><QuizSources sources={question.sources} palette={palette} /></View>}
-      {answered && question.look && <View style={{ paddingHorizontal: 16 }}><PlaceButton look={question.look} palette={palette} /></View>}
+      {answered && lookable(question.look) && <View style={{ paddingHorizontal: 16 }}><PlaceButton look={question.look} palette={palette} /></View>}
       {answered && question.ayahKey && onOpen && <View style={{ paddingHorizontal: 16, alignItems: 'flex-start' }}><Button Icon={FEATURE_ICON.mushaf} accessibilityLabel="في المصحف" onPress={() => onOpen(question.ayahKey!)} /></View>}
     </Box>
   );

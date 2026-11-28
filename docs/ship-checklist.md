@@ -77,7 +77,7 @@ in [records](records/README.md), `AGENTS` a rule already in AGENTS.md.
 - [ ] Kinds mix as chips inside solo and party, never as separate quizzes. Quizzes show trees in the matrix view only. (owner 11-13, 11-17)
 - [ ] Every typed Quran answer (recite, write, tree leaves, compare blanks) uses the recite-mode write boxes, in the same colour. No quiz builds its own writing field. (owner 11-17, 11-19)
 - [ ] A tree question's prompt is not bigger than the tree. Corrections sit inside each asked node.
-- [ ] Look-up: tapping «تلميح» (once «ابحث عن الجواب») counts as the attempt. Party scores 10 a question and 5 after a look; solo has no penalty; nothing extra for speed. After the reveal, everyone sees the feature's full view under the answer. Memory kinds (which-surah, compare, recite) have no look-up. (owner 11-19)
+- [ ] Look-up: tapping «تلميح» (once «ابحث عن الجواب») counts as the attempt. Party scores 10 a question and 5 after a look; solo has no penalty; nothing extra for speed. After the reveal, everyone sees the feature's full view under the answer. (owner 11-19.) Every question has «تلميح» (owner 11-28): `ChoiceQuestion.look` is required, and a memory kind gets a hint that helps without saying the answer (the ayat around it, the next word, the surah's opening). `look: { view: 'own' }` only where the question's own view draws its hint (compare blanks, the surah-order tray); `shared/quiz/look.test.ts` holds it.
 - [ ] Answer buttons sit on the right. Players move between questions by swiping. The result never says "passed" or "failed". (owner 11-17)
 
 ## 4. Feed cards

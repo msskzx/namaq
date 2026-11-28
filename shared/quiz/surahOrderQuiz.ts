@@ -46,12 +46,14 @@ function mixed(order: number[], random: Random) {
 export function orderQuestion(surahs: number[], random: Random, kind: string = SURAH_ORDER, prompt = 'رتّب هذه السور كما في المصحف'): ChoiceQuestion {
   const order = [...surahs].sort((a, b) => a - b);
   const right = order.map(String);
+  const shown = mixed(order, random);
   return {
     key: `${kind}:${order.join(',')}`,
     family: kind,
     promptArabic: prompt,
     ...(kind === SURAH_ORDER_JUZ && { tray: true }),
-    choices: mixed(order, random).map(n => ({ value: String(n), labelArabic: SURAH_NAMES[n] })),
+    choices: shown.map(n => ({ value: String(n), labelArabic: SURAH_NAMES[n] })),
+    look: kind === SURAH_ORDER_JUZ ? { view: 'own' } : { view: 'surahs', surahs: shown },
     correctAnswer: right.join(PICKS),
     order: right,
     whereOf: Object.fromEntries(order.map(n => [String(n), num(n)])),

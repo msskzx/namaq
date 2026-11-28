@@ -90,6 +90,7 @@ function question({ ask, sources }: Asked): ChoiceQuestion {
     choices: [],
     correctAnswer: ask.blanks.map(([from, to]) => ask.asked.words.slice(from, to).join(' ')).join(' … '),
     compare: ask,
+    look: { view: 'own' },
     sources,
     evidence: { claimKeys: [] },
   };

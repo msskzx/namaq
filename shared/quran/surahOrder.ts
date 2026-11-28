@@ -12,11 +12,11 @@ export type Cite = { book: Book; vol?: number; page: number; to?: number; sh: nu
 export type Aim = { text: string; src: Cite };
 export type Link = { text: string; src: Cite; pairs: [string, string][] };
 
-export const BOOKS: Record<Book, { title: string; short: string; shamela: number }> = {
-  nazm: { title: 'نظم الدرر في تناسب الآيات والسور، للبقاعي', short: 'البقاعي، نظم الدرر', shamela: 9098 },
-  masaid: { title: 'مصاعد النظر للإشراف على مقاصد السور، للبقاعي', short: 'البقاعي، مصاعد النظر', shamela: 1404 },
-  tanasuq: { title: 'تناسق الدرر في تناسب السور، للسيوطي', short: 'السيوطي، تناسق الدرر', shamela: 9992 },
-  burhan: { title: 'البرهان في تناسب سور القرآن، لابن الزبير الغرناطي', short: 'ابن الزبير، البرهان', shamela: 1388 },
+export const BOOKS: Record<Book, { title: string; short: string; by: string; shamela: number }> = {
+  nazm: { title: 'نظم الدرر في تناسب الآيات والسور، للبقاعي', short: 'البقاعي، نظم الدرر', by: 'البقاعي', shamela: 9098 },
+  masaid: { title: 'مصاعد النظر للإشراف على مقاصد السور، للبقاعي', short: 'البقاعي، مصاعد النظر', by: 'البقاعي', shamela: 1404 },
+  tanasuq: { title: 'تناسق الدرر في تناسب السور، للسيوطي', short: 'السيوطي، تناسق الدرر', by: 'السيوطي', shamela: 9992 },
+  burhan: { title: 'البرهان في تناسب سور القرآن، لابن الزبير الغرناطي', short: 'ابن الزبير، البرهان', by: 'ابن الزبير الغرناطي', shamela: 1388 },
 };
 
 export const FIRST_SURAH = 1;

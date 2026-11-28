@@ -8,9 +8,9 @@ import { num } from '@shared/quran/arabicNumber';
 import { PEN_NAMES } from '@/components/recite/PenSetting';
 import { WRITTEN_TOPICS } from '@shared/quiz/settings';
 import type { PenRule } from '@shared/quran/writeAyah';
-import { leaderboard, NAME_MAX, QUESTION_SECONDS, TREE_SECONDS, type ActionError, type PartyQuestion, type PartySettings, type PartyView, type PlayerAction, type PlayerView } from '@shared/party/rules';
+import { leaderboard, NAME_MAX, PARTY_MOST, QUESTION_SECONDS, TREE_SECONDS, type ActionError, type PartyQuestion, type PartySettings, type PartyView, type PlayerAction, type PlayerView } from '@shared/party/rules';
 import { emptyBranchAnswers, type QuestionAnswer } from '@shared/quiz/score';
-import { QUIZ_LENGTHS, RANGED_TOPICS, type QuizTopic } from '@shared/quiz/settings';
+import { RANGED_TOPICS, type QuizTopic } from '@shared/quiz/settings';
 import { CHOICE_KINDS } from '@shared/quiz/kinds';
 import type { ChoiceQuestion, QuizLook } from '@shared/quiz/choiceKinds';
 import QuizChoice, { QuizPrompt } from '@/components/QuizChoice';
@@ -34,7 +34,9 @@ import { useKeyboardShown } from '@/lib/keyboard';
 import { WEBSITE } from '@/lib/website';
 import { scopeSummary } from '@shared/quiz/scopeSummary';
 import { partyUrl, playerId, saveName, savedName, usePartySocket, type PartyStatus } from '@/lib/party';
-import { partyQuiz, type QuestionState } from '@/lib/quiz';
+import { partyAvailable, partyQuiz, type QuestionState } from '@/lib/quiz';
+import NumberPicker from '@/ui/NumberPicker';
+import { useNoBackButton } from '@/lib/hooks/useNoBackButton';
 import { usePalette, type Palette } from '@/lib/theme';
 import Field from '@/ui/Field';
 import { reportError } from '@shared/errors';
@@ -156,6 +158,17 @@ function PartyFilters({ settings, change, palette }: { settings: PartySettings; 
   return <FilterFields draft={draft} setDraft={setDraft} palette={palette} sort={false} kinds={false} savedOnly={false} trees={settings.topics.includes('BRANCHES')} />;
 }
 
+function PartyLength({ settings, change, palette }: { settings: PartySettings; change: (next: Partial<PartySettings>) => void; palette: Palette }) {
+  const available = Math.min(partyAvailable(settings), PARTY_MOST);
+  if (!available) return <Label palette={palette} muted>لا أسئلة لهذا الاختيار. وسّع التصفية.</Label>;
+  return (
+    <>
+      <View style={{ flexDirection: 'row' }}><NumberPicker value={Math.min(settings.length, available)} max={available} label="عدد الأسئلة" palette={palette} onChange={length => change({ length })} /></View>
+      <Label palette={palette} muted>{`حتى ${num(PARTY_MOST)} سؤال في الاختبار الجماعي. إن قلّت الأسئلة المتاحة عن العدد بدأ بما وُجد.`}</Label>
+    </>
+  );
+}
+
 const PARTY_KINDS: { id: QuizTopic; name: string }[] = [{ id: 'BRANCHES', name: 'متشابهات القرآن' }, ...CHOICE_KINDS.filter(kind => kind.party)];
 
 const isAyahChoice = (question: Question): question is Question & ChoiceQuestion => Array.isArray((question as { quran?: unknown }).quran) || !!(question as { page?: unknown }).page
@@ -174,7 +187,6 @@ function Settings({ settings, editable, send, palette }: { settings: PartySettin
   const others = settings.topics.some(topic => !isTyped(topic));
   if (!editable) {
     const rows: [string, string][] = [
-      ['الأسئلة', settings.topics.map(topic => PARTY_KINDS.find(kind => kind.id === topic)?.name).filter(Boolean).join('، ')],
       ['عدد الأسئلة', num(settings.length)],
       ...(ranged ? [[branches ? 'الأشجار' : 'النطاق', scopeSummary(settings, true, branches)], ['الصعوبة', DIFFICULTY_NAMES[settings.difficulty ?? DEFAULT_DIFFICULTY]]] as [string, string][] : []),
       ...(branches ? [['الإجابات في كل سؤال', num(settings.leaves)]] as [string, string][] : []),
@@ -185,10 +197,12 @@ function Settings({ settings, editable, send, palette }: { settings: PartySettin
     return (
       <Section title="إعدادات الاختبار" palette={palette}>
         <Label palette={palette} muted>يختارها المضيف.</Label>
+        <Label palette={palette}>أنواع الأسئلة</Label>
+        <Row>{PARTY_KINDS.filter(kind => settings.topics.includes(kind.id)).map(kind => <Button key={kind.id} label={kind.name} active />)}</Row>
         {rows.map(([label, value]) => (
           <View key={label} style={{ flexDirection: 'row', gap: 12 }}>
             <Text style={{ color: palette.muted, fontSize: 15, minWidth: 130, textAlign: 'right' }}>{label}</Text>
-            <Text style={{ color: palette.ink, fontSize: 15 }}>{value}</Text>
+            <Text style={{ flex: 1, color: palette.ink, fontSize: 15, textAlign: 'right' }}>{value}</Text>
           </View>
         ))}
         {branches && <QuizExplainer leaves={settings.leaves} palette={palette} />}
@@ -234,7 +248,7 @@ function Settings({ settings, editable, send, palette }: { settings: PartySettin
         </>
       )}
       <Label palette={palette}>عدد الأسئلة</Label>
-      <Row>{QUIZ_LENGTHS.map(value => <Button key={value} label={num(value)} active={settings.length === value} onPress={() => change({ length: value })} />)}</Row>
+      <PartyLength settings={settings} change={change} palette={palette} />
     </Section>
   );
 }
@@ -253,8 +267,9 @@ function Lobby({ view, send, error, palette }: { view: PartyView; send: SendActi
   const begin = (early?: boolean) => {
     let quiz;
     try { quiz = partyQuiz(view.settings); } catch (error) { reportError('party: build questions', error); return setBuilt('failed'); }
-    if (quiz.questions.length < view.settings.length) return setBuilt('short');
+    if (!quiz.questions.length) return setBuilt('short');
     setBuilt(null);
+    if (quiz.questions.length < view.settings.length) send({ type: 'settings', settings: { length: quiz.questions.length } });
     send({ type: 'start', ...(early && { early }), ...quiz });
   };
   const problem = built ?? (view.error ? (view.error === 'Not enough approved questions' ? 'short' : 'failed') : null);
@@ -455,6 +470,7 @@ function Notice({ status, palette }: { status: PartyStatus | 'started'; palette:
 
 export default function PartyRoom() {
   const palette = usePalette();
+  useNoBackButton();
   const { code = '' } = useLocalSearchParams<{ code: string }>();
   const id = useMemo(() => playerId(), []);
   const [name, setName] = useState<string | null>(() => savedName() || null);

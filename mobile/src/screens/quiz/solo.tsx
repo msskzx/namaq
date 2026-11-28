@@ -7,6 +7,7 @@ import { num } from '@shared/quran/arabicNumber';
 import TopBar from '@/ui/TopBar';
 import Button, { Row } from '@/ui/Button';
 import LoadingDots from '@/ui/LoadingDots';
+import NumberPicker from '@/ui/NumberPicker';
 import QuizExplainer from '@/components/QuizExplainer';
 import Toggle from '@/ui/Toggle';
 import { QuizPenSetting } from '@/components/recite/PenSetting';
@@ -47,7 +48,7 @@ export default function SoloSetup() {
     if (applied) change({ list: { filters: applied.filters, range: applied.range, saved: applied.saved } });
   };
   useSyncExternalStore(subscribeBookmarks, readBookmarks);
-  const { available, lengths } = availability(settings);
+  const { available } = availability(settings);
   const trees = settings.kinds.includes('BRANCHES');
   const onPage = settings.kinds.some(kind => PAGE_TOPICS.includes(kind));
   const [pageBefore, setPageBefore] = quizPageBefore.use();
@@ -56,7 +57,7 @@ export default function SoloSetup() {
     const kinds = settings.kinds.includes(kind) ? settings.kinds.filter(item => item !== kind) : [...settings.kinds, kind];
     if (kinds.length) change({ kinds });
   };
-  const length = lengths.includes(settings.length as never) ? settings.length : lengths[0];
+  const length = Math.min(settings.length, available);
   const later = useLater();
   const start = () => {
     setBuilding(true);
@@ -106,11 +107,11 @@ export default function SoloSetup() {
         </Section>}
         <Section title="عدد الأسئلة" palette={palette}>
           <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'right' }}>{`${num(available)} سؤالًا متاحًا`}</Text>
-          {lengths.length > 0
-            ? <Row>{lengths.map(value => <Button key={value} label={num(value)} active={length === value} onPress={() => change({ length: value })} />)}</Row>
-            : <Text style={{ color: palette.ink, fontSize: 15, textAlign: 'right' }}>لا توجد خمسة أسئلة لهذا الاختيار. وسّع التصفية.</Text>}
+          {available > 0
+            ? <View style={{ flexDirection: 'row' }}><NumberPicker value={length} max={available} label="عدد الأسئلة" palette={palette} onChange={value => change({ length: value })} /></View>
+            : <Text style={{ color: palette.ink, fontSize: 15, textAlign: 'right' }}>لا أسئلة لهذا الاختيار. وسّع التصفية.</Text>}
         </Section>
-        {lengths.length > 0 && (
+        {available > 0 && (
           <View style={{ alignItems: 'flex-start', minHeight: 50, justifyContent: 'center' }}>
             {building ? <LoadingDots /> : <Button big variant="primary" Icon={Play} label="ابدأ الاختبار" onPress={start} />}
           </View>

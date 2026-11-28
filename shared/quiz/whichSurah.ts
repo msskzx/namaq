@@ -93,6 +93,9 @@ function question(ayah: BranchAyah, alike: Alike[], difficulty: Difficulty, rand
     const found = alike.find(item => surahOf(item.key) === n);
     return found ? [[String(n), { key: found.key, words: index().ayat.get(found.key)!.words }]] : [];
   }));
+  const ayahNumber = Number(ayah.key.split(':')[1]);
+  const before = index().ayat.get(`${surah}:${ayahNumber - 1}`)?.words;
+  const after = index().ayat.get(`${surah}:${ayahNumber + 1}`)?.words;
   return {
     key: `${WHICH_SURAH}:${ayah.key}`,
     family: WHICH_SURAH,
@@ -104,6 +107,7 @@ function question(ayah: BranchAyah, alike: Alike[], difficulty: Difficulty, rand
     ayahKey: ayah.key,
     page: { title: 'hidden' },
     ...(Object.keys(closest).length && { alike: closest }),
+    look: { view: 'around', ...(before && { before }), ...(after && { after }) },
     sources: [mushafSource(ayah.key, ayah.page)],
     evidence: { claimKeys: [] },
   };
