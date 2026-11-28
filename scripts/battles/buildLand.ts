@@ -6,7 +6,7 @@ export const LAND_BOX: Box = [24, 12, 52, 40];
 type Geometry = { type: 'Polygon'; coordinates: number[][][] } | { type: 'MultiPolygon'; coordinates: number[][][][] };
 
 const file = process.argv[2];
-if (!file) throw new Error('Give the path of ne_50m_land.geojson');
+if (!file) throw new Error('Usage: npm run battles:land -- <path to ne_50m_land.geojson>, from https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_50m_land.geojson');
 const { features } = JSON.parse(readFileSync(file, 'utf8')) as { features: { geometry: Geometry }[] };
 const rings = features
   .flatMap(({ geometry }) => (geometry.type === 'Polygon' ? [geometry.coordinates] : geometry.coordinates))

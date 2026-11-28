@@ -26,8 +26,6 @@ import TapRow from '@/ui/TapRow';
 import NumberGrid from '@/ui/NumberGrid';
 import { FortyCard } from '@/components/FortyCard';
 
-
-
 function ContinueCard({ read, palette }: { read: LastRead; palette: Palette }) {
   const book = SAHIH[read.slug];
   const kitab = placeOf(book, read.n)?.kitab;

@@ -71,7 +71,6 @@ function Part({ n, title, palette, children, above, row, source, head, pad, gap 
   );
 }
 
-
 const sayerOf = (fact: PersonFact, many = false) => (fact.anonymous ? 'قيل:' : many ? sayerAt(fact) : saidBy(fact));
 
 function Quote({ fact, palette, marked = false, many = false, children }: { fact: PersonFact; palette: Palette; marked?: boolean; many?: boolean;
@@ -382,7 +381,6 @@ export default function PersonScreen() {
 }
 
 const openBattle = (slug: string) => toTab({ pathname: '/battle', params: { slug } });
-
 
 function heroSources(person: AppPerson) {
   const { book, part } = volumeLabel(person.entry.volume);

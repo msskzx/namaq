@@ -56,7 +56,7 @@ Counts are of product code: test files are left out. "Empty catch blocks" counts
 | 2026-11-28 | 7 no raw effects or timers | app | files on the shrink-only list | 0 | 89 | |
 | 2026-11-28 | 8 scripts lint | scripts | comment lines | 1030 | 54 | 740 comments removed; the 54 lines left are "see docs/… / R00xx" pointers. `npm run lint` now checks `scripts/` |
 | 2026-11-28 | 8 scripts lint | scripts | empty catch blocks | 1 | 0 | a download-size retry that dropped every error; it now keeps the last one as the cause |
-| 2026-11-28 | 8 scripts lint | scripts | lint errors | 8 | 0 | 5 unused, 1 empty catch (counted twice), 1 expression used as a statement |
+| 2026-11-28 | 8 scripts lint | scripts | lint errors | 8 | 0 | 5 unused (cleared by allowing `_` names and unused caught errors, as the app does), 1 empty catch (counted twice), 1 expression used as a statement |
 | 2026-11-28 | 9 import rules | app | imports of a screen from outside app/ | 22 | 11 | 11 hadith-link and view imports fixed by moving 4 helpers to lib/ways.ts and 2 views to components/; the 11 left are feed and quiz views |
 | 2026-11-28 | 9 import rules | app | ui/ imports of features or pages | 3 | 3 | the logo and the settings sheet; frozen |
 | 2026-11-28 | 9 import rules | shared | imports from outside shared/ | 0 | 0 | the rule now guards it; it was a written rule only |
