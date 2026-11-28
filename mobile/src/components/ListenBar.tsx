@@ -1,4 +1,4 @@
-import { useEffect, useState, useSyncExternalStore } from 'react';
+import { useSyncExternalStore } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { BlurView } from 'expo-blur';
 import { Minimize2, Pause, Play, Repeat, X } from 'lucide-react-native';
@@ -12,6 +12,7 @@ import type { Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
 import { Tap } from '@/ui/Tap';
 import { surahName } from '@shared/quran/surahNames';
+import { useDelayedFlag } from '@/lib/hooks/useDelayedFlag';
 
 export const LISTEN_BAR = 58;
 
@@ -26,13 +27,7 @@ export default function ListenBar({ width, onRepeat, onFold, palette }: { width:
   const listening = useListening();
   const plan = useSyncExternalStore(subscribeListenPlan, readListenPlan, serverListenPlan);
   const loading = !!listening?.loading;
-  const [slow, setSlow] = useState(false);
-  useEffect(() => {
-    setSlow(false);
-    if (!loading) return;
-    const timer = setTimeout(() => setSlow(true), 800);
-    return () => clearTimeout(timer);
-  }, [loading, listening?.key]);
+  const slow = useDelayedFlag(loading, 800, listening?.key);
   if (!listening) return null;
   const repeating = plan.eachAyah !== ONCE.eachAyah || plan.rangeTimes !== ONCE.rangeTimes || plan.pause !== ONCE.pause;
   const { playing, failed } = listening;

@@ -2523,7 +2523,7 @@
  },
  {
   "file": "mobile/src/components/SearchResults.tsx",
-  "line": 47,
+  "line": 49,
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
@@ -2537,7 +2537,7 @@
  },
  {
   "file": "mobile/src/components/SearchResults.tsx",
-  "line": 54,
+  "line": 56,
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
@@ -2551,7 +2551,7 @@
  },
  {
   "file": "mobile/src/components/SearchResults.tsx",
-  "line": 68,
+  "line": 70,
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
@@ -2565,7 +2565,7 @@
  },
  {
   "file": "mobile/src/components/SearchResults.tsx",
-  "line": 74,
+  "line": 76,
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
@@ -2579,7 +2579,7 @@
  },
  {
   "file": "mobile/src/components/SearchResults.tsx",
-  "line": 81,
+  "line": 83,
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
@@ -2593,7 +2593,7 @@
  },
  {
   "file": "mobile/src/components/SearchResults.tsx",
-  "line": 82,
+  "line": 84,
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
@@ -2607,7 +2607,7 @@
  },
  {
   "file": "mobile/src/components/SearchResults.tsx",
-  "line": 82,
+  "line": 84,
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
@@ -2621,7 +2621,7 @@
  },
  {
   "file": "mobile/src/components/SearchResults.tsx",
-  "line": 89,
+  "line": 91,
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
@@ -2635,7 +2635,7 @@
  },
  {
   "file": "mobile/src/components/SearchResults.tsx",
-  "line": 89,
+  "line": 91,
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
@@ -2649,7 +2649,7 @@
  },
  {
   "file": "mobile/src/components/SearchResults.tsx",
-  "line": 96,
+  "line": 98,
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
@@ -2663,7 +2663,7 @@
  },
  {
   "file": "mobile/src/components/SearchResults.tsx",
-  "line": 96,
+  "line": 98,
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
@@ -2677,7 +2677,7 @@
  },
  {
   "file": "mobile/src/components/SearchResults.tsx",
-  "line": 96,
+  "line": 98,
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
@@ -2691,7 +2691,7 @@
  },
  {
   "file": "mobile/src/components/SearchResults.tsx",
-  "line": 107,
+  "line": 109,
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
@@ -2705,7 +2705,7 @@
  },
  {
   "file": "mobile/src/components/SearchResults.tsx",
-  "line": 117,
+  "line": 119,
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
@@ -2719,7 +2719,7 @@
  },
  {
   "file": "mobile/src/components/SearchResults.tsx",
-  "line": 123,
+  "line": 125,
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
@@ -3289,7 +3289,7 @@
  },
  {
   "file": "mobile/src/screens/book.tsx",
-  "line": 116,
+  "line": 117,
   "owner": "BookReader",
   "key": "openAyah",
   "label": null,
@@ -3668,7 +3668,7 @@
  },
  {
   "file": "mobile/src/screens/hadithSahih.tsx",
-  "line": 42,
+  "line": 43,
   "owner": "SahihPage",
   "key": "onPress",
   "label": "‹›‹›",
@@ -3681,7 +3681,7 @@
  },
  {
   "file": "mobile/src/screens/hadithSahih.tsx",
-  "line": 42,
+  "line": 43,
   "owner": "SahihPage",
   "key": "onPress",
   "label": "‹›‹›",
@@ -3694,7 +3694,7 @@
  },
  {
   "file": "mobile/src/screens/hadithSahih.tsx",
-  "line": 53,
+  "line": 54,
   "owner": "SahihPage",
   "key": "onOpen",
   "label": null,
@@ -3707,7 +3707,7 @@
  },
  {
   "file": "mobile/src/screens/hadithSahih.tsx",
-  "line": 55,
+  "line": 56,
   "owner": "SahihPage",
   "key": "onPress",
   "label": null,
@@ -3720,7 +3720,7 @@
  },
  {
   "file": "mobile/src/screens/hadithSahih.tsx",
-  "line": 76,
+  "line": 77,
   "owner": "InHadith",
   "key": "onPress",
   "label": "‹› · ‹›",
@@ -3733,7 +3733,7 @@
  },
  {
   "file": "mobile/src/screens/hadithSahih.tsx",
-  "line": 113,
+  "line": 108,
   "owner": "HadithSahihScreen",
   "key": "back",
   "label": null,
@@ -4160,7 +4160,7 @@
  },
  {
   "file": "mobile/src/screens/quiz/party/code.tsx",
-  "line": 360,
+  "line": 357,
   "owner": "QuestionStage",
   "key": "onOpen",
   "label": null,
@@ -4173,7 +4173,7 @@
  },
  {
   "file": "mobile/src/screens/quiz/party/code.tsx",
-  "line": 400,
+  "line": 397,
   "owner": "QuestionStage",
   "key": "onOpen",
   "label": null,
@@ -4186,7 +4186,7 @@
  },
  {
   "file": "mobile/src/screens/quiz/party/code.tsx",
-  "line": 434,
+  "line": 431,
   "owner": "FinalResults",
   "key": "onOpen",
   "label": null,
@@ -4472,7 +4472,7 @@
  },
  {
   "file": "mobile/src/screens/stories.tsx",
-  "line": 34,
+  "line": 35,
   "owner": "StoryRow",
   "key": "onPress",
   "label": null,
@@ -4485,7 +4485,7 @@
  },
  {
   "file": "mobile/src/screens/stories.tsx",
-  "line": 55,
+  "line": 56,
   "owner": "ChapterCard",
   "key": "onPress",
   "label": null,

@@ -30,6 +30,7 @@ import IconButton from '@/ui/IconButton';
 import Tabs from '@/ui/Tabs';
 import { SearchField } from '@/ui/Field';
 import Empty from '@/ui/Empty';
+import { useDebounced } from '@/lib/hooks/useDebounced';
 
 // see docs/plans/book-reader.md
 export default function BookScreen() {
@@ -258,11 +259,8 @@ function BookSheet({ open, onTab, onClose, id, entries, pages, page, palette, sa
   const here = pages[page]?.slices[0]?.entry ?? 0;
   const hereSurah = entries[here]?.surah;
   const [query, setQuery] = useState('');
-  const [found, setFound] = useState<ReturnType<typeof searchBook> & { query: string }>({ hits: [], more: false, query: '' });
-  useEffect(() => {
-    const timer = setTimeout(() => setFound({ ...searchBook(entries, pages, query), query }), 250);
-    return () => clearTimeout(timer);
-  }, [query, entries, pages]);
+  const settled = useDebounced(query, 250);
+  const found = useMemo(() => ({ ...searchBook(entries, pages, settled), query: settled }), [settled, entries, pages]);
   const row = { paddingHorizontal: 16, paddingVertical: 10, borderBottomWidth: 1, borderColor: `${palette.rule}66` } as const;
   return (
     <Sheet open={!!open} onClose={onClose} palette={palette} tall>

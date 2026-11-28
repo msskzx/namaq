@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { FlatList, Platform, ScrollView, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
+import { FlatList, ScrollView, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { ChevronLeft, MessagesSquare } from 'lucide-react-native';
 import { CardWithRow } from '@/ui/Card';
@@ -25,6 +25,7 @@ import { SahihDownload, SahihHadithView, opening } from '@/components/Sahih';
 import HadithBooks from '@/components/HadithBooks';
 import { recordedIn, type BookBox } from '@shared/hadith';
 import { openBab, openKitab } from './hadith';
+import { useWebScrollEnd } from '@/lib/hooks/useWebScrollEnd';
 
 const openBox = (box: BookBox) => {
   const [book, n] = box.key.split(':');
@@ -102,13 +103,7 @@ export default function HadithSahihScreen() {
     const to = Math.round(Math.abs(event.nativeEvent.contentOffset.x) / width);
     if (to >= 0 && to < all.length) setIndex(to);
   }, [width, all.length]);
-  const quiet = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
-  const scrolled = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
-    if (Platform.OS !== 'web') return;
-    const { nativeEvent } = event;
-    clearTimeout(quiet.current);
-    quiet.current = setTimeout(() => settle({ nativeEvent } as NativeSyntheticEvent<NativeScrollEvent>), 150);
-  }, [settle]);
+  const scrolled = useWebScrollEnd(settle);
   const layout = useCallback((_: unknown, i: number) => ({ length: width, offset: width * i, index: i }), [width]);
   const back = () => (router.canGoBack() ? router.back() : toTab('/hadith'));
   const title = book ? `${book.title} ${num(hadith?.n ?? Number(at))}` : undefined;

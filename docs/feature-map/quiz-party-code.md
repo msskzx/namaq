@@ -38,9 +38,9 @@ flowchart RL
 | `TermChips` | أمثلته في مصطلحات البلاغة | [المصطلح](term.md) | [components/TermSheet.tsx:34](../../mobile/src/components/TermSheet.tsx#L34) |
 | `People` | (onPress) | [الترجمة](person.md) | [components/battles/BattleParts.tsx:113](../../mobile/src/components/battles/BattleParts.tsx#L113) |
 | `Box` | (onPress) | [الترجمة](person.md) | [screens/nasab.tsx:31](../../mobile/src/screens/nasab.tsx#L31) |
-| `QuestionStage` | (onOpen) | [المصحف](read.md) | [screens/quiz/party/code.tsx:360](../../mobile/src/screens/quiz/party/code.tsx#L360) |
-|  | (onOpen) | [المصحف](read.md) | [screens/quiz/party/code.tsx:400](../../mobile/src/screens/quiz/party/code.tsx#L400) |
-| `FinalResults` | (onOpen) | [المصحف](read.md) | [screens/quiz/party/code.tsx:434](../../mobile/src/screens/quiz/party/code.tsx#L434) |
+| `QuestionStage` | (onOpen) | [المصحف](read.md) | [screens/quiz/party/code.tsx:357](../../mobile/src/screens/quiz/party/code.tsx#L357) |
+|  | (onOpen) | [المصحف](read.md) | [screens/quiz/party/code.tsx:397](../../mobile/src/screens/quiz/party/code.tsx#L397) |
+| `FinalResults` | (onOpen) | [المصحف](read.md) | [screens/quiz/party/code.tsx:431](../../mobile/src/screens/quiz/party/code.tsx#L431) |
 | `HadithOpen` | افتح ‹› | [حديث الصحيح](hadith-sahih.md) | [screens/story.tsx:68](../../mobile/src/screens/story.tsx#L68) |
 
 ## Sheets

@@ -24,7 +24,7 @@ flowchart RL
 
 | Part of the screen | Label | Opens | Code |
 | --- | --- | --- | --- |
-| `BookReader` | (openAyah) | [المصحف](read.md) | [screens/book.tsx:116](../../mobile/src/screens/book.tsx#L116) |
+| `BookReader` | (openAyah) | [المصحف](read.md) | [screens/book.tsx:117](../../mobile/src/screens/book.tsx#L117) |
 
 ## Sheets
 

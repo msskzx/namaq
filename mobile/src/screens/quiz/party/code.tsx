@@ -38,9 +38,10 @@ import { partyQuiz, type QuestionState } from '@/lib/quiz';
 import { usePalette, type Palette } from '@/lib/theme';
 import Field from '@/ui/Field';
 import { reportError } from '@shared/errors';
+import { useNow } from '@/lib/hooks/useNow';
 type QuestionChoice = { value: string; labelArabic: string };
 
-type Send = (action: PlayerAction) => void;
+type SendAction = (action: PlayerAction) => void;
 const SKIPPED = '';
 
 type Question = PartyQuestion & { promptArabic?: string; choices?: QuestionChoice[]; look?: QuizLook };
@@ -80,11 +81,7 @@ function NameForm({ initial, error, onSubmit, palette }: { initial: string; erro
 }
 
 function Countdown({ deadline, total, offset, palette, big }: { deadline: number; total: number; offset: number; palette: Palette; big?: boolean }) {
-  const [now, setNow] = useState(() => Date.now() + offset);
-  useEffect(() => {
-    const timer = setInterval(() => setNow(Date.now() + offset), 250);
-    return () => clearInterval(timer);
-  }, [offset]);
+  const now = useNow(250) + offset;
   const left = Math.max(0, Math.ceil((deadline - now) / 1000));
   const urgent = left <= 10;
   const fill = urgent ? palette.accent : 'transparent';
@@ -164,7 +161,7 @@ const isAyahChoice = (question: Question): question is Question & ChoiceQuestion
   || Array.isArray((question as { correctAnswers?: unknown }).correctAnswers)
   || Array.isArray((question as { order?: unknown }).order);
 
-function Settings({ settings, editable, send, palette }: { settings: PartySettings; editable: boolean; send: Send; palette: Palette }) {
+function Settings({ settings, editable, send, palette }: { settings: PartySettings; editable: boolean; send: SendAction; palette: Palette }) {
   const change = (next: Partial<PartySettings>) => send({ type: 'settings', settings: next });
   const branches = settings.topics.includes('BRANCHES');
   const ranged = settings.topics.some(topic => RANGED_TOPICS.includes(topic));
@@ -240,7 +237,7 @@ function Settings({ settings, editable, send, palette }: { settings: PartySettin
   );
 }
 
-function Lobby({ view, send, error, palette }: { view: PartyView; send: Send; error: ActionError | null; palette: Palette }) {
+function Lobby({ view, send, error, palette }: { view: PartyView; send: SendAction; error: ActionError | null; palette: Palette }) {
   const isHost = view.you === view.hostId;
   const me = view.players.find(player => player.id === view.you);
   const others = view.players.filter(player => player.id !== view.hostId);
@@ -316,7 +313,7 @@ function Choices({ question, answer, revealed, onPick, palette }: { question: Qu
   );
 }
 
-function QuestionStage({ view, send, offset, palette }: { view: PartyView; send: Send; offset: number; palette: Palette }) {
+function QuestionStage({ view, send, offset, palette }: { view: PartyView; send: SendAction; offset: number; palette: Palette }) {
   const insets = useSafeAreaInsets();
   const typing = useKeyboardShown();
   const question = view.question as Question;
@@ -415,7 +412,7 @@ function QuestionStage({ view, send, offset, palette }: { view: PartyView; send:
   );
 }
 
-function FinalResults({ view, send, palette }: { view: PartyView; send: Send; palette: Palette }) {
+function FinalResults({ view, send, palette }: { view: PartyView; send: SendAction; palette: Palette }) {
   const insets = useSafeAreaInsets();
   const [review, setReview] = useState<number | null>(null);
   const entries = view.review ?? [];
