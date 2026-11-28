@@ -34,7 +34,7 @@ export default function RecitePill({ recite, writing, onWriting, onClose, onRest
       {lead}
       <Control {...look} Icon={ChevronLeft} label="أظهر الكلمة التالية" name="كلمة" disabled={recite.done} onPress={recite.nextWord} />
       {!recite.party && <Control {...look} Icon={next.Icon} label={next.label} name={next.name} disabled={ended && !more} onPress={recite.nextAyah} />}
-      <Control {...look} Icon={PenLine} label={writing ? 'أوقف الكتابة' : recite.pen === 'whole' ? 'اكتب كل آية كاملة' : 'اكتب أول كل آية وآخرها'} name="القلم" on={writing} disabled={recite.party} onPress={onWriting} />
+      <Control {...look} Icon={PenLine} label={writing ? 'أوقف الكتابة' : recite.pen === 'whole' ? 'اكتب كل آية كاملة' : 'اكتب أول كل آية وآخرها'} name="اكتب" on={writing} disabled={recite.party} onPress={onWriting} />
       <Control {...look} Icon={Undo2} label="ارجع خطوة" name="تراجع" disabled={recite.atStart} onPress={recite.back} />
       {onRestart && <Control {...look} Icon={RotateCcw} label="أخفِ الصفحة وسمّع من أولها" name="أعد الصفحة" onPress={onRestart} />}
       {onClose && <Control {...look} Icon={X} label="إنهاء التسميع" name="إنهاء" onPress={onClose} />}

@@ -395,7 +395,7 @@ test('the recite bar keeps the owner\'s order, right to left, and every button f
   await page.getByRole('button', { name: 'تسميع: أخفِ الآيات وأظهرها واحدة واحدة' }).click();
   await page.getByRole('button', { name: 'سمّع من أول الصفحة' }).click();
   const bar = page.getByRole('toolbar', { name: 'أدوات التسميع' });
-  const fromLeft = ['اطوِ', 'إنهاء', 'أعد الصفحة', 'تراجع', 'القلم', 'آية', 'كلمة'];
+  const fromLeft = ['اطوِ', 'إنهاء', 'أعد الصفحة', 'تراجع', 'اكتب', 'آية', 'كلمة'];
   const boxes = await Promise.all(fromLeft.map(name => bar.getByText(name, { exact: true }).boundingBox()));
   for (const [at, box] of boxes.entries()) {
     expect(box!.x).toBeGreaterThanOrEqual(0);
