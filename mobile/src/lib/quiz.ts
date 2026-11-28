@@ -12,7 +12,7 @@ import type { Hints } from '@shared/quiz/hints';
 import { readBookmarks, type Bookmark } from '@shared/bookmarks';
 import type { GroupFilters } from '@shared/quran/mutashabih/browse';
 import type { JuzRange } from '@shared/quran/juz';
-import { quizTrees } from '@shared/quiz/treeScope';
+import { quizTrees, parseTreeScope } from '@shared/quiz/treeScope';
 import { isCompareBookmark } from '@shared/compareBookmarks';
 import { mixQuestions, questionAyat, type ChoiceQuestion, type ChoiceScope } from '@shared/quiz/choiceKinds';
 import { kunyaNotFirst } from '@shared/quiz/tarajim';
@@ -20,7 +20,6 @@ import { emptyCompareAnswers, type CompareAsk } from '@shared/quiz/compareAnswer
 import { CHOICE_KINDS } from '@shared/quiz/kinds';
 import { CHOICE_TOPICS, WRITTEN_TOPICS, type QuizTopic } from '@shared/quiz/settings';
 import { quizQuery, type PartyQuestion, type PartySettings } from '@shared/party/rules';
-import { parseTreeScope } from '@shared/quiz/treeScope';
 import { parseJuzRange } from '@shared/quran/juz';
 import { shuffle } from '@shared/quiz/random';
 import { orders, recited, ticks } from '@shared/quiz/choiceKinds';

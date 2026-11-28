@@ -8,12 +8,12 @@ Before merging a change to the phone app, use the feature you changed the way a 
 npm run phone -- start             # builds the app (about a minute) and opens the home screen
 npm run phone -- tap الاختبارات      # one step; prints the screenshot's path and everything on screen that can be tapped
 npm run phone -- press ٱلۡحَمۡدُ          # a long press, as on a word in the reader
-npm run phone -- open /read        # go to a route
+npm run phone -- open "مقارنة السور"  # go to a screen by its name in docs/feature-map.md (or a route, e.g. /read)
 npm run phone -- save reader-menu  # keep the steps since start as e2e/journeys/reader-menu.json
 npm run phone -- stop
 ```
 
-The other steps are `type`, `swipe up|down|left|right`, `back`, `wait <name>` and `look`; `npm run phone` alone lists them. After each step, open the screenshot (`e2e/look/NN-step.png`) and decide the next tap from what you see, as a person would. A step that cannot be done prints `STUCK`, and an error the page raised prints under `ERRORS`. `start --reuse` skips the build when `mobile/dist-phone` already holds this branch's code.
+The other steps are `type`, `swipe up|down|left|right`, `back`, `wait <name>` and `look`; `npm run phone` alone lists them. Each step prints the screen's name from [the feature map](../docs/feature-map.md); use those names when you write about the app. After each step, open the screenshot (`e2e/look/NN-step.png`) and decide the next tap from what you see, as a person would. A step that cannot be done prints `STUCK`, and an error the page raised prints under `ERRORS`. `start --reuse` skips the build when `mobile/dist-phone` already holds this branch's code.
 
 Save a walk when it covers a flow worth keeping. `npm run phone -- run <name>...` walks saved journeys again from the start, and `npm run test:ui` walks every one of them (`app/journeys.spec.ts`), failing when a step can no longer be done or the page errs. A journey checks that the walk still works; to check a result (a stored value, a number shown), write a spec below.
 

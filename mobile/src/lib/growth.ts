@@ -1,7 +1,7 @@
 import { ALL_WORDS, cardWords, growthPlan } from '@shared/quran/growth';
+import { type Branch, type Variant } from '@shared/quran/branches';
 
 export { ALL_WORDS };
-import { type Branch, type Variant } from '@shared/quran/branches';
 
 /**
  * Ids of what a tree card draws, shared by the tree, the growth studio and the video:

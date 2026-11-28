@@ -183,7 +183,7 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
       chords[at] = 2 * textRx * Math.sqrt(Math.max(0, 1 - (y / textRy) ** 2));
     });
     return { top, centre, rx, ry, chords };
-  }, [opening, body, itemCount, oneLine, lineAt, flowing]);
+  }, [opening, body, itemCount, oneLine, lineAt, flowing, slice]);
   const size = useMemo(() => {
     if (!body || !measured) return 0;
     if (flowing) return flowSize(body.width, zoom);
@@ -192,7 +192,7 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
     const widest = Math.max(1, ...widths);
     const typical = [...widths].sort((a, b) => a - b)[Math.floor(widths.length * 0.6)] ?? 1;
     return Math.max(1, Math.min((BASE * body.width) / typical, (BASE * body.width) / (widest * SQUEEZE), rowHeight * (slice ? 0.72 : TEXT_HEIGHT)));
-  }, [body, measured, lineAt, page, rowHeight, oval, oneLine, flowing, zoom, slice]);
+  }, [body, measured, lineAt, page, rowHeight, oval, oneLine, flowing, zoom, slice]); // eslint-disable-line react-hooks/exhaustive-deps
   // The printed text block: the body's width, or narrower and centred where the line height held the text smaller.
   const block = useMemo(() => {
     if (!body || !measured || !size || flowing || oval || slice) return body?.width ?? 0;
@@ -449,7 +449,7 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
                     ? { flexDirection: 'row', alignItems: 'center', gap: GAP * size }
                     : { width: width / scale, flexShrink: 0, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', transform: [{ scaleX: scale }], transformOrigin: oval ? 'center' : 'right' }}>
                     {bands(row.id, cells)}
-                    {cells.map(({ group, key, wordHidden, rel, at: wordAt, band }, at) => {
+                    {cells.map(({ group, key, wordHidden, rel, at: wordAt }, at) => {
                       const endHidden = (end: number) => !!hidden?.(`${group.surah}:${end}`, Number.MAX_SAFE_INTEGER);
                       const writing = !!group.word && wordHidden && write?.key === key;
                       const graded = !wordHidden && checked?.key === key ? (checked.right.includes(rel) ? palette.green : checked.wrong.includes(rel) ? palette.amber : null) : null;

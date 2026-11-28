@@ -26,7 +26,7 @@ const LABELS: Record<StudioKind, { studio: string; watch: string; ask: string; f
   read: { studio: 'استوديو القراءة', watch: 'اقرأ مع التظليل', ask: '', from: 'من الآية' },
 };
 
-export function StudioButton({ palette }: { palette: Palette }) {
+export function StudioButton(_: { palette: Palette }) {
   const growth = useGrowth();
   if (!growth.total) return null;
   return <IconButton label={LABELS[growth.kind].studio} onPress={openStudio} Icon={Clapperboard} tone="ink" />;

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useLiftSource, type Source } from '@/ui/sourceSlot';
+import { useLiftSource, type Quote } from '@/ui/sourceSlot';
 import { View } from 'react-native';
 import { ChevronDown } from 'lucide-react-native';
 import { Text } from '@/ui/Text';
@@ -9,7 +9,6 @@ import { Tap } from '@/ui/Tap';
 
 /** A quote from a book: its words, with the page it cites as a link (the page alone when it has no words). A quote with no page is our own note on the ones above. */
 export type { Quote, Source } from '@/ui/sourceSlot';
-import type { Quote } from '@/ui/sourceSlot';
 
 /**
  * A section's reference, collapsed to the book and page it cites (a muted line with a chevron); a tap opens the quotes,

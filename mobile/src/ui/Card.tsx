@@ -5,7 +5,6 @@ import { CARD_CAP_SHARE } from '@shared/homeFeed';
 import { CARD, type Palette } from '@/lib/theme';
 import { Tap } from '@/ui/Tap';
 import OpenButton from '@/ui/OpenButton';
-import { Text } from '@/ui/Text';
 import Sheet from '@/ui/Sheet';
 import MoreMenu, { type MoreItem } from '@/ui/MoreMenu';
 import { SourceSlotContext, type Source } from '@/ui/sourceSlot';

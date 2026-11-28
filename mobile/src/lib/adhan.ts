@@ -6,6 +6,7 @@ import { adhkarOf, anyAlert, planAll, plannedHere, planKey } from '@shared/adhan
 import { prayerDay, type Adhan } from '@shared/prayer';
 import { adhanAlerts, adhkarAlerts, prayerPlace, prayerSettings } from './settings';
 import { openAdhkar } from './adhkar';
+import { reportError } from '@shared/errors';
 
 const lib = adhan as unknown as Adhan;
 /** Android groups notifications by channel; this one rings with the phone's own notification sound. */
@@ -26,7 +27,8 @@ export async function allowAlerts(): Promise<boolean> {
     if (now.granted) return true;
     if (!now.canAskAgain) return false;
     return (await Notifications.requestPermissionsAsync()).granted;
-  } catch {
+  } catch (error) {
+    reportError('adhan: ask permission', error);
     return false;
   }
 }
@@ -36,7 +38,7 @@ export async function alertsAllowed(): Promise<boolean> {
   try { return (await Notifications.getPermissionsAsync()).granted; } catch { return false; }
 }
 
-export const openPhoneSettings = () => { Linking.openSettings().catch(() => {}); };
+export const openPhoneSettings = () => { Linking.openSettings().catch(error => reportError('adhan: open settings', error)); };
 
 let lastKey = '';
 let running: Promise<void> = Promise.resolve();
@@ -83,8 +85,9 @@ export function syncAlerts(force = false): Promise<void> {
           trigger: { type: Notifications.SchedulableTriggerInputTypes.DATE, date: alert.at, channelId: ADHKAR_CHANNEL },
         });
       }
-    } catch {
-      lastKey = ''; // try again next time the app opens
+    } catch (error) {
+      reportError('adhan: schedule alerts', error);
+      lastKey = '';
     }
   });
   return running;
@@ -107,11 +110,11 @@ export function startAlerts() {
     const time = adhkarOf(response?.notification.request.content.data);
     if (!time) return;
     // Cleared once handled, or the next launch would open it again.
-    Notifications.clearLastNotificationResponseAsync().catch(() => {});
+    Notifications.clearLastNotificationResponseAsync().catch(error => reportError('adhan: clear opened alert', error));
     openAdhkar(time);
   };
   Notifications.addNotificationResponseReceivedListener(opened);
-  Notifications.getLastNotificationResponseAsync().then(opened).catch(() => {});
+  Notifications.getLastNotificationResponseAsync().then(opened).catch(error => reportError('adhan: read opened alert', error));
 }
 
 /** Counts each return to the app, so a screen can check the permission again after the phone's settings. */

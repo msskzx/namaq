@@ -6,7 +6,7 @@ import { placeOf, searchSahih, type SahihHit, type SahihSlug } from '@shared/sah
 import { num } from '@shared/quran/arabicNumber';
 import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
-import Card from '@/ui/Card';
+import Card, { CardWithRow } from '@/ui/Card';
 import Chip from '@/ui/Chip';
 import Tabs from '@/ui/Tabs';
 import Empty from '@/ui/Empty';
@@ -20,7 +20,6 @@ import { SAHIH, SAHIH_SLUGS, lastRead, useSahihTexts, type LastRead } from '@/li
 import { bookState, useBooks } from '@/lib/books';
 import { findHadith } from '@shared/sahih';
 import { SahihDownload, SahihShape, opening } from '@/components/Sahih';
-import { CardWithRow } from '@/ui/Card';
 import OpenButton from '@/ui/OpenButton';
 import QuoteBar from '@/ui/QuoteBar';
 import TapRow from '@/ui/TapRow';

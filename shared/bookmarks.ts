@@ -1,3 +1,4 @@
+import { reportError } from './errors';
 /** Saved trees, kept on this device for now. Accounts can later sync this list behind the same functions. */
 export type Bookmark = { id: string; text: string; href: string; savedAt: number };
 
@@ -31,19 +32,19 @@ export function setBookmarkStorage(next: BookmarkStorage) {
 
 export function readBookmarks(): Bookmark[] {
   let raw: string | null = null;
-  try { raw = storage.getItem(KEY); } catch {}
+  try { raw = storage.getItem(KEY); } catch (error) { reportError('bookmarks: read', error); }
   if (raw === cache.raw) return cache.list;
   let list: Bookmark[] = [];
   try {
     const parsed = raw ? JSON.parse(raw) : [];
     if (Array.isArray(parsed)) list = parsed.filter(item => item && typeof item.id === 'string' && typeof item.href === 'string');
-  } catch {}
+  } catch (error) { reportError('bookmarks: parse', error); }
   cache = { raw, list };
   return list;
 }
 
 function write(list: Bookmark[]) {
-  try { storage.setItem(KEY, JSON.stringify(list)); } catch {}
+  try { storage.setItem(KEY, JSON.stringify(list)); } catch (error) { reportError('bookmarks: save', error); }
   listeners.forEach(listener => listener());
 }
 

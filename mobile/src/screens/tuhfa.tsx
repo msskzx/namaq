@@ -68,7 +68,7 @@ export default function TuhfaScreen() {
     pending.current = number;
     router.setParams({ verse: undefined });
     toVerse();
-  }, [verse]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [verse]);
   useTabRetap('tuhfa', () => scroll.current?.scrollTo({ y: 0, animated: true }));
   const onScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     shrink(event);

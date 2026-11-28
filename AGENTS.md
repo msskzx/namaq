@@ -67,6 +67,8 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
   `page.tsx` may only export `default`, `metadata`, and the other names
   Next recognizes; anything else, like a helper function, fails only here)
   — run it before every PR, not just when something feels risky.
+- [docs/feature-map.md](docs/feature-map.md) names every screen of the phone app and the tap that opens it. Use those
+  names when writing about the app; a new screen gets an entry in `e2e/featureMap.mjs` (its test fails until it does).
 - A change to the phone app is used before it merges (owner, 2026-11-21): run
   `npm run phone -- start` and tap through the feature you changed step by step,
   looking at each dark, iPhone-size screenshot as a person would, then save the
@@ -95,7 +97,7 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
 - Opening the PR means the work is finished: `npm run lint`, `npx tsc --noEmit`,
   `npm test` and `npm run build` pass (the same checks as "Before considering a
   change finished"), the review findings are fixed or answered in the PR body, and the
-  PR can merge once those checks pass (plus `npm run typecheck` in `mobile/` for
+  PR can merge once those checks pass (plus `npm run lint` and `npm run typecheck` in `mobile/` for
   app changes) unless the owner comments on it. GitHub CI is off for now (manual
   run only), so the local run is the gate. A migration the
   owner applies is not a reason to hold the merge: write the change so the app

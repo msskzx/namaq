@@ -1,4 +1,3 @@
-import { WEBSITE } from './website';
 import corpus from '@shared/quran/quranText/corpus';
 import surahRows from '@shared/data/quran/surahs.json';
 import type { BranchPiece } from '@shared/quran/branchInventory';

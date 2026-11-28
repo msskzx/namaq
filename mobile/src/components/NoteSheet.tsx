@@ -23,7 +23,7 @@ export default function NoteSheet({ ayah, onClose, palette }: { ayah: string | n
   const [shown, setShown] = useState(ayah);
   const pending = useRef<{ key: string; text: string; timer: ReturnType<typeof setTimeout> } | null>(null);
   const flush = () => { if (pending.current) { clearTimeout(pending.current.timer); writeAyahNote(pending.current.key, pending.current.text); pending.current = null; } };
-  useEffect(() => { const stop = onLeave(flush); return () => { stop(); flush(); }; }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { const stop = onLeave(flush); return () => { stop(); flush(); }; }, []);
   useEffect(() => {
     flush();
     if (!ayah) return;

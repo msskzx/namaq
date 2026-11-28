@@ -7,5 +7,4 @@ import { QURAN_FONT } from '@/lib/fonts';
 export const QURAN_FAMILY = QURAN_FONT;
 
 /** The font's file, for a video recorded in a web view, which embeds the face itself. */
-// eslint-disable-next-line @typescript-eslint/no-require-imports
 export const QURAN_FONT_FILE: number = require('../../../../assets/fonts/UthmanicHafs1Ver18.ttf');

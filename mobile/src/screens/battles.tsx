@@ -1,9 +1,8 @@
 import { useDeferredValue, useEffect, useMemo, useRef, useState, type ComponentRef } from 'react';
 import { ScrollView, View } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
-import { battleTimeline } from '@shared/battles/timeline';
+import { battleTimeline, legendKinds } from '@shared/battles/timeline';
 import { searchBattles } from '@shared/battles/battle';
-import { Text } from '@/ui/Text';
 import TopBar from '@/ui/TopBar';
 import Empty from '@/ui/Empty';
 import { usePalette } from '@/lib/theme';
@@ -14,7 +13,6 @@ import { back } from '@/lib/ways';
 import { BATTLES } from '@/lib/battles';
 import BattleLine from '@/components/battles/BattleLine';
 import { Legend } from '@/components/battles/BattleTimeline';
-import { legendKinds } from '@shared/battles/timeline';
 
 /**
  * Every battle in the app as one line down the years (owner, 2026-11-23: BattleLine), undated last; each station opens its page.

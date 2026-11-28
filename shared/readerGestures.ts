@@ -1,4 +1,5 @@
 import { keyStore } from './storage';
+import { reportError } from './errors';
 
 /** What a tap, double tap and long press do on the Quran reader's page, chosen per mode in the settings sheet. Kept on this device. */
 export type ReaderMode = 'read' | 'recite';
@@ -24,7 +25,7 @@ export const AYAH_ACTIONS: ReadonlySet<GestureAction> = new Set(['actions', 'for
 
 export function parseGestures(raw: string | null): ReaderGestures {
   let parsed: unknown = null;
-  try { parsed = raw ? JSON.parse(raw) : null; } catch {}
+  try { parsed = raw ? JSON.parse(raw) : null; } catch (error) { reportError('reader gestures: read', error); }
   const stored = (parsed && typeof parsed === 'object' ? parsed : {}) as Partial<Record<ReaderMode, Partial<Record<Gesture, string>>>>;
   const pick = (mode: ReaderMode, gesture: Gesture): GestureAction => {
     const value = stored[mode]?.[gesture] as GestureAction | undefined;
