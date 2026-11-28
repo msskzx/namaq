@@ -387,7 +387,7 @@ test('recite from the top bar starts at the page start', async ({ page }) => {
   await reciteBarsHidden(page);
 });
 
-test('the recite bar keeps the owner\'s order, right to left, and every button fits on the narrowest phone', async ({ page }) => {
+test('the recite bar keeps the owner\'s order, right to left, and every button fits inside it on a 360-point phone', async ({ page }) => {
   // Owner, 2026-11-28: from the left, fold, end, page reset, step back, pen, next ayah, next word, each with its name under it.
   await page.setViewportSize({ width: 360, height: 800 });
   await open(page, '/read');
@@ -395,12 +395,15 @@ test('the recite bar keeps the owner\'s order, right to left, and every button f
   await page.getByRole('button', { name: 'تسميع: أخفِ الآيات وأظهرها واحدة واحدة' }).click();
   await page.getByRole('button', { name: 'سمّع من أول الصفحة' }).click();
   const bar = page.getByRole('toolbar', { name: 'أدوات التسميع' });
+  const edge = (await bar.boundingBox())!;
   const fromLeft = ['اطوِ', 'إنهاء', 'أعد الصفحة', 'تراجع', 'اكتب', 'آية', 'كلمة'];
-  const boxes = await Promise.all(fromLeft.map(name => bar.getByText(name, { exact: true }).boundingBox()));
-  for (const [at, box] of boxes.entries()) {
-    expect(box!.x).toBeGreaterThanOrEqual(0);
-    expect(box!.x + box!.width).toBeLessThanOrEqual(360);
-    if (at) expect(box!.x).toBeGreaterThan(boxes[at - 1]!.x + boxes[at - 1]!.width);
+  const buttons = await Promise.all(fromLeft.map(name => bar.getByRole('button').filter({ hasText: name }).boundingBox()));
+  for (const [at, box] of buttons.entries()) {
+    expect(box!.x).toBeGreaterThanOrEqual(edge.x);
+    expect(box!.x + box!.width).toBeLessThanOrEqual(edge.x + edge.width);
+    expect(box!.y + box!.height).toBeLessThanOrEqual(edge.y + edge.height);
+    expect(Math.min(box!.width, box!.height)).toBeGreaterThanOrEqual(44);
+    if (at) expect(box!.x).toBeGreaterThanOrEqual(buttons[at - 1]!.x + buttons[at - 1]!.width);
   }
 });
 

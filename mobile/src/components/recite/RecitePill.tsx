@@ -1,12 +1,12 @@
 import type { StyleProp, ViewStyle } from 'react-native';
 import { ChevronLeft, ChevronsLeft, Minimize2, PenLine, RotateCcw, Undo2, X, type LucideProps } from 'lucide-react-native';
 import IconButton from '@/ui/IconButton';
-import ActButton from '@/ui/ActButton';
+import ActButton, { ACT_HEIGHT } from '@/ui/ActButton';
 import GlassBar from '@/ui/GlassBar';
 import type { Palette } from '@/lib/theme';
 import type { Recite } from './useRecite';
 
-export const RECITE_BAR = 60;
+export const RECITE_BAR = ACT_HEIGHT + 2;
 
 type Icon = (props: LucideProps) => React.ReactNode;
 
