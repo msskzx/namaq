@@ -65,18 +65,13 @@ function FlowText({ children, size, color, center, lines, guess }: { children: R
       between={(before, after) => bandOf(before.words[before.words.length - 1], palette) === bandOf(after.words[0], palette) ? bandOf(after.words[0], palette) : undefined}
       draw={(piece, at) => (
         <Text key={at} style={style}>
-          {piece.words.map((run, k) => <Word key={k} run={run} style={style} />)}
+          {piece.words.map((run, k) => <AyahWords key={k} look={run.look} mark={run.mark} lit={run.lit} onPress={run.onPress}>{run.text}</AyahWords>)}
         </Text>
       )} />
   );
 }
 
 const bandOf = (run: Run, palette: Palette) => run.look?.backgroundColor as string | undefined ?? (run.lit ? palette.highlight : undefined);
-
-function Word({ run, style }: { run: Run; style: TextStyle }) {
-  const word = run.lit || run.mark ? <ToneWord style={style} look={run.look} mark={run.mark} lit={run.lit}>{run.text}</ToneWord> : <Text style={run.look}>{mushafText(run.text)}</Text>;
-  return run.onPress ? <Text onPress={run.onPress} accessibilityRole="link">{word}</Text> : word;
-}
 
 export type WordLook = Pick<TextStyle, 'color' | 'fontWeight' | 'textDecorationLine' | 'textDecorationColor' | 'backgroundColor'>;
 
@@ -87,7 +82,7 @@ export function AyahWords({ children, look, mark, lit = false, onPress }: { chil
   const { size, color } = useContext(FlowSize);
   const style = { fontFamily: QURAN_FONT, fontSize: size, lineHeight: size * FLOW_LINE, color, writingDirection: 'rtl' as const };
   const word = lit || mark ? <ToneWord style={style} look={look} mark={mark} lit={lit}>{children}</ToneWord> : <Text style={{ ...style, ...look }}>{mushafText(children)}</Text>;
-  return onPress ? <Text onPress={onPress}>{word}</Text> : word;
+  return onPress ? <Text onPress={onPress} accessibilityRole="link">{word}</Text> : word;
 }
 
 function ToneWord({ children, style, look, mark, lit }: { children: string; style: TextStyle; look?: WordLook; mark?: WordMark; lit: boolean }) {
