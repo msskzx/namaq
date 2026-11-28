@@ -13,6 +13,7 @@ import AyahMenuHost from '@/components/AyahMenuHost';
 import { useStackOptions } from '@/lib/stackOptions';
 import { noteRootPage } from '@/lib/ways';
 import { leave } from '@/lib/storage';
+import { reportError } from '@shared/errors';
 
 /**
  * Everything the app shows, loaded by the root layout only after the loading screen is up (app/_layout.tsx),
@@ -26,7 +27,7 @@ export default function AppShell({ onReady }: { onReady: () => void }) {
   // A tablet turns both ways; a phone stays standing (owner, 2026-11-23), so app.json allows every way and phones lock here.
   useEffect(() => {
     const { width, height } = Dimensions.get('screen');
-    if (Platform.OS !== 'web' && !isTablet(width, height)) void ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP).catch(() => {});
+    if (Platform.OS !== 'web' && !isTablet(width, height)) void ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP).catch(error => reportError('app: lock portrait', error));
   }, []);
   // Downloaded recitations stay current through Quran Foundation's Content Sync (lib/listenFiles.ts).
   useEffect(() => { syncPacks(); }, []);

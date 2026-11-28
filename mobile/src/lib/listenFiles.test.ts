@@ -88,7 +88,7 @@ describe('audio downloads', () => {
     const files = await load();
     const { Directory } = await import('expo-file-system');
     vi.spyOn(Directory.prototype, 'create').mockImplementation(() => { throw new Error('disk full'); });
-    await files.downloadPack(7, 'all', 'all', KEYS).catch(() => undefined);
+    await files.downloadPack(7, 'all', 'all', KEYS);
     expect(files.progressOf(7, 'all')?.failed).toBe(true);
   });
 

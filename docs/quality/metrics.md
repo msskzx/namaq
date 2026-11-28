@@ -27,3 +27,8 @@ Counts are of product code: test files are left out. "Empty catch blocks" counts
 | 2026-11-28 | baseline | app | empty catch blocks | 21 | | step 2 |
 | 2026-11-28 | baseline | shared | empty catch blocks | 10 | | step 2 |
 | 2026-11-28 | baseline | website | empty catch blocks | 44 | | step 2 |
+| 2026-11-28 | 2 errors show their cause | app | empty catch blocks | 21 | 1 | the one left is inside the video recorder's web page script, which lint does not read; it now sends a warning instead of nothing |
+| 2026-11-28 | 2 errors show their cause | shared | empty catch blocks | 10 | 0 | |
+| 2026-11-28 | 2 errors show their cause | app | failures that dropped their reason | 7 | 0 | adhan scheduling and permission, book download and open, party questions, location, audio download, video recording |
+| 2026-11-28 | 2 errors show their cause | app + shared | catches that recover without the error (judged expected) | 26 | 26 | parsing a saved value or a URL, reading storage; a failure here is an expected answer, not an error |
+| 2026-11-28 | 2 errors show their cause | website | empty catch blocks | 44 | 44 | the website is paused; its turn comes when it returns |

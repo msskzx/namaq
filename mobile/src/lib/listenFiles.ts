@@ -6,6 +6,7 @@ import { ayahAudioUrl, ayahFile, reciterOf } from '@shared/quran/recitation';
 import { applySync, syncDue, type AudioRow, type SyncResult } from '@shared/quran/recitationSync';
 import { arrayOf, isNumberIn, isRecord, isString, readJson, writeJson } from './storage';
 import surahRows from '@shared/data/quran/surahs.json';
+import { reportError } from '@shared/errors';
 
 /**
  * Recitations kept on the phone to listen offline, one folder of ayah files per reciter.
@@ -51,7 +52,7 @@ const have = (reciter: number, key: string) => { try { const file = fileOf(recit
 const lines = new Map<number, Promise<unknown>>();
 function inLine<T>(reciter: number, task: () => Promise<T>): Promise<T> {
   const run = (lines.get(reciter) ?? Promise.resolve()).then(task, task);
-  lines.set(reciter, run.catch(() => undefined));
+  lines.set(reciter, run);
   return run;
 }
 
@@ -68,7 +69,7 @@ async function fetchAyah(reciter: number, key: string, url: string) {
     if (!part.exists || !part.size) throw new Error(`listen ${key}: empty file`);
     part.moveSync(fileOf(reciter, key), { overwrite: true });
   } finally {
-    try { const left = new File(folder(reciter), name); if (left.exists) left.delete(); } catch {}
+    try { const left = new File(folder(reciter), name); if (left.exists) left.delete(); } catch (error) { reportError('listen: delete partial file', error); }
   }
 }
 const savePacks = (next: Pack[]) => { packs = next; writeJson(PACKS, packs); changed(); };
@@ -117,7 +118,7 @@ async function directSync(reciter: number): Promise<SyncResult> {
 const AUDIO_SOURCES: Record<AudioSource, (reciter: number, token?: string) => Promise<SyncResult | { resync: true }>> = { website: websiteSync, direct: directSync };
 const fetchSync = (reciter: number, token?: string) => AUDIO_SOURCES[AUDIO_SOURCE](reciter, token);
 
-const deleteFile = (reciter: number, key: string) => { try { const file = fileOf(reciter, key); if (file.exists) file.delete(); } catch {} };
+const deleteFile = (reciter: number, key: string) => { try { const file = fileOf(reciter, key); if (file.exists) file.delete(); } catch (error) { reportError('listen: delete file', error); } };
 const heldKeys = (reciter: number, list = packs) => new Set(list.filter(pack => pack.reciter === reciter).flatMap(pack => pack.keys));
 
 /** Deletes the files in a reciter's folder that no download holds: what a stopped or failed run left behind. */
@@ -128,7 +129,7 @@ function sweep(reciter: number) {
     const fetching = [...running.entries()].filter(([id]) => id.startsWith(`${reciter}:`)).flatMap(([, keys]) => keys);
     const names = new Set([...heldKeys(reciter), ...fetching].map(ayahFile));
     for (const item of dir.list()) if (item instanceof File && !names.has(item.name) && !(fetching.length && item.name.endsWith('.part'))) item.delete();
-  } catch {}
+  } catch (error) { reportError('listen: sweep reciter folder', error); }
 }
 
 /**
@@ -162,7 +163,7 @@ async function repairFiles(reciter: number) {
       const row = synced[reciter]?.rows[key];
       if (!row || !heldKeys(reciter).has(key)) continue;
       running.set(id, [key]);
-      try { await fetchAyah(reciter, key, row.url); fetched.add(key); } catch {}
+      try { await fetchAyah(reciter, key, row.url); fetched.add(key); } catch (error) { reportError('listen: fetch ayah', error); }
       if (!heldKeys(reciter).has(key)) deleteFile(reciter, key);
     }
   } finally {
@@ -203,7 +204,7 @@ export async function downloadPack(reciter: number, kind: PackKind, label: strin
     progress.total = queue.length;
     const worker = async () => {
       for (let key = queue.shift(); key && !stopped.has(id); key = queue.shift()) {
-        try { if (repair.has(key) || !have(reciter, key)) { await fetchAyah(reciter, key, rows[key].url); fetched.add(key); } } catch { failed = true; }
+        try { if (repair.has(key) || !have(reciter, key)) { await fetchAyah(reciter, key, rows[key].url); fetched.add(key); } } catch (error) { reportError(`listen: download ${key}`, error); failed = true; }
         progress.done += 1;
         if (progress.done % 10 === 0 || progress.done === progress.total) changed();
       }
@@ -221,7 +222,8 @@ export async function downloadPack(reciter: number, kind: PackKind, label: strin
     const next = [...rest, { reciter, kind, label, keys }];
     if (old) { const kept = heldKeys(reciter, next); old.keys.forEach(key => { if (!kept.has(key)) deleteFile(reciter, key); }); }
     savePacks(next);
-  } catch {
+  } catch (error) {
+    reportError('listen: download pack', error);
     fail();
   }
 }
@@ -253,9 +255,9 @@ export async function syncPacks(now = Date.now()) {
   try {
     const root = new Directory(Paths.document, 'listen');
     if (root.exists) for (const item of root.list()) if (item instanceof Directory && /^\d+$/.test(item.name)) sweep(Number(item.name));
-  } catch {}
+  } catch (error) { reportError('listen: sweep downloads', error); }
   for (const reciter of new Set(packs.map(pack => pack.reciter))) {
-    try { await inLine(reciter, async () => { if (syncDue(synced[reciter]?.syncedAt, now)) await sync(reciter); }); } catch {}
+    try { await inLine(reciter, async () => { if (syncDue(synced[reciter]?.syncedAt, now)) await sync(reciter); }); } catch (error) { reportError('listen: sync reciter', error); }
     // Outside the line, so a download started meanwhile does not wait for every repaired file.
     await repairFiles(reciter);
   }

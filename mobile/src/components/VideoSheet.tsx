@@ -9,6 +9,7 @@ import { readRecorderMessage, recorderPage, type VideoInput } from '@/lib/scene'
 import { fontFace, shareVideo } from '@/lib/shareVideo';
 import type { Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
+import { reportError } from '@shared/errors';
 
 type Video = { data: string; mime: string };
 
@@ -36,19 +37,20 @@ export default function VideoSheet({ input, page, onClose, palette, part, onNext
     setShareFailed(false);
     setFont(null);
     if (!open) return;
-    fontFace().then(face => { if (request.current === own) setFont(face); }, () => { if (request.current === own) setFont(''); });
+    fontFace().then(face => { if (request.current === own) setFont(face); }, error => { reportError('video: load font', error); if (request.current === own) setFont(''); });
   }, [input, page, open]);
   const message = useCallback((own: number, data: string) => {
     if (request.current !== own) return;
     const said = readRecorderMessage(data);
     if (said?.type === 'video') setVideo({ data: said.data, mime: said.mime });
-    if (said?.type === 'error') setFailed(true);
+    if (said?.type === 'error') { reportError('video: record', said.reason); setFailed(true); }
+    if (said?.type === 'warning') reportError('video: recorder', said.reason);
   }, []);
   const again = () => { begin(); setVideo(null); setFailed(false); setPaused(false); setShareFailed(false); };
   const share = (made: Video) => {
     setSharing(true);
     setShareFailed(false);
-    shareVideo(made.data, made.mime).catch(() => { if (request.current === own) setShareFailed(true); }).finally(() => setSharing(false));
+    shareVideo(made.data, made.mime).catch(error => { reportError('video: share', error); if (request.current === own) setShareFailed(true); }).finally(() => setSharing(false));
   };
   // As on the website, the recording can be paused: the paused time is left out of the video.
   const toggle = () => { frame.current?.send({ type: paused ? 'resume' : 'pause' }); setPaused(!paused); };

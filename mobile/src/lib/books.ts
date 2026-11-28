@@ -3,6 +3,7 @@ import { Platform } from 'react-native';
 import { Directory, File, Paths } from 'expo-file-system';
 import { bookOf, bookUrl, isBookId, type BookId } from '@shared/books';
 import { readJson, writeJson } from './storage';
+import { reportError } from '@shared/errors';
 
 /**
  * The person's books (shared/books.ts): which are on the phone, and downloading or removing one. A built-in book is
@@ -86,14 +87,15 @@ export async function addBook(id: BookId) {
         part.moveSync(fileOf(id), { overwrite: true });
         loaded.set(id, data);
       } finally {
-        try { const left = new File(dir, `${id}.json.part`); if (left.exists) left.delete(); } catch {}
+        try { const left = new File(dir, `${id}.json.part`); if (left.exists) left.delete(); } catch (error) { reportError('books: delete partial download', error); }
       }
     }
     saved = [...saved.filter(other => other !== id), id];
     writeJson(SAVED, saved);
     busy.delete(id);
     revise(id);
-  } catch {
+  } catch (error) {
+    reportError(`books: download ${id}`, error);
     busy.set(id, 'failed');
   }
   changed();
@@ -109,7 +111,7 @@ export function removeBook(id: BookId) {
     writeJson(SAVED, saved);
     loaded.delete(id);
     busy.delete(id);
-    if (!web) { try { const file = fileOf(id); if (file.exists) file.delete(); } catch {} }
+    if (!web) { try { const file = fileOf(id); if (file.exists) file.delete(); } catch (error) { reportError('books: delete book file', error); } }
   }
   changed();
 }
@@ -129,7 +131,8 @@ async function readFromFile(id: BookId): Promise<unknown> {
     const data = readable(id, web ? await (await fetch(bookUrl(id))).json() : JSON.parse(await fileOf(id).text()));
     loaded.set(id, data);
     return data;
-  } catch {
+  } catch (error) {
+    reportError(`books: open ${id}`, error);
     return null;
   }
 }

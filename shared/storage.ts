@@ -1,3 +1,4 @@
+import { reportError } from './errors';
 /** Where small per-device state is kept: localStorage on the website, the app's own key-value store on the phone. */
 export type KeyStorage = {
   getItem(key: string): string | null;
@@ -36,7 +37,7 @@ export function keepingStorage(base: KeyStorage) {
   /** Saves again what the device refused; true when nothing is left unsaved. */
   const retry = () => {
     const before = unsaved.size;
-    for (const [key, value] of [...unsaved]) { try { base.setItem(key, value); unsaved.delete(key); } catch {} }
+    for (const [key, value] of [...unsaved]) { try { base.setItem(key, value); unsaved.delete(key); } catch (error) { reportError('storage: retry save', error); } }
     changed(before);
     return unsaved.size === 0;
   };
@@ -67,13 +68,13 @@ export function keyStore<T>(key: string, parse: (raw: string | null) => T) {
   return {
     read(): T {
       let raw: string | null = null;
-      try { raw = current.getItem(key); } catch {}
+      try { raw = current.getItem(key); } catch (error) { reportError('storage: read', error); }
       if (cache && cache.raw === raw) return cache.value;
       cache = { raw, value: parse(raw) };
       return cache.value;
     },
     write(raw: string) {
-      try { current.setItem(key, raw); } catch {}
+      try { current.setItem(key, raw); } catch (error) { reportError('storage: save', error); }
       notify();
     },
     subscribe(listener: () => void) {
