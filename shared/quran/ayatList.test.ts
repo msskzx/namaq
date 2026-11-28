@@ -17,6 +17,9 @@ describe('the ayat list', () => {
     expect(typedAyah('سورة ٢ ٣')).toBe('2:3');
     expect(typedAyah('البقرة۳۶')).toBe('2:36');
     expect(typedAyah('ال ٥')).toBeNull();
+    expect(typedAyah('ق ١')).toBe('50:1');
+    expect(ayatFound('يو').surahs.length).toBeGreaterThan(1);
+    expect(ayatFound('سورة ٢').surahs.map(surah => surah.number)).toEqual([2]);
     expect(ayatFound('البقرة ٣٦').ayat[0]).toBe('2:36');
   });
 

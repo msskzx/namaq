@@ -16,10 +16,11 @@ const inSurah = (surah: number) => (ayah: { key: string }) => ayah.key.startsWit
 export const surahAyat = (surah: number) => corpus.ayat.filter(inSurah(surah));
 
 function surahNamed(name: string): SurahRow | undefined {
-  const rest = name.replace(/^سور[ةه]\s*/, '').trim();
+  const rest = westernDigits(name).replace(/^سور[ةه]\s*/, '').trim();
   if (/^\d+$/.test(rest)) return SURAHS.find(row => row.number === Number(rest));
-  if (compactQuery(rest).join('').replace(/^ال/, '').length < 2) return undefined;
-  const ranked = SURAHS.map(surah => ({ surah, rank: surahRank(surah, rest) })).filter(found => found.rank !== null && found.rank <= 1);
+  if (!compactQuery(rest).join('')) return undefined;
+  const short = compactQuery(rest).join('').replace(/^ال/, '').length < 2;
+  const ranked = SURAHS.map(surah => ({ surah, rank: surahRank(surah, rest) })).filter(found => found.rank === 0 || (found.rank === 1 && !short));
   ranked.sort((a, b) => a.rank! - b.rank!);
   return ranked[0]?.surah;
 }
@@ -38,7 +39,8 @@ const searchable = (query: string) => compactQuery(westernDigits(query).replace(
 export function ayatFound(query: string) {
   const ref = typedAyah(query);
   if (ref) return { surahs: [], ayat: [ref, ...byWords(query, corpusIndex).filter(key => key !== ref)] };
-  return { surahs: searchSurahs(SURAHS, query), ayat: byWords(query, corpusIndex) };
+  const numbered = /^سور[ةه]\s*\d+$/.test(westernDigits(query.trim())) ? surahNamed(query.trim()) : undefined;
+  return { surahs: numbered ? [numbered] : searchSurahs(SURAHS, query), ayat: byWords(query, corpusIndex) };
 }
 
 export function surahAyatFound(surah: number, query: string) {
