@@ -90,6 +90,30 @@ export async function longPress(page: Page, target: Locator, ms = 900) {
   await page.mouse.up();
 }
 
+/** A finger held on `from` until it lifts, then moved in small steps to `to` (a point on the page), held there `ms`, and let go. */
+export async function drag(page: Page, from: Locator, to: { x: number; y: number }, ms = 200) {
+  const box = (await from.boundingBox())!;
+  const touch = await page.context().newCDPSession(page);
+  const at = (type: 'touchStart' | 'touchMove' | 'touchEnd', x: number, y: number) =>
+    touch.send('Input.dispatchTouchEvent', { type, touchPoints: type === 'touchEnd' ? [] : [{ x, y }] });
+  const start = { x: box.x + box.width / 2, y: box.y + box.height / 2 };
+  await at('touchStart', start.x, start.y);
+  await page.waitForTimeout(400);
+  for (let step = 1; step <= 12; step++) {
+    await at('touchMove', start.x + ((to.x - start.x) * step) / 12, start.y + ((to.y - start.y) * step) / 12);
+    await page.waitForTimeout(16);
+  }
+  await page.waitForTimeout(ms);
+  await at('touchEnd', to.x, to.y);
+  await touch.detach();
+}
+
+/** The middle of an element, to drag something onto it. */
+export const middle = async (target: Locator) => {
+  const box = (await target.boundingBox())!;
+  return { x: box.x + box.width / 2, y: box.y + box.height / 2 };
+};
+
 /**
  * The indices of a locator's matches that sit wholly inside the screen's width. The tree and compare pagers keep their
  * neighbouring cards drawn beside the screen, so a page holds their buttons too.

@@ -7,7 +7,6 @@ import { Check, ChevronDown, ChevronUp, Eye, Square, SquareCheck, X } from 'luci
 import { Text } from '@/ui/Text';
 import Button from '@/ui/Button';
 import { alikeDiff, BOX_ASKED, FORGOT, isRightChoice, orders, PICKS, picksOf, recited, RECITED, ticks, type ChoiceQuestion } from '@shared/quiz/choiceKinds';
-import OrderRows from '@/ui/OrderRows';
 import OrderTray from '@/ui/OrderTray';
 import { SurahSheet } from './OrderSurah';
 import Chip from '@/ui/Chip';
@@ -107,7 +106,7 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
   const diff = alike && question.quran ? alikeDiff(question.quran, alike.words) : undefined;
   const name = (value: string) => question.choices.find(choice => choice.value === value)?.labelArabic ?? '';
   const [card, setCard] = useState<number | null>(null);
-  if (question.tray) return (
+  if (orders(question)) return (
     <View style={{ flex: scroll ? 1 : undefined, paddingBottom: scroll ? 0 : 12 }}>
       <OrderTray key={question.key} question={question} picked={picked} palette={palette} pinned={scroll}
         onPick={answered ? undefined : onPick} onDraft={onTicks}
@@ -157,7 +156,6 @@ export default function QuizChoice({ question, picked, shown, onPick, onReveal, 
         </Card>
       )}
       {!revealed && !onPage && onReveal && <View style={{ paddingHorizontal: 16, alignItems: 'flex-start' }}><Button variant="primary" Icon={Eye} label="أظهر الآية" onPress={onReveal} /></View>}
-      {orders(question) && <OrderRows key={question.key} question={question} picked={picked} palette={palette} onPick={answered ? undefined : onPick} onDraft={onTicks} />}
       {question.map && (
         <AtlasQuizMap layer={question.map.layer} choices={question.choices.map(choice => choice.value)} right={answered ? question.correctAnswer : undefined}
           picked={answered ? picked : ticked[0]} onPick={answered || !onPick ? undefined : select} palette={palette} />
