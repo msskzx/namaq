@@ -71,3 +71,29 @@ types, but the import no longer says what it is. Each got its `type` mark back. 
   the error can be dropped. That is the pattern from the talk: the comment makes the shortcut look reviewed.
   The stricter rule from the review (a catch block holding only a comment counts as empty) flagged both, and
   they now report what failed.
+
+## A test that passed when a story lost its last words (every-word tests, review)
+
+- **Where:** `shared/everyWord.test.ts`, the sira stories check.
+- **Wrong:** the first version asked only whether the story's words appear somewhere in the hadith.
+- **Effect:** a story missing its first or last words still passed, and so did one cut in the middle of a word.
+  A reviewer cut «رَسُولُ اللَّهِ ﷺ» from the end of a story and kept the full stop, and the test still passed.
+- **Found by:** a reviewer who did not write the test, by changing the data and running the test.
+- **Fix:** a story must be the whole hadith, or whole words that start where a route starts and end where the
+  source ends a sentence.
+
+## A check that could never fail (every-word tests, review)
+
+- **Where:** `shared/everyWord.test.ts`, al-Sa'di's runs.
+- **Wrong:** `tafsirRuns` splits a passage with `split(/(…)/)`, so joining the runs always gives back the passage.
+- **Effect:** the test was green whatever the code did, so it protected nothing.
+- **Found by:** review, against ship-checklist section 9: "a guard counts only if it fails when the old bug is put back".
+- **Fix:** removed. The al-Kashshaf runs, which can lose text, are still checked.
+
+## A letter fold that hid a real spelling change (every-word tests, review)
+
+- **Where:** `shared/quran/quranText/everyWord.test.ts`, the letter comparison with the corpus.
+- **Wrong:** it folded ة into ت and dropped shadda, which went further than the two copies needed.
+- **Effect:** a page that wrote «رحمة» where the mushaf has «رحمت» would have passed.
+- **Found by:** a reviewer, who measured each fold. Without the ة fold, still only the same 2 ayat differ.
+- **Fix:** the ة fold is gone and shadda is compared.
