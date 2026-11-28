@@ -3369,7 +3369,7 @@
  },
  {
   "file": "mobile/src/screens/hadith.tsx",
-  "line": 36,
+  "line": 34,
   "owner": "ContinueCard",
   "key": "onPress",
   "label": "افتح ‹›",
@@ -3382,7 +3382,7 @@
  },
  {
   "file": "mobile/src/screens/hadith.tsx",
-  "line": 54,
+  "line": 52,
   "owner": "FortyShape",
   "key": "onOpen",
   "label": null,
@@ -3395,7 +3395,7 @@
  },
  {
   "file": "mobile/src/screens/hadith.tsx",
-  "line": 69,
+  "line": 67,
   "owner": "Hit",
   "key": "onPress",
   "label": null,
@@ -3408,7 +3408,7 @@
  },
  {
   "file": "mobile/src/screens/hadith.tsx",
-  "line": 69,
+  "line": 67,
   "owner": "Hit",
   "key": "onPress",
   "label": null,
@@ -3421,7 +3421,7 @@
  },
  {
   "file": "mobile/src/screens/hadith.tsx",
-  "line": 69,
+  "line": 67,
   "owner": "Hit",
   "key": "onPress",
   "label": null,
@@ -3434,7 +3434,7 @@
  },
  {
   "file": "mobile/src/screens/hadith.tsx",
-  "line": 117,
+  "line": 115,
   "owner": "HadithScreen",
   "key": "onPress",
   "label": null,
@@ -3447,7 +3447,7 @@
  },
  {
   "file": "mobile/src/screens/hadith.tsx",
-  "line": 131,
+  "line": 129,
   "owner": "HadithScreen",
   "key": "onOpenBook",
   "label": null,
@@ -3460,7 +3460,7 @@
  },
  {
   "file": "mobile/src/screens/hadith.tsx",
-  "line": 131,
+  "line": 129,
   "owner": "HadithScreen",
   "key": "onOpenKitab",
   "label": null,
@@ -3473,7 +3473,7 @@
  },
  {
   "file": "mobile/src/screens/hadith.tsx",
-  "line": 135,
+  "line": 133,
   "owner": "HadithScreen",
   "key": "onOpenBook",
   "label": null,
@@ -3978,7 +3978,7 @@
  },
  {
   "file": "mobile/src/screens/person.tsx",
-  "line": 211,
+  "line": 210,
   "owner": "Names",
   "key": "onPress",
   "label": null,
@@ -3991,7 +3991,7 @@
  },
  {
   "file": "mobile/src/screens/person.tsx",
-  "line": 248,
+  "line": 247,
   "owner": "PersonScreen",
   "key": "showBattle",
   "label": null,
@@ -4004,7 +4004,7 @@
  },
  {
   "file": "mobile/src/screens/person.tsx",
-  "line": 253,
+  "line": 252,
   "owner": "PersonScreen",
   "key": "back",
   "label": null,
@@ -4017,7 +4017,7 @@
  },
  {
   "file": "mobile/src/screens/person.tsx",
-  "line": 255,
+  "line": 254,
   "owner": "PersonScreen",
   "key": "tree",
   "label": "شجرة النسب",
@@ -4030,7 +4030,7 @@
  },
  {
   "file": "mobile/src/screens/person.tsx",
-  "line": 295,
+  "line": 294,
   "owner": "PersonScreen",
   "key": "onPress",
   "label": null,
@@ -4043,7 +4043,7 @@
  },
  {
   "file": "mobile/src/screens/person.tsx",
-  "line": 317,
+  "line": 316,
   "owner": "PersonScreen",
   "key": "onPress",
   "label": "قارن حياته بغيره",
@@ -4056,7 +4056,7 @@
  },
  {
   "file": "mobile/src/screens/person.tsx",
-  "line": 328,
+  "line": 327,
   "owner": "PersonScreen",
   "key": "onPin",
   "label": null,
@@ -4069,7 +4069,7 @@
  },
  {
   "file": "mobile/src/screens/person.tsx",
-  "line": 330,
+  "line": 329,
   "owner": "PersonScreen",
   "key": "onPress",
   "label": null,
@@ -4082,7 +4082,7 @@
  },
  {
   "file": "mobile/src/screens/person.tsx",
-  "line": 339,
+  "line": 338,
   "owner": "PersonScreen",
   "key": "onPress",
   "label": "تنقّل في صلاته",
@@ -4095,7 +4095,7 @@
  },
  {
   "file": "mobile/src/screens/person.tsx",
-  "line": 340,
+  "line": 339,
   "owner": "PersonScreen",
   "key": "onPress",
   "label": "بينه وبين…",
@@ -4108,7 +4108,7 @@
  },
  {
   "file": "mobile/src/screens/person.tsx",
-  "line": 343,
+  "line": 342,
   "owner": "PersonScreen",
   "key": "onPick",
   "label": null,
@@ -4121,7 +4121,7 @@
  },
  {
   "file": "mobile/src/screens/person.tsx",
-  "line": 362,
+  "line": 361,
   "owner": "PersonScreen",
   "key": "onPress",
   "label": "‹›‹›",
@@ -4134,7 +4134,7 @@
  },
  {
   "file": "mobile/src/screens/person.tsx",
-  "line": 371,
+  "line": 370,
   "owner": "PersonScreen",
   "key": "onPress",
   "label": null,
