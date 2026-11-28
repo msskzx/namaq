@@ -2,6 +2,7 @@ import { useEffect, useState, useSyncExternalStore } from 'react';
 import type { PairCard } from '@shared/quran/compareCards';
 import { readPlan, READ_SPEEDS, stepTime } from '@shared/quran/readPlan';
 import { device as deviceStorage } from '@/lib/storage';
+import { reportError } from '@shared/errors';
 
 const SPEED_KEY = 'compare-read-pace';
 type Shared = { active: string | null; speed: number };
@@ -14,7 +15,7 @@ const subscribe = (listener: () => void) => { listeners.add(listener); return ()
 export function nextSpeed() {
   const speed = READ_SPEEDS[(READ_SPEEDS.indexOf(shared.speed) + 1) % READ_SPEEDS.length];
   setShared({ speed });
-  try { deviceStorage.setItem(SPEED_KEY, String(speed)); } catch {}
+  try { deviceStorage.setItem(SPEED_KEY, String(speed)); } catch (error) { reportError('read-along: save speed', error); }
 }
 
 /** The read-along speed every card and the page video share. */

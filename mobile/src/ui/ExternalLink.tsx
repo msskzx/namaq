@@ -3,9 +3,10 @@ import { Linking, View, type StyleProp, type TextStyle } from 'react-native';
 import { SquareArrowOutUpLeft } from 'lucide-react-native';
 import { Text, UI_SCALE } from '@/ui/Text';
 import { Tap } from '@/ui/Tap';
+import { reportError } from '@shared/errors';
 
 /** Opens a page outside the app in the phone's browser. */
-export const openExternal = (url: string) => { void Linking.openURL(url).catch(() => {}); };
+export const openExternal = (url: string) => { void Linking.openURL(url).catch(error => reportError('open external link', error)); };
 
 /**
  * Every link that leaves the app: a text link ending with the out-of-site mark, small and in the link's own colour,

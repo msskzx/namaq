@@ -27,12 +27,11 @@ import { TanasubQuote } from './TanasubQuote';
 import { BookAnswers, MutashabihCells } from './MutashabihFace';
 import CompareTargetsSheet from './CompareTargetsSheet';
 import { TAGS, type Group, type Tag } from '@shared/quran/mutashabih/types';
-import { connectionTone } from '@shared/quran/mutashabih/connections';
+import { connectionTone, wordConnections } from '@shared/quran/mutashabih/connections';
 import { connectors } from '@/lib/settings';
 import type { ListState } from '@/lib/branchList';
 import type { Camera, Size } from '@/lib/camera';
 import { connectionBeats, growthBeats } from '@/lib/growth';
-import { wordConnections } from '@shared/quran/mutashabih/connections';
 import { answer, claimTarget, closeStudio, growthState, studioOwner, stop, useGrowth, type Growth } from '@/lib/growPlayer';
 import type { TreeScene, VideoInput } from '@/lib/scene';
 import { treeVideo } from '@/lib/treeVideo';
@@ -344,7 +343,7 @@ export default function TreePager({ pieces, list, palette, around: defaultAround
       waiting.current = lightPath;
       pending.current = setTimeout(() => { waiting.current = undefined; lightPath(); }, DOUBLE_TAP);
     }
-  }, [pieces, index]);
+  }, [pieces, index, embedded]);
 
   const openVideo = async () => {
     stop();

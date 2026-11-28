@@ -3,6 +3,7 @@ import { juzOf } from './quran/juz';
 import surahRows from './data/quran/surahs.json';
 import { dailyIndex } from './dailyPick';
 import type { CompareScope } from './quran/compareScope';
+import { reportError } from './errors';
 
 /**
  * What the reader says they have memorized (owner, 2026-11-13), kept on this device only and never shown or counted:
@@ -20,7 +21,7 @@ function parse(raw: string | null): Memorized | null {
       const picked = [...new Set((value.picked as unknown[]).map(Number).filter(n => Number.isInteger(n) && n >= 1 && n <= max))].sort((a, b) => a - b);
       return picked.length ? { unit: value.unit, picked } : null;
     }
-  } catch {}
+  } catch (error) { reportError('memorized: read', error); }
   return null;
 }
 

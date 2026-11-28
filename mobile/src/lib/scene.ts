@@ -78,14 +78,16 @@ export type VideoInput = { scene: TreeScene; beats: Beat[]; look: Look; speed: n
  * Plain JavaScript in a string, since it runs inside a web view.
  */
 /** What the recorder page says back, checked: a finished video (base64 of a video type) or a failure, an empty recording included; anything else is nothing. */
-export type RecorderMessage = { type: 'video'; data: string; mime: string } | { type: 'error' };
+export type RecorderMessage = { type: 'video'; data: string; mime: string } | { type: 'error' | 'warning'; reason: string };
 export function readRecorderMessage(text: string): RecorderMessage | null {
   let parsed: unknown;
   try { parsed = JSON.parse(text); } catch { return null; }
   if (!parsed || typeof parsed !== 'object') return null;
-  const { type, data, mime } = parsed as { type?: unknown; data?: unknown; mime?: unknown };
+  const { type, data, mime, message } = parsed as { type?: unknown; data?: unknown; mime?: unknown; message?: unknown };
   // A recording with no data is a failed one: there is nothing to share.
-  if (type === 'error' || (type === 'video' && data === '')) return { type: 'error' };
+  if (type === 'error') return { type: 'error', reason: typeof message === 'string' && message ? message : 'the recorder failed without a message' };
+  if (type === 'video' && data === '') return { type: 'error', reason: 'the recording is empty' };
+  if (type === 'warning' && typeof message === 'string') return { type, reason: message };
   if (type === 'video' && typeof data === 'string' && data.length > 0 && typeof mime === 'string' && mime.startsWith('video/')) return { type, data, mime };
   return null;
 }
@@ -477,7 +479,7 @@ else {
   }
   ${PAUSE}
   var uiFont = document.fonts && document.fonts.load
-    ? Promise.all([document.fonts.load('40px ' + look.ui), document.fonts.load('bold 40px ' + look.ui), document.fonts.load('40px ' + look.font)]).catch(function () {})
+    ? Promise.all([document.fonts.load('40px ' + look.ui), document.fonts.load('bold 40px ' + look.ui), document.fonts.load('40px ' + look.font)]).catch(function (error) { send({ type: 'warning', message: 'fonts did not load: ' + String(error) }); })
     : Promise.resolve();
   // The chips, the card and the tree's place are measured once the app's fonts have loaded.
   uiFont.then(function () { layout(); ready(logo, look.font, function () { start = performance.now(); recorder.start(); started(); enter(0, 0); requestAnimationFrame(tick); }); });

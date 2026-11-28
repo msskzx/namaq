@@ -4,12 +4,11 @@ import Svg, { Circle, G, Line, Polygon, Rect, Text as SvgText } from 'react-nati
 import { Bell, BellOff, CalendarDays, Check, HandHeart, ChevronDown, ChevronLeft, ChevronRight, Compass, Infinity as InfinityIcon, List, LocateFixed, MapPin, type LucideProps } from 'lucide-react-native';
 import { Text } from '@/ui/Text';
 import Sheet from '@/ui/Sheet';
-import { hijriDate, hijriDay, todaysJuz } from '@shared/hijri';
-import { inMinutes } from '@shared/homeFeed';
+import { hijriDate, todaysJuz } from '@shared/hijri';
 import { readQiblaAsks, subscribeQiblaAsks, takeQiblaAsk } from '@/lib/ways';
 import { juzLabel, openJuz } from '@/lib/juz';
 import Button from '@/ui/Button';
-import { ALL, clock, dayDigits, FACING, hijriMonth, METHODS, MY_LOCATION, nextPrayer, PRAYER_NAMES, qiblaLabel, searchPlaces, turnTo, type Place, type PrayerKey } from '@shared/prayer';
+import { dayDigits, FACING, hijriMonth, METHODS, MY_LOCATION, nextPrayer, PRAYER_NAMES, qiblaLabel, searchPlaces, turnTo, type Place, type PrayerKey } from '@shared/prayer';
 import { locate, qiblaFor, timesFor, useHeading, useMinute } from '@/lib/prayer';
 import { adhanAlerts, prayerPlace, prayerView, type PrayerView, prayerSettings, utilityView, type UtilityView } from '@/lib/settings';
 import { buzz } from '@/lib/haptics';
@@ -376,7 +375,6 @@ function Qibla({ place, palette, on }: { place: Place; palette: Palette; on: boo
 }
 
 const WEEK = ['س', 'ح', 'ن', 'ث', 'ر', 'خ', 'ج'];
-const WEEK_NAMES = ['السبت', 'الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة'];
 
 /**
  * Today at the top of the tools page (owner, 2026-11-23): the Hijri date over the Gregorian one, and this week's days from

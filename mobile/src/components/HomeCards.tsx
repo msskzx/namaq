@@ -10,9 +10,6 @@ import { num } from '@shared/quran/arabicNumber';
 import TreeIcon from './TreeIcon';
 import IconButton from '@/ui/IconButton';
 import { surahName } from '@shared/quran/surahNames';
-
-/** A card's button: its icon, its short name, and what a screen reader says; `color` marks the green «تذكّرتها». */
-type MenuItem = { id: string; Icon: (props: LucideProps) => React.ReactNode; name: string; label: string; on?: boolean; color?: string; onPress: () => void };
 import { shareAyah } from './AyahShare';
 import CompareTargetsSheet from './CompareTargetsSheet';
 import NoteSheet from './NoteSheet';
@@ -27,6 +24,9 @@ import { ayahSections, sectionNames, sectionOn } from '@/lib/ayahPage';
 import { useBooks } from '@/lib/books';
 import { followWay, openAyahPage, openIntent } from '@/lib/ways';
 import { FEATURE_ICON } from '@/components/featureIcons';
+
+/** A card's button: its icon, its short name, and what a screen reader says; `color` marks the green «تذكّرتها». */
+type MenuItem = { id: string; Icon: (props: LucideProps) => React.ReactNode; name: string; label: string; on?: boolean; color?: string; onPress: () => void };
 
 const KIND_ICONS: Record<BookmarkKind, (props: LucideProps) => React.ReactNode> = { tree: TreeIcon, compare: ArrowLeftRight, ayah: FEATURE_ICON.mushaf, card: Bookmark };
 const WAYS: Record<CardWay['to'], { label: string; name: string; Icon: (props: LucideProps) => React.ReactNode }> = {
@@ -52,7 +52,7 @@ export function ShelfCard({ card, palette, items, open, note = false, Icon = KIN
   const ayah = card.kind === 'ayah' || note ? ayahOfCard(card) : null;
   const books = useBooks();
   const saved = card.kind === 'ayah' && !note;
-  const holds = useMemo(() => (ayah && saved ? sectionNames(ayahSections(ayah).filter(sectionOn)) : []), [ayah, saved, books]);
+  const holds = useMemo(() => (ayah && saved ? sectionNames(ayahSections(ayah).filter(sectionOn)) : []), [ayah, saved, books]); // eslint-disable-line react-hooks/exhaustive-deps
   return (
     <View style={{ gap: 4 }}>
       <PostHead Icon={Icon} title={places || label} sub={places && card.kind !== 'ayah' ? label : undefined} palette={palette} />

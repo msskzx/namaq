@@ -6,6 +6,7 @@ import { ayahCounts } from './mushaf';
 import { readListenPlan, readReciter } from '@shared/listenSettings';
 import { localAyah, streamUrl } from './listenFiles';
 import { surahName } from '@shared/quran/surahNames';
+import { reportError } from '@shared/errors';
 
 /**
  * The one recitation playing in the app: a range of ayat, read by one reciter, with each ayah's and the range's repeats
@@ -58,7 +59,7 @@ const sourceOf = (reciter: number, key: string) => localAyah(reciter, key) ?? st
 
 function ensurePlayer() {
   if (player) return player;
-  Promise.resolve(setAudioModeAsync({ playsInSilentMode: true, shouldPlayInBackground: true, interruptionMode: 'doNotMix', allowsRecording: false })).catch(() => {});
+  Promise.resolve(setAudioModeAsync({ playsInSilentMode: true, shouldPlayInBackground: true, interruptionMode: 'doNotMix', allowsRecording: false })).catch(error => reportError('listen: audio mode', error));
   player = createAudioPlayer(null, { updateInterval: 250 });
   player.addListener('playbackStatusUpdate', onStatus);
   return player;

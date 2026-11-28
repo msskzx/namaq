@@ -170,8 +170,7 @@ export function useAppSearch(query: string, keep?: (kind: SearchKind) => boolean
       setFound({ query: typed, groups: keep ? groups.filter(group => keep(group.kind)) : groups });
     }, 150);
     return () => clearTimeout(timer);
-    // `keep` is a fixed rule of the page that calls this, not a value that changes.
-  }, [query, notes]);
+  }, [query, notes]); // eslint-disable-line react-hooks/exhaustive-deps
   return { found, waiting: query.trim() !== found.query };
 }
 

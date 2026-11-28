@@ -3,6 +3,7 @@ import { AppState } from 'react-native';
 import * as adhan from 'adhan';
 import * as Location from 'expo-location';
 import { MY_LOCATION, prayerDay, qiblaBearing, type Adhan, type Place, type PrayerDay, type PrayerSettings } from '@shared/prayer';
+import { reportError } from '@shared/errors';
 
 const lib = adhan as unknown as Adhan;
 
@@ -20,7 +21,8 @@ export async function locate(): Promise<Place | null> {
     // Two decimals (about a kilometre) is plenty for prayer times and the qibla, and keeps less of the person's place.
     const round = (value: number) => Math.round(value * 100) / 100;
     return { name: MY_LOCATION, lat: round(position.coords.latitude), lng: round(position.coords.longitude) };
-  } catch {
+  } catch (error) {
+    reportError('prayer: read location', error);
     return null;
   }
 }
