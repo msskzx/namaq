@@ -98,3 +98,44 @@ describe('reviewing forgotten words (owner, 2026-11-21)', () => {
     expect(upTo.gap).toEqual({ place: 1, at: 2 });
   });
 });
+
+describe('a sign inside the ayah is not a step (owner, 2026-11-28)', () => {
+  const withHizb = pageModel({ juz: 1, items: [{ surah: 2 }, { line: ['۞', 'أول', 'ثان', 1, 'بعد', 2] }] });
+
+  it('shows the ۞ together with the word after it', () => {
+    const first = reciteView(withHizb, { start: '2:1', shown: null, words: 0 }).nextWord()!;
+    expect(reciteView(withHizb, first).hidden('2:1', 0)).toBe(false);
+    expect(reciteView(withHizb, first).hidden('2:1', 1)).toBe(false);
+    expect(reciteView(withHizb, first).hidden('2:1', 2)).toBe(true);
+    expect(reciteView(withHizb, first).nextWord()).toEqual({ start: '2:1', shown: '2:1', words: 0 });
+  });
+
+  it('reviews a forgotten first word with no step that shows only the ۞', () => {
+    const view = reciteView(withHizb, { start: '2:1', gaps: [0], shown: null, words: 0 });
+    expect(view.gap).toEqual({ place: 0, at: 1 });
+    expect(reciteView(withHizb, view.nextAyah()!).hidden('2:1', 1)).toBe(false);
+  });
+
+  it('takes one tap per word on every quarter-opening ayah of the Quran', () => {
+    let top: number | undefined;
+    for (let n = 1; n <= 604; n++) {
+      const data = page(n);
+      const model = pageModel(data, top);
+      top = data.items.flatMap(item => ('surah' in item ? [item.surah] : [])).at(-1) ?? top;
+      for (const [key, signs] of Object.entries(model.signs)) {
+        let at: RecitePosition = { start: key, shown: null, words: 0 };
+        let taps = 0;
+        while (at.shown !== key) { at = reciteView(model, at).nextWord()!; taps++; }
+        expect(taps, key).toBe(model.words[key] - signs.length);
+      }
+    }
+  });
+});
+
+describe('a spread keeps each sign at its place in the ayah', () => {
+  it('counts a sign on the second page after the first page\'s words', () => {
+    const right = pageModel({ juz: 1, items: [{ surah: 2 }, { line: ['أ', 'ب'] }] });
+    const left = pageModel({ juz: 1, items: [{ line: ['۞', 'ج', 1] }] }, 2);
+    expect(joinModels([right, left]).signs['2:1']).toEqual([2]);
+  });
+});
