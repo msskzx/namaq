@@ -3698,7 +3698,7 @@
   "owner": "SahihPage",
   "key": "onOpen",
   "label": null,
-  "how": "tab",
+  "how": "push",
   "route": "/hadith-sahih",
   "opens": "حديث الصحيح",
   "on": [
