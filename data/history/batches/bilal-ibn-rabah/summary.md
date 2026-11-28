@@ -5,7 +5,7 @@
 **Subject**: بلال بن رباح (Bilal ibn Rabah)
 **Subject kind**: PERSON
 
-## Claims authored (9)
+## Claims authored (10)
 
 | Key | Type | Target | Excerpt |
 |-----|------|--------|---------|
@@ -18,6 +18,7 @@
 | badr | relation PARTICIPATED_IN | badr | شَهِدَ بَدْراً |
 | death-year | field deathYearHijri | — | سَنَةَ عِشْرِيْنَ (بداريا؛ بدمشق) |
 | death-year-alt | field deathYearHijri DISPUTED | — | وَقِيْلَ: مَاتَ سَنَةَ … إِحْدَى وَعِشْرِيْنَ |
+| ayah-al-anam | field ayat | الأنعام ٥٢-٥٣ | فَأَنْزَلَ اللهُ: {وَلاَ تَطْرُدِ الَّذِيْنَ يَدْعُوْنَ رَبَّهُم …} (353) |
 
 ## Confirmed absent from this account
 

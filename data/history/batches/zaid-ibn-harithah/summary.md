@@ -43,7 +43,7 @@ as a Companion, no contest recorded.
 
 ## What this entry supports
 
-Eleven claims, across the eleven pages.
+Twelve claims, across the eleven pages. The twelfth ties him to al-Ahzab 5: "فَنَزَلَتْ: {ادْعُوْهُم لآبَائِهِم}" (`224-p4`), from Salim from his father.
 
 His name, from the heading and the opening nasab: "زَيْدُ بنُ حَارِثَةَ
 الكَلْبِيُّ" (`220-p1`) "ابْنِ شرَاحِيْلَ - أَوْ شُرَحْبِيْلَ - بنِ كَعْبِ

@@ -36,7 +36,7 @@ recorded.
 
 ## What the entry supports
 
-Eight claims across four pages.
+Nine claims across five pages. The ninth ties him to Al Imran 169: "فَأَنْزَلَ اللهُ: {وَلاَ تَحْسَبَنَّ الَّذِيْنَ قُتِلُوا فِي سَبِيْلِ اللهِ}" (`327-p14` to 328), from Jabir.
 
 **Nasab.** The heading and the chain that follows it: "٦٧ - عبد الله بن عمرو بن
 حرام بن ثعلبة الأنصاري *" (`324-p10`), "ابن حرام بن كعب بن غنم بن كعب بن
