@@ -119,8 +119,8 @@ types, but the import no longer says what it is. Each got its `type` mark back. 
 - **Where:** `screens/quran.tsx` and `screens/search.tsx`, and every screen that read a route param.
 - **Wrong:** `useEffect(() => { setOpen(null); }, [query])`. The effect runs after the screen has drawn.
 - **Effect:** each new letter typed drew the new results under the old open group for one frame, then drew
-  again. The screens that read a link (`/battles?year=5`, `/order?juz=30`, `/people?title=…`) did the same: one
-  frame of the old year or juz, then the linked one.
+  again. The atlas opened from a link (`/atlas?year=5`) drew one frame of its first year before the linked one,
+  and `/order?juz=…` and `/people?title=…` did the same when a new link arrived while the screen was open.
 - **Found by:** `react-hooks/set-state-in-effect`, frozen in the baseline since step 7.
 - **Fix:** `useAdjustOn([query], () => setOpen(null))` sets the state while rendering, so the first frame is
   already right. Only the work React cannot do while rendering (scrolling, clearing the route params) stays

@@ -1,13 +1,20 @@
 import { useEffect, useState } from 'react';
 import { reportError } from '@shared/errors';
 
+type Loaded<T> = { load: number; value: T };
+
 export function useLoaded<T>(key: string | null, load: (key: string) => Promise<T>): T | null {
-  const [loaded, setLoaded] = useState<{ key: string; value: T } | null>(null);
+  const [asked, setAsked] = useState({ key, load: 0 });
+  const [loaded, setLoaded] = useState<Loaded<T> | null>(null);
+  if (asked.key !== key) {
+    setAsked({ key, load: asked.load + 1 });
+    setLoaded(null);
+  }
   useEffect(() => {
-    if (key === null) return;
+    if (asked.key === null) return;
     let live = true;
-    load(key).then(value => { if (live) setLoaded({ key, value }); }, error => reportError(`load ${key}`, error));
+    load(asked.key).then(value => { if (live) setLoaded({ load: asked.load, value }); }, error => reportError(`load ${asked.key}`, error));
     return () => { live = false; };
-  }, [key]); // eslint-disable-line react-hooks/exhaustive-deps
-  return loaded && key !== null && loaded.key === key ? loaded.value : null;
+  }, [asked]); // eslint-disable-line react-hooks/exhaustive-deps
+  return loaded && loaded.load === asked.load && asked.key === key ? loaded.value : null;
 }

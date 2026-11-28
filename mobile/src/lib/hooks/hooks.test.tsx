@@ -1,4 +1,4 @@
-import { act, useEffect, useState } from 'react';
+import { act, StrictMode, useEffect, useState } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useAdjustOn } from './useAdjustOn';
@@ -13,6 +13,8 @@ import { SCROLL_QUIET_MS, useWebScrollEnd } from './useWebScrollEnd';
 
 const platform = vi.hoisted(() => ({ OS: 'web' }));
 vi.mock('react-native', () => ({ Platform: platform }));
+const reported = vi.hoisted(() => [] as string[]);
+vi.mock('@shared/errors', () => ({ reportError: (where: string) => { reported.push(where); } }));
 
 (globalThis as { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
 
@@ -193,6 +195,17 @@ describe('useOnChange', () => {
   });
 });
 
+describe('useOnChange under StrictMode', () => {
+  it('runs again after React unmounts and remounts the effects, so a job started on mount is not lost', () => {
+    const run = vi.fn();
+    const Probe = () => { useOnChange([], run); return null; };
+    const root = createRoot(document.createElement('div'));
+    act(() => root.render(<StrictMode><Probe /></StrictMode>));
+    expect(run).toHaveBeenCalledTimes(2);
+    act(() => root.unmount());
+  });
+});
+
 describe('useLater', () => {
   it('runs only the newest job when a second one is asked before the first', () => {
     const first = vi.fn();
@@ -209,9 +222,32 @@ describe('useLater', () => {
     const run = vi.fn();
     const view = mount(() => useLater(), {});
     view.seen.current.afterPaint(run);
+    wait(1);
     expect(run).not.toHaveBeenCalled();
     wait(100);
     expect(run).toHaveBeenCalledTimes(1);
+  });
+
+  it('drops the waiting job on cancel', () => {
+    const run = vi.fn();
+    const view = mount(() => useLater(), {});
+    view.seen.current.after(300, run);
+    view.seen.current.cancel();
+    wait(300);
+    expect(run).not.toHaveBeenCalled();
+  });
+
+  it('keeps a job asked from inside a job, and still clears it on unmount', () => {
+    const run = vi.fn();
+    const view = mount(() => useLater(), {});
+    const later = view.seen.current;
+    later.nextFrame(() => later.nextFrame(run));
+    wait(20);
+    expect(run).not.toHaveBeenCalled();
+    view.unmount();
+    wait(100);
+    expect(run).not.toHaveBeenCalled();
+    expect(vi.getTimerCount()).toBe(0);
   });
 
   it('leaves no timer or frame behind after unmount', () => {
@@ -238,5 +274,25 @@ describe('useLoaded', () => {
     expect(view.seen.current).toBe('B');
     view.rerender({ id: null });
     expect(view.seen.current).toBeNull();
+  });
+
+  it('shows nothing for a key turned off and on again until the new read arrives', async () => {
+    const waiting: ((value: string) => void)[] = [];
+    const load = () => new Promise<string>(resolve => waiting.push(resolve));
+    const view = mount(({ id }: { id: string | null }) => useLoaded(id, load), { id: 'a' as string | null });
+    await act(async () => { waiting[0]('old'); });
+    view.rerender({ id: null });
+    view.rerender({ id: 'a' });
+    expect(view.seen.current).toBeNull();
+    await act(async () => { waiting[1]('new'); });
+    expect(view.seen.current).toBe('new');
+  });
+
+  it('reports a failed read with its key', async () => {
+    reported.length = 0;
+    const view = mount(({ id }: { id: string }) => useLoaded(id, () => Promise.reject(new Error('gone'))), { id: 'kashshaf' });
+    await act(async () => {});
+    expect(reported).toEqual(['load kashshaf']);
+    view.unmount();
   });
 });

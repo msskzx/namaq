@@ -10,4 +10,5 @@ export function useOnChange(deps: readonly unknown[], run: () => void) {
     seen.current = deps;
     latest.current();
   });
+  useEffect(() => () => { seen.current = null; }, []);
 }
