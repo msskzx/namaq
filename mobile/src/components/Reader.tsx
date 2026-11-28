@@ -84,6 +84,11 @@ const modelOf = (page: number) => {
 
 const plainSurah = (key: string) => { const [surah, ayah] = key.split(':').map(Number); return `${surahName(surah)} ${num(ayah)}`; };
 
+const countSize = (at: number, total: number) => {
+  const digits = String(at).length + String(total).length;
+  return digits <= 4 ? 12 : digits <= 6 ? 10 : 9;
+};
+
 export default function Reader() {
   const palette = usePalette();
   const insets = useSafeAreaInsets();
@@ -485,7 +490,7 @@ export default function Reader() {
               lead={reviewing ? (
                 <View accessible accessibilityLabel={`مراجعة ${num(reviewAt)} من ${num(reviewTotal)}`} style={{ alignItems: 'center', paddingHorizontal: 4, flexShrink: 0 }}>
                   <Text style={{ color: palette.muted, fontSize: 11 }}>مراجعة</Text>
-                  <Text style={{ color: palette.muted, fontSize: 12 }}>{num(reviewAt)} من {num(reviewTotal)}</Text>
+                  <Text style={{ color: palette.muted, fontSize: countSize(reviewAt, reviewTotal) }}>{num(reviewAt)} من {num(reviewTotal)}</Text>
                 </View>
               ) : null} />
           )}
