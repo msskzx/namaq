@@ -12,7 +12,8 @@ import { dayDigits, FACING, hijriMonth, METHODS, MY_LOCATION, nextPrayer, PRAYER
 import { locate, qiblaFor, timesFor, useHeading, useMinute } from '@/lib/prayer';
 import { adhanAlerts, prayerPlace, prayerView, type PrayerView, prayerSettings, utilityView, type UtilityView } from '@/lib/settings';
 import { buzz } from '@/lib/haptics';
-import { ALERTS_SUPPORTED, allowAlerts, openPhoneSettings, useAlertsBlocked, useForeground } from '@/lib/adhan';
+import { ALERTS_SUPPORTED, allowAlerts, openPhoneSettings, useForeground } from '@/lib/adhan';
+import { useAlertsBlocked } from '@/lib/alertsBlocked';
 import { anyAlert } from '@shared/adhanAlerts';
 import { type Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';

@@ -173,3 +173,13 @@ types, but the import no longer says what it is. Each got its `type` mark back. 
 - **Effect:** if the file failed to load, the sea scene stayed empty with no error anywhere.
 - **Fix:** a module-level `lazy()` under `Suspense`, with no effect. A failed load is passed to `reportError` with its
   cause, and the scene draws nothing instead of crashing the screen.
+
+## A hook that the web build could not see (step 7, components)
+
+- **Where:** `lib/adhan.ts`, which has a web twin, `lib/adhan.web.ts`.
+- **Wrong:** the new `useAlertsBlocked` hook went into `adhan.ts` only. On web, the bundler picks `adhan.web.ts`, which has
+  no such export.
+- **Effect:** the tools and adhkar pages crashed on web, and so did their UI tests. Phones were fine, so the review
+  missed it, and #1259 merged after a run of only the specs that had failed before.
+- **Fix:** the hook moved to `lib/alertsBlocked.ts`, which imports `alertsAllowed` from `./adhan` and so gets the
+  right twin on each platform. Run the whole app UI suite after the last change before merging.
