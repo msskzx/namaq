@@ -93,7 +93,7 @@
     "quiz:project": "tsx scripts/quiz/projectQuestions.ts",
     "party:dev": "npm --prefix party run dev",
     "sync:all": "tsx scripts/sync/syncAndGenerate.ts",
-    "feature-map": "node e2e/featureMap.mjs"
+    "feature-map": "node e2e/featureMapPages.mjs"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.7.2",
