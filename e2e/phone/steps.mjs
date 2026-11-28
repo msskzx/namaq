@@ -1,10 +1,11 @@
 // The steps a person takes on the phone app's web build. `npm run phone` runs them one at a time for an agent, and a
 // saved journey (e2e/journeys/*.json) runs the same steps again. How to use them: e2e/README.md, "Using the app".
 import { chromium } from '@playwright/test';
+import { SCREENS, urlNamed } from '../featureMap.mjs';
 
 /** What each step does; `arg` is the step's one argument. */
 export const HELP = {
-  open: 'open <route>        go to a route, e.g. / or /read or /quiz/solo',
+  open: 'open <screen|route> go to a screen by its name in docs/feature-map.md, e.g. «مقارنة السور», or a route, e.g. /read',
   tap: 'tap <name>          tap the button, link, tab or field with this name, or else the text',
   press: 'press <name>        long-press it (the reader\'s menu, for one)',
   type: 'type <text>         type into the focused field (tap the field first)',
@@ -71,10 +72,13 @@ const stuck = message => { throw new Error(message); };
 /** Runs one step. Throws a plain message when the step cannot be done, as a person would be stuck. */
 export async function run(page, [command, arg]) {
   switch (command) {
-    case 'open':
-      await page.goto(arg);
+    case 'open': {
+      const url = arg?.startsWith('/') ? arg : urlNamed(arg);
+      if (!url) stuck(`No screen called "${arg}". Screens: ${SCREENS.map(screen => screen.name).join('، ')}`);
+      await page.goto(url);
       await page.locator('#root > *').first().waitFor();
       break;
+    }
     case 'tap': {
       const target = await find(page, arg);
       if (!target) stuck(`Nothing called "${arg}" to tap.`);
