@@ -24,5 +24,5 @@ shrink (see docs/quality/effects.md for how). On 2026-11-28 that was:
 - `ui/TopBar.tsx` (2) and `ui/LoadingScreen.tsx` (1): the logo and the settings sheet are in `components/`.
 
 The four hadith-link helpers (`openBook`, `openKitab`, `openBab`, `openSahih`), `FortyCard` and `Credit` lived
-in screen files and were imported by eight other files. They moved to `lib/ways.ts` and `components/` the same
+in screen files and were imported by eleven other files. They moved to `lib/ways.ts` and `components/` the same
 day.

@@ -54,11 +54,12 @@ const quality = {
         const check = (node, spec) => {
           if (typeof spec !== 'string') return;
           const target = resolve(spec);
+          const inside = dir => `${target}/`.startsWith(dir);
           for (const zone of mine) {
             const crossed = target === null
               ? zone.packages === false && !(zone.allowPackages ?? []).includes(spec)
-              : (zone.allow ? !zone.allow.some(dir => target.startsWith(dir)) : false)
-                || ((zone.forbid ?? []).some(dir => target.startsWith(dir)) && !(zone.unless ?? []).some(dir => target.startsWith(dir)));
+              : (zone.allow ? !zone.allow.some(inside) : false)
+                || ((zone.forbid ?? []).some(inside) && !(zone.unless ?? []).some(inside));
             if (crossed) context.report({ node, messageId: 'crossed', data: { message: zone.message, target: spec } });
           }
         };
