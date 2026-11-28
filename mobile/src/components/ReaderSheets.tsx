@@ -16,6 +16,7 @@ import Tabs from '@/ui/Tabs';
 import Chip from '@/ui/Chip';
 import { SearchField } from '@/ui/Field';
 import Empty from '@/ui/Empty';
+import { useDebounced } from '@/lib/hooks/useDebounced';
 
 export type Jump = { page: number; key: string; mark: boolean };
 
@@ -44,13 +45,8 @@ export function IndexSheet({ open, onClose, onJump, palette, page, recite, query
   const groups = useMemo(() => juzGroups(surahs), []);
   const reference = parseReference(query, surahs);
   const words = !reference && searchable(query) ? query.trim() : '';
-  const [hits, setHits] = useState<AyahSearch & { query: string }>({ query: '', total: 0, hits: [] });
-  useEffect(() => {
-    if (!words) return;
-    const timer = setTimeout(() => setHits({ ...searchAyat(ayahIndex(), words, Infinity), query: words }), 150);
-    return () => clearTimeout(timer);
-  }, [words]);
-  const found = words && hits.query === words ? hits : null;
+  const settled = useDebounced(words, 150);
+  const found = useMemo<AyahSearch | null>(() => (settled && settled === words ? searchAyat(ayahIndex(), words, Infinity) : null), [settled, words]);
 
   const rows = useMemo<Row[]>(() => {
     const keep = (surah: IndexSurah) => (reference ? surah.number === reference.surah.number : !query.trim() || matchesSurah(surah, query));

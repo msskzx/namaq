@@ -17,7 +17,13 @@ Rules for any agent (Claude Code or otherwise) making changes in this repo.
 - No comments (owner, 2026-11-28). Say it in code, a test or a lint rule. When a reader
   needs a reason the code can't show, write only `// see docs/<file>.md` or `// see R00xx`.
   Lint directives (`eslint-disable…`, `@ts-…`, `@vitest-environment`) stay. `quality/no-comments`
-  (`shared/lint/noComments.mjs`) enforces this in `mobile/` and `shared/`.
+  (`shared/lint/quality.mjs`) enforces this in `mobile/` and `shared/`.
+- No raw effects or timers in app screens and components (owner, 2026-11-28): no `useEffect`,
+  `useLayoutEffect`, `useInsertionEffect`, `setTimeout`, `setInterval`, `requestAnimationFrame` or
+  `requestIdleCallback` outside `mobile/src/lib/` and test files.
+  Derive the value, act in the event handler, or use a hook from `mobile/src/lib/hooks/`. Old code is
+  listed in `mobile/eslint-suppressions.json`, which may only shrink: after removing a case, run
+  `npx eslint src scripts --prune-suppressions` in `mobile/`. See docs/quality/effects.md.
 - Invoke the `ponytail` skill before writing or reviewing code: reuse what the
   codebase already has, reach for stdlib and native platform features before a
   dependency, and stop at the shortest diff that works. It is not vendored

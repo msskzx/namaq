@@ -54,7 +54,7 @@
     "ios": "expo start --ios",
     "typecheck": "tsc --noEmit",
     "update": "eas update --auto",
-    "lint": "expo lint",
+    "lint": "expo lint && eslint -c eslint.unlocks.config.js src --quiet --pass-on-unpruned-suppressions",
     "app-icons": "node scripts/app-icons.mjs",
     "tree-sizes": "expo export --platform web && node scripts/tree-sizes.mjs",
     "test": "cd .. && npx vitest run mobile/ shared/"

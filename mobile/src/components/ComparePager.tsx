@@ -1,5 +1,5 @@
 import { forwardRef, memo, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
-import { FlatList, Platform, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
+import { FlatList, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
 import type { Visit } from '@shared/quran/compareCards';
 import { cardsFor, focusIndex, visitKey } from '@/lib/compare';
 import type { Palette } from '@/lib/theme';
@@ -11,6 +11,7 @@ import { Text } from '@/ui/Text';
 import SourceLine, { sourcesOf } from '@/ui/SourceLine';
 import { pairNote, tanasubSource } from '@shared/quran/tanasubCards';
 import type { Link } from '@shared/quran/surahOrder';
+import { useWebScrollEnd } from '@/lib/hooks/useWebScrollEnd';
 
 const GAP = 14;
 
@@ -85,13 +86,7 @@ const ComparePager = forwardRef<PagerHandle, { visits: Visit[]; index: number; o
       }
       if (at !== index && at >= 0 && at < visits.length) { setCompact(false); onIndex(at); }
     }, [width, index, visits.length, onIndex]);
-    const quiet = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
-    const scrolled = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
-      if (Platform.OS !== 'web') return;
-      const { nativeEvent } = event;
-      clearTimeout(quiet.current);
-      quiet.current = setTimeout(() => settle({ nativeEvent } as NativeSyntheticEvent<NativeScrollEvent>), 150);
-    }, [settle]);
+    const scrolled = useWebScrollEnd(settle);
     const layout = useCallback((_: unknown, at: number) => ({ length: width, offset: width * at, index: at }), [width]);
     const extra = useMemo(() => ({ palette, savedOnly, focus, height }), [palette, savedOnly, focus, height]);
     return (
