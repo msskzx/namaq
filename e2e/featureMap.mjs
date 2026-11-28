@@ -119,17 +119,18 @@ function diagram(section) {
   return lines.join('\n');
 }
 
-export function renderDoc() {
+export function renderDoc({ shared, pageOf, sharedAcross, rules }) {
   const table = SCREENS.map(screen => {
     const ways = screen.tabBar ? `شريط التبويب: ${screen.tabBar}`
       : screen.unlinked ? `لا يُفتح من التطبيق (${screen.unlinked})`
       : screen.from.map(([at, ...taps]) => `${at} ← ${taps.join(' ← ')}`).join('<br>');
     const bar = screen.file.startsWith('(tabs)/') ? 'shown' : 'covered';
-    return `| ${screen.name} | \`${urlNamed(screen.name)}\` | ${bar} | ${ways} | \`mobile/src/app/${screen.file}.tsx\` |`;
+    return `| [${screen.name}](feature-map/${pageOf(screen)}.md) | \`${urlNamed(screen.name)}\` | ${bar} | ${ways} | \`mobile/src/app/${screen.file}.tsx\` |`;
   });
   return `# The app's feature map
 
-Every screen of the phone app, by the name a person would give it, and the tap that opens it. Use these names when
+Every screen of the phone app, by the name a person would give it, and the tap that opens it. Each screen's name below
+leads to its own page: the ways in, every button and card that opens another screen, and its sheets. Use these names when
 talking about the app and with \`npm run phone -- open <name>\`. This file is written by \`npm run feature-map\` from
 [e2e/featureMap.mjs](../e2e/featureMap.mjs); \`e2e/featureMap.test.ts\` fails when a route file in \`mobile/src/app\` is
 missing from the map, when a fixed label in the map no longer appears in the app's code, when a screen cannot be
@@ -150,6 +151,34 @@ ${SECTIONS.map(section => `## ${section}\n\n${diagram(section)}`).join('\n\n')}
 | --- | --- | --- | --- | --- |
 ${table.join('\n')}
 
+## On almost every screen
+
+What the bars and menus that nearly every screen draws can open. Each screen's page leaves these out.
+
+${shared}
+
+## Rules
+
+The owner agreed these on 2026-11-28. \`e2e/featureRules.test.ts\` checks them against the links found in the code
+(\`e2e/featureRules.mjs\`). What breaks a rule today is listed in \`e2e/featureRules.baseline.json\`, which may only
+shrink: a new break fails the test, and a fixed one must leave the list. Two more rules wait on a walk through the
+running app: a person's name opens their page wherever it shows, and no place builds its own page for something that
+has one.
+
+${rules}
+
+## How the links are found
+
+\`e2e/featureLinks.mjs\` reads every file in \`mobile/src\` and finds each place that opens a screen: a router call,
+\`toTab\`, or a function that ends in one (\`openSahih\`, \`openAyahPage\`, …), and each sheet a screen draws (a component
+whose name ends in \`Sheet\`). It gives each the label on the button around it, when the label is written there. Then it
+follows what each route file uses, function by function, to tell which screens show it. A link drawn by a piece that
+${sharedAcross} screens or more use goes under "On almost every screen". A route that depends on what the card holds
+(\`openIntent\`) is listed once for each route it can take, and each route keeps how its own call opens it: \`tab\`
+(\`toTab\`), \`push\`, \`navigate\`, \`replace\` or \`dismissTo\`. A screen whose ayat open the ayah menu on a long press
+(\`AyahMenuPress\`) counts as opening «صفحة الآية». \`docs/feature-map/links.json\` holds every link for agents to
+search.
+
 ## Adding a screen
 
 Add the route file, then an entry in \`SCREENS\` in \`e2e/featureMap.mjs\`, and run \`npm run feature-map\`:
@@ -163,9 +192,4 @@ Add the route file, then an entry in \`SCREENS\` in \`e2e/featureMap.mjs\`, and 
 - \`sample\`: for a screen that needs params, a query (\`?slug=badr\`) or a path (\`/musa\`) that gives it something to show. The party room's \`/000000\` is no real room, so it opens on the room's empty state.
 - \`unlinked\`: why nothing in the app opens the screen, for a tool such as \`tree-sizes\`.
 `;
-}
-
-if (process.argv[1] === self) {
-  fs.writeFileSync(path.join(APP, '../../../docs/feature-map.md'), renderDoc());
-  console.log('Wrote docs/feature-map.md');
 }
