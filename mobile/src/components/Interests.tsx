@@ -14,14 +14,9 @@ import type { Palette } from '@/lib/theme';
 
 export const usePicked = () => useSyncExternalStore(pickedInterests.subscribe, pickedInterests.read, pickedInterests.server);
 
-/** A short line for what is picked: the names, or «الكل» while nothing is. */
 export const interestsLabel = (picked: readonly string[]) =>
   picked.length ? INTERESTS.filter(interest => picked.includes(interest.id)).map(interest => interest.name).join('، ') : 'الكل';
 
-/**
- * The interests to pick (owner, 2026-11-19), under the sections as the scholars name the sciences (shared/interests.ts). Each
- * tap is kept at once, on the device only; none picked means all. The first-open screen, the settings and home's pencil show it.
- */
 export function InterestPicker({ palette }: { palette: Palette }) {
   const picked = usePicked();
   return (
@@ -41,13 +36,11 @@ export function InterestPicker({ palette }: { palette: Palette }) {
   );
 }
 
-/** «فاجئني من غير اهتماماتي»: one card a round from an interest not picked. */
 function SurpriseToggle({ palette }: { palette: Palette }) {
   const on = useSyncExternalStore(surpriseMe.subscribe, surpriseMe.read, surpriseMe.server);
   return <Toggle on={on} onChange={value => { surpriseMe.write(value); newVisit(); }} label="فاجئني من غير اهتماماتي" palette={palette} />;
 }
 
-/** The picker in a sheet (home's pencil); closing it starts the feed afresh when the interests changed. */
 export function InterestsSheet({ open, onClose, palette }: { open: boolean; onClose: () => void; palette: Palette }) {
   const before = useRef('');
   if (open && !before.current) before.current = JSON.stringify(pickedInterests.read());
@@ -66,10 +59,8 @@ export function InterestsSheet({ open, onClose, palette }: { open: boolean; onCl
   );
 }
 
-/** The settings section «اهتماماتي»: what is picked (tap to change), and the surprise toggle. */
 export function InterestsSetting({ palette }: { palette: Palette }) {
   const picked = usePicked();
-  // A change starts the feed afresh once the row folds or settings close, never under the reader's eyes.
   const read = () => JSON.stringify(pickedInterests.read());
   const shown = useRef(read());
   const refresh = () => { if (shown.current !== read()) { shown.current = read(); newVisit(); } };
@@ -84,10 +75,6 @@ export function InterestsSetting({ palette }: { palette: Palette }) {
   );
 }
 
-/**
- * The first open (owner, 2026-11-19, like a new account on Pinterest): «ماذا تحب أن تتعلّم؟» with the interests to pick, any
- * number or none. «ابدأ» (or «ابدأ بالكل» with none) and the close button both keep what is picked; it is asked once.
- */
 export function InterestsWelcome({ palette }: { palette: Palette }) {
   const asked = useSyncExternalStore(interestsAsked.subscribe, interestsAsked.read, interestsAsked.server);
   const picked = usePicked();
@@ -105,13 +92,8 @@ export function InterestsWelcome({ palette }: { palette: Palette }) {
   );
 }
 
-/** The one interest shown alone, while it is still among the picks (none picked means all). */
 export const onlyOf = (only: string | null, picked: readonly string[]) => (only && (!picked.length || picked.includes(only)) ? only : null);
 
-/**
- * The chip row over the feed (owner, 2026-11-19): «لك» (the mixed feed) and each interest picked; a tap shows that
- * interest's cards alone. The pencil opens the picker.
- */
 export function InterestChips({ only, onOnly, palette }: { only: string | null; onOnly: (id: string | null) => void; palette: Palette }) {
   const picked = usePicked();
   const [editing, setEditing] = useState(false);

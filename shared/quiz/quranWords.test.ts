@@ -1,6 +1,4 @@
-// Guard (owner sign-off 2026-11-19, docs/plans/guard-proposals.md no. 2): a quiz never hands a screen a Quran word
-// that is not the word as the Madina page writes it, so no kind can drop tashkeel or signs on its way to the mushaf font.
-// Other readers' readings (QIRAAT choices) are not the Hafs page text (AGENTS.md "Quran text") and are left out.
+// see docs/plans/guard-proposals.md
 import { describe, expect, it } from 'vitest';
 import data from '@shared/quran/quranText/corpus';
 import { CHOICE_KINDS } from './kinds';

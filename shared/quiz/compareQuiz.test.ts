@@ -12,7 +12,6 @@ import { normalizeWord } from '../quran/normalize';
 const seeded = (seed = 1) => () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
 const all = { range: null, filters: {} };
 const every = compareQuiz.questions(all, 'medium', seeded());
-/** The card asked one way: the side picked is random, so seeds are tried until it comes up that way. */
 function find(shown: string, asked: string) {
   for (let seed = 1; seed < 50; seed++) {
     const found = compareQuiz.questions(all, 'medium', seeded(seed)).find(question => question.compare!.shown.key === shown && question.compare!.asked.key === asked);
@@ -72,7 +71,6 @@ describe('compare quiz', () => {
 });
 
 describe('compare answers', () => {
-  // al-Furqan 55 against al-Anbiya 66: قال أفتعبدون / ويعبدون, then ينفعكم شيئا ولا يضركم / ينفعهم ولا يضرهم …
   const question = find('21:66', '25:55')!;
   const ask = question.compare as CompareAsk;
 

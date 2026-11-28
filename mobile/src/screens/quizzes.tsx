@@ -26,38 +26,25 @@ import { memorizedQuestions, readMemorized, subscribeMemorized, withMemorizedSco
 import { bareName } from '@shared/tarajimLine';
 import { PAGE_TOPICS, type QuizTopic } from '@shared/quiz/settings';
 
-/** A question on the page: its kind and the seed that draws it, so a missed one comes back as it was asked. */
 type Asked = { kind: FeedQuizKind; seed: number };
 
-/**
- * Kinds that fill the screen when asked (a mushaf page to write on, a tree, two ayat to compare, a whole juz to order):
- * a tap on their leaf asks them, but a science never opens on one.
- */
 const TALL: readonly FeedQuizKind[] = [...PAGE_TOPICS, 'BRANCHES', 'COMPARE', 'ORDER_JUZ'];
 
-/** The sciences' tabs, short enough for one line on a phone; the heading under them names each in full. */
 const TAB_NAMES: Record<SectionId, string> = { quran: 'القرآن', lisan: 'اللسان', hadith: 'الحديث', history: 'السيرة' };
 
 const freshSeed = () => Math.floor(Math.random() * 2 ** 31);
 const sectionOf = (kind: FeedQuizKind): SectionId => interestOf(kind)?.section ?? 'quran';
 
-/** Each science's interests as branches, their kinds of question as leaves (shared/interests.ts, one home for both). */
 const branchesOf = (section: SectionId): TreeBranch<FeedQuizKind>[] => INTERESTS.filter(interest => interest.section === section)
   .map(interest => ({ id: interest.id, name: interest.name, Icon: QUIZ_ICON[interest.quizzes[0] as FeedKind],
     leaves: interest.quizzes.map(kind => ({ key: kind, name: FEED_QUIZ_NAMES[kind] })) }));
 
-/** The scope a page question asks from: everything, or only what is memorized when «الأسئلة مما أحفظ فقط» is on. */
 function useList() {
   const memorized = useSyncExternalStore(subscribeMemorized, readMemorized);
   const only = useSyncExternalStore(memorizedQuestions.subscribe, memorizedQuestions.read);
   return useMemo(() => (memorized && only ? { ...DEFAULT_LIST, filters: withMemorizedScope(DEFAULT_LIST.filters, memorized) } : DEFAULT_LIST), [memorized, only]);
 }
 
-/**
- * The quizzes tab (owner, 2026-11-23; sketch quizzes-hub/sketch2-dark.png, the three designs joined): the questions answered
- * wrong and due again («عادت إليك»), then the four sciences, a live question of the one open answered on the page, and under
- * it the science's tree of kinds, a leaf putting its question in the card. The setup («اختبار مخصص») and the party stay.
- */
 export default function QuizzesScreen() {
   const palette = usePalette();
   const onScroll = useShrinkOnScroll();
@@ -68,9 +55,7 @@ export default function QuizzesScreen() {
   useBooks();
   const [query, setQuery] = useState('');
   const [section, setSection] = useState<SectionId>('quran');
-  // The question open in each science, kept while another is looked at.
   const [asked, setAsked] = useState<Partial<Record<SectionId, Asked>>>({});
-  // A science opens on a question of one of its short kinds, a different one each visit.
   const [firstSeed] = useState(freshSeed);
   const firstOf = (id: SectionId) => {
     const kinds = branchesOf(id).flatMap(branch => branch.leaves).map(leaf => leaf.key).filter(kind => quizBookOn(kind) && !TALL.includes(kind));
@@ -91,7 +76,6 @@ export default function QuizzesScreen() {
     router.push('/quiz/play');
   };
 
-  // Searched: every science's kinds whose name or interest's name has the words.
   const typed = bareName(query.trim());
   const found = useMemo(() => !typed ? null : SECTIONS.map(each => ({ ...each, branches: branchesOf(each.id)
     .map(branch => bareName(branch.name).includes(typed) ? branch : { ...branch, leaves: branch.leaves.filter(leaf => bareName(leaf.name).includes(typed)) })
@@ -146,11 +130,6 @@ function Heading({ title, line, palette }: { title: string; line?: string; palet
   );
 }
 
-/**
- * «عادت إليك» (owner, 2026-11-23): the questions answered wrong whose rest is over (shared/quiz/missedQuestions.ts), each
- * by its own question (an ayah stays hidden until it is asked: its long press would name the answer), a tap putting it in
- * the card. Nothing is counted; with none due the row is not drawn.
- */
 function CameBack({ onOpen, palette }: { onOpen: (asked: Asked) => void; palette: Palette }) {
   const missed = useSyncExternalStore(subscribeMissed, readMissed);
   const memorized = useSyncExternalStore(subscribeMemorized, readMemorized);
@@ -160,7 +139,6 @@ function CameBack({ onOpen, palette }: { onOpen: (asked: Asked) => void; palette
     .sort((a, b) => a.due - b.due).flatMap(item => {
       const kind = item.kind as FeedQuizKind;
       if (!quizBookOn(kind)) return [];
-      // The card's own run (HomeFeed feedRun): the same question the tap asks, worked out once.
       const question = feedRun(kind as QuizTopic, item.seed, memorized && only ? memorized : null)?.questions[0];
       return question ? [{ kind, seed: item.seed, prompt: question.promptArabic ?? '' }] : [];
     }), [missed, now, memorized, only]);

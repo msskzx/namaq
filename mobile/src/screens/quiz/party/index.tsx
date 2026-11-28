@@ -13,7 +13,6 @@ import Field from '@/ui/Field';
 
 const toLatin = (text: string) => text.replace(/[٠-٩]/g, d => String('٠١٢٣٤٥٦٧٨٩'.indexOf(d))).replace(/\D/g, '');
 
-/** Start a party and share its number, or join one by its number (the website's /quizzes/party). */
 export default function PartyStart() {
   const palette = usePalette();
   const [name, setName] = useState(savedName);

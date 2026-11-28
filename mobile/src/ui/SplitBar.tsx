@@ -1,7 +1,6 @@
 import { View } from 'react-native';
 import type { Palette } from '@/lib/theme';
 
-/** Two amounts on one bar, each side its share: the first (right) in the accent, the second in the rule colour. */
 export default function SplitBar({ first, second, palette }: { first?: number; second?: number; palette: Palette }) {
   const total = (first ?? 0) + (second ?? 0) || 1;
   return (

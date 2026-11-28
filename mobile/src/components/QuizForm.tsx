@@ -8,9 +8,7 @@ import { CardWithRow } from '@/ui/Card';
 import { SharedCard } from '@/ui/CardShare';
 import type { Source } from '@/ui/sourceSlot';
 
-/** A titled section in the home card's shape (owner 2026-11-20): its own buttons in the `row` under the card, its books (`source`) on the line under them. */
 export function Section({ title, palette, row, source, share, children }: { title: string; palette: Palette; row?: React.ReactNode; source?: Source[];
-  /** Shares the section as a picture (ui/CardShare SharedCard), under this head naming its page. */
   share?: { head: React.ReactNode };
   children: React.ReactNode }) {
   const content = <>
@@ -22,7 +20,6 @@ export function Section({ title, palette, row, source, share, children }: { titl
     : <CardWithRow palette={palette} gap={10} row={row} source={source}>{content}</CardWithRow>;
 }
 
-/** How many leaves to type in each tree, 1 to 10. */
 export function LeavesPicker({ value, onChange, palette }: { value: number; onChange: (value: number) => void; palette: Palette }) {
   return (
     <>
@@ -36,7 +33,6 @@ export function LeavesPicker({ value, onChange, palette }: { value: number; onCh
   );
 }
 
-/** Easy, medium or hard (shared/quiz/difficulty.ts), with what it changes in each kind of question asked. */
 export function DifficultyPicker({ value, onChange, palette, kinds = ['BRANCHES'] }: { value: Difficulty; onChange: (value: Difficulty) => void; palette: Palette; kinds?: QuizTopic[] }) {
   return (
     <>

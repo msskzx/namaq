@@ -69,7 +69,6 @@ describe('«في أيّ كتاب؟»', () => {
       const kitab = book.kitabs.find(each => each.n === Number(kitabN))!;
       const heading = kitab.babs[Number(babAt)].title;
       expect(question.choices.find(choice => choice.value === question.correctAnswer)!.labelArabic).toBe(kitab.title.replace(/[ً-ْٰ]/g, '').replace(/[.،]+$/, '').trim());
-      // Matched with their hamzas: Muslim has «كتاب الإيمان» and «كتاب الأيمان» (oaths).
       const label = (title: string) => title.replace(/[ً-ْٰ]/g, '').replace(/[.،]+$/, '').trim();
       const wrong = question.choices.filter(choice => choice.value !== question.correctAnswer).map(choice => book.kitabs.find(each => label(each.title) === choice.labelArabic)!);
       for (const other of wrong) expect(other.babs.some(bab => bare(bab.title) === bare(heading)), `${heading} in ${other.title}`).toBe(false);
@@ -96,7 +95,6 @@ describe('the words between the chain and the saying', () => {
   it('names him after the narrator with no clause between', () => {
     expect(leadIn('عَنْ عُمَرَ: أَنَّ رَسُولَ اللهِ ﷺ قَالَ: ', [{ name: 'عُمَرَ', mode: 'عَنْ' }])).toEqual({ lead: '', prophet: 'أَنَّ رَسُولَ اللهِ ﷺ قَالَ:' });
   });
-  // Owner 2026-11-24: «لا تحذف ولا كلمة»; the line shows the name, the text under it every word after it.
   it('keeps «رضي الله عنه» and the narrator\'s own «قَالَ» under the line', () => {
     expect(leadIn('عَنْ أَبِي هُرَيْرَةَ  رضي الله عنه عَنِ النَّبِيِّ ﷺ قَالَ: ', [{ name: 'أَبِي هُرَيْرَةَ', mode: 'عَنْ' }])).toEqual({ lead: 'رضي الله عنه', prophet: 'عَنِ النَّبِيِّ ﷺ قَالَ:' });
     expect(leadIn('عَنْ أَنَسٍ رضي الله عنه قَالَ: ', [{ name: 'أَنَسٍ', mode: 'عَنْ' }])).toEqual({ lead: 'رضي الله عنه قَالَ:' });
@@ -112,7 +110,6 @@ describe('the words between the chain and the saying', () => {
   });
 });
 
-// Owner 2026-11-24: the drawing and the text are two ways of showing one printed text; neither drops nor adds a word.
 describe('every drawn chain in the app', () => {
   const words = (text: string) => bareHadith(text).replace(/[^\p{L}ﷺ]+/gu, ' ').trim().split(' ').filter(Boolean);
   const shownWhole = (chainText: string, links: { name: string; mode: string }[]) => {

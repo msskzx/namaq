@@ -23,7 +23,6 @@ describe('recordedIn («من أخرجه»)', () => {
     for (const entry of ENTRIES) {
       const boxes = recordedIn(entry);
       for (const name of entry.named) expect(boxes.some(box => box.name === name && box.named), `${entry.n}: ${name}`).toBe(true);
-      // A named book we hold a record of is one numbered box, never a second unnumbered one beside it.
       for (const record of entry.records) expect(boxes.filter(box => box.number === undefined && box.name === COLLECTOR[record.book]), `${entry.n}: ${record.book}`).toEqual([]);
       for (const box of boxes) expect(box.named, `${entry.n}: ${box.name}`).toBe(entry.named.includes(box.name));
     }
@@ -54,7 +53,6 @@ describe('the colours of a scene\'s speakers', () => {
 
   it('never gives two speakers of one scene the same colour while there are colours enough, nor anyone else the Prophet\'s', () => {
     for (const scenes of SCENES) {
-      // A colour for each speaker besides the one kept for the Prophet ﷺ: just enough.
       const enough = 1 + Math.max(...scenes.map(scene => sceneSpeakers(scene.lines).length));
       for (const [i, slots] of sceneSlots(scenes, enough).entries()) {
         const speakers = sceneSpeakers(scenes[i].lines);

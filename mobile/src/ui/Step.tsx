@@ -3,7 +3,6 @@ import { num } from '@shared/quran/arabicNumber';
 import { Text } from '@/ui/Text';
 import type { Palette } from '@/lib/theme';
 
-/** One step of a numbered sequence: its number in a ring of the accent colour, what it says beside it. */
 export default function Step({ n, palette, children }: { n: number; palette: Palette; children: React.ReactNode }) {
   return (
     <View style={{ flexDirection: 'row', gap: 12 }}>

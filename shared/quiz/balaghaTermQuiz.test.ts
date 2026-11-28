@@ -20,7 +20,6 @@ describe('«ما المصطلح؟»', () => {
       expect(namedIn(right, question.passage!), `${right} shows in its definition`).toBe(false);
       for (const choice of question.choices.filter(choice => choice.value !== question.correctAnswer)) {
         expect(namedIn(choice.labelArabic, `${right} ${question.passage}`), `${choice.labelArabic} beside ${right}`).toBe(false);
-        // A term that holds others (a إطناب بالزيادة holds a تذييل) is never the wrong one.
         expect([...BROAD_TERMS, ...BROAD_ITNAB]).not.toContain(choice.value);
       }
       expect(Object.keys(question.terms ?? {}).sort()).toEqual(question.choices.map(choice => choice.value).sort());
@@ -49,7 +48,6 @@ describe('«ما المصطلح؟»', () => {
 
   it('hides another name the definition gives the term', () => {
     expect(hideName('وَتُسَمَّى الطِّبَاقُ: الْجَمْعُ بَيْنَ مُتَضَادَّيْنِ', 'الْمُطَابَقَةُ')).toBe('وَتُسَمَّى …: الْجَمْعُ بَيْنَ مُتَضَادَّيْنِ');
-    // A two-letter word of the name is hidden too.
     expect(hideName('لَا فِي اللَّفِّ وَالنَّشْرِ', 'اللَّفُّ وَالنَّشْرُ')).toBe('لَا فِي … …');
     expect(hideName('أَمَّا الْحَصْرُ- وَيُقَالُ لَهُ الْقَصْرُ فَهُوَ', 'الْحَصْرُ وَالِاخْتِصَاصُ')).toBe('أَمَّا …- وَيُقَالُ لَهُ … فَهُوَ');
   });
@@ -57,7 +55,6 @@ describe('«ما المصطلح؟»', () => {
   it('asks only terms the books define', () => {
     const asked = new Set(termQuiz.questions(scope, 'medium', seededRandom(3)).map(question => question.correctAnswer));
     for (const term of terms.terms.filter(term => !term.defines)) expect(asked.has(term.name)).toBe(false);
-    // الحذف and إيجاز الحذف share al-Suyuti's paragraph: one question.
     expect(asked.has('إيجاز الحذف') !== asked.has('الْحَذْفُ')).toBe(true);
   });
 });
@@ -66,7 +63,6 @@ describe('ابحث عن الجواب', () => {
   it('lists the offered terms in the order shown, so the list never gives the answer away', () => {
     for (const question of termQuiz.questions(scope, 'medium', seededRandom(5), 30)) {
       expect(question.look).toEqual({ view: 'terms', names: question.choices.map(choice => choice.value), mark: question.correctAnswer });
-      // A party sends `terms` before the reveal: its keys follow the choices too.
       expect(Object.keys(question.terms!)).toEqual(question.choices.map(choice => choice.value));
     }
   });

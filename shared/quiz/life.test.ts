@@ -11,7 +11,6 @@ const LIFE = lifeData as AppLife;
 let seed = 7;
 const random = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
 
-/** The years a choice names, read back from its words («السنة ٥ أو ٦ للهجرة», «٣ قبل الهجرة»). */
 const yearsOf = (label: string) => (label.match(/[٠-٩]+/g) ?? [])
   .map(digits => Number([...digits].map(digit => digit.charCodeAt(0) - 0x660).join('')) * (label.includes('قبل') ? -1 : 1));
 
@@ -40,14 +39,11 @@ describe('«في أي سنة كان؟»', () => {
       const thing = things.find(each => q.key.endsWith(`:${each.key}`))!;
       expect(q.choices[Number(q.correctAnswer)].labelArabic).toBe(yearsName(thing.years));
       expect(new Set(q.choices.map(choice => choice.labelArabic)).size).toBe(q.choices.length);
-      // The form gives nothing away: every choice names as many years as the right one.
       const count = (label: string) => label.split(' أو ').length;
       expect(new Set(q.choices.map(choice => count(choice.labelArabic))).size).toBe(1);
-      // No wrong choice is a near miss: each of its years is more than a year from every year given.
       for (const choice of q.choices.filter(choice => choice.value !== q.correctAnswer)) {
         expect(yearsOf(choice.labelArabic).every(year => thing.years.every(given => Math.abs(year - given) > 1))).toBe(true);
       }
-      // Every year given is cited: each source of each reading is under the answer.
       expect(q.sources).toEqual(expect.arrayContaining(thing.sources));
     }
   });

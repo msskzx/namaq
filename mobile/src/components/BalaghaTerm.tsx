@@ -14,13 +14,7 @@ import type { Palette } from '@/lib/theme';
 import BookRuns from './quran/text/BookRuns';
 import LitAyat from './quran/text/LitAyat';
 
-/**
- * The pieces of the balagha terms page (shared/quran/balaghaTerms.ts), shared by the term's page and its feed card: a
- * book's words with the Quran in them coloured, a term's defining quotes each with its folded credit, and an example of
- * al-Suyuti's with the ayah words he quotes lit.
- */
 
-/** A book's words, its ﴿…﴾ quotes in the mushaf's font and the accent (BookRuns). `lines` cuts it short (a feed card). */
 export function BookWords({ text, palette, lines, size = 18 }: { text: string; palette: Palette; lines?: number; size?: number }) {
   return (
     <BookRuns text={text} quran={palette.accent} lines={lines} style={{ color: palette.ink, fontSize: size, lineHeight: size * 1.85, textAlign: 'right', writingDirection: 'rtl' }} />
@@ -29,12 +23,9 @@ export function BookWords({ text, palette, lines, size = 18 }: { text: string; p
 
 const BY: Record<TermQuote['book'], string> = { itqan: 'قال السيوطي في الإتقان:', talkhis: 'قال القزويني في تلخيص المفتاح:' };
 
-/** What heads a term's quotes: «تعريفه» where they define it, otherwise his words on it. */
 export const quotesTitle = (term: Pick<BalaghaTerm, 'defines'>) => (term.defines ? 'تعريفه' : 'من كلام السيوطي عليه');
 
-/** A term's quotes in one card, each whole, their books on the line under it (owner 2026-11-20). */
 export function TermQuotes({ term, head, palette }: { term: BalaghaTerm;
-  /** The term's name over the card's share picture, on its page (ui/CardShare SharedCard). */
   head?: React.ReactNode; palette: Palette }) {
   const mixed = new Set(term.quotes.map(quote => quote.book)).size > 1;
   return (
@@ -42,7 +33,6 @@ export function TermQuotes({ term, head, palette }: { term: BalaghaTerm;
       <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right' }}>{quotesTitle(term)}</Text>
       {term.quotes.map((quote, i) => (
         <View key={`${quote.book}${quote.id}/${i}`}>
-          {/* Two books on one term: each book's words under its name. */}
           {mixed && quote.book !== term.quotes[i - 1]?.book && <Text style={{ color: palette.muted, fontSize: 14, textAlign: 'right', marginTop: i ? 8 : 0 }}>{BY[quote.book]}</Text>}
           <BookWords text={quote.text} palette={palette} />
         </View>
@@ -51,18 +41,12 @@ export function TermQuotes({ term, head, palette }: { term: BalaghaTerm;
   );
 }
 
-/** «القيامة ٢٩–٣٠», «المسد ١، ٤–٥», «الأنفال ٢، القصص ٤، غافر ٣٦» (placesLabel). */
 export const ayatName = (ayat: string[]) => placesLabel(ayat, surahNames);
 
-/** The ayat of an example in the mushaf's font, with the words he quotes lit and each ayah's number after it. */
 export function ExampleAyat({ example, palette }: { example: Pick<TermExample, 'entry' | 'ayat'>; palette: Palette }) {
   return <LitAyat ayat={example.ayat.map(key => ({ words: ayahMushafWords(key), lit: exampleWords(itqan, example, key), number: Number(key.split(':')[1]) }))} menu={example.ayat} palette={palette} />;
 }
 
-/**
- * One example: the ayat with his quoted words lit and his paragraph whole (unless the definition above already quotes it);
- * under the card each ayah as a chip to the mushaf, then his book on the line (owner 2026-11-20).
- */
 export function TermExampleCard({ example, head, palette }: { example: TermExample & { inDefinition?: boolean }; head?: React.ReactNode; palette: Palette }) {
   return (
     <SharedCard palette={palette} pad={[10, 14]} gap={6} source={sourcesOf([exampleSource(example)])} shareHead={head} shareLabel={`شارك المثال ${ayatName(example.ayat)}`} row={

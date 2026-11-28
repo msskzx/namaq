@@ -6,13 +6,8 @@ import { num } from '@shared/quran/arabicNumber';
 import { useCompact } from '@/lib/chrome';
 import type { Palette } from '@/lib/theme';
 
-/** The bar and the count under it. */
 const HEIGHT = 18;
 
-/**
- * How far through the list a pager is: a thin bar under the top bar, with the count in small type under its end.
- * It slides away with the top bar while the page scrolls down and comes back with it (owner, 2026-11-15: everything hides).
- */
 export default function PageProgress({ at, count, label, palette }: { at: number; count: number; label: string; palette: Palette }) {
   const hidden = useCompact();
   const { frame, content } = useSlideAway(hidden, 'top', HEIGHT);

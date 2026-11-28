@@ -40,5 +40,4 @@ const TONES: Partial<Record<Tag, ConnectionTone>> = {
   particle: 'root', number: 'green', definiteness: 'slot4',
 };
 
-/** Each kind of difference keeps one colour for its lines and its chip. */
 export const connectionTone = (tag: Tag): ConnectionTone => TONES[tag] ?? 'muted';

@@ -15,13 +15,11 @@ import type { Palette } from '@/lib/theme';
 
 export { battleLine } from '@shared/battles/battle';
 
-/** A section's folded reference; nothing while the evidence is owed. */
 export function Refs({ refs, palette }: { refs: AppCite[]; palette: Palette }) {
   if (!refs.length) return null;
   return <Reference title={refs[0].cite} quotes={refs} palette={palette} />;
 }
 
-/** The other readings of the values shown, each as the source words it and with its own reference (owner, 2026-11-18). */
 export function Readings({ values, palette }: { values: readonly (AppCited<unknown> | undefined)[]; palette: Palette }) {
   const readings = values.flatMap(value => value?.others ?? []);
   if (!readings.length) return null;
@@ -37,7 +35,6 @@ export function Readings({ values, palette }: { values: readonly (AppCited<unkno
   );
 }
 
-/** The two sides' names over the bars: the Muslims on the right, the other side by the battle's kind. */
 export function SidesHead({ battle, palette }: { battle: Pick<AppBattle, 'kind'>; palette: Palette }) {
   return (
     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -47,10 +44,6 @@ export function SidesHead({ battle, palette }: { battle: Pick<AppBattle, 'kind'>
   );
 }
 
-/**
- * One row of numbers: the Muslims' number, the bar of both, the other side's; a dash where the source gives none. The bar
- * is drawn only when both are given, so one side's number never reads as against nothing.
- */
 export function CountRow({ label, ours, theirs, palette }: { label: string; ours?: number; theirs?: number; palette: Palette }) {
   const side = (value: number | undefined) => <Text numberOfLines={1} style={{ color: palette.ink, fontSize: 18, minWidth: 44, textAlign: 'center' }}>{value === undefined ? '—' : num(value)}</Text>;
   return (
@@ -65,7 +58,6 @@ export function CountRow({ label, ours, theirs, palette }: { label: string; ours
   );
 }
 
-/** One side of a row of numbers: its number large with whose it is, then the number as dots of `unit` men each. */
 function Side({ name, value, unit, color, palette }: { name: string; value?: number; unit: number; color: string; palette: Palette }) {
   return (
     <View style={{ flex: 1, gap: 6 }}>
@@ -80,11 +72,6 @@ function Side({ name, value, unit, color, palette }: { name: string; value?: num
   );
 }
 
-/**
- * How many on each side (owner, 2026-11-23: as dots, sketch tools-design/battles page-v2): the Muslims on the right in the
- * accent, the other side in the rule colour, each row's dots one unit of men that keeps the larger side under a hundred
- * dots, said under it («كل نقطة عشرة رجال»). A side the source does not give is a dash.
- */
 export function Counts({ battle, palette }: { battle: AppBattle; palette: Palette }) {
   const { muslims, others, muslimsKilled, othersKilled } = battle.counts;
   const them = battle.kind?.value === 'معركة' ? 'العدو' : 'المشركون';
@@ -114,17 +101,13 @@ export function Counts({ battle, palette }: { battle: AppBattle; palette: Palett
   );
 }
 
-/** The people of a story, a battle or a moment as chips: one with a page in the app opens it. */
 export function People({ people, palette, tints, more = [] }: { people: AppPersonLink[]; palette: Palette;
-  /** A colour by person slug: in a story's drawing each speaker's chip is in his bubbles' colour, the key to them. */
   tints?: Map<string, string>;
-  /** Speakers the story names but has no person page for («صاحب السرية»), each in his colour. */
   more?: { name: string; tint: string }[] }) {
   return (
     <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>
       {people.map(person => {
         const tint = tints?.get(person.slug);
-        // A name with a page in the app opens it (owner, 2026-11-24: everything links to what it touches); the rest are text.
         const page = !!findPerson(person.slug);
         return <Chip key={person.slug} label={person.slug === PROPHET_AGENT ? PROPHET_LABEL : person.name} on={!!tint} lit={!!tint} tint={tint} small palette={palette}
           role={page ? 'button' : 'text'} onPress={page ? () => router.push({ pathname: '/person', params: { slug: person.slug } }) : undefined} />;
@@ -134,9 +117,7 @@ export function People({ people, palette, tints, more = [] }: { people: AppPerso
   );
 }
 
-/** A numbered moment: our few words naming it, the source's words, where the source says the report is found, and its page. */
 export function Moment({ moment, n, palette, plain }: { moment: AppMoment; n: number; palette: Palette;
-  /** In a feed card the source is in the card's source line under its buttons (owner, 2026-11-20); the grading stays. */
   plain?: boolean }) {
   return (
     <Step n={n} palette={palette}>

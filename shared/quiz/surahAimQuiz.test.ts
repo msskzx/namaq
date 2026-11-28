@@ -22,9 +22,7 @@ describe('«ما مقصود هذه السورة؟»', () => {
   });
 
   it('never asks nor offers a saying that names the surah or one near it (owner, 2026-11-21)', () => {
-    // «واسمها الكوثر», «مدلول اسمها النصر», «على آخر يس» each point at the answer.
     for (const surah of [108, 110, 37, 4]) expect(askable(surah)).toBe(false);
-    // A far surah's name used as a word names no surah: al-Fatiha's «مراقبة العباد لربهم» and al-An'am's saying stay.
     expect(askable(1)).toBe(true);
     expect(askable(6)).toBe(true);
   });

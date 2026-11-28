@@ -1,7 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { AudioStatus } from 'expo-audio';
 
-// A player that only records what it was asked, and a status the test sends as the phone would.
 let onStatus: (status: AudioStatus) => void;
 const asked: string[] = [];
 const player = {
@@ -37,7 +36,6 @@ describe('playback', () => {
     listen.listen('1:1', '1:3');
     heard();
     listen.applyReciter(2);
-    // The old voice's end arrives after the new voice was asked for: the same ayah, not yet heard.
     ended();
     expect(listen.readListening()!.key).toBe('1:1');
     heard();

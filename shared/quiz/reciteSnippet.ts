@@ -1,5 +1,3 @@
-// Recite a snippet (owner, 2026-11-13): an ayah's opening words from the chosen range, the reader recites the rest, shows
-// it and says whether they had it. The opening is long enough that no other ayah starts the same way.
 import corpus from '../quran/quranText/corpus';
 import type { BranchAyah } from '../quran/branches';
 import { filteredAyat } from '../quran/mutashabih/browse';
@@ -9,22 +7,18 @@ import { shuffle } from './random';
 import { FORGOT, RECITE_SNIPPET, RECITED, type ChoiceKind, type ChoiceQuestion, type ChoiceScope } from './choiceKinds';
 import { mushafSource } from './sources';
 
-/** The opening shows at least this many words, and leaves at least this many to recite. */
 const MIN_SHOWN = 3;
 const MIN_LEFT = 3;
-/** Easy shows two more words than the shortest opening no other ayah shares; medium one more; hard none. */
 const EXTRA: Record<Difficulty, number> = { easy: 2, medium: 1, hard: 0 };
 
 
 type Index = { ayat: Map<string, BranchAyah>; opening: Map<string, number> };
 let built: Index | undefined;
 
-/** Built once: for each ayah, the fewest opening words no other ayah starts with (none when that leaves too little to recite). */
 function index(): Index {
   if (built) return built;
   const all = corpus.ayat as BranchAyah[];
   const norm = all.map(ayah => ({ key: ayah.key, words: ayah.words.map(normalizeWord) }));
-  // Sorted word by word, the ayah sharing the longest opening with another sits next to it.
   const compare = (a: string[], b: string[]) => {
     for (let i = 0; i < Math.min(a.length, b.length); i++) if (a[i] !== b[i]) return a[i] < b[i] ? -1 : 1;
     return a.length - b.length;
@@ -69,7 +63,6 @@ export const reciteSnippet: ChoiceKind = {
   id: RECITE_SNIPPET,
   name: 'سمّع بقية الآية',
   party: true,
-  // The difficulty only changes how much of the opening is shown.
   questions: (scope, difficulty, random, limit = Infinity) => shuffle(inScope(scope), random).slice(0, limit).map(ayah => question(ayah, difficulty)),
   count: scope => inScope(scope).length,
 };

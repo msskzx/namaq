@@ -1,8 +1,3 @@
-// The kinds recited on the ayah's own mushaf page with recite mode's bar (owner, 2026-11-17: every quiz kind lives inside
-// the quizzes, the quizzes tab holds only solo and party). «أوائل السور»: a surah's name, and its first ayah to recite;
-// «سمّع الآية»: an ayah named by its surah and number. The pen writes what the pen setting says; written, it is graded by
-// the words, else the reader says حفظتها or نسيتها.
-// Only the ayat's keys and pages are read here, for the range and filters; the words are the page's own (QuizPage).
 import corpus from '../quran/quranText/corpus';
 import { num } from '../quran/arabicNumber';
 import type { BranchAyah } from '../quran/branches';
@@ -28,7 +23,6 @@ const ask = (family: string, key: string, promptArabic: string): ChoiceQuestion 
   choices: CHOICES,
   correctAnswer: RECITED,
   ayahKey: key,
-  // The surah is named in the question, so its title shows on the page.
   page: { shows: 0, recite: true, title: 'shown' },
   sources: [mushafSource(key, ayat?.get(key)?.page)],
   evidence: { claimKeys: [] },

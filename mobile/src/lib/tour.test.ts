@@ -17,7 +17,6 @@ describe('the first-launch tour', () => {
 
   it('recites from the page al-Ikhlas starts on, with an ayah left to reveal there', () => {
     expect(mushafPages(Array.from({ length: 604 }, (_, i) => page(i + 1))).get(RECITE_AYAH)).toBe(RECITE_PAGE);
-    // The surah running at the top of the page, as surahBefore() in lib/mushaf.ts finds it.
     const top = surahs.findLast(row => row.page != null && row.page < RECITE_PAGE)?.number;
     const view = reciteView(pageModel(page(RECITE_PAGE), top), { start: RECITE_AYAH, shown: null, words: 0 });
     expect(view.upcoming).toBe(RECITE_AYAH);

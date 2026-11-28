@@ -13,16 +13,9 @@ import TopBar from '@/ui/TopBar';
 import { surahName } from '@shared/quran/surahNames';
 
 type Props = { state: ListState; bookmarks: Bookmark[]; palette: Palette; onClose: () => void;
-  /** The new list, and where it opens: a picked phrase, else the search's best tree. */
   onApply: (next: ListState, opening?: { id?: string; query?: string }) => void };
 
-/**
- * Search and filter in one screen: the box takes the whole top bar; under it the filters, or, while typing,
- * the surahs and phrases inside them. Enter or the apply button opens the list.
- * The keyboard waits for a tap on the box; the apply row rides above it, and a tap on empty space or a scroll closes it.
- */
 export default function BranchSearch({ state, bookmarks, palette, onClose, onApply }: Props) {
-  // The see-through tab bar lies over this screen's bottom; with the keyboard up the keyboard covers it instead.
   const tabBarSpace = useTabBarSpace();
   const typing = useKeyboardShown();
   const [query, setQuery] = useState(state.query);
@@ -31,7 +24,6 @@ export default function BranchSearch({ state, bookmarks, palette, onClose, onApp
   const filtered = useMemo(() => applyDraft(draft) ?? state, [draft, state]);
   const found = useMemo(() => suggestions(filtered, query, bookmarks), [filtered, query, bookmarks]);
   const typed = !!query.trim();
-  // Suggestions while the text is being changed; the filters otherwise (also when the screen opens on an earlier search).
   const suggesting = typed && query.trim() !== state.query;
   const apply = (next: Partial<ListState>, opening?: { id?: string; query?: string }) => {
     if (!valid) return;

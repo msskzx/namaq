@@ -22,40 +22,28 @@ import type { SceneBox, SceneEdge, ScenePart, SceneText, TreeScene } from '@/lib
 import { TreeText, useWordSize } from './quran/text/AyahFlow';
 import { FLOW_LINE } from '@shared/quran/quranText/flow';
 
-/** A tap on a box; `lightPath` lights its path, which the host runs unless the tap meant something else (a double tap). */
 type Tap = (ayahKeys: string[], lightPath?: () => void) => void;
-/** The paths lit on a tree, as on the website: a node's ayat, several at once. */
 export type Paths = { lit: Set<string>; pinned: Map<string, string[]>; pin: (id: string, keys: string[]) => void };
-/** The button row under each node; when given, every box gets it (the quiz draws none). The matrix shows a node's ayat. */
 export type NodeActions = { onSubtree: (piece: BranchPiece) => void };
 export type Direction = 'side' | 'down';
-/** What a growing tree hides and lights; empty when nothing grows. */
 export type TreeGrowth = { hidden: Set<string>; now: Set<string>; ask?: { id: string; left: number; seconds: number }; lit: string | null; tour?: boolean; words?: number };
 const NO_GROWTH: TreeGrowth = { hidden: new Set(), now: new Set(), lit: null };
 
-/** Draws a node's own content instead of its words, e.g. a quiz input; `index` counts nodes below the root as `branchNodes` does. */
-/** Draws a node's box in place of its words; `path` is the words above it. */
 export type RenderNode = (node: Branch, index: number, path: string[]) => React.ReactNode | undefined;
-type Shared = { /** The tree's word size: a word on its own, the reader's (useWordSize). */ size: number; spellings: boolean; palette: Palette; names: Record<number, string>; matches: Matches; offsets: Record<string, number>; onTap: Tap; down: boolean; indices: Map<Branch, number>; around?: Around; edges: SceneEdge[]; render?: RenderNode; paths?: Paths; actions?: NodeActions; inTree: Set<string>;
-  /** The ayat whose ayah before the one before is drawn too (a mixed tree with the surrounding ayat on, see `required`). */
+type Shared = { size: number; spellings: boolean; palette: Palette; names: Record<number, string>; matches: Matches; offsets: Record<string, number>; onTap: Tap; down: boolean; indices: Map<Branch, number>; around?: Around; edges: SceneEdge[]; render?: RenderNode; paths?: Paths; actions?: NodeActions; inTree: Set<string>;
   earlier: Set<string> };
-/** A lit path: the ayah growing while the studio is open, else the paths a tap or a search lit. */
 const isLit = (shared: Shared, growth: TreeGrowth, ayahKeys: string[]) => growth !== NO_GROWTH
   ? growth.lit !== null && ayahKeys.includes(growth.lit)
   : !!shared.paths && ayahKeys.some(key => shared.paths!.lit.has(key));
-/** The ayat whose paths were lit by a tap (not by a search), as the website names them on the box the path starts from. */
 const tapped = (shared: Shared, ayahKeys: string[]) => !shared.paths ? [] : ayahKeys.filter(key => [...shared.paths!.pinned].some(([id, lit]) => id !== 'search' && lit.includes(key)));
 const Growth = createContext<TreeGrowth>(NO_GROWTH);
-/** Where each box registers itself, so a video of the tree can be drawn from where the boxes sit. */
 type Host = ComponentRef<typeof View>;
 type Registry = Map<string, { view: Host | null; text: SceneText }>;
 const Boxes = createContext<Registry | null>(null);
-/** Each label and line of words inside a box, where the app laid it out, so the video draws it in the same place. */
 type PartSpec = Omit<ScenePart, 'x' | 'y' | 'w' | 'h'>;
 type Parts = Map<string, { box: string; view: Host | null; spec: PartSpec }>;
 const PartsOf = createContext<Parts | null>(null);
 const BoxId = createContext<string | null>(null);
-/** The video's label size: the app's interface text at 12 points, as Text scales it. */
 const LABEL = Math.round(12 * UI_SCALE);
 function usePart(spec: PartSpec) {
   const parts = useContext(PartsOf);
@@ -70,16 +58,12 @@ const edge = (shared: Shared, from: string, to: string, back = false) => { if (!
 
 const LINE = 2;
 const FADE = 250;
-/** How long a growing spine takes to reach a new child. */
 const REACH = 150;
 const isMark = (word: string) => word === '۝' || word.startsWith('﴿');
 
-/** Fades a box or connector in and out as the tree grows. */
 function Fade({ id, children, style, delay = 0 }: { id: string; children: React.ReactNode; style?: object;
-  /** A connector waits for the spine to reach it. */
   delay?: number }) {
   const growth = useContext(Growth);
-  // The box waiting for an answer shows, empty, with its timer.
   const hidden = growth.hidden.has(id) && growth.ask?.id !== id;
   const opacity = useSharedValue(hidden ? 0 : 1);
   useEffect(() => { opacity.value = hidden ? 0 : withDelay(delay, withTiming(1, { duration: FADE })); }, [hidden, opacity, delay]);
@@ -88,16 +72,11 @@ function Fade({ id, children, style, delay = 0 }: { id: string; children: React.
 }
 
 function References({ text, shared, center, ruled }: { text: string; shared: Shared; center?: boolean;
-  /** Inside a Ruled header, which hands the video its place. */
   ruled?: boolean }) {
   const part = usePart({ label: text, size: LABEL, align: center ? 'center' : 'right' });
   return <Text ref={ruled ? undefined : part} style={{ fontSize: 12, color: shared.palette.muted, textAlign: center ? 'center' : 'right', marginTop: center ? 0 : 4 }}>{text}</Text>;
 }
 
-/**
- * Above the box a lit path starts from: which ayah it is, or how many, as on the website. Not when the box itself ends
- * that one ayah, since its own reference already says so.
- */
 function startLabel(shared: Shared, ayahKeys: string[], ending: string[] = []) {
   const lit = tapped(shared, ayahKeys);
   if (lit.length === 0 || (lit.length === 1 && ending.includes(lit[0]))) return undefined;
@@ -111,7 +90,6 @@ function StartReference({ label, shared }: { label?: string; shared: Shared }) {
   return <Ruled label={label} shared={shared}><Text style={{ fontSize: 12, color: shared.palette.muted, textAlign: 'center' }}>{label}</Text></Ruled>;
 }
 
-/** A label over a thin rule, at the top of a box. */
 function Ruled({ label, shared, children }: { label: string; shared: Shared; children: React.ReactNode }) {
   const part = usePart({ label, size: LABEL, align: 'center', rule: true });
   return (
@@ -123,12 +101,10 @@ function Ruled({ label, shared, children }: { label: string; shared: Shared; chi
 
 type Marks = SharedWords;
 
-/** A word's colour by how alike it is in every ayah through this node (shared/quran/wordMatch.ts); written differently when the node's ayat write it apart. */
 function tonesOf(words: string[], ayahKeys: string[], at: number, shared: Shared, marks?: Marks, forms?: Branch['forms'], differs?: number[], given?: Branch['tones']) {
   const { palette, matches, offsets } = shared;
   return words.map((word, i) => {
     if (given) {
-      // A compare tree's words carry their likeness; a word its sides write differently is amber, as on every tree.
       const written = writtenForms({ forms }, i, word, shared.paths?.lit);
       if (written.length > 1 || (bare(written[0].word) !== bare(word) && !isMark(word))) return palette.marks.written;
       return markColour(given[i] === 'written' ? 'exact' : given[i], palette, given[i] === 'written');
@@ -139,9 +115,7 @@ function tonesOf(words: string[], ayahKeys: string[], at: number, shared: Shared
     });
     const all = !isMark(word) && kinds.length > 0 && kinds.every(Boolean);
     const kind = all ? (kinds.includes('root') ? 'root' : kinds.includes('written') ? 'written' : 'exact') : undefined;
-    // A root match already says the forms differ, so it keeps its purple.
     const written = writtenForms({ forms }, i, word, shared.paths?.lit);
-    // A word moved here from a neighbour because the ayat write it differently, over its root match.
     if (differs?.includes(i)) return palette.marks.written;
     if (kind === 'root' && written.length === 1) return palette.marks.root;
     if (written.length > 1 || (bare(written[0].word) !== bare(word) && !isMark(word))) return palette.marks.written;
@@ -150,7 +124,6 @@ function tonesOf(words: string[], ayahKeys: string[], at: number, shared: Shared
 }
 
 type WordsProps = { words: string[]; ayahKeys: string[]; at: number; shared: Shared; size: number; marks?: Marks; color?: string; forms?: Branch['forms']; differs?: number[]; tones?: Branch['tones'] };
-/** The lines into and out of a braid: one strand parting into one per way of writing, or those strands meeting again. */
 function BraidEdge({ count, join, palette }: { count: number; join?: boolean; palette: Palette }) {
   const part = usePart({ size: 0, braid: { count, join: !!join } });
   const d = Array.from({ length: count }, (_, i) => {
@@ -164,18 +137,15 @@ function BraidEdge({ count, join, palette }: { count: number; join?: boolean; pa
   );
 }
 
-/** One word of a node that holds a braid, in its own place so the video finds it where the app put it. */
 function Word({ form, color, size, palette }: { form: WrittenForm; color: string; size: number; palette: Palette }) {
   const part = usePart({ size, words: [{ text: quranText(form.word), color }], lineHeight: size * FLOW_LINE });
   return <TreeText ref={part} look={{ color }}><Written form={form} palette={palette} /></TreeText>;
 }
 
-/** A word as the node's ayat write it, with the stop signs only some of them carry faint (shared/quran/writtenForms.ts). */
 function Written({ form, palette }: { form: WrittenForm; palette: Palette }) {
   return <>{quranText(form.word)}{form.faint ? <Text style={{ color: palette.rule }}>{form.faint}</Text> : null}</>;
 }
 
-/** One way of writing a braid's words, outlined, with the ayat that write it so; the video draws the outline, words and references. */
 function Strand({ words, refs, size, palette }: { words: string; refs: string; size: number; palette: Palette }) {
   const frame = usePart({ size: 0, frame: true });
   const ink = palette.marks.written ?? palette.ink;
@@ -189,8 +159,8 @@ function Strand({ words, refs, size, palette }: { words: string; refs: string; s
   );
 }
 
-// docs/adr/0035-a-tree-node-shows-words-only-as-the-mushaf-writes-them.md (quiz trees keep one form)
-// docs/adr/0036-a-word-written-differently-moves-to-its-neighbour.md
+// see docs/adr/0035-a-tree-node-shows-words-only-as-the-mushaf-writes-them.md
+// see docs/adr/0036-a-word-written-differently-moves-to-its-neighbour.md
 function Words({ words, ayahKeys, at, shared, size, marks, color, forms, differs, tones: given }: WordsProps) {
   const tones = tonesOf(words, ayahKeys, at, shared, marks, forms, differs, given);
   const { palette } = shared;
@@ -206,8 +176,6 @@ function Words({ words, ayahKeys, at, shared, size, marks, color, forms, differs
       </TreeText>
     );
   }
-  // With a braid the words sit in a row of their own pieces (the app lays out right to left, so a row starts on the
-  // right), wrapping, each measured for the video.
   return (
     <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', columnGap: size * 0.28 }}>
       {pieces.map((piece, n) => {
@@ -233,7 +201,6 @@ function Words({ words, ayahKeys, at, shared, size, marks, color, forms, differs
   );
 }
 
-/** The same words as data, for the video: each word as the node shows it (a braid's words come as their own pieces). */
 const sceneWords = ({ words, ayahKeys, at, shared, size, marks, color, forms, differs, tones: given }: WordsProps) => {
   const tones = tonesOf(words, ayahKeys, at, shared, marks, forms, differs, given);
   return { size, lineHeight: size * FLOW_LINE, words: words.map((word, i) => ({ text: quranText(writtenForms({ forms }, i, word, shared.paths?.lit)[0].word), color: tones[i] ?? color ?? shared.palette.ink })) };
@@ -248,13 +215,10 @@ function Tool({ label, Icon, onPress, palette, on }: { label: string; Icon: (pro
   );
 }
 
-/** The buttons under a node: open the part under it as a tree of its own, or light a neighbour ayah's own place in the tree. */
 function Tools({ shared, subtree, inTree }: { shared: Shared; subtree?: BranchPiece;
-  /** A neighbour ayah that is itself in the tree: lights its own place there (the website's «في هذه الشجرة»). */
   inTree?: string }) {
   const { actions, paths, palette } = shared;
   if (!actions) return null;
-  // Tapping the box lights its path, so it has no path button.
   if (!subtree && !inTree) return null;
   const found = !!inTree && !!paths?.pinned.has(pathToggleKey(`t${inTree}`, [inTree]));
   return (
@@ -266,22 +230,18 @@ function Tools({ shared, subtree, inTree }: { shared: Shared; subtree?: BranchPi
 }
 
 function Box({ id, ayahKeys, leaf, shared, muted, text, tools, width, children }: { id: string; ayahKeys: string[]; leaf: boolean; shared: Shared; muted?: boolean; text: SceneText; tools?: React.ReactNode;
-  /** The widest the box may grow, in place of the tree's own limits. */
   width?: number; children: React.ReactNode }) {
   const { palette, down, paths } = shared;
   const growth = useContext(Growth);
   const registry = useContext(Boxes);
   const register = (view: Host | null) => { if (registry) registry.set(id, { view, text: { ...text, muted: !!muted, keys: ayahKeys } }); };
   const asked = growth.ask?.id === id ? growth.ask : undefined;
-  // A lit path tints its boxes blue and outlines them in the colour of its lines; the box tapped (or just grown) is tinted deeper.
   const onPath = isLit(shared, growth, ayahKeys);
   const selected = !!paths?.pinned.has(pathToggleKey(id, ayahKeys));
   const [pressed, setPressed] = useState(false);
   const tap = () => shared.onTap(ayahKeys, paths ? () => paths.pin(id, ayahKeys) : undefined);
   return (
     <Fade id={id}>
-      {/* The box draws the frame; the words are its tap area and the buttons sit beside them, not in them: a button inside a
-          pressable is lost on the web and to screen readers (R0055). */}
       <View ref={register}
         style={{
           maxWidth: width ?? (down ? (leaf ? 176 : 384) : leaf ? 208 : 192),
@@ -292,10 +252,8 @@ function Box({ id, ayahKeys, leaf, shared, muted, text, tools, width, children }
           ...CARD,
         }}>
         <Pressable onPress={tap} onPressIn={() => setPressed(true)} onPressOut={() => setPressed(false)} accessibilityRole="button" accessibilityLabel={asked ? 'اكشف الكلمة التالية' : undefined}>
-          {/* The video draws the whole box, buttons' room included, and in it the words and references, not the buttons. */}
           <View style={{ paddingHorizontal: 12, paddingVertical: 4, opacity: asked ? 0 : 1 }}><BoxId.Provider value={id}>{children}</BoxId.Provider></View>
         </Pressable>
-        {/* Asked, the buttons keep their room but hide and take no tap; the words reveal the next word. */}
         {tools && <View pointerEvents={asked ? 'none' : 'auto'} style={{ opacity: asked ? 0 : 1 }}>{tools}</View>}
         {asked && <View pointerEvents="none" style={{ position: 'absolute', top: 0, bottom: 0, start: 0, end: 0, alignItems: 'center', justifyContent: 'center' }}>
           {asked.seconds ? <Hourglass left={asked.left} seconds={asked.seconds} color={palette.accent} /> : <Text style={{ color: palette.accent, fontSize: 22, fontWeight: '700' }}>؟</Text>}
@@ -305,26 +263,18 @@ function Box({ id, ayahKeys, leaf, shared, muted, text, tools, width, children }
   );
 }
 
-/** An ayah's end mark between two parts of a branch, drawn without a box. */
 function Mark({ id, text, shared }: { id: string; text: string; shared: Shared }) {
   const registry = useContext(Boxes);
   const register = (view: Host | null) => { if (registry) registry.set(id, { view, text: { size: shared.size, words: [{ text, color: shared.palette.muted }], bare: true } }); };
   return <View ref={register} style={{ paddingHorizontal: 4 }}><TreeText look={{ color: shared.palette.muted }}>{text}</TreeText></View>;
 }
 
-/**
- * One child's elbow: the spine from its siblings and the line into it, curved at the two ends. The spine is always drawn plain;
- * a lit child lights only its own line and, at an end, its curve. The lit stretch of spine up to the parent is drawn by the fan
- * on top, so a lit path is exactly the lines it runs along and never the spine past the parent's line.
- */
 function Elbow({ first, last, color, lit, down, spine: whole = true }: { first: boolean; last: boolean; color: string; lit?: string; down: boolean;
-  /** Off while the tree grows: the fan draws the spine itself, only as far as the children shown. */
   spine?: boolean }) {
   const only = first && last;
   const into = lit ?? color;
   const spine = whole ? LINE : 0;
   if (down) {
-    // Children sit in a row under the parent: a bus along the top, a drop into each child.
     return (
       <View style={{ height: 16, alignSelf: 'stretch', flexDirection: 'row' }}>
         {last && !only
@@ -365,21 +315,16 @@ function Elbow({ first, last, color, lit, down, spine: whole = true }: { first: 
 type Entry = { id: string; keys: string[]; item: React.ReactNode };
 
 function Fan({ entries, shared, join, bare, onSpans }: { entries: Entry[]; shared: Shared;
-  /** The children's paths meet again after them (`rejoin`): each runs on to the fan's far edge, where `Join` gathers them. */
   join?: boolean;
-  /** No line into the fan: a compare tree that opens apart has no box before it. */
   bare?: boolean;
-  /** Hears where each child sits along the fan, for `Join`. */
   onSpans?: (spans: Span[]) => void }) {
   const { palette, down } = shared;
   const growth = useContext(Growth);
   const lit = entries.map(entry => isLit(shared, growth, entry.keys));
-  // While the tree grows, the spine reaches only the children already drawn, not the places the hidden ones keep.
   const shown = entries.map(entry => !growth.hidden.has(lineId(entry.id)));
   const growing = growth.hidden.size > 0;
   const [spans, setSpans] = useState<Span[]>([]);
   const [whole, setWhole] = useState(0);
-  // A lit child still hidden lights nothing yet.
   const litShown = lit.map((on, i) => on && shown[i]);
   const spine = litShown.some(Boolean) ? litSpine(spans, litShown, whole) : null;
   const drawn = growing && shown.some(Boolean) ? litSpine(spans, shown, whole) : null;
@@ -402,16 +347,11 @@ function Fan({ entries, shared, join, bare, onSpans }: { entries: Entry[]; share
   );
 }
 
-/**
- * A stretch of a fan's spine. While the tree grows it runs out from the parent's line toward the new child,
- * in step with the child's connector fading in, so a line never reaches a place before its curve and box.
- */
 function Spine({ range, color, down, from, grow = true }: { range: [number, number]; color: string; down: boolean; from: number; grow?: boolean }) {
   const start = grow && from > range[0] && from < range[1];
   const low = useSharedValue(start ? from : range[0]);
   const high = useSharedValue(start ? from : range[1]);
   useEffect(() => {
-    // Only a spine that reaches further runs out; one that shrinks (a replay from a later ayah) or moves jumps.
     const reach = grow && range[0] <= low.value && range[1] >= high.value;
     low.value = reach ? withTiming(range[0], { duration: REACH }) : range[0];
     high.value = reach ? withTiming(range[1], { duration: REACH }) : range[1];
@@ -422,7 +362,6 @@ function Spine({ range, color, down, from, grow = true }: { range: [number, numb
     : { position: 'absolute', start: 0, borderStartWidth: LINE, borderColor: color }, style]} />;
 }
 
-/** The connector between a box and its fan; shown once anything in the fan is, lit when a path runs through it. */
 function Stub({ shared, entries }: { shared: Shared; entries: Entry[] }) {
   const growth = useContext(Growth);
   const { hidden } = growth;
@@ -431,7 +370,6 @@ function Stub({ shared, entries }: { shared: Shared; entries: Entry[] }) {
   return <View style={[shared.down ? { height: 14, borderStartWidth: LINE } : { width: 14, borderTopWidth: LINE }, { borderColor: color, opacity: visible ? 1 : 0 }]} />;
 }
 
-/** Fans drawn before the root (words before the phrase, the ayat before) open the other way: mirrored, then each item mirrored back. */
 function BackFan({ entries, shared }: { entries: Entry[]; shared: Shared }) {
   const flip = shared.down ? { transform: [{ scaleY: -1 }] } : { transform: [{ scaleX: -1 }] };
   return (
@@ -441,11 +379,9 @@ function BackFan({ entries, shared }: { entries: Entry[]; shared: Shared }) {
   );
 }
 
-/** Where a fan's paths meet again: the fan's lines mirrored, each child's place kept by an empty box of its size. */
 function Join({ entries, spans, shared }: { entries: Entry[]; spans: Span[]; shared: Shared }) {
   const flip = shared.down ? { transform: [{ scaleY: -1 }] } : { transform: [{ scaleX: -1 }] };
   if (spans.length !== entries.length) return null;
-  // The fan pads each child by 5 on either side; the empty box takes the rest of its span.
   const places = entries.map((entry, i) => ({ ...entry, item: <View style={shared.down ? { width: spans[i].size - 10 } : { height: spans[i].size - 10 }} /> }));
   return <View style={flip}><Fan shared={shared} entries={places} /></View>;
 }
@@ -455,8 +391,6 @@ function NeighbourBox({ id, beside, of, shared }: { id: string; beside: Beside; 
   const ref = shared.names[surah] ? `${shared.names[surah]} ${num(ayah)}` : `${num(surah)}:${num(ayah)}`;
   const basmala = beside.basmala ? sceneWords({ words: beside.basmala, ayahKeys: [], at: 0, shared, size: shared.size, marks: NOTHING_SHARED, color: shared.palette.muted }).words : [];
   const closed = [...beside.words, ...closingSign(beside.words, [beside.key])];
-  // Drawn as every box is (owner, 2026-11-15: the dashed, muted look drew more attention than it should): same border, card,
-  // text size and ink; only the basmala stays muted, as it is not the ayah's text.
   const own = sceneWords({ words: closed, ayahKeys: [], at: 0, shared, size: shared.size, marks: beside });
   const text: SceneText = { size: shared.size, words: id.startsWith('a') ? [...basmala, ...own.words] : [...own.words, ...basmala], footer: ref };
   return (
@@ -469,7 +403,6 @@ function NeighbourBox({ id, beside, of, shared }: { id: string; beside: Beside; 
   );
 }
 
-/** The ayat before the given ones, opening to the right of what they lead into (or above it, top down). */
 function befores(ayahKeys: string[], shared: Shared): Entry[] {
   const around = shared.around;
   if (!around) return [];
@@ -477,9 +410,7 @@ function befores(ayahKeys: string[], shared: Shared): Entry[] {
 }
 
 function Node({ node, path, shared, starts }: { node: Branch; path: string[]; shared: Shared;
-  /** On the root: the ayat that start here rather than in a box of words before the phrase. */
   starts?: string[] }) {
-  // The tree's own root (index -1): a compare tree's first children have no words above them either.
   const root = shared.indices.get(node) === -1;
   const all = keys(node);
   const words = node.words;
@@ -487,15 +418,11 @@ function Node({ node, path, shared, starts }: { node: Branch; path: string[]; sh
   const own = root ? undefined : shared.render?.(node, shared.indices.get(node)!, path);
   const boundary = node.ayat.length === 0 && words.length > 0 && words.every(isMark);
   const ayatSpans = shownAyat(node, path);
-  // The ayat the box names: those it ends, or a compare tree's own runs (`holds`).
   const runs = node.holds ?? node.ayat.map(key => ayatSpans[key]);
   const singleSurah = runs.length > 0 && runs.every(run => run[0].split(':')[0] === runs[0][0].split(':')[0]);
-  // A box with no words would be an empty box: where one side of a compare tree says nothing between two common stretches, its
-  // line runs straight on instead (owner, 2026-11-16: never an empty node, a longer line is fine).
   const growth = useContext(Growth);
   const through = !root && own === undefined && words.length === 0 && node.ayat.length === 0;
   const shown = !boundary && !through && (!root || words.length > 0 || node.ayat.length > 0);
-  // A compare tree that opens apart has no box before its first boxes, so no line into them; each opens with its own ayah before.
   const bare = root && words.length === 0 && node.ayat.length === 0;
   const [spans, setSpans] = useState<Span[]>([]);
   const rejoinId = node.rejoin && nodeId(shared.indices.get(node.rejoin)!);
@@ -522,7 +449,6 @@ function Node({ node, path, shared, starts }: { node: Branch; path: string[]; sh
       {boundary && <Fade id={id}><Mark id={id} text={quranText(words.join(' '))} shared={shared} /></Fade>}
       {through && <View testID="through" style={{ [shared.down ? 'height' : 'width']: 24, [shared.down ? 'width' : 'height']: LINE, backgroundColor: isLit(shared, growth, all) ? shared.palette.path : shared.palette.rule }} />}
       {shown && (() => {
-        // Every box names its ayat inside, over a rule, whichever way the tree is drawn: no tabs (owner, 2026-11-16).
         return (
           <Box id={id} ayahKeys={all} leaf={node.children.length === 0} shared={shared} text={text}
             tools={own === undefined && <Tools shared={shared} subtree={!root && node.children.length > 0 && shared.actions ? subtreeOf(all) : undefined} />}>
@@ -549,21 +475,13 @@ function Node({ node, path, shared, starts }: { node: Branch; path: string[]; sh
 }
 
 type Props = { presentation: Presentation; matches: Matches; names: Record<number, string>; palette: Palette; onTap: Tap; onLayout?: (event: LayoutChangeEvent) => void;
-  /** The lit paths, and the node buttons (the branches tab draws both; the quiz neither). */
   paths?: Paths; actions?: NodeActions;
   direction?: Direction; around?: Around; growth?: TreeGrowth;
-  /** Filled with a function that measures the drawn tree for the video. */
   sceneRef?: React.MutableRefObject<(() => Promise<TreeScene | null>) | null>;
-  /** Draws a node's own content, e.g. a quiz input or a graded answer. */
   renderNode?: RenderNode;
-  /** Draws each way the ayat write a word (a braid, amber); on unless the tree draws its own nodes (the quiz). */
   spellings?: boolean;
 };
 
-/**
- * The website's phrase tree, root on the right and branches growing left (or top down); words before the phrase fan out on the right.
- * With the surrounding switch on (`around`), the ayah before each ayah opens before the root and the ayah after closes each branch.
- */
 function BranchTree({ presentation: given, matches, names, palette, onTap, onLayout, direction = 'side', around, growth = NO_GROWTH, sceneRef, renderNode, paths, actions, spellings }: Props) {
   const presentation = { ...given, prefixes: withStarts(given.prefixes, keys(given.tree)) };
   const down = direction === 'down';
@@ -575,8 +493,6 @@ function BranchTree({ presentation: given, matches, names, palette, onTap, onLay
   const rootId = nodeId(-1);
   const all = keys(presentation.tree);
   const mixed = mixedBefore(presentation);
-  // Words before the phrase, each with the ayat before it; ayat that open with the phrase show the ayah before when the switch is on,
-  // or always when other ayat have words before the phrase (with the switch, one more before that).
   const opensApart = presentation.tree.words.length === 0 && presentation.tree.ayat.length === 0;
   const before: Entry[] = presentation.prefixes.length === 0 ? (opensApart ? [] : befores(all, shared)) : presentation.prefixes.flatMap((prefix, i): Entry[] => {
     if (prefix.word) {
@@ -598,7 +514,6 @@ function BranchTree({ presentation: given, matches, names, palette, onTap, onLay
     <Boxes.Provider value={sceneRef ? registry : null}>
     <PartsOf.Provider value={sceneRef ? parts : null}>
     <Growth.Provider value={growth}>
-      {/* dir: the web build reads start/end from it, not from the direction style, so it draws the tree as the phone does. */}
       <View {...({ dir: 'rtl' } as object)} ref={rootView} onLayout={onLayout} style={{ direction: 'rtl', flexDirection: down ? 'column' : 'row', alignItems: 'center', alignSelf: 'flex-start', padding: 12 }}>
         {before.length > 0 && <>
           <BackFan entries={before} shared={shared} />
@@ -612,10 +527,6 @@ function BranchTree({ presentation: given, matches, names, palette, onTap, onLay
   );
 }
 
-/**
- * Where every box sits in the tree, in the tree's own points, with its words and where each of its labels and lines of words was laid
- * out: what the video draws.
- */
 function measureScene(root: Host | null, registry: Registry, parts: Parts, edges: SceneEdge[], down: boolean): Promise<TreeScene | null> {
   if (!root) return Promise.resolve(null);
   type Rect = { x: number; y: number; w: number; h: number };
@@ -633,8 +544,6 @@ function measureScene(root: Host | null, registry: Registry, parts: Parts, edges
       const inside = own.get(id)?.sort((a, b) => a.y - b.y);
       return [{ ...item.text, ...(inside ? { parts: inside } : {}), ...rect, id }];
     });
-    // The tree's size from what it holds, in the same measure as the boxes: the root's own measure counts the zoom the card is
-    // shown at on a phone (a tree fitted at half size measured half as big, and the video drew it twice too big), measureLayout not.
     const rectsIn = [...boxes, ...boxes.flatMap(box => box.parts ?? [])];
     if (!rectsIn.length) return null;
     const left = Math.min(...rectsIn.map(r => r.x)), top = Math.min(...rectsIn.map(r => r.y));
@@ -643,7 +552,6 @@ function measureScene(root: Host | null, registry: Registry, parts: Parts, edges
   });
 }
 
-/** The ayah before each ayah that opens with the phrase, always drawn in a mixed tree; the switch adds the one before that. */
 function required(ayahKeys: string[], shared: Shared, context: Around): Entry[] {
   return ayahKeys.flatMap(key => {
     const beside = context.before[key];

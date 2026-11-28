@@ -8,73 +8,47 @@ const TAB_OF: Record<Intent['tab'], Href> = { branches: '/branches', compare: '/
 
 let overTabs = false;
 
-/** The root stack names the page in front (app/_layout.tsx): the tabs, or a page stacked over them. */
 export const noteRootPage = (name: string) => { overTabs = name !== '(tabs)'; };
-/** Whether a page is stacked over the tabs now (a quiz, a party): opening a tab from it would close it. */
 export const isOverTabs = () => overTabs;
 
-/**
- * Opens a tab. From a page stacked over the tabs (the saved and forgotten list) it closes that page first, so the tabs are not opened a second time over it.
- * Inside the tabs it only opens the page, so the home and Quran stacks keep the way back (a tree's compare goes back to the tree).
- */
 export function toTab(href: Href) {
   const fromOver = overTabs;
   if (fromOver && router.canDismiss()) router.dismissAll();
-  // withAnchor puts the stack's first page under a page opened in a stack that has not been drawn yet (lib/stackOptions.ts).
   router.navigate(href, { withAnchor: true });
-  // Home is gone back to, not opened again over the search: the home stack drops back to its first page.
-  // Not from a page over the tabs, where the tabs may not be drawn yet and the pop would close the page just opened.
   const path = typeof href === 'string' ? href : href.pathname;
   if (path === '/' && !fromOver) router.dismissAll();
 }
 
-/**
- * The back arrow of a page in the home or Quran stack: one page back, as the swipe from the right edge goes (lib/stackOptions.ts).
- * Each stack keeps its first page (home, the Quran hub) under the rest, so a tool opened from anywhere goes back to the Quran hub.
- */
 export const back = () => router.back();
 
-/** The grid of a Quran tool: back to the Quran hub, the stack's first page, however many pages lie between (a tree's compare). */
 export const toHub = () => router.dismissTo('/quran');
 
-/** The library mark of a book: back to the shelf, the library stack's first page. */
 export const toShelf = () => router.dismissTo('/books');
 
-/** Opens the tab an intent is for, which then takes it. */
 export const openIntent = (intent: Intent) => { setIntent(intent); toTab(TAB_OF[intent.tab]); };
 
-/** Opens a compare page on its surah pair, scrolled to the card of the target's two ayat. */
 export function openCompare(target: CompareTarget) {
   setIntent({ tab: 'compare', lead: target.lead, other: target.other, ayat: [`${target.lead}:${target.ayat[0]}`, `${target.other}:${target.ayat[1]}`] });
   toTab('/compare');
 }
 
-/** Opens the trees tab on the trees that hold one ayah. */
 export function openTreesOf(ayah: string) {
   setIntent({ tab: 'branches', ayah });
   toTab('/branches');
 }
 
-/** Follows one way out of a saved card; a compare way with several pages is picked first, so it takes the picked one. */
 export function followWay(way: CardWay, target?: CompareTarget) {
   if (way.to === 'mushaf') { setIntent({ tab: 'read', at: way.at }); toTab('/read'); return; }
   if (way.to === 'trees') { openTreesOf(way.ayah); return; }
   if (way.to === 'compare') { const picked = target ?? way.targets[0]; if (picked) openCompare(picked); return; }
-  // «الشجرة» opens that one card as its tree; every other card still opens as its matrix.
   const view = way.to === 'tree' ? 'tree' as const : undefined;
   if (way.tree) toTab({ pathname: '/branches', params: { tree: way.tree, ...(view ? { view } : {}) } });
   else if (way.open) { setIntent(way.open.tab === 'branches' && view ? { ...way.open, view } : way.open); toTab('/branches'); }
 }
 
-/** Opens a book in the book reader at the passage on an ayah, lit (a reader sheet's book button). */
 export const openBookAt = (id: string, ayah: string) => toTab({ pathname: '/book', params: { id, ayah } });
-/** Opens a book at a printed page, «part:page» (a branch card's citation of it). */
 export const openBookPage = (id: string, printed: string) => toTab({ pathname: '/book', params: { id, printed } });
 
-/**
- * The qibla asked for from outside the tools page (home's «القبلة»): waiting until the page takes it, once. `qiblaAsks`
- * grows with each ask so the page hears it; the page drops an ask it cannot serve (no place yet), so it never jumps later.
- */
 let qiblaAsks = 0;
 let qiblaWaiting = false;
 export const takeQiblaAsk = () => { const waiting = qiblaWaiting; qiblaWaiting = false; return waiting; };
@@ -82,17 +56,11 @@ const qiblaListeners = new Set<() => void>();
 export const subscribeQiblaAsks = (listener: () => void) => { qiblaListeners.add(listener); return () => { qiblaListeners.delete(listener); }; };
 export const readQiblaAsks = () => qiblaAsks;
 
-/** Opens the utilities on a page; `qibla` scrolls the tools page down to the compass. */
 export const openUtility = (view: UtilityView, spot?: 'qibla') => {
   utilityView.set(view);
   if (spot) { qiblaAsks++; qiblaWaiting = true; qiblaListeners.forEach(listener => listener()); }
   toTab('/utilities');
 };
 
-/**
- * Opens an ayah's page, everything on it (owner, 2026-11-22): wherever the ayah is the subject (a saved ayah, a home card
- * on it, a bookmark). Reading (continue reading, today's juz) still opens the mushaf. `at` scrolls to one of its sections.
- */
-/** The ayah's page, scrolled to a section when `at` names one; `word` is the word a feed i'rab card showed. */
 export const openAyahPage = (key: string, at?: string, word?: number) =>
   router.push({ pathname: '/ayah', params: { key, ...(at ? { at } : {}), ...(word !== undefined ? { word: String(word) } : {}) } });

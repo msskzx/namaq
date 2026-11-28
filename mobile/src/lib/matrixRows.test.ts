@@ -8,7 +8,6 @@ it('finds each ayah\'s own row once a row read on into another is left out (card
   const { presentation } = cardOf(piece);
   const matrix = matrixOf(presentation, false);
   const firsts = matrix.rows.map(row => row.ayah!.ayat[0].key);
-  // al-Zumar 37 is drawn once, inside the al-Zumar 36 row.
   expect(firsts).not.toContain('39:37');
   expect(matrix.rows.flatMap(row => row.ayah!.ayat.map(ayah => ayah.key)).filter(key => key === '39:37')).toHaveLength(1);
   for (const ayah of presentation.ayat) {

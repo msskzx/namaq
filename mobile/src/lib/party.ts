@@ -1,4 +1,3 @@
-// The party quiz on the phone talks to the same Cloudflare worker as the website (party/src/index.ts).
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { AppState } from 'react-native';
 import type { ActionError, PartyView, PlayerAction } from '@shared/party/rules';
@@ -8,13 +7,8 @@ import { reportError } from '@shared/errors';
 const PLAYER_KEY = 'namaq-party-player';
 const NAME_KEY = 'namaq-party-name';
 
-/** The live worker, the website's NEXT_PUBLIC_PARTY_URL. Public, so a published build never depends on an Expo env setting. */
 const PUBLISHED_PARTY_URL = 'https://namaq.msskzx.workers.dev';
 
-/**
- * The worker's address: EXPO_PUBLIC_PARTY_URL when set at build time, else a local worker on the dev server
- * and the live worker in a published build (the trial updates and store builds).
- */
 export const partyUrl = (): string | null => {
   const url = process.env.EXPO_PUBLIC_PARTY_URL ?? (__DEV__ ? 'http://localhost:8787' : PUBLISHED_PARTY_URL);
   return url ? url.replace(/\/$/, '') : null;
@@ -22,13 +16,11 @@ export const partyUrl = (): string | null => {
 
 export class NoPartyServer extends Error {}
 
-/** How long starting a party may take before the phone gives up. */
 const START_TIMEOUT = 10_000;
 
 const read = (key: string) => { try { return deviceStorage.getItem(key); } catch { return null; } };
 const write = (key: string, value: string) => { try { deviceStorage.setItem(key, value); } catch (error) { reportError('party: save to device', error); } };
 
-/** One id per device, so a phone that drops out rejoins the party as the same player with its score. */
 export function playerId() {
   const existing = read(PLAYER_KEY);
   if (existing) return existing;
@@ -57,10 +49,8 @@ export async function startParty(id: string, name: string): Promise<string> {
   return body.code;
 }
 
-/** `offline`: the socket keeps failing before the party was ever reached (no network, or no party server). */
 export type PartyStatus = 'connecting' | 'open' | 'closed' | 'offline' | 'missing' | 'removed';
 
-/** The website's party socket (src/lib/party/client.ts), reconnecting when the app comes back to the front. */
 export function usePartySocket(code: string, id: string | null, name: string | null) {
   const [view, setView] = useState<PartyView | null>(null);
   const [error, setError] = useState<ActionError | null>(null);
@@ -80,7 +70,6 @@ export function usePartySocket(code: string, id: string | null, name: string | n
       return;
     }
     const connect = () => {
-      // An offline notice stays up while retrying, so it doesn't flicker back to the loader on each try.
       setStatus(current => current === 'offline' ? current : 'connecting');
       const ws = new WebSocket(`${url.replace(/^http/, 'ws')}/parties/${code}?player=${encodeURIComponent(id)}`);
       socket.current = ws;
@@ -106,7 +95,6 @@ export function usePartySocket(code: string, id: string | null, name: string | n
         if (stopped || socket.current !== ws) return;
         if (event.code === 4001) return setStatus('removed');
         if (event.code === 4004) return setStatus('missing');
-        // Still retrying, but after a few failed tries with nothing reached, say so instead of loading forever.
         setStatus(!reached && attempt >= 2 ? 'offline' : 'closed');
         timer = setTimeout(connect, Math.min(10_000, 500 * 2 ** attempt++));
       };

@@ -9,18 +9,14 @@ import { openAdhkar } from './adhkar';
 import { reportError } from '@shared/errors';
 
 const lib = adhan as unknown as Adhan;
-/** Android groups notifications by channel; this one rings with the phone's own notification sound. */
 const CHANNEL = 'adhan';
-/** The adhkar reminders ring on their own channel, so the phone's settings can quiet one without the other. */
 const ADHKAR_CHANNEL = 'adhkar';
 export const ALERTS_SUPPORTED = true;
 
-// Show the alert even while the app is open.
 Notifications.setNotificationHandler({
   handleNotification: async () => ({ shouldShowBanner: true, shouldShowList: true, shouldPlaySound: true, shouldSetBadge: false }),
 });
 
-/** Ask for notifications, the first time a prayer is switched on. false when refused. */
 export async function allowAlerts(): Promise<boolean> {
   try {
     const now = await Notifications.getPermissionsAsync();
@@ -33,7 +29,6 @@ export async function allowAlerts(): Promise<boolean> {
   }
 }
 
-/** Are notifications allowed now, without asking? */
 export async function alertsAllowed(): Promise<boolean> {
   try { return (await Notifications.getPermissionsAsync()).granted; } catch { return false; }
 }
@@ -43,11 +38,6 @@ export const openPhoneSettings = () => { Linking.openSettings().catch(error => r
 let lastKey = '';
 let running: Promise<void> = Promise.resolve();
 
-/**
- * Bring the phone's waiting notifications in line with the switches, the place and the method.
- * The adhan alerts and the adhkar reminders share one budget (shared/adhanAlerts planAll), so they are planned together.
- * Cheap to call often: it does nothing unless something, or the day, changed.
- */
 export function syncAlerts(force = false): Promise<void> {
   running = running.then(async () => {
     const alerts = adhanAlerts.get();
@@ -62,7 +52,6 @@ export function syncAlerts(force = false): Promise<void> {
       await Promise.all(waiting.filter(item => plannedHere(item.content.data)).map(item => Notifications.cancelScheduledNotificationAsync(item.identifier)));
       lastKey = key;
       if (!place || (!anyAlert(alerts) && !adhkar.morning && !adhkar.evening)) return;
-      // Blocked now, maybe allowed in the phone's settings later today: check again next time.
       if (!(await Notifications.getPermissionsAsync()).granted) { lastKey = ''; return; }
       if (Platform.OS === 'android') {
         await Notifications.setNotificationChannelAsync(CHANNEL, {
@@ -94,7 +83,6 @@ export function syncAlerts(force = false): Promise<void> {
 }
 
 let started = false;
-/** Keep the alerts in step: on launch, whenever a switch, the place or the method changes, and each time the app comes back. */
 export function startAlerts() {
   if (started) return;
   started = true;
@@ -105,11 +93,9 @@ export function startAlerts() {
   prayerPlace.subscribe(again);
   prayerSettings.subscribe(again);
   AppState.addEventListener('change', state => { if (state === 'active') syncAlerts(); });
-  // A tap on an adhkar reminder opens that time's adhkar.
   const opened = (response: Notifications.NotificationResponse | null) => {
     const time = adhkarOf(response?.notification.request.content.data);
     if (!time) return;
-    // Cleared once handled, or the next launch would open it again.
     Notifications.clearLastNotificationResponseAsync().catch(error => reportError('adhan: clear opened alert', error));
     openAdhkar(time);
   };
@@ -117,7 +103,6 @@ export function startAlerts() {
   Notifications.getLastNotificationResponseAsync().then(opened).catch(error => reportError('adhan: read opened alert', error));
 }
 
-/** Counts each return to the app, so a screen can check the permission again after the phone's settings. */
 export function useForeground() {
   const [count, setCount] = useState(0);
   useEffect(() => {

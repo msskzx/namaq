@@ -4,7 +4,6 @@ import { byMushaf, cardWords, growthPlan, growthWords } from './growth';
 
 const leaf = (words: string[], ayat: string[]): Branch => ({ words, ayat, children: [] });
 
-// إِنَّ ٱلْمُتَّقِينَ فِى → جَنَّـٰتٍ → (وَعُيُونٍ | وَنَعِيمٍ) and مَقَامٍ أَمِينٍ
 const tree: Branch = {
   words: ['إِنَّ', 'ٱلْمُتَّقِينَ', 'فِى'],
   ayat: [],

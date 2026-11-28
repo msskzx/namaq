@@ -3,16 +3,9 @@ import { type Branch, type Variant } from '@shared/quran/branches';
 
 export { ALL_WORDS };
 
-/**
- * Ids of what a tree card draws, shared by the tree, the growth studio and the video:
- * nodes `n<index>` (the root is n-1, then depth first, as the website numbers them),
- * words before the phrase `p<i>`, the ayah before an ayah `b<key>` (and one more, `e<key>`), the ayah after `a<key>`.
- * The connector into a box is `l:<id>`.
- */
 export const nodeId = (index: number) => `n${index}`;
 export const lineId = (id: string) => `l:${id}`;
 
-/** Depth-first node numbers, the root first as -1. */
 export function nodeIndices(tree: Branch) {
   const indices = new Map<Branch, number>();
   const visit = (node: Branch) => {
@@ -24,45 +17,30 @@ export function nodeIndices(tree: Branch) {
   return indices;
 }
 
-/** One beat of a growing tree: what it reveals, what it lights as just drawn, how long it lasts at 1×; an ask beat waits for the answer. */
 export type Beat = { step: number; key: string; ms: number; reveal: string[]; now: string[]; ask?: string;
-  /** While the ayah grows: how many of its words (from the ayah's start) the boxes drawn so far hold; its card under the tree shows those. */
   words?: number;
-  /** After the tree has grown: the ayah's path lit on its own, with its ayah read in full. */
   path?: boolean };
 
-// Milliseconds at 1×, as on the website: a connector, a box fading in, a box an earlier ayah drew lighting again, the pause at an ayah's end.
 export const LINE = 200;
 export const BOX = 300;
 export const RELIGHT = 140;
 export const LEAF = 700;
-/** How long each ayah's path stays lit once the tree has grown. */
 export const PATH = 2500;
 
-/** The boxes drawn before the root for each ayah: words before the phrase, and the ayat before it with the surrounding switch. */
 export type Starts = { id: string; keys: string[] }[];
-/** The ayah after each ayah's end, drawn at the end of its branch. */
 export type Afters = Record<string, string>;
 
-/**
- * The website's growth (Grow.tsx) as data: each ayah walks from the root to its end, reusing what earlier ayat drew
- * and growing its own branch from where it splits. In ask mode the first new box of each ayah waits, empty, for the answer.
- */
 export function growthBeats(tree: Branch, { starts = [], afters = {}, ask = false, prefixes = [], paths = false, offsets = {} }: { starts?: Starts; afters?: Afters; ask?: boolean; prefixes?: Variant[];
-  /** Where the phrase starts in each ayah (the presentation's offsets): the words before it show with the box that draws them. */
   offsets?: Record<string, number>;
-  /** Ends by lighting each ayah's path in turn, in the order the ayat grew. */
   paths?: boolean } = {}): Beat[] {
   const plan = growthPlan(tree, prefixes.map(prefix => prefix.keys));
   const beats: Beat[] = [];
   const shown = new Set<string>();
-  // Numbered as growthPlan numbers them (children only, depth first, the root -1).
   const nodes = new Map<number, Branch>();
   const visit = (node: Branch) => { nodes.set(nodes.size - 1, node); node.children.forEach(visit); };
   visit(tree);
   plan.forEach((step, i) => {
     const mine = starts.filter(start => start.keys.includes(step.key));
-    // The words before the phrase come with the box that draws them (a mixed tree's first box), else with the ayah's first beat.
     let words = mine.some(start => start.id.startsWith('p')) ? 0 : offsets[step.key] ?? 0;
     let afterEnd = false;
     const beat = (ms: number, reveal: string[], now: string[] = [], asked?: string) => {
@@ -72,7 +50,6 @@ export function growthBeats(tree: Branch, { starts = [], afters = {}, ask = fals
     for (const start of mine) {
       if (start.id.startsWith('p')) words = offsets[step.key] ?? 0;
       if (shown.has(start.id)) beat(RELIGHT, [], [start.id]);
-      // A box drawn before the root comes first, then the connector from it toward the root: the tree never opens on a connector.
       else { beat(BOX, [start.id], [start.id]); beat(LINE, [lineId(start.id)]); }
     }
     step.nodes.forEach((index, j) => {
@@ -95,10 +72,8 @@ export function growthBeats(tree: Branch, { starts = [], afters = {}, ask = fals
   return beats;
 }
 
-/** Everything a growth can hide: every box and connector it reveals at some point. */
 export const grownIds = (beats: Beat[]) => new Set(beats.flatMap(beat => beat.reveal));
 
-/** The website's connections studio (Grow.tsx playMatrix): the matrix's lines one by one, `r<n>` in drawing order; ask waits before each. */
 export function connectionBeats(count: number, ask = false): Beat[] {
   return Array.from({ length: count }, (_, i) => [
     ...(ask ? [{ step: i, key: '', ms: 0, reveal: [], now: [], ask: `r${i}` }] : []),

@@ -1,20 +1,13 @@
 import { normalizeWord } from './normalize';
 
-/**
- * How often each word of the Quran occurs, from the Quranic Arabic Corpus (built by scripts/quran/buildLemmas.ts).
- * A word is counted by its lemma; prefixes, separate pronouns and the opening letters carry none. docs/plans/word-counts-app.md
- */
+// see docs/plans/word-counts-app.md
 export type WordsData = {
-  /** Name, count and root of each lemma, most frequent first; a lemma's id is its place here. */
   lemmas: [name: string, count: number, root: string][];
-  /** Surah by surah, ayah by ayah: one entry per corpus word, its lemma ids joined by "+", entries joined by spaces. */
   ayat: string[][];
 };
 
-/** The source the counts come from (shared/sources.ts), shown from the words page's books icon. */
 export const WORDS_SOURCE = 'quranic-arabic-corpus';
 
-/** How the words page counts, under its source. */
 export const WORDS_COUNTING = [
   'تُعدّ الكلمة بمدخلها المعجمي في المدوّنة القرآنية العربية، فـ«والله» و«لله» تحت «ٱللَّه». وأعدادنا تطابق أعدادها.',
   'لا تُعدّ الحروف المتصلة بالكلمة كالواو والفاء والباء واللام وأل، ولا الضمائر المنفصلة كـ«هو» و«هم»، ولا الحروف المقطعة في أوائل السور. والبسملة تُعدّ مرة واحدة، في الفاتحة.',
@@ -23,7 +16,6 @@ export const WORDS_COUNTING = [
 
 export type WordPlace = { key: string; words: number[] };
 
-/** Lemma ids of one corpus word (from 0) of an ayah. */
 export function lemmasOfWord(data: WordsData, key: string, word: number): number[] {
   const [surah, ayah] = key.split(':').map(Number);
   const entry = data.ayat[surah - 1]?.[ayah - 1]?.split(' ')[word];
@@ -32,7 +24,6 @@ export function lemmasOfWord(data: WordsData, key: string, word: number): number
 
 const indexes = new WeakMap<WordsData, WordPlace[][]>();
 
-/** The ayat that hold a lemma, in mushaf order, each with its words (from 0) that hold it. */
 export function placesOf(data: WordsData, id: number): WordPlace[] {
   let index = indexes.get(data);
   if (!index) {
@@ -56,14 +47,12 @@ export function placesOf(data: WordsData, id: number): WordPlace[] {
 
 export const SURAHS = 114;
 
-/** How many times a word occurs in each surah (index 0 is al-Fatiha), from its places. */
 export function countsBySurah(places: WordPlace[]): number[] {
   const counts = new Array<number>(SURAHS).fill(0);
   for (const { key, words } of places) counts[Number(key.split(':')[0]) - 1] += words.length;
   return counts;
 }
 
-/** Lemmas whose name holds the query, ignoring vowel marks, most frequent first. */
 export function searchWords(data: WordsData, query: string, limit: number): number[] {
   const needle = normalizeWord(query.trim());
   if (!needle) return [];
@@ -74,10 +63,6 @@ export function searchWords(data: WordsData, query: string, limit: number): numb
   return found;
 }
 
-/**
- * The 1441 Madinah mushaf the reader draws spaces seven ayat differently from the corpus (Tanzil) text: «بعد ما» is one
- * corpus word where the mushaf has two, «مالي» two where it has one. `at` is the mushaf word where the difference starts.
- */
 const SPACING: Record<string, { at: number; mushaf: 'two' | 'one' }> = {
   '2:181': { at: 2, mushaf: 'two' },
   '8:6': { at: 3, mushaf: 'two' },
@@ -88,7 +73,6 @@ const SPACING: Record<string, { at: number; mushaf: 'two' | 'one' }> = {
   '36:22': { at: 0, mushaf: 'one' },
 };
 
-/** The corpus words (from 0) under one mushaf word of an ayah, counting the mushaf's words without the ۞ mark. */
 export function corpusWords(key: string, mushafWord: number): number[] {
   const spacing = SPACING[key];
   if (!spacing || mushafWord < spacing.at) return [mushafWord];
@@ -96,7 +80,6 @@ export function corpusWords(key: string, mushafWord: number): number[] {
   return mushafWord === spacing.at ? [spacing.at, spacing.at + 1] : [mushafWord + 1];
 }
 
-/** The mushaf words (from 0, without ۞) that hold one corpus word of an ayah: corpusWords turned around. */
 export function mushafWords(key: string, corpusWord: number): number[] {
   const spacing = SPACING[key];
   if (!spacing || corpusWord < spacing.at) return [corpusWord];
@@ -104,10 +87,8 @@ export function mushafWords(key: string, corpusWord: number): number[] {
   return [corpusWord <= spacing.at + 1 ? spacing.at : corpusWord - 1];
 }
 
-/** A lemma's ayat as `placesOf` gives them, each with its mushaf words instead of its corpus words. */
 export const mushafPlacesOf = (data: WordsData, id: number): WordPlace[] =>
   placesOf(data, id).map(({ key, words }) => ({ key, words: [...new Set(words.flatMap(word => mushafWords(key, word)))] }));
 
-/** Lemma ids under one mushaf word, in the word's order. */
 export const lemmasAtMushafWord = (data: WordsData, key: string, mushafWord: number) =>
   [...new Set(corpusWords(key, mushafWord).flatMap(word => lemmasOfWord(data, key, word)))];

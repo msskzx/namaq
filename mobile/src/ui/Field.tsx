@@ -10,18 +10,11 @@ const frame = (palette: Palette): ViewStyle => ({ borderWidth: 1, borderColor: p
 
 type Props = Omit<TextInputProps, 'style' | 'placeholderTextColor' | 'accessibilityLabel'> & {
   palette: Palette;
-  /** What a screen reader says: the field's question, also when it has a placeholder. */
   label: string;
-  /** A number to type in, large and spaced, left to right (a party's code). */
   code?: boolean;
-  /** Its place only (flex, margins), never its look. */
   style?: StyleProp<ViewStyle>;
 };
 
-/**
- * The one text field (owner: inputs 16px): framed like a card, one height, right-aligned; `multiline` grows from five lines
- * for the reader's own words (a note). Search goes in `SearchField`. The recite writing boxes are the quiz's own.
- */
 export default function Field({ palette, label, code = false, multiline, style, ...input }: Props) {
   return (
     <TextInput {...input} multiline={multiline} accessibilityLabel={label} placeholderTextColor={palette.muted}
@@ -32,7 +25,6 @@ export default function Field({ palette, label, code = false, multiline, style, 
   );
 }
 
-/** The one search field: the field with a magnifier at its start and, once something is typed, a clear button at its end. */
 export function SearchField({ palette, label, value, onChangeText, style, ...input }: Omit<Props, 'code' | 'multiline' | 'value' | 'onChangeText'> & {
   value: string; onChangeText: (text: string) => void;
 }) {
@@ -46,10 +38,6 @@ export function SearchField({ palette, label, value, onChangeText, style, ...inp
   );
 }
 
-/**
- * The search field as a button: the field's frame and magnifier, with nothing typed in it, that opens the search page (home's
- * top bar, owner 2026-11-18: a field says "search" better than an icon). `label` is what a screen reader says.
- */
 export function SearchOpener({ palette, label, onPress, style }: { palette: Palette; label: string; onPress: () => void; style?: StyleProp<ViewStyle> }) {
   return (
     <Tap onPress={onPress} accessibilityRole="button" accessibilityLabel={label} hitSlop={4}

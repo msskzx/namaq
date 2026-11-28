@@ -81,7 +81,6 @@ describe('reader words', () => {
   it('matches the corpus words the app shows ayah cards with', () => {
     for (const ayah of trees.ayat) {
       const [surah, number] = ayah.key.split(':').map(Number);
-      // The trees hold the page's words; where the page splits an ayah otherwise (15:7 «لَّوۡمَا»), corpusWordsAt counts its corpus words.
       const shown = ayah.words.filter(word => !word.startsWith('﴿') && word !== '۞').flatMap((_, at) => corpusWordsAt(ayah.key, at)).length;
       expect([ayah.key, shown]).toEqual([ayah.key, words.ayat[surah - 1][number - 1].split(' ').length]);
     }

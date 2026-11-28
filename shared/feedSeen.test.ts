@@ -29,7 +29,6 @@ describe('feed seen', () => {
   });
 
   it('keeps the cards already given in place as the feed grows', () => {
-    // Only c is liked, and it is found only when looking further: it must not jump ahead of a and b, already shown.
     const near = (offset: number) => ['a', 'b', 'x', 'y', 'c'][offset];
     const holder = { list: [] as string[] };
     const prefer = (item: string) => item === 'c';

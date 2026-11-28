@@ -19,17 +19,11 @@ import QiraatPlace from '@/components/QiraatPlace';
 
 type Row = { kind: 'surah'; surah: number } | { kind: 'place'; key: string; words: number[] };
 
-/**
- * «القراءات» (owner, 2026-11-19): every place the ten readers differ, under its surah in the mushaf's order, found by a word
- * or a surah's name. A reader's chip keeps the places where he reads otherwise than Hafs and shades his reading; under it,
- * his two riwayat. Opened from the feed's readings card, it starts at that card's ayah.
- */
 export default function QiraatScreen() {
   const palette = usePalette();
   const shrink = useShrinkOnScroll();
   const bottom = useTabBarSpace();
   const list = useRef<FlatList<Row>>(null);
-  // `at` changes on every open from a card, so a second open of the same ayah scrolls to it again.
   const { ayah, at } = useLocalSearchParams<{ ayah?: string; at?: string }>();
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState<QiraatFilter>({});
@@ -39,9 +33,6 @@ export default function QiraatScreen() {
   ]), [filter, query]);
   const mark = filterRawis(filter);
   const reader = (id: ReaderId | undefined) => { setFrom(undefined); setFilter(id ? { reader: id } : {}); };
-  // Opened for an ayah (the feed's readings card): the filters and search are cleared and the list starts at that ayah's
-  // place, its surah's heading first; a button above brings back the places before it. A list of rows of many heights
-  // cannot jump to a far row reliably, so it starts there instead.
   const [from, setFrom] = useState<string | undefined>(ayah);
   useEffect(() => {
     if (!ayah) return;

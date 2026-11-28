@@ -24,7 +24,6 @@ describe('home feed cards', () => {
 
 describe('the feed\'s item lists', () => {
   it('cover every card kind but the pairs and trees, which come by their own ids', () => {
-    // A kind left out would never fill its slots, on the website or in the app.
     expect([...LIST_KINDS, 'pair', 'tree'].sort()).toEqual([...FEED_CARD_KINDS].sort());
   });
 });
@@ -34,7 +33,6 @@ describe('the prayer card', () => {
     expect(prayerSoon(day, at(14, 4))).toEqual({ key: 'asr', minutes: 18 });
     expect(prayerSoon(day, at(13, 51))).toBeNull();
     expect(prayerSoon(day, at(13, 52))).toEqual({ key: 'asr', minutes: 30 });
-    // Sunrise is not one of the five.
     expect(prayerSoon(day, at(7, 30))).toBeNull();
     expect(prayerSoon(day, at(20, 0))).toBeNull();
   });
@@ -104,7 +102,6 @@ describe('the feed by interests', () => {
     }
   });
 
-  // The website draws nothing for the phone's own cards: a turn dealt to one was a blank slot in its feed.
   it('deals the website none of the cards only the phone draws', () => {
     const slots = Array.from({ length: 40 }, (_, round) => feedRound(INTERESTS.map(onWebsite), round, 3)).flat().filter(slot => !slot.quiz);
     expect(slots.length).toBeGreaterThan(0);

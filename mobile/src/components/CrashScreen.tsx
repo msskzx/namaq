@@ -7,10 +7,6 @@ import Button from '@/ui/Button';
 import { usePalette } from '@/lib/theme';
 import { causeChain, recentErrors } from '@shared/errors';
 
-/**
- * Shown in place of a screen that crashed, so the app never goes blank. Screens re-export it as `ErrorBoundary`
- * (expo-router's convention). The error text is shown and selectable, so it can be copied into a bug report.
- */
 export function ErrorBoundary({ error, retry }: ErrorBoundaryProps) {
   const palette = usePalette();
   const stack = (error.stack ?? '').split('\n');
@@ -23,7 +19,6 @@ export function ErrorBoundary({ error, retry }: ErrorBoundaryProps) {
       <View style={{ flex: 1, padding: 20, gap: 16, direction: 'rtl' }}>
         <Text style={{ fontSize: 20, fontWeight: '600', color: palette.ink }}>حدث خطأ في هذه الصفحة</Text>
         <ScrollView style={{ flex: 1, borderWidth: 1, borderColor: palette.rule, borderRadius: 10 }} contentContainerStyle={{ padding: 12 }}>
-          {/* Error text is code, read left to right. */}
           <Text selectable style={{ fontFamily: 'monospace', fontSize: 12, color: palette.muted, writingDirection: 'ltr', textAlign: 'left' }}>{details}</Text>
         </ScrollView>
         <View style={{ flexDirection: 'row', gap: 12 }}>

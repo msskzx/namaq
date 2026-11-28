@@ -10,7 +10,6 @@ import { findPerson, personName } from '@/lib/tarajim';
 import { personLife } from '@/lib/life';
 import { lifeColor, openItem, placeLabel } from './LifeTimeline';
 
-/** One person's row in a year: a box with a dot of its kind; tapped it opens, held it shows its sentences. */
 function Cell({ item, palette, show }: { item?: LifeItem; palette: Palette; show: (item: LifeItem) => void }) {
   if (!item) return <View style={{ flex: 1 }} />;
   return (
@@ -24,10 +23,6 @@ function Cell({ item, palette, show }: { item?: LifeItem; palette: Palette; show
   );
 }
 
-/**
- * Lives side by side (owner, 2026-11-18; sketch timeline-events/sketch-dark.png, screen 4): a column each, by year; what they
- * shared on one row joined by a line, what one did alone in his own column. The «حياتهما» screen and its feed card draw it.
- */
 export default function LifeColumns({ slugs, palette, show }: { slugs: readonly string[]; palette: Palette; show: (item: LifeItem) => void }) {
   const places = useMemo(() => lifeColumns(slugs.map(s => personLife(findPerson(s)!))), [slugs]);
   const join = { width: 8, height: 1.5, backgroundColor: palette.rule, alignSelf: 'center' as const };

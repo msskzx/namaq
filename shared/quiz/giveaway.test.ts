@@ -1,6 +1,3 @@
-// The guard on owner's rule (2026-11-19, AGENTS.md "Quiz questions"): no quiz question gives its answer away, and a quiz
-// on part of the Quran offers no wrong choice from outside it. Every kind in CHOICE_KINDS is run whole, so a new kind is
-// checked the day it is registered.
 import { describe, expect, it } from 'vitest';
 import { CHOICE_KINDS } from './kinds';
 import { givesAway } from './giveaway';
@@ -11,10 +8,6 @@ import { quizFilters } from './scopeParams';
 import { quizTrees } from './treeScope';
 import gharib from '../data/quran/gharib';
 
-/**
- * Questions the check flags that were read and do not give their answer away, each with why. Add one only after reading
- * the question as a reader would; a second agent and the owner see the list in the PR.
- */
 const READ: Record<string, string> = {
   'QIRAAT:7:43:1': 'the ayah has another «ما» before «لنهتدي»; Ibn Amir\'s «ما كنا» (no و) is not told by it',
   'QIRAAT:5:110:2': '«طيرا» later in the ayah is another word; how «الطير» is read is not told by it',
@@ -50,9 +43,7 @@ describe('no question gives its answer away', () => {
     expect(tieTold('زينب بنت محمد', 'محمد ﷺ')).toBe('child');
     expect(tieTold('صفية بنت عبد المطلب', 'الزبير بن العوام')).toBeUndefined();
     const ties = tieQuestions();
-    // Asked plainly (owner, 2026-11-19): «ما صلة A بB؟».
     for (const question of ties) expect(question.promptArabic, question.promptArabic).toMatch(/^ما صلة .+ ب.+؟$/u);
-    // Umar ibn Abi Salamah is Abu Salamah's son, as his name says: not asked; nor a Companion asked of the Prophet ﷺ.
     expect(ties.some(question => question.key.includes('umar-ibn-abi-salamah') && /:abu-salamah/.test(question.key))).toBe(false);
     expect(ties.some(question => question.key.includes('prophet-muhammad') && question.correctAnswer === 'صاحبه')).toBe(false);
   });

@@ -14,12 +14,9 @@ import { usePalette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
 import StepDots from '@/ui/StepDots';
 
-/** The widest the image is drawn; the phone's pixel density makes it about 1080 pixels wide. */
 const FRAME = 360;
-/** A story's pictures are drawn wider, so the reading-size text sits on them as in the agreed sketch (owner, 2026-11-21). */
 const PAGED_FRAME = 440;
 
-/** The card drawn for the image, shrunk to the image's width when it is wider (a big tree). */
 function Fit({ width, children, onReady }: { width: number; children: ReactNode; onReady: () => void }) {
   const [size, setSize] = useState<{ width: number; height: number } | null>(null);
   const scale = size ? Math.min(1, width / size.width) : 1;
@@ -34,13 +31,6 @@ function Fit({ width, children, onReady }: { width: number; children: ReactNode;
   );
 }
 
-/**
- * Share as image: the card on the page colour, with the logo and the name under it. The image is drawn once out of sight
- * (behind the preview, never in a scroll view, so nothing of it is cut), captured, and the preview shows that very file.
- * The big button shares it; beside it the card's video (where it has one), the whole page's video (compare) and its link.
- * A long drawing (a story) is shared as equal 4:5 pictures instead (`paged`, SharePages): the preview swipes through them,
- * the big button shares the one shown, and «احفظ الصور» saves them all to the phone's photos, for a post of several.
- */
 export default function ShareSheet() {
   const request = useShareRequest();
   const palette = usePalette();
@@ -61,7 +51,6 @@ export default function ShareSheet() {
   useEffect(() => {
     if (!drawn) return;
     let live = true;
-    // A moment after layout, so the fonts and the shrunk tree are on screen before the capture.
     const timer = setTimeout(() => {
       if (!frame.current) return;
       captureRef(frame.current, { format: 'png', result: CAPTURE_RESULT })
@@ -72,9 +61,7 @@ export default function ShareSheet() {
   }, [drawn]);
   const frameWidth = request?.paged ? PAGED_FRAME : Math.min(FRAME, width - 24);
   const cardWidth = frameWidth - 32;
-  // The preview fits the whole image in the box.
   const fit = shot && box ? Math.min(box.width / shot.width, box.height / shot.height, frameWidth / shot.width) : 0;
-  // Another sheet can open only once this one has gone: on iOS when it says so (onDismiss), elsewhere after a wait.
   const pending = useRef<(() => void) | null>(null);
   const video = (onVideo?: () => void) => {
     closeShare();
@@ -85,7 +72,6 @@ export default function ShareSheet() {
   const dismissed = () => { const next = pending.current; pending.current = null; next?.(); };
   const link = () => { if (request?.link) void Share.share({ message: request.link }); };
   const paged = request?.paged;
-  // Drawn once per request: SharePages measures these very blocks, then captures them.
   const pictures = useMemo(() => paged?.(cardWidth), [paged, cardWidth]);
   const shownShot = shots ? shots[shown] : shot;
   const saveAll = () => {

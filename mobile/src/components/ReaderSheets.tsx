@@ -17,11 +17,9 @@ import Chip from '@/ui/Chip';
 import { SearchField } from '@/ui/Field';
 import Empty from '@/ui/Empty';
 
-/** Where a link in the index goes: a page, the ayah that starts there, and whether to mark that ayah. */
 export type Jump = { page: number; key: string; mark: boolean };
 
 const name = (surah: { number: number }) => surahName(surah.number);
-/** Words set as one run of text with a space after each, so a long ayah is three spans, not one per word. */
 const join = (words: string[]) => words.map(word => `${quranText(word)} `).join('');
 const JUZ_ROW = 48;
 const SURAH_ROW = 40;
@@ -32,17 +30,13 @@ type Row =
   | { kind: 'surah'; number: number; name: string; from: number; page: number }
   | { kind: 'ayah'; key: string; page: number; words: string[]; from: number; to: number };
 
-/** The index of surahs and juz', and the search for a surah, an ayah number or words. */
 export function IndexSheet({ open, onClose, onJump, palette, page, recite, query: asked }: {
   open: boolean;
-  /** Opens searching these words: a selection's «المواضع» (owner, 2026-11-19). */
   query?: string | null;
-  /** The page open in the reader: the index opens at its surah. */
   page: number;
   onClose: () => void;
   onJump: (jump: Jump) => void;
   palette: Palette;
-  /** Reciting: the index says what a link does now, as the website's recite index. */
   recite?: boolean;
 }) {
   const [query, setQuery] = useState('');
@@ -73,7 +67,6 @@ export function IndexSheet({ open, onClose, onJump, palette, page, recite, query
     return [...ayat, ...list];
   }, [groups, query, reference, found]);
 
-  // With no search, the list is only juz' and surah rows of fixed heights, so it can open scrolled to the surah on the open page.
   const plain = !rows.some(row => row.kind === 'ayah');
   const here = useMemo(() => {
     let at = -1;
@@ -130,7 +123,6 @@ export function IndexSheet({ open, onClose, onJump, palette, page, recite, query
             <Pressable onPress={() => go({ page: row.page, key: row.key, mark: true })} accessibilityRole="link"
               style={{ paddingHorizontal: 16, paddingVertical: 8, borderBottomWidth: 1, borderColor: palette.rule, gap: 2 }}>
               <Text style={{ color: palette.accent, fontSize: 13 }}>{name(surahs[surah - 1])} {num(ayah)}</Text>
-              {/* The whole ayah, its found words coloured (owner, 2026-11-17). */}
               <AyahFlow color={palette.ink} menu={false}>
                 <AyahWords>{join(row.words.slice(0, row.from))}</AyahWords>
                 <AyahWords look={{ color: palette.accent }}>{join(row.words.slice(row.from, row.to + 1))}</AyahWords>
@@ -155,7 +147,6 @@ const ACTION_NAMES: Record<GestureAction, string> = {
   none: 'لا شيء',
 };
 
-/** What each touch does on the mushaf page, per mode, like a game's controls (the website's settings sheet). */
 export function GestureSettings({ palette, mode: shownMode }: { palette: Palette; mode: ReaderMode }) {
   const gestures = useSyncExternalStore(subscribeGestures, readGestures, serverGestures);
   const [mode, setMode] = useState<ReaderMode>(shownMode);

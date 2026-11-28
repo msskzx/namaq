@@ -1,4 +1,3 @@
-/** The website's emblem (src/components/common/Emblem.tsx): the tree grown from a dotless ن, its berries in the accent colour. */
 export const BOWL = 'M17 60 C14.6 63 14 72 18.4 80.4 C24 90.6 36 96.4 50.4 96.4 C66 96.4 79.4 89 84 76 C86.4 68.6 85.6 61.6 83.4 57.4 C82.8 62.4 81.2 68 76.4 74.4 C70 82.6 60 87.6 50.2 87.6 C38.6 87.6 28.4 83 22.6 75.4 C19.2 70.8 17.6 65.4 17 60 Z';
 export const BRANCHES = [
   'M630 880 C636 770 649 709 643 637 C639 576 606 531 578 483 C549 435 536 392 533 350 C529 294 508 246 473 213 C522 241 542 283 546 331 C558 282 595 271 614 218 C612 265 579 284 562 316 C535 367 557 419 587 464 C630 526 664 572 667 638 C677 712 655 800 643 880 Z',
@@ -9,7 +8,6 @@ export const BRANCHES = [
 ];
 export const BERRIES = [[473, 213], [614, 218], [244, 366], [402, 351], [357, 615], [412, 579], [815, 433], [940, 509], [912, 674], [878, 602]] as const;
 
-/** The emblem as an SVG file, for the video recorder's canvas (as the website draws /brand/namaq-icon-*.svg). */
 export function logoSvg(ink: string, accent: string) {
   const branches = BRANCHES.map(d => `<path d="${d}"/>`).join('');
   const berries = BERRIES.map(([cx, cy]) => `<circle cx="${cx}" cy="${cy}" r="30"/>`).join('');
@@ -17,5 +15,4 @@ export function logoSvg(ink: string, accent: string) {
     + `<g transform="translate(-3.06 13.49) scale(0.085)"><g fill="${ink}">${branches}</g><g fill="${accent}">${berries}</g></g></svg>`;
 }
 
-/** The emblem as a data URL an image in the recorder page can load. */
 export const logoUrl = (ink: string, accent: string) => `data:image/svg+xml;charset=utf-8,${encodeURIComponent(logoSvg(ink, accent))}`;

@@ -24,17 +24,9 @@ const CORPUS: Source = { line: 'المدوّنة القرآنية العربية
 
 const bookStyle = { color: '', fontSize: 18, lineHeight: 34, textAlign: 'right', writingDirection: 'rtl' } as const;
 
-/**
- * The head of a word's page (owner, 2026-11-24: sketch quran-design/word-page, designs أ and ب together, with its «أصلها»
- * and «مواضعها»): the word with its root and counts as a person's card gives his, al-Raghib's opening words on its root,
- * then Ibn Qutaybah's meanings of it, each on a line of its own: the ayah's words he explains, his meaning under them, the ayah's place (owner 2026-11-24), the picked one's
- * entry whole under them. The ayat follow it
- * on the page (components/WordSheet.tsx WordView).
- */
 export default function WordFace({ name, root, count, ayat, counts, entries, article, onOpen, onWhole, palette }: {
   name: string; root?: string; count: number; ayat: number; counts: number[]; entries: GharibPlaced[];
   article?: MufradatEntry; onOpen: (key: string) => void;
-  /** Opens al-Raghib's whole article in the page's own section. */
   onWhole: () => void; palette: Palette;
 }) {
   const surahs = counts.filter(Boolean).length;
@@ -43,7 +35,6 @@ export default function WordFace({ name, root, count, ayat, counts, entries, art
   const branches = useMemo(() => meaningBranches(gharib, entries), [entries]);
   const [picked, setPicked] = useState(0);
   const branch = branches[Math.min(picked, branches.length - 1)];
-  // The ayah's words he explains, from the mushaf page, before his meaning of them (owner, 2026-11-24).
   const quoted = (each: GharibPlaced) => { const page = ayahMushafWords(each.key); return each.words.map(([from, to]) => page.slice(from, to + 1).join(' ')).join(' … '); };
   const placeOf = (key: string) => { const [surah, number] = key.split(':').map(Number); return `${surahNames[surah] ?? num(surah)} ${num(number)}`; };
   return (

@@ -24,7 +24,6 @@ type Row =
   | { kind: 'surah'; key: string; surah: number; count: number; open: boolean; current: boolean }
   | { kind: 'pair'; key: string; pair: SurahPair; lead: number; nested: boolean };
 
-/** What the filter keeps, in a few words for the filter row. */
 function scopeText(filter: PairFilter, memorized: Memorized | null) {
   const scope = filter.scope;
   const parts: string[] = [];
@@ -35,8 +34,6 @@ function scopeText(filter: PairFilter, memorized: Memorized | null) {
   return parts.length ? parts.join(' · ') : 'كل القرآن';
 }
 
-/** The page's one dropdown (owner, 2026-11-10): search, sort, the filter (saved only and the part of the Quran, applied as you pick),
- *  then the surah pairs grouped under each surah. The filter opens in place of the list. */
 export default function CompareSheet({ open, onClose, pairs, filter, onFilter, lead, other, onPick, palette }: {
   open: boolean; onClose: () => void; pairs: SurahPair[]; filter: PairFilter; onFilter: (filter: PairFilter) => void;
   lead: number; other: number; onPick: (lead: number, other: number) => void; palette: Palette;
@@ -47,7 +44,6 @@ export default function CompareSheet({ open, onClose, pairs, filter, onFilter, l
   const [filtering, setFiltering] = useState(false);
   const [draft, setDraftState] = useState<FilterDraft>(() => draftOf(listOfFilter(filter)));
   useEffect(() => { if (open) { setDraftState(draftOf(listOfFilter(filter))); setFiltering(false); } }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
-  // Each pick applies at once; a half-made one (no surah picked yet) waits.
   const setDraft = (next: FilterDraft) => {
     setDraftState(next);
     const list = applyDraft(next);
@@ -56,7 +52,6 @@ export default function CompareSheet({ open, onClose, pairs, filter, onFilter, l
   const filtered = !!(filter.scope || filter.savedOnly);
   const memorized = useSyncExternalStore(subscribeMemorized, readMemorized);
   const mine = memorizedScope(memorized);
-  // «ما أحفظه»: one tap narrows the pairs to the juz or surahs said in settings, and off again to the whole Quran.
   const pickMemorized = (on: boolean) => {
     const next = { ...filter, scope: on ? mine : undefined };
     onFilter(next);

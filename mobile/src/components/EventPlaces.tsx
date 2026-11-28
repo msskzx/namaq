@@ -22,7 +22,6 @@ import { sourcesOf } from '@/ui/SourceLine';
 import { storySource } from '@shared/quran/pieceSources';
 import { FEATURE_ICON } from '@/components/featureIcons';
 
-// How far (px) a finger must move sideways to change the event, or how fast a flick.
 const SWIPE = 60;
 const FLICK = 600;
 
@@ -31,10 +30,6 @@ const openCompare = (target: CompareTarget) => {
   toTab('/compare');
 };
 
-/**
- * The website's EventPlaces: one event, a card for each surah that tells it, one under another, shared runs of words in colour.
- * A sideways swipe changes the event: a finger moving right goes on to the next one, as an Arabic page turns.
- */
 export default function EventPlaces({ event, places, phase, focus, onStep, hasPrev, hasNext, onLayoutPlace, palette, readable = true }: {
   event: EventView;
   places: Place[];
@@ -44,17 +39,14 @@ export default function EventPlaces({ event, places, phase, focus, onStep, hasPr
   hasPrev: boolean;
   hasNext: boolean;
   onLayoutPlace: (surah: number, y: number) => void;
-  /** Shows the mushaf and compare buttons on each place (off in the first-launch tour, which can't leave its screen). */
   readable?: boolean;
   palette: Palette;
 }) {
   const shared = sharedWords(places);
-  // The compare pages holding a kept card of two of the event's ayat, each place getting those with another surah.
   const targets = useMemo(() => compareTargetsFor(places.flatMap(p => p.segments.flatMap(g => g.lines.map(line => `${p.surah}:${line.ayah}`)))), [places]);
   const [choosing, setChoosing] = useState<CompareTarget[] | null>(null);
   const x = useSharedValue(0);
   const step = (forward: boolean) => onStep(forward ? 1 : -1);
-  // In the tour a sideways swipe turns the tour's own step instead.
   const pan = Gesture.Pan()
     .hitSlop(BACK_EDGE_SLOP)
     .enabled(readable)
@@ -93,7 +85,6 @@ export default function EventPlaces({ event, places, phase, focus, onStep, hasPr
           <Text accessibilityRole="header" style={{ color: palette.ink, fontSize: 22, fontWeight: '700', lineHeight: 32 }}>{event.title}</Text>
         </View>
       </View>
-      {/* Each place in the home card's shape (owner 2026-11-20): the mushaf, compare and share under it, the mushaf's places on the line (the feed card's source). */}
       {places.map((place, k) => (
         <View key={place.surah} style={{ gap: 4 }} onLayout={e => onLayoutPlace(place.surah, e.nativeEvent.layout.y)}>
           <CardWithRow palette={palette} gap={4} picked={focus === place.surah}
@@ -101,10 +92,8 @@ export default function EventPlaces({ event, places, phase, focus, onStep, hasPr
             lead={readable && <IconButton Icon={FEATURE_ICON.mushaf} label={`افتح ${place.name} في المصحف`} onPress={() => readAyah(`${place.surah}:${place.segments[0].range[0]}`)} />}
             row={readable && <>
               <CompareButton place={place} targets={targets.filter(t => t.lead !== t.other && (t.lead === place.surah || t.other === place.surah))} onChoose={setChoosing} palette={palette} />
-              {/* Share is always the last button: this place as an image, under the event's title. */}
               <IconButton Icon={Send} label={`شارك ${place.name}`} onPress={() => share(place, k)} />
             </>}>
-            {/* The tapped dot scrolls straight to its card, past the event's title, so the card names the event itself. */}
             {focus === place.surah && <Text style={{ color: groupColor(palette, event.phase), fontSize: 13, fontWeight: '600' }}>{event.title}</Text>}
             <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
               <Text style={{ color: palette.ink, fontSize: 15, fontWeight: '600' }}>{place.name}</Text>
@@ -120,10 +109,8 @@ export default function EventPlaces({ event, places, phase, focus, onStep, hasPr
   );
 }
 
-/** The compare pages of a place's ayat: one opens at once, several open a list to choose from. */
 function CompareButton({ place, targets, onChoose }: { place: Place; targets: CompareTarget[]; onChoose: (targets: CompareTarget[]) => void; palette: Palette }) {
   if (!targets.length) return null;
-  // Seen from this place's surah.
   const own = targets.map(t => (t.lead === place.surah ? t : { lead: t.other, other: t.lead, ayat: [t.ayat[1], t.ayat[0]] as [number, number] }));
   return (
     <IconButton Icon={ArrowLeftRight} label={`قارن ${place.name}`} onPress={() => (own.length === 1 ? openCompare(own[0]) : onChoose(own))} />

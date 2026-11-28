@@ -20,7 +20,6 @@ describe('the compare card shared by the app and its video', () => {
     const view = sideView(card, 0, 1);
     expect(view.pieces.filter(piece => piece.kind === 'ayat')).toMatchObject([{ plain: true, picked: false }, { picked: true }]);
     expect(sideTitle(view.name, n => `س${n}`)).toBe('س3 ١٥ · ١٩٨');
-    // The video draws each partner's sides from the same pieces.
     const video = videoCard(card, readPlan(card), 1, names);
     expect(video.options).toHaveLength(2);
     expect(video.options[1][0].pieces.map(piece => piece.kind)).toEqual(['ayat', 'dash', 'ayat']);
@@ -62,7 +61,6 @@ describe('written differently', () => {
   it('colours a pair the sides write differently in the written colour, under every colour setting', () => {
     const side = (word: string) => ({ ayat: [{ number: 1, words: [word, 'ٱللَّهِ'], marks: { 0: { kind: 'exact' as const, link: '1' }, 1: { kind: 'exact' as const, link: '2' } } }] });
     expect([...writtenLinks({ sides: [{ surah: 2, ayah: 1, ...side('لَعْنَةُ') }, { surah: 3, ayah: 1, ...side('لَعْنَةَ') }] })]).toEqual(['1']);
-    // A one-to-many card: only the partner picked counts, since partners reuse link ids.
     const many = { side: 1 as const, options: [
       { id: 'a', ayah: side('ٱللَّهِ').ayat[0], shared: side('ٱللَّهِ').ayat[0] },
       { id: 'b', ayah: { number: 2, words: ['مَآ'], marks: { 0: { kind: 'exact' as const, link: '7' } } }, shared: { number: 1, words: ['مَا'], marks: { 0: { kind: 'exact' as const, link: '7' } } } },
@@ -70,7 +68,6 @@ describe('written differently', () => {
     const manyCard = { sides: [{ surah: 2, ayah: 1, ayat: [] }, { surah: 3, ayah: 1, ayat: [] }] as PairCard['sides'], many };
     expect(writtenLinks(manyCard, 1).has('7')).toBe(true);
     expect(writtenLinks(manyCard, 0).has('7')).toBe(false);
-    // The same id on two partners: one written alike, one not.
     const reused = { ...manyCard, many: { ...many, options: [{ ...many.options[1], ayah: { ...many.options[1].ayah, words: ['مَا'] } }, many.options[1]] } };
     expect(writtenLinks(reused, 0).has('7')).toBe(false);
     expect(writtenLinks(reused, 1).has('7')).toBe(true);

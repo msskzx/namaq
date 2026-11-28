@@ -41,7 +41,6 @@ import { reportError } from '@shared/errors';
 type QuestionChoice = { value: string; labelArabic: string };
 
 type Send = (action: PlayerAction) => void;
-/** A choice question sent with nothing picked. */
 const SKIPPED = '';
 
 type Question = PartyQuestion & { promptArabic?: string; choices?: QuestionChoice[]; look?: QuizLook };
@@ -73,7 +72,6 @@ function NameForm({ initial, error, onSubmit, palette }: { initial: string; erro
     <View style={{ padding: 16 }}>
       <Section title="اسمك" palette={palette}>
         <Field value={name} onChangeText={setName} onSubmitEditing={submit} maxLength={NAME_MAX} autoFocus label="اسمك" palette={palette} />
-        {/* A name error belongs to the name that was sent; editing the name clears it. */}
         {error && name.trim() === sent ? <Text accessibilityRole="alert" style={{ color: palette.accent, textAlign: 'right' }}>{error}</Text> : null}
         <View style={{ alignItems: 'flex-start' }}><Button variant="primary" label="انضم" disabled={!name.trim()} onPress={submit} /></View>
       </Section>
@@ -81,7 +79,6 @@ function NameForm({ initial, error, onSubmit, palette }: { initial: string; erro
   );
 }
 
-/** Time left on the party's clock (the worker's time, corrected by `offset`), with a bar that empties. */
 function Countdown({ deadline, total, offset, palette, big }: { deadline: number; total: number; offset: number; palette: Palette; big?: boolean }) {
   const [now, setNow] = useState(() => Date.now() + offset);
   useEffect(() => {
@@ -119,13 +116,11 @@ function Leaderboard({ players, you, palette, final, answering }: { players: Pla
                 <Text numberOfLines={1} style={{ color: palette.ink, fontSize: 16, flexShrink: 1 }}>{player.name}</Text>
                 {answering && (player.submitted ? <CircleCheck size={16} color={palette.green} accessibilityLabel="أجاب" /> : <LoadingDots />)}
               </View>
-              {/* Faded green is the score before this question, full green what this question added. */}
               <View style={{ flexDirection: 'row', height: 8, borderRadius: 4, overflow: 'hidden', backgroundColor: palette.rule }}>
                 <View style={{ width: `${(earlier / top) * 100}%`, backgroundColor: palette.green, opacity: final ? 1 : 0.5 }} />
                 {!final && !!player.earned && <View style={{ width: `${(player.earned / top) * 100}%`, backgroundColor: player.looked ? palette.amber : palette.green }} />}
               </View>
             </View>
-            {/* Who looked the answer up shows only once it is revealed: the magnifier, and its points in amber. */}
             {player.earned !== null && !final && player.looked && <Search size={14} color={palette.amber} accessibilityLabel="بحث عن الجواب" />}
             {player.earned !== null && !final && <Text style={{ color: !player.earned ? palette.muted : player.looked ? palette.amber : palette.green, fontSize: 14 }}>{`+${num(player.earned)}`}</Text>}
             <Text style={{ color: palette.ink, fontWeight: '700', minWidth: 28, textAlign: 'left' }}>{num(player.score)}</Text>
@@ -151,36 +146,28 @@ function Invite({ code, palette }: { code: string; palette: Palette }) {
   );
 }
 
-/** The branches tab's filters for the host (saved only is left out: each phone saves its own trees). */
 function PartyFilters({ settings, change, palette }: { settings: PartySettings; change: (next: Partial<PartySettings>) => void; palette: Palette }) {
   const range = settings.juzFrom === 1 && settings.juzTo === 30 ? null : { from: settings.juzFrom, to: settings.juzTo };
   const [draft, setDraftState] = useState<FilterDraft>(() => draftOf({ ...EMPTY_LIST, filters: settings.filters ?? {}, range }));
   const setDraft = (next: FilterDraft) => {
     setDraftState(next);
     const applied = applyDraft(next);
-    // «سور متباعدة» is no range filter, so a range picked keeps it.
     if (applied) change({ juzFrom: applied.range?.from ?? 1, juzTo: applied.range?.to ?? 30, filters: { ...applied.filters, ...(settings.filters?.apart && { apart: settings.filters.apart }) } });
   };
   return <FilterFields draft={draft} setDraft={setDraft} palette={palette} sort={false} kinds={false} savedOnly={false} trees={settings.topics.includes('BRANCHES')} />;
 }
 
-/** The kinds a party can mix (a recited snippet stays solo: the reader grades it alone). */
 const PARTY_KINDS: { id: QuizTopic; name: string }[] = [{ id: 'BRANCHES', name: 'متشابهات القرآن' }, ...CHOICE_KINDS.filter(kind => kind.party)];
 
-/** A choice question with something over its choices (an ayah, a page, a book's passage), or its plain choices. */
 const isAyahChoice = (question: Question): question is Question & ChoiceQuestion => Array.isArray((question as { quran?: unknown }).quran) || !!(question as { page?: unknown }).page
   || typeof (question as { passage?: unknown }).passage === 'string'
-  // Several right choices tick boxes, which QuizChoice draws.
   || Array.isArray((question as { correctAnswers?: unknown }).correctAnswers)
-  // So do choices put in order, which QuizChoice hands to OrderRows.
   || Array.isArray((question as { order?: unknown }).order);
 
-/** What the host chose; the host can change it until the quiz starts, everyone else only reads it. */
 function Settings({ settings, editable, send, palette }: { settings: PartySettings; editable: boolean; send: Send; palette: Palette }) {
   const change = (next: Partial<PartySettings>) => send({ type: 'settings', settings: next });
   const branches = settings.topics.includes('BRANCHES');
   const ranged = settings.topics.some(topic => RANGED_TOPICS.includes(topic));
-  // Trees, compare questions and recited ayat are typed, so they run on the longer time.
   const isTyped = (topic: QuizTopic) => topic === 'BRANCHES' || topic === 'COMPARE' || WRITTEN_TOPICS.includes(topic);
   const typed = settings.topics.filter(isTyped);
   const written = settings.topics.some(topic => WRITTEN_TOPICS.includes(topic));
@@ -261,7 +248,6 @@ function Lobby({ view, send, error, palette }: { view: PartyView; send: Send; er
   const [confirming, setConfirming] = useState(false);
   useEffect(() => { if (error === 'not-ready') setConfirming(true); }, [error]);
   useEffect(() => { if (readyCount === others.length) setConfirming(false); }, [readyCount, others.length]);
-  // The host's phone builds the questions and sends them with «ابدأ», so a party needs no website.
   const [built, setBuilt] = useState<'short' | 'failed' | null>(null);
   const settingsKey = JSON.stringify(view.settings);
   useEffect(() => setBuilt(null), [settingsKey]);
@@ -334,12 +320,9 @@ function QuestionStage({ view, send, offset, palette }: { view: PartyView; send:
   const insets = useSafeAreaInsets();
   const typing = useKeyboardShown();
   const question = view.question as Question;
-  // On a tree the prompt scrolls away with it; the countdown stays.
   const prompt = question.promptArabic ? <QuizPrompt text={question.promptArabic} palette={palette} /> : null;
   const revealed = view.phase === 'reveal';
   const [typed, setTyped] = useState<string[]>(() => question.compare ? emptyCompareAnswers(question) : emptyBranchAnswers(question));
-  // What is typed goes to the party as it is typed, so the time running out grades it as sent (owner, 2026-11-21: right
-  // answers were lost for not pressing «أرسل»).
   const draftTyped = (at: number, text: string) => {
     const next = typed.map((value, i) => i === at ? text : value);
     setTyped(next);
@@ -349,7 +332,6 @@ function QuestionStage({ view, send, offset, palette }: { view: PartyView; send:
   const isHost = view.you === view.hostId;
   const last = view.index + 1 >= view.total;
   const total = (question.tree || question.compare || question.write ? view.settings.treeSeconds : view.settings.seconds) * 1000;
-  // A recited ayah: each word goes as a draft, the last as the answer, sent again if the connection dropped it.
   const finished = useRef<string[] | null>(null);
   useEffect(() => {
     if (finished.current && view.phase === 'question' && view.answer === null) send({ type: 'submit', answer: finished.current });
@@ -358,14 +340,12 @@ function QuestionStage({ view, send, offset, palette }: { view: PartyView; send:
     if (done) finished.current = answer;
     send({ type: done ? 'submit' : 'draft', answer });
   };
-  // A party counts a look before the answer is sent: a right answer after it earns LOOKED_POINTS (shared/quiz/score.ts).
   const look = () => { if (!view.looked) send({ type: 'look' }); };
 
   if (!revealed && sent) return (
     <ScrollView contentContainerStyle={{ padding: 16, gap: 16 }}>
       {view.deadline !== null && <Countdown big deadline={view.deadline} total={total} offset={offset} palette={palette} />}
       <Label palette={palette} muted>أُرسلت إجابتك، وتظهر الإجابة حين يجيب الجميع.</Label>
-      {/* Looking once the answer is sent is for learning: it costs nothing. */}
       {question.look && <LookButton look={question.look} palette={palette} />}
       <Leaderboard players={view.players} you={view.you} palette={palette} answering />
     </ScrollView>
@@ -397,7 +377,6 @@ function QuestionStage({ view, send, offset, palette }: { view: PartyView; send:
       </View>
     </ScrollView>
   );
-  // Sent with nothing picked or typed (owner, 2026-11-19): a player who does not know need not wait out the clock.
   const skip = <View style={{ paddingHorizontal: 16, paddingTop: 8, alignItems: 'flex-start' }}><Button Icon={Send} label="أرسل بلا إجابة" onPress={() => send({ type: 'submit', answer: SKIPPED })} /></View>;
   const clock = view.deadline !== null ? <Countdown deadline={view.deadline} total={total} offset={offset} palette={palette} /> : undefined;
   return (
@@ -475,7 +454,6 @@ function Notice({ status, palette }: { status: PartyStatus | 'started'; palette:
   );
 }
 
-/** A party room: the lobby, then each question for everyone at once, the reveal with the leaderboard, and the final results. */
 export default function PartyRoom() {
   const palette = usePalette();
   const { code = '' } = useLocalSearchParams<{ code: string }>();

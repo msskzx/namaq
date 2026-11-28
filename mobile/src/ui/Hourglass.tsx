@@ -4,7 +4,6 @@ import Svg, { Path } from 'react-native-svg';
 import { HOURGLASS_FRAME, hourglassSand } from '@shared/quran/hourglass';
 import { num } from '@shared/quran/arabicNumber';
 
-/** The ask mode's timer, as on the website: sand running down and the seconds left. */
 export default function Hourglass({ left, seconds, color }: { left: number; seconds: number; color: string }) {
   const sand = hourglassSand(left);
   return (

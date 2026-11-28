@@ -1,6 +1,7 @@
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 import { FlatCompat } from "@eslint/eslintrc";
+import quality from "./shared/lint/noComments.mjs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -13,7 +14,10 @@ const eslintConfig = [
   ...compat.extends("next/core-web-vitals", "next/typescript"),
   {
     files: ["shared/**/*.ts"],
+    ignores: ["shared/**/*.d.ts"],
+    plugins: { quality },
     rules: {
+      "quality/no-comments": "error",
       "no-empty": ["error", { allowEmptyCatch: false }],
       "no-restricted-syntax": ["error",
         { selector: "CatchClause > BlockStatement[body.length=0]", message: "Report the error with reportError(where, error) from shared/errors.ts, so its cause is not lost." },

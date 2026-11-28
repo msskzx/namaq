@@ -14,11 +14,9 @@ export type Shot = { uri: string; width: number; height: number };
 const PAD = 16;
 const TOP = 20;
 const BOTTOM = 12;
-/** The row at every picture's foot: the logo and «نمق», and «١ من ٤». */
 const FOOT = 30;
 const GAP = 10;
 
-/** The logo and «نمق» at a shared image's foot (one picture or each of a story's); `small` on a story's pictures. */
 export function ShareBrand({ small, palette }: { small?: boolean; palette: Palette }) {
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6 }}>
@@ -28,17 +26,10 @@ export function ShareBrand({ small, palette }: { small?: boolean; palette: Palet
   );
 }
 
-/** The source under the last picture's blocks, a hairline above it (owner, 2026-11-21: the only line in the pictures). */
 function Foot({ children, palette }: { children: React.ReactNode; palette: Palette }) {
   return <View style={{ borderTopWidth: 1, borderTopColor: palette.rule, paddingTop: 6 }}>{children}</View>;
 }
 
-/**
- * A long drawing as equal 4:5 pictures (owner, 2026-11-21: Instagram wants every picture of a post the same size): no card
- * frame, the head on the first only, the blocks flowing and evened out (shared/sharePages.ts), the tail together on the
- * last with the source under it, and on every picture's foot the logo with «نمق» and its number. Each block is measured
- * out of sight first, then the pictures are drawn there and captured one by one; `onShots` gets them in order.
- */
 export default function SharePages({ paged, width, palette, onShots, onFail }: { paged: SharePaged; width: number; palette: Palette;
   onShots: (shots: Shot[]) => void; onFail: () => void }) {
   const height = Math.round((width * 5) / 4);
@@ -61,7 +52,6 @@ export default function SharePages({ paged, width, palette, onShots, onFail }: {
   useEffect(() => {
     if (!pictureCount) return;
     let live = true;
-    // A moment after layout, so the fonts are on screen before the captures.
     const timer = setTimeout(() => {
       void (async () => {
         const shots: Shot[] = [];

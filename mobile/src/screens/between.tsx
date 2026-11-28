@@ -20,11 +20,6 @@ import { findPerson, GRAPH, personName, searchPeople } from '@/lib/tarajim';
 import { Credit } from './person';
 import TiesChain from '@/components/TiesChain';
 
-/**
- * «بينه وبين…» (owner, 2026-11-18; sketch tarajim-app/graph/sketch2-dark.png, screen 7): the reader picks two people or
- * more, and a small graph draws them and the nearest ties that join them, family before companionship, said in one
- * sentence with the pages that state each tie. Anyone in it with a page opens his ties.
- */
 export default function BetweenScreen() {
   const palette = usePalette();
   const bottom = useTabBarSpace();
@@ -33,10 +28,8 @@ export default function BetweenScreen() {
   const [picked, setPicked] = useState(() => slugs.split(',').filter(s => findPerson(s)));
   const [adding, setAdding] = useState(picked.length < 2);
   const [query, setQuery] = useState('');
-  // The chain drawn or said in one sentence: one at a time, the drawing first (owner, 2026-11-20).
   const [shown, setShown] = useState<DrawingOrText>('drawing');
   const { nodes, steps, apart } = useMemo(() => joining(GRAPH, picked), [picked]);
-  // The page's side room and the card's padding and frame.
   const drawW = Math.min(width - 32 - 30, 480);
   const back = () => (router.canGoBack() ? router.back() : toTab('/tarajim'));
   const name = (slug: string) => personName(GRAPH.nodes.get(slug)!);
@@ -59,7 +52,6 @@ export default function BetweenScreen() {
             </Text>
           )}
           {sentence ? <Tabs palette={palette} label="كيف تُعرض الصلة" value={shown} onChange={setShown} options={DRAWING_OR_TEXT} /> : null}
-          {/* The chain in the home card's shape, its pages on the book line under it (owner 2026-11-20). */}
           <CardWithRow palette={palette}>
             {shown === 'text' && sentence
               ? <Text style={{ color: palette.ink, fontSize: 18, lineHeight: 32, textAlign: 'right' }}>{sentence}.</Text>

@@ -27,10 +27,8 @@ describe('reader selection', () => {
   });
 
   it('finds the word under the finger, or the nearest one on the nearest line', () => {
-    // Right to left: words 0 and 1 on the first line, a hidden word (no box), word 3 on the next line.
     const boxes = [{ x: 200, y: 0, w: 80, h: 40 }, { x: 100, y: 0, w: 80, h: 40 }, null, { x: 200, y: 50, w: 80, h: 40 }];
     expect(wordAtPoint(boxes, 120, 20)).toBe(1);
-    // In the gap between two words: the nearer one.
     expect(wordAtPoint(boxes, 190, 20)).toBe(0);
     expect(wordAtPoint(boxes, 20, 70)).toBe(3);
     expect(wordAtPoint(boxes, 150, 200)).toBe(3);

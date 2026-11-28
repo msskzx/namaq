@@ -1,7 +1,6 @@
 import { keyStore } from './storage';
 import { DEFAULT_RECITER, isRepeatPlan, ONCE, RECITERS, type RepeatPlan } from './quran/recitation';
 
-/** Listening's defaults, kept on this device: the reciter, and how a range plays (each ayah's and the range's times, the pause, the speed). */
 const json = (raw: string | null): unknown => { try { return raw ? JSON.parse(raw) : null; } catch { return null; } };
 
 const plan = keyStore<RepeatPlan>('listen-plan', raw => { const value = json(raw); return isRepeatPlan(value) ? value : ONCE; });

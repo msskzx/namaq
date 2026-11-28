@@ -1,15 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import { CURVE, litSpine } from './litSpine';
 
-// Two children 100 wide: centres at 50 and 150, the parent's line meets the spine at 100.
 const two = (first: number, second: number) => [{ at: first, size: 100 }, { at: second, size: 100 }];
 
 describe('litSpine', () => {
   it('stops short of the corner of a lit end child, whichever side it sits on', () => {
-    // Sideways or left to right: the first child is at the start.
     expect(litSpine(two(0, 100), [true, false], 200)).toEqual([50 + CURVE, 100]);
     expect(litSpine(two(0, 100), [false, true], 200)).toEqual([100, 150 - CURVE]);
-    // Top down in Arabic: the first child sits on the right, so its corner is at the far end.
     expect(litSpine(two(100, 0), [true, false], 200)).toEqual([100, 150 - CURVE]);
     expect(litSpine(two(100, 0), [false, true], 200)).toEqual([50 + CURVE, 100]);
   });

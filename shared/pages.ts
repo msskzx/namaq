@@ -1,14 +1,8 @@
-/**
- * Every page of the app and the website, side by side (guard proposal 22, R0018: every phone feature also ships on the
- * website). `app` names route files under mobile/src/app, `web` page folders under src/app ('' is the home page). A page
- * on one side only says why with `only`: something a browser cannot do, or a review tool. shared/pages.test.ts checks
- * that every route and page is listed, and that a page missing a side is marked or waits on the shrink-only list.
- */
+// see R0018
 export type PageEntry = {
   id: string;
   app?: string[];
   web?: string[];
-  /** Why the page lives on one side only. */
   only?: { side: 'app' | 'web'; why: 'browser-impossible' | 'review-tool'; note: string };
 };
 
@@ -51,7 +45,6 @@ export const PAGES: readonly PageEntry[] = [
   { id: 'between', app: ['(tabs)/(tarajim)/between.tsx'], web: ['between', 'graphs'] },
   { id: 'battles', app: ['(tabs)/(tarajim)/battles.tsx'], web: ['battles'] },
   { id: 'battle', app: ['(tabs)/(tarajim)/battle.tsx'], web: ['battles/[slug]'] },
-  // Phone only while the website is paused (owner, 2026-11-23); ported with the other phone pages later.
   { id: 'atlas', app: ['(tabs)/(tarajim)/atlas.tsx'] },
   { id: 'stories', app: ['(tabs)/(tarajim)/stories.tsx'], web: ['stories'] },
   { id: 'story', app: ['(tabs)/(tarajim)/story.tsx'], web: ['stories/[slug]'] },

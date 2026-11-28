@@ -1,33 +1,24 @@
 import { useSyncExternalStore } from 'react';
 import { grownIds, type Beat } from './growth';
 
-/** Watch grows the tree on its own; ask stops at each ayah's first new box until the timer ends or a tap. */
 export type GrowMode = 'watch' | 'ask';
 export type Status = 'idle' | 'playing' | 'paused' | 'done';
 export type StudioKind = 'tree' | 'matrix' | 'read';
 export type Prefs = { mode: GrowMode; speed: number; timer: number };
 export const SPEEDS = [1, 1.5, 2, 0.5];
-/** Seconds the ask mode waits on an empty box; 0 waits for a tap. */
 export const TIMERS = [3, 5, 10, 0, 1];
 
 export type Growth = Prefs & {
   status: Status;
-  /** The ayah (step) growing now, and how many there are. */
   at: number;
   total: number;
-  /** Whether the open card's studio is open: its controls replace save and share. */
   studio: boolean;
-  /** While playing: what is still hidden, what was just drawn, the box waiting for an answer and its time left (0 to 1). */
   hidden: Set<string>;
   now: Set<string>;
   ask?: { id: string; left: number; seconds: number };
-  /** The ayah whose path is lit. */
   lit: string | null;
-  /** Once the tree has grown: each ayah's path is lit in turn and its ayah read in full. */
   tour: boolean;
-  /** While an ayah grows: how many of its words its card under the tree shows (the beat's words). */
   words?: number;
-  /** What the studio grows: a tree, a book matrix's word connections, or a plain matrix read along word by word. */
   kind: StudioKind;
 };
 
@@ -42,7 +33,6 @@ const subscribe = (listener: () => void) => { listeners.add(listener); return ()
 export const growthState = () => state;
 export const useGrowth = () => useSyncExternalStore(subscribe, growthState, growthState);
 
-/** Where the speed and ask settings are kept (the phone's store; nothing in tests). */
 let keep: (prefs: Prefs) => void = () => {};
 export function loadPrefs(saved: Partial<Prefs> | undefined, save: (prefs: Prefs) => void) {
   keep = save;
@@ -57,7 +47,6 @@ export function setPrefs(next: Partial<Prefs>) {
   keep({ mode: state.mode, speed: state.speed, timer: state.timer });
 }
 
-/** The tree the studio grows: a card hands its beats (built for both modes) when it becomes the open card. */
 export type Target = { watch: Beat[]; ask: Beat[]; kind?: StudioKind };
 let target: Target | null = null;
 let run = 0;
@@ -72,13 +61,7 @@ export function setTarget(next: Target | null) {
   set({ total: next ? totalOf(next.watch) : 0, studio: next ? state.studio : false, kind: next?.kind ?? 'tree' });
 }
 
-/**
- * Each screen that can grow a tree claims the studio with its own tree (null lets go). The last screen to claim it
- * (a quiz's answer tree over the branches tab) owns it until it lets go; a screen below may change its tree meanwhile
- * without taking the studio back. A change of owner closes the studio.
- */
 const claims: { owner: string; target: Target }[] = [];
-/** The screen whose target the studio plays now. */
 export const studioOwner = () => claims[claims.length - 1]?.owner;
 export function claimTarget(owner: string, next: Target | null) {
   const top = claims[claims.length - 1]?.owner;
@@ -93,7 +76,6 @@ export function claimTarget(owner: string, next: Target | null) {
 
 const TICK = 50;
 
-/** Waits `ms` of playing time (paused time does not count). False once a newer run started. */
 function wait(ms: number, token: number, progress?: (left: number) => void) {
   return new Promise<boolean>(resolve => {
     let left = ms;
@@ -116,7 +98,6 @@ function wait(ms: number, token: number, progress?: (left: number) => void) {
   });
 }
 
-/** Plays from an ayah (step). The video always gives the ask mode a timer, so it never waits for a tap. */
 export async function play(from = 0, { video = false } = {}) {
   if (!target) return;
   const beats = state.mode === 'ask' ? target.ask : target.watch;
@@ -146,7 +127,6 @@ export async function play(from = 0, { video = false } = {}) {
   set({ status: 'done', at: totalOf(beats), hidden: NONE, now: NONE, lit: null, tour: false });
 }
 
-/** A tap on the box waiting for an answer shows it. */
 export const answer = () => reveal?.();
 
 export function pause(paused: boolean) {
@@ -161,7 +141,6 @@ export function stop() {
   set({ status: 'idle', at: 0, hidden: NONE, now: NONE, ask: undefined, lit: null, tour: false });
 }
 
-/** Opens the card's studio: its controls show, the tree waits for play. */
 export function openStudio() {
   if (state.total > 0) set({ studio: true });
 }

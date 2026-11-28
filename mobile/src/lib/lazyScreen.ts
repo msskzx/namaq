@@ -1,19 +1,11 @@
 import { createElement, type ComponentType } from 'react';
 import { reportError } from '@shared/errors';
 
-/**
- * A route whose screen (and the data it reads) loads on its first visit instead of at launch.
- * The navigators read every route file when they mount, so a route file that imports its screen
- * directly pulls all of that screen's data into the launch. The route files under app/ wrap their
- * screen in src/screens/ with this, so launch reads only what home needs; `warmScreens` then loads
- * the rest one by one in the background, so a first visit is as quick as before.
- */
 type Screen = ComponentType<object>;
 type Loader = () => { default: Screen };
 
 const pending: (() => Screen)[] = [];
 
-/** `warm: false` for a screen people rarely open (a developer tool): it loads only when visited. */
 export function lazyScreen(load: Loader, { warm = true } = {}): Screen {
   let screen: Screen | undefined;
   const get = () => (screen ??= load().default);
@@ -23,7 +15,6 @@ export function lazyScreen(load: Loader, { warm = true } = {}): Screen {
   };
 }
 
-/** Loads the screens not yet visited, one at a time with a pause between, so scrolling home stays smooth. */
 export function warmScreens(gap = 120) {
   let stopped = false;
   const next = () => {

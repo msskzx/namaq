@@ -38,7 +38,6 @@ export function Group({ title, children, palette }: { title: string; children: R
   );
 }
 
-/** What the number means: the surah's name, where the juz starts, or the surah the page is in. */
 function nameOf(unit: FilterUnit, n: number) {
   if (unit === 'surah') return surahNames[n] ?? '';
   if (unit === 'juz') { const [surah, ayah] = JUZ_STARTS[n - 1].split(':').map(Number); return `${surahNames[surah]} ${num(ayah)}`; }
@@ -46,13 +45,8 @@ function nameOf(unit: FilterUnit, n: number) {
   return '';
 }
 
-/** A range end as a number; a missing or broken one falls back to the unit's end. */
 const toNumber = (value: string, fallback: number) => { const n = Number(value); return Number.isInteger(n) && n > 0 ? n : fallback; };
 
-/** The sheet's fields: saved only and the part of the Quran; the branches tab adds the comparison kinds, differences and sort (the quiz
- *  only differences: it asks just the books' mutashabihat, owner 2026-11-19).
- *  The compare tab shows the first two inside its pair list, since it has no other filters (owner, 2026-11-10). */
-/** Without `trees` (a quiz with no tree questions) only the part of the Quran is asked. */
 export function FilterFields({ draft, setDraft, palette, compare = false, sort = true, kinds = true, savedOnly = true, trees = true }: { draft: FilterDraft; setDraft: (draft: FilterDraft) => void; palette: Palette; compare?: boolean; sort?: boolean; kinds?: boolean; savedOnly?: boolean; trees?: boolean }) {
   const bookmarks = useSyncExternalStore(subscribeBookmarks, readBookmarks);
   const [openEnd, setOpenEnd] = useState<'from' | 'to' | null>(null);
@@ -74,10 +68,8 @@ export function FilterFields({ draft, setDraft, palette, compare = false, sort =
         const max = UNIT_MAX[draft.unit];
         const from = toNumber(draft.from, 1), to = toNumber(draft.to, max);
         const name = (n: number) => nameOf(draft.unit, n);
-        // Moving one end past the other moves both, as in the quiz settings.
         const pickFrom = (n: number) => setDraft({ ...draft, from: String(n), to: String(Math.max(n, to)) });
         const pickTo = (n: number) => setDraft({ ...draft, to: String(n), from: String(Math.min(n, from)) });
-        // Only one end is open at a time, so its list takes the full width under both fields and shows more rows.
         return <View style={{ gap: 6 }}>
           <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: 10 }}>
             <NumberPicker key={`from-${draft.unit}`} value={from} max={max} label="من" nameOf={name} palette={palette} onChange={pickFrom}
@@ -111,10 +103,8 @@ export function FilterFields({ draft, setDraft, palette, compare = false, sort =
   );
 }
 
-/** Whether the draft's range can be applied (a range needs both ends in order). */
 export const draftValid = (draft: FilterDraft) => !['juz', 'surah', 'page'].includes(draft.unit) || !!draftRange(draft);
 
-/** Reset on one side, apply on the other: under the filters in the branches search screen. */
 export function FilterActions({ onReset, onApply, valid, palette }: { onReset: () => void; onApply: () => void; valid: boolean; palette: Palette }) {
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 12, borderTopWidth: 1, borderColor: palette.rule, paddingTop: 4 }}>

@@ -13,8 +13,6 @@ import { reportError } from '@shared/errors';
 
 type Video = { data: string; mime: string };
 
-/** Share as video: the tree grows (or a compare card is read along) in a story frame while it is recorded, then goes to the phone's share sheet.
- *  `page` builds another recorder page from the font, in place of the tree's. A page video in parts names the `part`, and `onNext` records the next one. */
 export default function VideoSheet({ input, page, onClose, palette, part, onNext }: { input?: VideoInput | null; page?: ((font: string) => string) | null; onClose: () => void; palette: Palette; part?: string; onNext?: () => void }) {
   const open = !!input || !!page;
   const [font, setFont] = useState<string | null>(null);
@@ -24,8 +22,6 @@ export default function VideoSheet({ input, page, onClose, palette, part, onNext
   const [shareFailed, setShareFailed] = useState(false);
   const [sharing, setSharing] = useState(false);
   const frame = useRef<FrameHandle>(null);
-  // Each recording is one request: a font, a recorder's message or a share that finishes after the input changed,
-  // the sheet closed or the video was made again belongs to an older one and is let go.
   const request = useRef(0);
   const [own, setOwn] = useState(0);
   const begin = () => { request.current++; setOwn(request.current); return request.current; };
@@ -52,7 +48,6 @@ export default function VideoSheet({ input, page, onClose, palette, part, onNext
     setShareFailed(false);
     shareVideo(made.data, made.mime).catch(error => { reportError('video: share', error); if (request.current === own) setShareFailed(true); }).finally(() => setSharing(false));
   };
-  // As on the website, the recording can be paused: the paused time is left out of the video.
   const toggle = () => { frame.current?.send({ type: paused ? 'resume' : 'pause' }); setPaused(!paused); };
   return (
     <Sheet open={open} onClose={onClose} full title={part ? `مشاركة كفيديو · ${part}` : 'مشاركة كفيديو'} palette={palette}>

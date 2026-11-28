@@ -1,15 +1,12 @@
-// docs/plans/quran-relations-page.md
+// see docs/plans/quran-relations-page.md
 const MARKS = /[ؐ-ًؚ-ٰٟۖ-ۭـ⁠࣓-ࣿ]/g;
 const BASMALA = 'بسم الله الرحمن الرحيم';
 
-/** The page writes a hamza on a seat as the seat with a hamza mark (يٕ, وٕ); typed text and older texts as one letter (ئ, ؤ). */
 export const seated = (word: string) => word
   .replace(/[يى]([\u064B-\u0652]*)[\u0654\u0655]/g, 'ئ$1')
   .replace(/و([\u064B-\u0652]*)[\u0654\u0655]/g, 'ؤ$1');
 
-/** Words already normalized: the same Quran words are asked for again and again (search, trees, quizzes). */
 const normalized = new Map<string, string>();
-/** Enough for every distinct word of the Quran; past it (long typed texts) the memory starts again. */
 const NORMALIZED_MAX = 60_000;
 
 export function normalizeWord(token: string): string {

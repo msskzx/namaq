@@ -54,7 +54,6 @@ describe('recite', () => {
     const due = { '2:255:9': {}, '2:255:3': {}, '2:256:1': {} };
     expect(reviewPosition('2:255:9', due)).toEqual({ start: '2:255', gaps: [3, 9], shown: null, words: 0 });
     expect(reviewPosition('2:255', due)).toEqual({ start: '2:255', gaps: [3, 9], shown: null, words: 0 });
-    // The whole ayah forgotten is recited whole.
     expect(reviewPosition('2:255:3', { ...due, '2:255': {} })).toEqual({ start: '2:255', shown: null, words: 0 });
     expect(reviewHref('2:255')).toBe('/quran/read/ayah/2/255?recite=2:255&review=1');
     expect(reviewHref('2:255:3', due)).toBe('/quran/read/ayah/2/255?recite=2:255&word=3,9&review=1');
@@ -67,7 +66,6 @@ describe('recite', () => {
     expect(nextInReview(ayat, '57:3', '2:255')).toBe('1:2');
     expect(nextInReview(ayat, '1:2', '2:255')).toBeNull();
     expect(reviewedBefore(ayat, '1:2', '2:255')).toBe(2);
-    // Begun at the first, it ends at the last.
     expect(nextInReview(ayat, '57:3', '1:2')).toBeNull();
   });
 
@@ -75,7 +73,6 @@ describe('recite', () => {
     const keys = forgottenOrder(['1:3', '1:2:1', '1:2', '1:2:0']);
     expect(keys).toEqual(['1:2', '1:2:0', '1:2:1', '1:3']);
     expect(nextForgotten(keys, '1:2:0')).toBe('1:2:1');
-    // The word under review was rested and left the list: the next one still follows it.
     expect(nextForgotten(['1:2', '1:3'], '1:2:0')).toBe('1:3');
   });
 
@@ -93,7 +90,6 @@ describe('mixed forgotten ayat and words', () => {
     const keys = forgottenOrder(['2:255:10', '1:2:1', '2:255', '2:255:2', '1:2:0', 'bad', '2:255:-1']);
     expect(keys).toEqual(['1:2:0', '1:2:1', '2:255', '2:255:2', '2:255:10']);
     expect(nextForgotten(keys, '1:2:0')).toBe('1:2:1');
-    // The word under review was rested and left the list: the next one still follows it.
     expect(nextForgotten(['1:2', '1:3'], '1:2:0')).toBe('1:3');
     expect(nextForgotten(keys, '2:255')).toBe('2:255:2');
     expect(nextForgotten(keys, '2:255:2')).toBe('2:255:10');

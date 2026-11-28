@@ -24,20 +24,13 @@ import { DRAW_MODES, type DrawMode } from '@shared/hadith';
 
 
 
-/**
- * A story whole: its name and place, its tags, who is in it, the report, the ayat it turns on and the other reports folded,
- * each in the home card's shape with its books on the line under it (owner 2026-11-20). The story page draws it, and so
- * does a quiz that looks it up (`titled`, for the questions that ask by a moment's title).
- */
 export function StoryView({ story, palette, titled }: { story: AppStory; palette: Palette; titled?: boolean }) {
   const [main, ...rest] = story.reports;
   const place = story.place ? sourcesOf(uniqueSources(story.place.refs.map(citeSource))) : [];
-  // Drawn when its speakers are all sourced (owner, 2026-11-21); until then the story is its text alone, with no tabs.
   const drawn = !titled && !!main && drawnReport(main);
   const [mode, setMode] = useState<DrawMode>('drawing');
   const lines = drawn ? reportLines(main) : [];
   const slots = reportSlots(lines, palette.slots.length);
-  // In the drawing, each speaker's chip is in his colour: the key to the bubbles.
   const colour = (speaker: string) => palette.slots[slots.get(speaker) ?? 0];
   const tints = new Map(lines.flatMap(line => (line.agent && line.speaker ? [[line.agent, colour(line.speaker)] as const] : [])));
   const more = [...new Set(lines.flatMap(line => (line.kind === 'turn' && line.speaker && !line.agent ? [line.speaker] : [])))]
@@ -49,7 +42,6 @@ export function StoryView({ story, palette, titled }: { story: AppStory; palette
       {story.place ? <Text style={{ color: palette.muted, fontSize: 16, textAlign: 'right' }}>{story.place.value}</Text> : null}
       {place.length ? <SourceLine named={place} sources={place} palette={palette} /> : null}
       <Tags story={story} palette={palette} />
-      {/* Who is in it, once, under the title (owner, 2026-11-19), not repeated under each moment. */}
       {drawing ? <People people={story.people} tints={tints} more={more} palette={palette} /> : <People people={story.people} palette={palette} />}
       {drawn ? <Tabs label="طريقة العرض" options={DRAW_MODES} value={mode} onChange={setMode} palette={palette} /> : null}
     </View>
@@ -71,16 +63,11 @@ export function StoryView({ story, palette, titled }: { story: AppStory; palette
   </>;
 }
 
-/** A report's «افتح» opens its hadith on the hadith tab (owner, 2026-11-24: the story and the hadith that tells it link both ways). */
 function HadithOpen({ report }: { report: AppReport }) {
   const hadith = reportHadith(report);
   return hadith ? <OpenButton what="الحديث" label={`افتح ${report.cite}`} onPress={() => openSahih(hadith.book, hadith.n)} /> : null;
 }
 
-/**
- * A sira story (owner, 2026-11-18): the report whole as the source tells it, in moments; the ayat it turns on in full; the
- * source's other reports of it, whole and folded; and who is in it.
- */
 export default function StoryScreen() {
   const palette = usePalette();
   const onScroll = useShrinkOnScroll();

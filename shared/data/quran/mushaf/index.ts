@@ -1,4 +1,3 @@
-// Generated: the 604 Madina pages in order, for code that needs every ayah at once (shared/quran/quranText/corpus.ts).
 import type { MushafPage } from '../../../quran/readerPage';
 import p1 from './1.json';
 import p2 from './2.json';

@@ -6,11 +6,6 @@ import Card from '@/ui/Card';
 import { openUtility, toTab } from '@/lib/ways';
 import type { Palette } from '@/lib/theme';
 
-/**
- * The few buttons at the top of home (owner, 2026-11-18), in the story circles' place: what is not one of the four sections
- * of the tab bar and still needs a way in from home. The qibla opens the utilities on the qibla (the prayer times and the
- * date come as a card in the feed); «مدونتي» holds what the reader kept: saved, forgotten and notes.
- */
 const BUTTONS: { label: string; Icon: (props: LucideProps) => React.ReactNode; open: () => void }[] = [
   { label: 'القبلة', Icon: Compass, open: () => openUtility('tools', 'qibla') },
   { label: 'الأذكار', Icon: SunMoon, open: () => openUtility('adhkar') },

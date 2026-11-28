@@ -6,10 +6,6 @@ import { countsOnDay, localDay, sayOnce, type SaidToday } from '@shared/adhkarCo
 import { adhkarSaid, utilityView } from './settings';
 import { toTab } from './ways';
 
-/**
- * The adhkar page's open time, or none for the list of times (owner, 2026-11-24: times → a time's adhkar → one dhikr).
- * Kept in memory only: the page opens on the list of times each launch.
- */
 let place: AdhkarOccasion | null = null;
 const listeners = new Set<() => void>();
 const subscribe = (listener: () => void) => { listeners.add(listener); return () => { listeners.delete(listener); }; };
@@ -22,19 +18,16 @@ export function showAdhkar(occasion: AdhkarOccasion | null) {
 
 export const useAdhkarPlace = () => useSyncExternalStore(subscribe, get, get);
 
-/** Open the utilities on the adhkar of `occasion` (a reminder after fajr or asr). */
 export function openAdhkar(occasion: AdhkarOccasion) {
   showAdhkar(occasion);
   utilityView.set('adhkar');
   toTab('/utilities');
 }
 
-/** Open one dhikr full screen, swiping through the rest of `occasion`'s adhkar (a search, a feed card, the list). */
 export function openDhikr(occasion: AdhkarOccasion, id: string) {
   router.push({ pathname: '/dhikr', params: { occasion, id } });
 }
 
-/** The phone's day, drawn again at midnight and when the app comes back, so yesterday's ticks never show today. */
 function useToday() {
   const [day, setDay] = useState(() => localDay(new Date()));
   useEffect(() => {
@@ -48,7 +41,6 @@ function useToday() {
   return day;
 }
 
-/** Today's counts, gone at the phone's midnight, and the way to count one more (`of`) or start one again (`null`). */
 export function useSaidToday(): [SaidToday['counts'], (key: string, of: number | null) => void] {
   const [saved] = adhkarSaid.use();
   const day = useToday();

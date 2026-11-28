@@ -1,4 +1,4 @@
-// docs/adr/0034-one-inventory-defines-quran-branch-trees.md
+// see docs/adr/0034-one-inventory-defines-quran-branch-trees.md
 import { foldForms } from './foldForms';
 import { keys, PIECE_MAX, runOn, spell, type Branch, type BranchAyah, type Variant } from './branches';
 import { chapterFamilies } from './chapterFamilies';
@@ -9,7 +9,6 @@ export type PhraseOccurrence = { key: string; start: number; end: number };
 export type PhraseGroup = { id: string; text: string; occurrences: PhraseOccurrence[] };
 export type TreeGroup = PhraseGroup & { textEn?: string; family?: true; aliases?: string[]; subtrees?: string[] };
 
-/** A word's letters as the branches trees group words: tashkeel dropped, hamza seats made one. */
 export const letters = (word: string) => normalizeWord(word.normalize('NFC')).replace(/[ؤئء]/g, 'ا');
 const isEnd = (word: string) => word === '۝' || word.startsWith('﴿');
 const members = (occurrences: PhraseOccurrence[]) => [...new Set(occurrences.map(o => o.key))];
@@ -148,11 +147,9 @@ export function buildTreeGroups(ayat: BranchAyah[]): TreeGroup[] {
   return [...phrases.filter(group => retained.has(group)).map(group => aliases.has(group) ? { ...group, aliases: [...new Set(aliases.get(group))] } : group), ...letterTrees, ...families];
 }
 
-/** One spelling for a word its ayat write differently: the marks they all share. */
 export function sharedDisplay(forms: string[]) {
   if (forms.every(form => form === forms[0])) return forms[0];
   if (forms.every(isEnd)) return '۝';
-  // The page's tatweel (شَيۡـٔٗا) is part of how it writes the word: kept, as a letter of its own.
   const originals = forms.map(form => form.replace(/\u2060/g, '').normalize('NFC').match(/[^\p{M}\u06D6-\u06ED][\p{M}\u06D6-\u06ED]*/gu) ?? []);
   forms = originals.map(words => words.map((word, i) => {
     const bases = originals.map(other => other[i]?.[0]);
@@ -167,11 +164,7 @@ export function phrasePresentation(group: PhraseGroup, ayat: BranchAyah[], conti
   return createTreePresenter(ayat, continueIdentical, followCorpus, within)(group);
 }
 
-/**
- * The one way a tree is built for showing (branches, home cards, previews, quizzes): the phrase trie with every rule folded in
- * (foldForms, ADR 0036). Made once for many trees, as the quiz builds several. `createPhrasePresenter` alone is the bare trie,
- * for ids and sizes only; shared/quran/oneTree.test.ts keeps it out of anything drawn.
- */
+// see ADR 0036
 export function createTreePresenter(ayat: BranchAyah[], continueIdentical = true, followCorpus = true, within?: (key: string) => boolean) {
   const present = createPhrasePresenter(ayat, continueIdentical, followCorpus, within);
   return (group: PhraseGroup) => foldForms(present(group));

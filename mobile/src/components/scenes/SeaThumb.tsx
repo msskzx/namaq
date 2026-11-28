@@ -7,10 +7,8 @@ import { ayahMushafWords } from '@/lib/mushaf';
 import { SEA_ART } from '@/lib/theme';
 import AyahFlow, { AyahWords } from '../quran/text/AyahFlow';
 
-/** The page whose words a picture or a title shows. */
 const pageOf = (layer: string) => DARK_SEA_STEPS.findIndex(step => step.layer === layer && step.phrase);
 
-/** The words of one of the scene's pages, off the mushaf page. */
 export function useSceneWords(layer: string) {
   return useMemo(() => {
     const page = pageOf(layer);
@@ -18,11 +16,6 @@ export function useSceneWords(layer: string) {
   }, [layer]);
 }
 
-/**
- * The scene's picture on its card (owner, 2026-11-22, sketch /mnt/project-files/mashahid/list-sketch-2, picture A with no
- * hand): a stormy night sea, a wave over a wave under heavy clouds, «ظلمات بعضها فوق بعض» large on it and «النور ٤٠» in the
- * corner, as a video's still invites a tap.
- */
 export default function SeaThumb({ place }: { place: string }) {
   const words = useSceneWords('night');
   const { sky, haze, cloud, mist, wave, edge, badge, badgeInk } = SEA_ART.thumb;

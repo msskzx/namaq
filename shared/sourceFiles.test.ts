@@ -1,6 +1,4 @@
-// Guard (owner sign-off 2026-11-19, docs/plans/guard-proposals.md no. 24): every data file and bundled font is named by a
-// source in shared/sources.ts, and no source's licence forbids commercial use. Files older than the list wait on
-// sourceFiles.baseline.json, which only shrinks: a new file names its source, and a file named in sources leaves the list.
+// see docs/plans/guard-proposals.md
 import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
@@ -24,7 +22,6 @@ const files = () => [
 ].sort();
 const named = (path: string) => SOURCES.some(source => source.files?.some(file => (file.endsWith('/') ? path.startsWith(file) : path === file)));
 
-/** A licence that forbids commercial use (CC BY-NC and the like). */
 export const nonCommercial = (licence: string) => /\bNC\b|-NC\b|non-?commercial/i.test(licence);
 
 describe('every data file and font names its source', () => {
@@ -34,7 +31,6 @@ describe('every data file and font names its source', () => {
     expect(all.some(path => FONT.test(path))).toBe(true);
     const unnamed = all.filter(path => !named(path));
     const known: string[] = JSON.parse(readFileSync(BASELINE, 'utf8'));
-    // Rewriting the list only drops files that now name a source or are gone.
     if (process.env.UPDATE_BASELINE) writeFileSync(BASELINE, `${JSON.stringify(known.filter(path => unnamed.includes(path)), null, 2)}\n`);
     expect(unnamed.filter(path => !known.includes(path)), 'name the source in shared/sources.ts').toEqual([]);
     expect(known.filter(path => !unnamed.includes(path)), 'named or gone: run with UPDATE_BASELINE=1').toEqual([]);

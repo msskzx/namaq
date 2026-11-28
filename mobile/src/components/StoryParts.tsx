@@ -7,7 +7,6 @@ import IconButton from '@/ui/IconButton';
 
 const WAVE = 'M6 0 C 0 6, 0 14, 6 20 C 12 26, 12 34, 6 40';
 
-/** One wavy strand, after the theme's rope: the story runs on through a part this surah does not tell. */
 function Rope({ color }: { color: string }) {
   return (
     <Svg width={12} height={40} viewBox="0 0 12 40" accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
@@ -16,7 +15,6 @@ function Rope({ color }: { color: string }) {
   );
 }
 
-/** A side's place in a part it does not tell: a rope with the note «لا تذكر سورة X هذا الجزء» in its middle. */
 export function Silent({ note, palette }: { note: string; palette: Palette }) {
   return (
     <View style={{ alignItems: 'center', gap: 4, paddingVertical: 4 }}>
@@ -27,7 +25,6 @@ export function Silent({ note, palette }: { note: string; palette: Palette }) {
   );
 }
 
-/** A dotted line; iOS draws no dotted border on one edge only, so a dotted box is clipped to its top edge. */
 function Dotted({ color }: { color: string }) {
   return (
     <View style={{ flex: 1, height: 1, overflow: 'hidden' }}>
@@ -36,7 +33,6 @@ function Dotted({ color }: { color: string }) {
   );
 }
 
-/** A dotted rule with the ayat it opens on in its middle, where a stretch of ayat begins. */
 export function Gap({ label, palette }: { label?: string; palette: Palette }) {
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginVertical: 2 }}>
@@ -47,7 +43,6 @@ export function Gap({ label, palette }: { label?: string; palette: Palette }) {
   );
 }
 
-/** A part's top rule: the fold chevron at its right end, and the part's ayat in the middle when there are any to name. */
 export function PartRule({ label, folded, onToggle, name, palette }: { label?: string; folded: boolean; onToggle: () => void; name: string; palette: Palette }) {
   const action = folded ? `افتح ${name}` : `اطوِ ${name}`;
   return (
@@ -61,7 +56,6 @@ export function PartRule({ label, folded, onToggle, name, palette }: { label?: s
   );
 }
 
-/** A side-by-side part's separator: the fold chevron and the part's surah and ayat at its start, and at its end the note that the other surah does not tell it. */
 export function StartRule({ label, note, folded, onToggle, palette }: { label: string; note?: string; folded: boolean; onToggle: () => void; palette: Palette }) {
   const action = folded ? `افتح ${label}` : `اطوِ ${label}`;
   return (

@@ -39,13 +39,11 @@ describe('the adhkar counter', () => {
     expect(web).toMatch(/useReducer\(counting, null\)/);
   });
 
-  // Owner, 2026-11-24: on the phone a ticked dhikr stays ticked until the day ends, and a new day starts with nothing said.
   it('the phone keeps each count until the day ends, each time and each dhikr on its own', () => {
     const morning = new Date(2026, 10, 24, 7, 0);
     const night = new Date(2026, 10, 24, 23, 59);
     const next = new Date(2026, 10, 25, 0, 1);
     const [a, b, evening] = [saidKey('morning', 'a'), saidKey('morning', 'b'), saidKey('evening', 'a')];
-    // Two of three on one, then another said: the first keeps its two.
     const counts = sayOnce(sayOnce(sayOnce({}, a, 3), a, 3), b, 1);
     const said = { day: localDay(morning), counts };
     expect(isSaidToday(said)).toBe(true);

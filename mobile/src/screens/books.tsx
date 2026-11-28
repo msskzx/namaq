@@ -23,19 +23,9 @@ import IconButton from '@/ui/IconButton';
 import { Tap } from '@/ui/Tap';
 import LoadingDots from '@/ui/LoadingDots';
 
-/** Tuhfat al-Atfal is a poem with a page of its own (screens/tuhfa.tsx), shelved with the books. It ships with the app and has nothing to manage. */
 export const TUHFA = { id: 'tuhfa', kind: 'التجويد', title: 'تحفة الأطفال', by: 'سليمان الجمزوري' } as const;
 const kindTitle = (book: Book) => BOOK_KINDS.find(kind => kind.kind === book.kind)?.title ?? '';
 
-/**
- * The library (owner, 2026-11-17): its own button in the tab bar, in the utilities' old place. Every book on a card a little taller than wide,
- * two to a row, no headings by kind until there are more books (the kind sits on each card). A reader book opens in the
- * book reader; the short i'rab and al-Itqan are read from an ayah's buttons in the mushaf, so their cards only say so.
- * Under a book only its «فاصلة», where the reader stopped: no counts of pages read.
- *
- * The books are managed here, not in the settings: the pencil turns on editing, where a downloaded book has a bin,
- * a built-in one an eye to hide it (hidden ones show only while editing, with an eye to bring them back), and the check ends it.
- */
 export default function LibraryScreen() {
   const palette = usePalette();
   const onScroll = useShrinkOnScroll();
@@ -43,17 +33,14 @@ export default function LibraryScreen() {
   const [editing, setEditing] = useState(false);
   useBooks();
   const scroll = useRef<ComponentRef<typeof ScrollView>>(null);
-  // The library button tapped again: editing ends and the shelf goes back to its top.
   useTabRetap('books', () => { setEditing(false); setQuery(''); scroll.current?.scrollTo({ y: 0, animated: true }); });
   const fasilas = useSyncExternalStore(subscribeFasilas, readFasilas, serverFasilas);
   const [query, setQuery] = useState('');
-  // The search in the top bar keeps the books whose title, author or kind holds the words typed.
   const held = (book: { title: string; by: string; kind: string }) => !query.trim() || holdsTerms(`${book.title} ${book.by} ${book.kind}`, query);
   const shown = BOOKS.filter(book => (editing || !(book.builtIn && bookState(book.id) === 'off')) && held({ ...book, kind: kindTitle(book) }));
   const tuhfa = held(TUHFA);
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      {/* The shelf opens from home's المكتبة, not from a button of the bar (owner, 2026-11-18), so it has a way back. */}
       <TopBar hideOnScroll back={() => (router.canGoBack() ? router.back() : toTab('/'))} search={{ value: query, onChangeText: setQuery, placeholder: 'ابحث في المكتبة', label: 'ابحث في المكتبة' }}>
         <IconButton Icon={editing ? Check : Pencil} label={editing ? 'تم' : 'تعديل الكتب'} onPress={() => setEditing(!editing)} on={editing} />
       </TopBar>
@@ -69,14 +56,11 @@ export default function LibraryScreen() {
   );
 }
 
-/** A book on the shelf; home's books card shows the same card, narrower (`width`). */
 export function BookCard({ book, palette, editing, fasila, width }: { book: Book; palette: Palette; editing: boolean; fasila: string | null; width?: number }) {
   const state = bookState(book.id);
   const reads = isReaderBook(book.id);
-  // A Sahih opens its kitabs on the hadith tab, there on the phone or not (its kitabs ship with the app).
   const open = book.kind === 'hadith' ? () => toTab({ pathname: '/hadith-book', params: { book: book.id } })
     : reads && state === 'on' ? () => toTab({ pathname: '/book', params: { id: book.id } }) : undefined;
-  // The card's last line: the فاصلة, or what the book is when there is none.
   const foot = state === 'failed' ? { text: 'تعذّر التنزيل', accent: true }
     : fasila && state === 'on' && !editing ? { text: `فاصلتك: ${fasila}`, accent: true, fasila: true }
     : book.kind === 'hadith' && state === 'on' && !editing ? { text: 'يُقرأ من تبويب الحديث', accent: false }
@@ -90,12 +74,10 @@ export function BookCard({ book, palette, editing, fasila, width }: { book: Book
   );
 }
 
-/** The card's one button: download (or retry) when the book is not on the phone; while editing, remove, hide or bring back. */
 function Action({ book, state, editing, palette }: { book: Book; state: BookState; editing: boolean; palette: Palette }) {
   if (state === 'downloading') return <View style={{ width: 44, height: 44, alignItems: 'center', justifyContent: 'center' }}><LoadingDots label={`ينزل ${book.title}`} /></View>;
   const on = state === 'on';
   if (on && !editing) return null;
-  // While editing, a download that failed can be dropped as well as retried.
   if (state === 'failed' && editing) return <Button Icon={Trash2} label={`احذف ${book.title}`} press={() => removeBook(book.id)} muted palette={palette} />;
   if (state === 'off' && book.builtIn && !editing) return null;
   const [Icon, label, press] = on
@@ -114,19 +96,14 @@ function Button({ Icon, label, press, muted, palette }: { Icon: typeof Trash2; l
   );
 }
 
-/** A book card's height over its width. */
 const BOOK_SHAPE = 1.2;
 
 type Foot = { text: string; accent: boolean; fasila?: boolean } | null;
 
 export function Shelf({ palette, label, onPress, kind, title, by, foot = null, action, faded = false, width }: { palette: Palette; label: string; onPress?: () => void;
   kind: string; title: string; by: string; foot?: Foot; action?: React.ReactNode; faded?: boolean; width?: number }) {
-  // Two to a row, a little taller than wide like a book (owner, 2026-11-18), and taller still when a long title or author
-  // needs the room (the row's other card grows with it).
   const shelf = (usePageWidth() - 32 - 12) / 2;
   const side = width ?? shelf;
-  // A card that opens is one link. One that does not (editing, or a book to download) is a plain view, so a screen reader
-  // reaches its button: a pressable card would read as one element with the button folded inside it.
   return (
     <Card palette={palette} gap={8} faded={faded} onPress={onPress} accessibilityRole={onPress ? 'link' : undefined} accessibilityLabel={onPress ? label : undefined}
       style={{ width: side, minHeight: Math.round(side * BOOK_SHAPE), justifyContent: 'space-between' }}>

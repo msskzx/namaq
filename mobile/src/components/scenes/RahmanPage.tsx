@@ -22,45 +22,31 @@ import { tafsirRuns } from '@shared/quran/tafsirSadi';
 import { ShareBrand } from '../SharePages';
 import MercyGalaxy from './MercyGalaxy';
 
-/**
- * A page of the «الرحمن» scene (owner, 2026-11-24, sketches /mnt/project-files/mashahid/rahman/paper3 and intro): a 4:5
- * paper page, the same picture in the scene and when shared, drawn at the share's width and scaled to the screen. Paper and
- * ink, only the name in colour; its title over it, the logo at its foot.
- */
 export const PAGE_W = 440;
 export const PAGE_H = 550;
 const EDGE = 10;
 const SIDE = 18;
 const HEAD = 28;
 const FOOT = 34;
-/** The width a page's blocks flow in. */
 export const BLOCK_W = PAGE_W - EDGE * 2 - 2 - SIDE * 2;
-/** Between two blocks: a short line in its middle. */
 export const BLOCK_GAP = 19;
-/** The height a page holds its blocks in. */
 export const PAGE_ROOM = PAGE_H - EDGE * 2 - 2 - 10 - 6 - HEAD - FOOT - 8;
-/** The hadith text sizes a section may take, biggest first: the biggest that needs no more pages than the smallest. */
 export const HADITH_SIZES = [22, 20, 18, 17, 15.5, 14] as const;
 
-/** The first page's name, over the map (owner, 2026-11-25: pages 1 and 7 merged), with its number in its medallion. */
 const TITLE_ZOOM = 1.8;
 
 const BUILT = builtHadith as Record<string, BuiltHadith>;
-// Read on first use, not when the app starts (the home feed imports this file): it walks the whole corpus.
 let places: WordPlace[] | null = null;
 let nameAt: Map<string, Set<number>> | null = null;
 const PLACES_OF = () => (places ??= rahmanPlaces(words));
 const NAME_AT_OF = () => (nameAt ??= new Map(PLACES_OF().map(place => [place.key, new Set(place.words)])));
-/** The keys of the ayat that hold the name, in the mushaf's order. */
 export const rahmanAyat = () => PLACES_OF().map(place => place.key);
 const BASMALAS = basmalasBySurah();
 const HADITH_COUNT = sceneHadithNumbers().length;
 const BOOK_TITLE = { bukhari: 'صحيح البخاري', muslim: 'صحيح مسلم' } as const;
 
-/** The scene's name on its foot and in its labels. */
 export const RAHMAN_NAME = 'الرحمن';
 
-/** «صحيح البخاري ٦٤٠٦، ٦٦٨٢ · صحيح مسلم ٢٦٩٤»: a hadith's numbers in both books. */
 export function hadithRef(id: string): string {
   const hadith = SCENE_HADITH_BY_ID[id];
   return hadithNumbers(hadith).map(({ book, numbers }) => {
@@ -74,11 +60,6 @@ function Ref({ children }: { children: string }) {
   return <Text style={{ color: paper.muted, fontSize: 13, lineHeight: 20, textAlign: 'center' }}>{children}</Text>;
 }
 
-/**
- * An ayah whole, its words that are the name in colour, and its surah's name over it (owner, 2026-11-25: the number is in
- * its medallion); the first page's name is the surah's own, so nothing repeats it, not even its number (owner, 2026-11-25). Its long press opens the
- * reader's menu.
- */
 function Ayah({ ayahKey, basmala, title }: { ayahKey: string; basmala?: boolean; title?: boolean }) {
   const lit = NAME_AT_OF().get(ayahKey);
   const text = ayahMushafWords(ayahKey);
@@ -93,7 +74,6 @@ function Ayah({ ayahKey, basmala, title }: { ayahKey: string; basmala?: boolean;
   );
 }
 
-/** Ayat of one surah that follow each other in one flow, each with its number, the surah's name over them. */
 function AyahRun({ keys, bare, breakAfter }: { keys: string[]; bare?: boolean; breakAfter?: string }) {
   return (
     <View style={{ gap: 2 }}>
@@ -110,9 +90,7 @@ function AyahRun({ keys, bare, breakAfter }: { keys: string[]; bare?: boolean; b
   );
 }
 
-/** Words of a book with the name in colour, and the Quran it quotes (﴿…﴾) in the mushaf font (AGENTS.md, "Quran text"). */
 function NamedText({ text, size, lit, before }: { text: string; size: number; lit?: string;
-  /** Words over it in the muted ink, in the same paragraph (a hadith's narrator). */
   before?: string }) {
   const colour = (run: { name: boolean; lit: boolean }) => (run.name ? { color: paper.accent } : run.lit ? { color: RAHMAN_ART.lit } : undefined);
   return (
@@ -126,7 +104,6 @@ function NamedText({ text, size, lit, before }: { text: string; size: number; li
   );
 }
 
-/** A hadith's words as the Sahih prints them (a part, with «…», where it runs too long for a page), and its numbers. */
 function Hadith({ id, size, live }: { id: string; size: number; live: boolean }) {
   const built = BUILT[id];
   const hadith = SCENE_HADITH_BY_ID[id];
@@ -138,7 +115,6 @@ function Hadith({ id, size, live }: { id: string; size: number; live: boolean })
       <Ref>{hadithRef(id)}</Ref>
     </View>
   );
-  // A tap on it opens the hadith whole on its page; the row lays out as the block does (a column, taller than a finger).
   return live
     ? <TapRow onPress={() => openSahih(hadith.book, hadith.n)} role="link" label={`افتح الحديث كاملًا: ${hadithRef(id)}`} style={{ flexDirection: 'column' }}>{body}</TapRow>
     : body;
@@ -146,10 +122,6 @@ function Hadith({ id, size, live }: { id: string; size: number; live: boolean })
 
 const GALAXY_H = 120;
 
-/**
- * The hundred parts of mercy (sketch B, owner 2026-11-25), small over the hadith: ninety-nine kept, the hundredth left pale,
- * sent down to the earth and spread over all creation, drawn as a galaxy (owner: «موزعة على جميع المخلوقات… الكون»).
- */
 function MercyParts() {
   const COLUMNS = 25;
   const DOT = 5;
@@ -175,7 +147,6 @@ function MercyParts() {
   );
 }
 
-/** «فبأي آلاء ربكما تكذبان» in al-Kirmani's four runs: a dot for each time, each run named in his words. */
 function TikrarRuns() {
   const DOT = 10;
   return (
@@ -193,7 +164,6 @@ function TikrarRuns() {
   );
 }
 
-/** Al-Kirmani's words on a repeated ayah, whole, with his book and page. */
 function Kirmani({ ayahKey }: { ayahKey: string }) {
   const citation = kirmaniOn(ayahKey);
   return (
@@ -211,11 +181,6 @@ const PLOT_NAME_W = 52;
 const PLOT_COUNT_W = 18;
 const PLOT_COLUMNS = 2;
 
-/**
- * The first page under the name (owner, 2026-11-25, chose «أعمدة أفقية»; then: the name only, in red, counted inside the
- * surah and not over it): a row for every surah whose ayat hold the name, in the mushaf's order, its name, a bar as long
- * as its places and their count; one line under it for the basmalas and the hadith.
- */
 function CoverPlot() {
   const bars = surahBars(PLACES_OF()).map((bar, i) => ({ surah: i + 1, count: bar.name + bar.both })).filter(bar => bar.count > 0);
   const basmalas = BASMALAS.reduce((sum, n) => sum + n, 0);
@@ -242,7 +207,6 @@ function CoverPlot() {
   );
 }
 
-/** Al-Sa'di on the surah's opening, in his words. */
 function Sadi() {
   const passage = tafsirSadiOf(SADI_OPENING.key);
   if (!passage) return null;
@@ -255,7 +219,6 @@ function Sadi() {
   );
 }
 
-/** One block of a page. `live`: a tap opens the hadith (never on the introduction, owner 2026-11-24: it shares clean). */
 export function RahmanBlockView({ block, size, live }: { block: RahmanBlock; size: number; live: boolean }) {
   switch (block.kind) {
     case 'ayah': return <Ayah ayahKey={block.key} basmala={block.basmala} title={block.title} />;
@@ -269,7 +232,6 @@ export function RahmanBlockView({ block, size, live }: { block: RahmanBlock; siz
   }
 }
 
-/** A whole page: its title, its blocks with a short line between them, and the logo at its foot. */
 export function RahmanPage({ title, blocks, size, live }: { title: string; blocks: RahmanBlock[]; size: number; live: boolean }) {
   return (
     <View style={{ width: PAGE_W, height: PAGE_H, backgroundColor: paper.paper, padding: EDGE, direction: 'rtl' }}>
@@ -294,7 +256,6 @@ export function RahmanPage({ title, blocks, size, live }: { title: string; block
   );
 }
 
-/** A page drawn at its own size and scaled into `width` (the scene, the list's cover). */
 export function ScaledPage({ width, children }: { width: number; children: React.ReactNode }) {
   const scale = width / PAGE_W;
   return (

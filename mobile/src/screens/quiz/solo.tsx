@@ -23,13 +23,10 @@ import { readSettings, setRun, useRun, writeSettings } from '@/lib/soloStore';
 import { usePalette } from '@/lib/theme';
 import Card from '@/ui/Card';
 
-/** What each kind is called on its chip. */
 const KIND_NAMES = { BRANCHES: 'متشابهات القرآن', ...Object.fromEntries(CHOICE_KINDS.map(kind => [kind.id, kind.name])) } as Record<QuizTopic, string>;
 
-/** The solo quiz setup: the kinds of question mixed, the part of the Quran (the branches tab's filters), how many leaves to type per tree, how many questions. */
 export default function SoloSetup() {
   const palette = usePalette();
-  // «الأسئلة مما أحفظ فقط» on: the setup opens on what is memorized (settings, «ما أحفظه»); the range can still be changed here.
   const [settings, setSettings] = useState<SoloSettings>(() => {
     const saved = readSettings();
     const memorized = readMemorized();
@@ -42,7 +39,6 @@ export default function SoloSetup() {
     setSettings(clean);
     writeSettings(clean);
   };
-  // The branches tab's filter fields; a range still being picked keeps the last whole one.
   const [draft, setDraftState] = useState<FilterDraft>(() => draftOf({ ...EMPTY_LIST, ...settings.list }));
   const setDraft = (next: FilterDraft) => {
     setDraftState(next);
@@ -52,21 +48,16 @@ export default function SoloSetup() {
   useSyncExternalStore(subscribeBookmarks, readBookmarks);
   const { available, lengths } = availability(settings);
   const trees = settings.kinds.includes('BRANCHES');
-  // Recite, «في أي سورة؟» and the written kinds are asked on the ayah's mushaf page (owner, 2026-11-17).
   const onPage = settings.kinds.some(kind => PAGE_TOPICS.includes(kind));
   const [pageBefore, setPageBefore] = quizPageBefore.use();
-  // A kind that does not ask the Quran (the Tuhfa's lines) has no range to pick.
   const ranged = settings.kinds.some(kind => RANGED_TOPICS.includes(kind));
-  // At least one kind stays picked.
   const toggleKind = (kind: QuizTopic) => {
     const kinds = settings.kinds.includes(kind) ? settings.kinds.filter(item => item !== kind) : [...settings.kinds, kind];
     if (kinds.length) change({ kinds });
   };
-  // A length the range cannot fill gives way to the first one it can, as on the website.
   const length = lengths.includes(settings.length as never) ? settings.length : lengths[0];
   const start = () => {
     setBuilding(true);
-    // Building the trees of a narrow juz range takes a moment; the loader shows first.
     requestAnimationFrame(() => setTimeout(() => {
       setRun(startSolo({ ...settings, length }));
       setBuilding(false);

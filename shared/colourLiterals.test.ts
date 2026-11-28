@@ -1,8 +1,5 @@
-// Guard (owner sign-off 2026-11-19, docs/plans/guard-proposals.md no. 17): colour values live only in the theme files,
-// src/app/theme.css on the website and mobile/src/lib/theme.ts in the app (AGENTS.md "Documentation", docs/palette.md),
-// so a theme change reaches every screen. colourLiterals.baseline.json lists today's other files with their counts; a
-// file may never hold more, and one that holds fewer has its count lowered
-// (`UPDATE_BASELINE=1 npx vitest run colourLiterals`), so the list only shrinks.
+// see docs/plans/guard-proposals.md
+// see docs/palette.md
 import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
@@ -34,7 +31,6 @@ describe('colour values live only in the theme files', () => {
   it('no file holds more colour values than the baseline lists, and the list only shrinks', () => {
     const now = counts();
     const baseline: Record<string, number> = JSON.parse(readFileSync(BASELINE, 'utf8'));
-    // Rewriting the list only lowers it: a file over its count still fails below.
     if (process.env.UPDATE_BASELINE) {
       const lowered = Object.fromEntries(Object.entries(baseline).filter(([path]) => now[path]).map(([path, n]) => [path, Math.min(n, now[path])]));
       writeFileSync(BASELINE, `${JSON.stringify(lowered, null, 2)}\n`);

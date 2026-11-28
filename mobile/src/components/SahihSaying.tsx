@@ -7,13 +7,11 @@ import Folded from '@/ui/Folded';
 import SourceLine, { sourcesOf } from '@/ui/SourceLine';
 import type { Palette } from '@/lib/theme';
 
-/** The narrator's own opening, up to the first quote mark when no sentence ends before it («قَالَ: سَمِعْتُ عَلِيًّا يَقُولُ: «»): muted. */
 const leadOf = (words: string) => {
   const at = words.search(/[«"“]/);
   return at > 0 && !/[.؟!]/.test(words.slice(0, at)) ? at : 0;
 };
 
-/** One route: its chain folded (shown on a tap, never left out), then from its last narrator on, his name lit. */
 function Route({ quote, names, palette, size, tone, marked }: { quote: SahihQuote; names: readonly string[]; palette: Palette; size: number; tone?: string; marked?: boolean }) {
   const lead = leadOf(quote.words);
   return (
@@ -33,11 +31,6 @@ function Route({ quote, names, palette, size, tone, marked }: { quote: SahihQuot
   );
 }
 
-/**
- * A report the Sahih gives, in its words (owner, 2026-11-25, sketch data-plan/shots/siyar-sahih-sketch2.png): the route
- * closest to the Siyar's words open, its chain folded; one line under it, «صحيح البخاري (٤٠٥٨)، وذكره غيره», opening every
- * place it is (the Siyar's page too); the other routes the Siyar's editor names folded under it, each opened at will.
- */
 export default function SahihSaying({ fact, names, palette, tone, marked }: { fact: PersonFact; names: readonly string[]; palette: Palette; tone?: string; marked?: boolean }) {
   const [first, ...rest] = fact.sahih!;
   const books = sourcesOf(sahihSources(fact));

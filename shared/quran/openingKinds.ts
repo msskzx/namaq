@@ -1,5 +1,4 @@
-// The surah openings page (owner, 2026-11-13): every surah under one of the ten kinds of opening that al-Suyuti lists
-// in al-Itqan (النوع الستون, after Abu Shama), and cards of surahs whose openings look alike. docs/plans/quran-openings-kinds.md
+// see docs/plans/quran-openings-kinds.md
 import { sharedByAll } from './ayahContext';
 import type { BranchAyah } from './branches';
 import type { Likeness } from './wordMatch';
@@ -20,16 +19,10 @@ export const OPENING_KINDS: { id: OpeningKindId; label: string; surahs: number[]
   { id: 'reason', label: 'التعليل', surahs: [106] },
 ];
 
-/**
- * Al-Suyuti's words for each kind, quoted from al-Itqan, ed. Muhammad Abu al-Fadl Ibrahim (al-Hay'a al-Misriyya, 1974),
- * vol. 3 pp. 361-363, linked to the page in the Shamela library. The punctuation is ours.
- */
-/** A quote and the page it cites; one with no page is our own note on the quotes above it. */
 type Quote = { text: string; cite?: string; url?: string };
 
 const itqan = (page: string, sh: number) => ({ cite: `السيوطي، الإتقان ٣/${page}`, url: `https://shamela.ws/book/11728/${sh}` });
 
-/** Al-Zarkashi, al-Burhan fi 'Ulum al-Quran, ed. Muhammad Abu al-Fadl Ibrahim (Dar Ihya' al-Kutub al-'Arabiyya, 1957). */
 const burhan = (page: string, sh: number) => ({ cite: `الزركشي، البرهان ${page}`, url: `https://shamela.ws/book/11436/${sh}` });
 
 export const ITQAN_OPENING = { text: 'اعلم أن الله افتتح سور القرآن بعشرة أنواع من الكلام لا يخرج شيء من السور عنها', ...itqan('٣٦١', 1125) };
@@ -48,8 +41,6 @@ export const ITQAN_QUOTES: { kind: OpeningKindId; text: string; cite: string; ur
 ];
 
 
-/** Under each kind's quote: what al-Suyuti leaves unnamed and how the page fills it in, the remarks he quotes about that kind, and
- * al-Zarkashi's words where al-Burhan names what al-Itqan leaves out or sets two of the kind's openings side by side. */
 export const ITQAN_KIND_NOTES: Partial<Record<OpeningKindId, Quote[]>> = {
   praise: [{ text: 'لم يسمّ سور التحميد وتبارك، فهي التي تبدأ بهما. وسمّى الكرماني فيما نقله ستًّا من سبع سور للتسبيح، والسابعة الصف.' }],
   letters: [{ text: 'لم يسمّها، فهي السور التي تبدأ بحروف التهجي.' }],
@@ -65,18 +56,8 @@ export const ITQAN_KIND_NOTES: Partial<Record<OpeningKindId, Quote[]>> = {
 };
 
 
-/**
- * Al-Suyuti on surahs whose openings go together, from Tanasuq al-Durar (Dar al-Fadila, 2002), linked to the page in the
- * Shamela library. His own words with the editor's footnote marks left out;
- * words in [] are ours, naming the surah he means, and so is the punctuation.
- */
 const tanasuq = (page: string, sh: number) => ({ cite: `السيوطي، تناسق الدرر ص${page}`, url: `https://shamela.ws/book/9992/${sh}` });
 
-/**
- * A card's surahs, under the kind most of them share. `parts` splits a card whose surahs open with two kinds (الزمر and
- * الحواميم). `refs` quote the book that puts the surahs together; a card with none is our own grouping. `alone` holds the
- * rest of a kind.
- */
 type CardDef = { id: string; kind: OpeningKindId; title: string; surahs: number[]; alone?: true; parts?: { label: string; surahs: number[] }[]; refs?: Quote[] };
 
 export const OPENING_CARDS: CardDef[] = [
@@ -144,28 +125,20 @@ export const OPENING_CARDS: CardDef[] = [
 
 export const kindOf = (surah: number) => OPENING_KINDS.find(kind => kind.surahs.includes(surah))!.id;
 
-/** A kind's cards: its own, and a card with a part of that kind (الزمر under «الخبر»). */
-/** A card that is its kind's only card: the kind heading above already names it, so the page shows no card title (the share image keeps it). */
 export const soleCard = (card: { kind: OpeningKindId }) => OPENING_CARDS.filter(def => def.kind === card.kind).length === 1;
 
 export const inKind = (card: OpeningCard, kind: OpeningKindId) => card.kind === kind || card.rows.some(row => kindOf(row.surah) === kind);
 
-/** The opening a card shows: the first ayah (the Fatiha's after the basmala), and the next one too when the first has two words or fewer. */
 export function openingKeys(surah: number, words: (key: string) => string[]): string[] {
   if (surah === 1) return ['1:2'];
   return words(`${surah}:1`).length <= 2 ? [`${surah}:1`, `${surah}:2`] : [`${surah}:1`];
 }
 
-/** A word's colour, by the rule every view uses (shared/quran/wordMatch.ts): how alike, and whether only `some` rows share it. */
 export type OpeningMark = { kind: Likeness; some: boolean; link: string };
 export type OpeningWord = { text: string; mark?: OpeningMark } | { end: number };
 export type OpeningRow = { surah: number; words: OpeningWord[] };
 export type OpeningCard = { id: string; kind: OpeningKindId; title: string; alone: boolean; rows: OpeningRow[]; parts?: { label: string; surahs: number[] }[]; refs?: Quote[] };
 
-/**
- * The cards with their rows. Words the rows share are lined up and coloured as in the matrix (`sharedByAll`), one row being
- * a surah's opening; the cards of surahs that stand alone colour nothing.
- */
 export function openingCards(ayahOf: (key: string) => BranchAyah | undefined): OpeningCard[] {
   const words = (key: string) => ayahOf(key)?.words ?? [];
   return OPENING_CARDS.map(card => {
@@ -193,7 +166,6 @@ export function openingCards(ayahOf: (key: string) => BranchAyah | undefined): O
 }
 
 
-/** The other surahs whose opening is on the same card (none for a surah that stands alone). */
 export function openingLike(surah: number): { card: string; kind: OpeningKindId; surahs: number[] } | null {
   const card = OPENING_CARDS.find(c => !c.alone && c.surahs.includes(surah));
   return card ? { card: card.id, kind: card.kind, surahs: card.surahs.filter(s => s !== surah) } : null;
@@ -201,24 +173,20 @@ export function openingLike(surah: number): { card: string; kind: OpeningKindId;
 
 export const openingHref = (card: string, kind: OpeningKindId) => `/quran/openings?kind=${kind}#${card}`;
 
-// إذا السماء: the conditions from the first ayah to their answer, as the page showed them before the rework.
 export type ConditionRole = 'condition' | 'answer';
 
-/** The span of conditions and the ayah that answers them; al-Inshiqaq's answer is disputed, so its span is the five conditions alone. */
 export const CONDITION_SPANS: Record<number, { to: number; answer?: number }> = {
   81: { to: 14, answer: 14 },
   82: { to: 5, answer: 5 },
   84: { to: 5 },
 };
 
-/** Each ayah of the span with its role. */
 export function conditionLines(surah: number): { key: string; role: ConditionRole }[] {
   const span = CONDITION_SPANS[surah];
   if (!span) return [];
   return Array.from({ length: span.to }, (_, i) => ({ key: `${surah}:${i + 1}`, role: i + 1 === span.answer ? 'answer' : 'condition' }));
 }
 
-/** What the mufassirun say of each surah's answer, with where they say it. */
 export const CONDITION_NOTES: Record<number, { text: string; source: { title: string; url: string } }> = {
   81: { text: 'قال الطبري والقرطبي إن «علمت نفس ما أحضرت» جواب «إذا» وما قبلها.', source: { title: 'الطبري والقرطبي في تفسير التكوير ١٤', url: 'https://quran.ksu.edu.sa/tafseer/ibn-tabary-qortobi-saadi/sura81-aya14.html' } },
   82: { text: 'قال القرطبي في «علمت نفس ما قدمت وأخرت»: وهذا جواب «إذا السماء انفطرت».', source: { title: 'القرطبي في تفسير الانفطار ٤', url: 'https://quran.ksu.edu.sa/tafseer/qortobi/sura82-aya4.html' } },
@@ -227,31 +195,19 @@ export const CONDITION_NOTES: Record<number, { text: string; source: { title: st
 
 export const OPENINGS_LEGEND = 'الكلمة الملوّنة تشترك فيها كل سور البطاقة، والباهتة يشترك فيها بعضها، كما في المصفوفة. والبطاقات على ما جمعه السيوطي، ونصه تحت عنوان النوع أو البطاقة. والنص برواية حفص.';
 
-/** Letters only, without the alifs the mushaf writes as a mark or a letter («ٱلۡكِتَٰبِ» and a typed «الكتاب» meet). */
-/** Typed or mushaf text as one plain form: no marks, one alif and one yeh, ة as ه. */
 const plain = (text: string) => normalizeWord(text).replace(/\s+/g, ' ').trim();
-/**
- * The letters a word keeps whatever its spelling: the mushaf writes some alifs small or not at all, the hamza on its own
- * (القرءان), and ىٰ or ۦ where typed text has ا or ي (أتىٰك, إۦلٰفهم). Leaving out ا, ء and ي matches the two.
- */
 const skeleton = (word: string) => word.replace(/[اءي]/g, '');
-/** A word with and without a joined و or ف and ال, so «قرآن» finds وَٱلۡقُرۡءَانِ and «القرآن» finds وَقُرۡءَانٖ. */
 const forms = (word: string) => {
   const bare = word.length > 3 ? word.replace(/^[وف]/, '') : word;
   const noAl = bare.replace(/^ال/, '');
   return noAl.length >= 3 ? [word, bare, noAl] : [word, bare];
 };
-/** A typed word found in a row's word: a short one (يس, ص, الم) only as the whole word, a longer one as its start or with the same letters. */
 const wordFound = (typed: string, word: string) => {
   const own = typed.replace(/^ال/, '');
   return [typed, ...(own.length >= 3 ? [own] : [])].some(t => forms(word).some(form =>
     typed.length <= 3 ? form === t : form.startsWith(t) || (t.length >= 4 && skeleton(form) === skeleton(t))));
 };
 
-/**
- * The page's search: a card with a row whose surah name is the typed text (or starts with it, from four letters), or
- * whose opening has every typed word.
- */
 export function openingFound(card: OpeningCard, query: string, nameOf: (surah: number) => string): boolean {
   const typed = plain(query);
   if (!typed) return true;

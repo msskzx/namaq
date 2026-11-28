@@ -9,7 +9,6 @@ export async function fontFace() {
     + face(UI_FONT, require('../../assets/fonts/Amiri-Bold.ttf'), 'bold');
 }
 
-/** The browser's share sheet with the file, or a download where it cannot share files. */
 export async function shareVideo(data: string, mime: string) {
   const bytes = Uint8Array.from(atob(data), c => c.charCodeAt(0));
   const file = new File([bytes], `namaq-tree.${mime.includes('mp4') ? 'mp4' : 'webm'}`, { type: mime });

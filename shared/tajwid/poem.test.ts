@@ -26,7 +26,6 @@ describe('Tuhfat al-Atfal', () => {
   });
 
   it('marks the lam of al- before a moon letter with a sukun, in titles and verses alike', () => {
-    // A bare lam followed by a vowelled letter that has no shadda: «المِيمِ» instead of «الْمِيمِ».
     const bare = /(^| )(وَ|فَ|بِ|لِ|كَ)?ال[ء-ي][َُِ](?!ّ)/;
     for (const chapter of poem.chapters) for (const text of [chapter.title, ...chapter.verses.flat()]) expect(text).not.toMatch(bare);
   });

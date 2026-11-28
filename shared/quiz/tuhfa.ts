@@ -1,5 +1,3 @@
-// Tuhfat al-Atfal's question kinds (owner, 2026-11-13): complete a verse, the next verse, and a letter's rule.
-// They ask the poem, not the Quran, so the juz range, filters and difficulty do not apply.
 import { completeQuestions, nextQuestions, ruleQuestions, TUHFA_COMPLETE, TUHFA_NEXT, TUHFA_RULE } from '../tajwid/questions';
 import type { ChoiceKind, ChoiceQuestion } from './choiceKinds';
 import { shuffle, type Random } from './random';

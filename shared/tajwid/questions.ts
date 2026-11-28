@@ -1,5 +1,3 @@
-// Tuhfat al-Atfal multiple-choice questions (owner, 2026-11-13): kinds mixed into the shared quiz, not a quiz of their own.
-// Every answer comes from the poem itself: its verses, and the letters it names for each rule.
 import { num } from '../quran/arabicNumber';
 import type { ChoiceQuestion } from '../quiz/choiceKinds';
 import type { QuizSource } from '../quiz/sources';
@@ -15,10 +13,8 @@ export const verses: NumberedVerse[] = numberVerses(poemData as Poem).flatMap(ch
 const verse = (number: number) => verses[number - 1];
 const whole = (number: number) => `${verse(number).first} ۞ ${verse(number).second}`;
 const noteOf = (number: number) => ({ label: `البيت ${num(number)}`, text: whole(number) });
-/** The poem, at the verse that answers (shown whole in the note). */
 const sourcesOf = (number: number): QuizSource[] => [{ book: 'تحفة الأطفال', author: 'سليمان الجمزوري', at: `البيت ${num(number)}` }];
 
-/** The letters the poem names for each rule, and the verse that names them (checked against the text in questions.test.ts). */
 export const NOON_RULES = [
   { rule: 'الْإِظْهَارُ', letters: 'ءهعحغخ', verse: 8 },
   { rule: 'إِدْغَامٌ بِغُنَّةٍ', letters: 'ينمو', verse: 10 },
@@ -38,16 +34,11 @@ export const LAM_RULES = [
 
 type Rules = readonly { rule: string; letters: string; verse: number }[];
 
-/** A half's rhyme: its last letter, past the vowels and a long vowel that only draws the rhyme out (الْجَمْزُورِي, الطُّلَّابَا). */
 export const rhyme = (text: string) => {
   const bare = text.replace(/[ً-ْٰ]/g, '').trim();
   return (bare.length > 1 ? bare.replace(/[اىوي]$/, '') : bare).slice(-1);
 };
 
-/**
- * Three wrong verse halves beside the right one. Both halves of a verse rhyme, so the wrong ones share its rhyme where
- * the poem has enough, else they come from the nearest verses; the verse shown in the prompt is never offered.
- */
 function halfChoices(right: string, near: number, half: 'first' | 'second', shown: number, random: Random) {
   const pool = verses.filter(item => item[half] !== right && item.number !== shown);
   const rhyming = shuffle(pool.filter(item => rhyme(item[half]) === rhyme(right)), random);
@@ -56,7 +47,6 @@ function halfChoices(right: string, near: number, half: 'first' | 'second', show
   return shuffle([right, ...wrong], random).map(text => ({ value: text, labelArabic: text }));
 }
 
-/** Complete the verse: its first half is shown, its second half picked. */
 export function completeQuestions(random: Random): ChoiceQuestion[] {
   return verses.map(({ number, first, second }) => ({
     key: `tuhfa:complete:${number}`,
@@ -71,7 +61,6 @@ export function completeQuestions(random: Random): ChoiceQuestion[] {
   }));
 }
 
-/** The next verse: a verse is shown, the first half of the one after it picked. */
 export function nextQuestions(random: Random): ChoiceQuestion[] {
   return verses.slice(0, -1).map(({ number }) => ({
     key: `tuhfa:next:${number}`,
@@ -88,7 +77,6 @@ export function nextQuestions(random: Random): ChoiceQuestion[] {
 
 function letterQuestions(name: string, rules: Rules, prompt: (letter: string) => string, random: Random): ChoiceQuestion[] {
   return rules.flatMap(({ rule, letters, verse: number }) => [...letters].map(letter => {
-    // Four rules at most: the right one and three others (noon has five).
     const others = shuffle(rules.filter(item => item.rule !== rule), random).slice(0, 3).map(item => item.rule);
     return {
       key: `tuhfa:${name}:${letter}`,
@@ -106,7 +94,6 @@ function letterQuestions(name: string, rules: Rules, prompt: (letter: string) =>
 
 const shown = (letter: string) => (letter === 'ء' ? 'الْهَمْزَةُ' : `«${letter}»`);
 
-/** The rule for a letter: after noon sakinah or tanween, after meem sakinah, and after the lam of al. */
 export function ruleQuestions(random: Random): ChoiceQuestion[] {
   return [
     ...letterQuestions('noon', NOON_RULES, letter => `نُونٌ سَاكِنَةٌ أَوْ تَنْوِينٌ فِي آخِرِ كَلِمَةٍ، وَأَوَّلُ الَّتِي بَعْدَهَا ${shown(letter)}: مَا حُكْمُهَا؟`, random),

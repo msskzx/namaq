@@ -1,5 +1,4 @@
-// Guard (owner sign-off 2026-11-19, docs/plans/guard-proposals.md no. 22, R0018): every phone feature ships on the website
-// in the same build. shared/pages.ts lists each page with its app route and its website page.
+// see docs/plans/guard-proposals.md, R0018
 import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
@@ -16,9 +15,7 @@ function walk(dir: string): string[] {
   });
 }
 
-/** The app's route files: every screen under mobile/src/app but layouts and expo-router's own (+not-found…). */
 const appRoutes = () => walk('mobile/src/app').filter(path => /\.tsx$/.test(path) && !/\/(_layout|\+[^/]*)\.tsx$/.test(path)).map(path => path.slice('mobile/src/app/'.length));
-/** The website's pages, as folders under src/app ('' is the home page); route groups in brackets stay in the path. */
 const webPages = () => walk('src/app').filter(path => path.endsWith('/page.tsx')).map(path => path.slice('src/app/'.length, -'/page.tsx'.length).replace(/^page\.tsx$/, ''));
 
 describe('one page list for app and website', () => {
@@ -40,7 +37,6 @@ describe('one page list for app and website', () => {
   it('gives every page both sides, unless it says why, or waits on the list from before the guard', () => {
     const missing = PAGES.filter(page => !(page.app?.length && page.web?.length) && !page.only).map(page => `${page.id}: no ${page.app?.length ? 'website page' : 'app route'}`);
     const known: string[] = JSON.parse(readFileSync(BASELINE, 'utf8'));
-    // Rewriting the list only drops pages that now have both sides.
     if (process.env.UPDATE_BASELINE) writeFileSync(BASELINE, `${JSON.stringify(known.filter(line => missing.includes(line)), null, 2)}\n`);
     expect(missing.filter(line => !known.includes(line)), 'build the other side, or say why with `only`').toEqual([]);
     expect(known.filter(line => !missing.includes(line)), 'done: run with UPDATE_BASELINE=1').toEqual([]);

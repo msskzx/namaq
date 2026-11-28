@@ -11,13 +11,8 @@ const known = (date: Date) => !Number.isNaN(date.getTime());
 
 type Next = { key: PrayerKey; at: Date; left: number };
 
-/** The next prayer's name, time and the time left, read out as one line. */
 const nextLabel = (next: Next) => `الصلاة التالية ${PRAYER_NAMES[next.key]} ${clock(next.at, true)}، ${inMinutes(next.left)}`;
 
-/**
- * The day as a 24-hour dial (owner, 2026-11-24): noon on top, the day an amber arc from sunrise to maghrib, the dawn and
- * dusk light grey, each prayer a point at its time, a dashed hand at the moment, and the next prayer in the middle.
- */
 export function DayDial({ times, now, next, palette }: { times: PrayerDay; now: Date; next: Next; palette: Palette }) {
   const [width, setWidth] = useState(0);
   const size = Math.min(width, 340);
@@ -25,7 +20,6 @@ export function DayDial({ times, now, next, palette }: { times: PrayerDay; now: 
   const m = (key: PrayerKey) => dayMinute(times[key]);
   const arc = (from: PrayerKey, to: PrayerKey, color: string) =>
     known(times[from]) && known(times[to]) ? <Path d={dialArc(m(from), m(to), r)} stroke={color} strokeWidth={14} fill="none" strokeLinecap="round" /> : null;
-  // The moment as a short dashed hand near the rim, clear of the next prayer in the middle.
   const [hx, hy] = onCircle(dialAngle(dayMinute(now)), r - 26);
   const [tx, ty] = onCircle(dialAngle(dayMinute(now)), r - 62);
   return (
@@ -74,7 +68,6 @@ export function DayDial({ times, now, next, palette }: { times: PrayerDay; now: 
   );
 }
 
-/** The six times under the dial, three to a row, each with its bell, so the exact minute and the adhan switch are a glance away. */
 export function TimeCells({ times, next, palette, bell }: { times: PrayerDay; next: Next; palette: Palette; bell: (key: PrayerKey) => React.ReactNode }) {
   return (
     <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 6 }}>
@@ -98,15 +91,10 @@ export function TimeCells({ times, next, palette, bell }: { times: PrayerDay; ne
 const LINE = 480;
 const ROW = 34;
 
-/**
- * The day as a line from midnight down to midnight (owner, 2026-11-24): the sky's colour by the hour beside it, each time
- * at its place on the line (pushed apart only where two would touch), and a dashed line at the moment with the time left.
- */
 export function DayLine({ times, now, next, palette, bell }: { times: PrayerDay; now: Date; next: Next; palette: Palette; bell: (key: PrayerKey) => React.ReactNode }) {
   const keys = ALL.filter(key => known(times[key]));
   const rows = lineRows(keys.map(key => dayMinute(times[key])), LINE - ROW, ROW);
   const at = (key: PrayerKey) => known(times[key]) ? dayMinute(times[key]) / DAY_MINUTES : null;
-  // The sky's stops: night, the dawn light from fajr to sunrise, day to maghrib, the dusk light to isha, night.
   const stops: [number | null, string][] = [[at('fajr'), DAY_SKY.night], [at('sunrise'), DAY_SKY.glow], [at('sunrise'), DAY_SKY.day], [at('maghrib'), DAY_SKY.day], [at('maghrib'), DAY_SKY.glow], [at('isha'), DAY_SKY.night]];
   const nowY = (dayMinute(now) / DAY_MINUTES) * LINE;
   return (
@@ -145,10 +133,6 @@ export function DayLine({ times, now, next, palette, bell }: { times: PrayerDay;
   );
 }
 
-/**
- * The Hijri month as its moons (owner, 2026-11-24, under the qibla): each day's moon drawn from its number, the days gone
- * faded and today ringed. `days` is the month's length; `today` its day, or null on a phone without the Hijri calendar.
- */
 export function MonthMoons({ days, today, palette }: { days: number; today: number; palette: Palette }) {
   const R = 9;
   return (

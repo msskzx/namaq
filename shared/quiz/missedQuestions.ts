@@ -1,9 +1,6 @@
-// A feed question answered wrong comes back (owner, 2026-11-19): after the rests a remembered ayah takes (shared/ayahMarks.ts
-// REST_DAYS), in its interest's turn. A right answer lets it go. Nothing here is counted or shown.
 import { keyStore } from '../storage';
 import { REST_DAYS } from '../ayahMarks';
 
-/** Each missed question by `kind:seed`: how many times it was missed in a row and when it is due again (ms). */
 export type Missed = Record<string, { kind: string; seed: number; step: number; due: number }>;
 
 const NONE: Missed = {};
@@ -29,7 +26,6 @@ export const subscribeMissed = store.subscribe;
 
 const idOf = (kind: string, seed: number) => `${kind}:${seed}`;
 
-/** The question was answered: wrong puts it to rest for the next, longer rest; right lets it go. */
 export function answeredQuestion(kind: string, seed: number, right: boolean, now = Date.now()) {
   const missed = readMissed();
   const id = idOf(kind, seed);
@@ -44,6 +40,5 @@ export function answeredQuestion(kind: string, seed: number, right: boolean, now
   store.write(JSON.stringify({ ...missed, [id]: { kind, seed, step, due: now + REST_DAYS[step - 1] * DAY } }));
 }
 
-/** The seeds of `kind` due again now, the longest waiting first. */
 export const dueSeeds = (missed: Missed, kind: string, now = Date.now()) =>
   Object.values(missed).filter(item => item.kind === kind && item.due <= now).sort((a, b) => a.due - b.due).map(item => item.seed);

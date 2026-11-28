@@ -2,7 +2,6 @@ import { keys, type Branch, type BranchAyah } from './branches';
 import { normalizeWord } from './normalize';
 import { createPhrasePresenter, type TreeGroup } from './phraseTrees';
 
-/** An inner node of a full-Quran tree: its trunk phrase from the tree's shared words down to the node, and its ayat. */
 export type Subtree = { id: string; text: string; parent: string; keys: string[] };
 export type SubtreeGroup = TreeGroup & { parent: string };
 
@@ -15,10 +14,6 @@ const compareKeys = (a: string, b: string) => {
 };
 export const keySet = (ayahKeys: string[]) => [...new Set(ayahKeys)].sort(compareKeys).join(' ');
 
-/**
- * Every inner node of every tree, keyed by its phrase, which opens as the tree's text does (no leading و / ف). A phrase two different nodes share (or a tree's id)
- * gets, after a ~, the first of its ayat no other node with that phrase holds, or else all its ayat; the same phrase over the same ayat in two trees is one subtree.
- */
 export function buildSubtrees(trees: TreeGroup[], ayat: BranchAyah[]): { trees: TreeGroup[]; subtrees: Subtree[] } {
   const present = createPhrasePresenter(ayat);
   const found = new Map<string, { phrase: string; text: string; parent: string; keys: string[]; parents: string[] }>();
@@ -58,7 +53,6 @@ export function buildSubtrees(trees: TreeGroup[], ayat: BranchAyah[]): { trees: 
   };
 }
 
-/** Subtrees as tree groups (the parent's occurrences of their ayat), and each tree's subtree ids by ayat. */
 export function subtreeIndex(trees: TreeGroup[], subtrees: Subtree[]) {
   const treeById = new Map(trees.map(tree => [tree.id, tree]));
   const groups: SubtreeGroup[] = subtrees.map(subtree => {
@@ -69,7 +63,6 @@ export function subtreeIndex(trees: TreeGroup[], subtrees: Subtree[]) {
   });
   const byId = new Map(groups.map(group => [group.id, group]));
   const idsByTree = new Map<string, Record<string, string>>();
-  /** The subtree id of every inner node of `group`'s tree, keyed by keySet of the node's ayat. */
   const idsFor = (group: { id: string; parent?: string }) => {
     const treeId = group.parent ?? group.id;
     if (!idsByTree.has(treeId)) idsByTree.set(treeId, Object.fromEntries((treeById.get(treeId)?.subtrees ?? []).map(id => [keySet(byId.get(id)!.occurrences.map(occurrence => occurrence.key)), id])));

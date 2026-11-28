@@ -16,7 +16,6 @@ const graph = peopleGraph(people);
 const sources = groupSources(storiesJson as { slug: string; name: string; people: { slug: string }[] }[], battlesJson as AppBattle[]);
 const FAMILY: readonly TieKind[] = ['parent', 'child', 'spouse', 'sibling', 'cousin'];
 
-// Owner, 2026-11-21: a group card draws three to five people joined by their own family; a long chain through others says little.
 describe('the «صلة بينهم» cards', () => {
   const items = groupItems(graph, sources, people);
 
@@ -48,7 +47,6 @@ describe('the «صلة بينهم» cards', () => {
 });
 
 describe('the ring cards', () => {
-  // Every kind folds and every drawing fits, so the rules on what a ring holds are what is tested.
   const rings = ringList(graph, people, () => ['parent', 'spouse', 'child', 'sibling', 'cousin'], () => true);
 
   it('leave a tie the book holds in doubt off the drawing and keep it to be said with both views', () => {
@@ -59,13 +57,10 @@ describe('the ring cards', () => {
       for (const slug of ring.people) expect(ties.some(tie => tie.to === slug && !tie.link.disputed), ring.id).toBe(true);
       expect(ring.doubted.every(tie => tie.link.disputed && !ring.people.includes(tie.to)), ring.id).toBe(true);
     }
-    // The Prophet's ﷺ children: al-Tayyib and al-Tahir are named apart (Zad al-Ma'ad: two titles of Abdullah).
     const children = rings.find(ring => ring.id === 'kin:prophet-muhammad:child')!;
     expect(children.doubted.length).toBeGreaterThan(0);
   });
 
-  // Owner, 2026-11-22: Ibn al-Qayyim's words on Abdullah go in the references, not under the drawing, so the card keeps the
-  // home layout; they stand in for the doubted ties only because they name each of them.
   it('carry a scholar\'s note on its book\'s line in the references, naming every doubted tie it settles', () => {
     const noted = rings.filter(ring => ring.note);
     expect(noted.length).toBeGreaterThan(0);
@@ -86,7 +81,6 @@ describe('the ring cards', () => {
     const hadith = (book: 'bukhari' | 'muslim', n: number) => (JSON.parse(readFileSync(join(__dirname, `../data/hadith/sahih/${book}.json`), 'utf8')) as SahihText)
       .kitabs.flatMap(kitab => kitab.hadith).find(each => each.n === n)!;
     for (const ring of HADITH_RINGS) {
-      // The same letters, however the edition orders a letter's marks.
       expect(hadith(ring.book, ring.n).routes.some(route => route.text.normalize('NFC').includes(ring.quote.normalize('NFC'))), ring.id).toBe(true);
       for (const slug of [ring.middle, ...ring.people]) expect(graph.nodes.has(slug), `${ring.id} ${slug}`).toBe(true);
     }
@@ -105,7 +99,6 @@ describe('the «أين يلتقي نسبهما؟» cards', () => {
   });
 });
 
-// The feed takes a kind's items in order: a list sorted by how much two lives share put one man in card after card.
 describe('spread', () => {
   it('keeps every item and shows no person twice in one pass while others are left', () => {
     const ids = ['a,b', 'a,c', 'a,d', 'b,c', 'e,f'];
@@ -115,7 +108,6 @@ describe('spread', () => {
   });
 });
 
-// Owner, 2026-11-23: the Prophet's ﷺ children are seven; Ibn al-Qayyim holds al-Tayyib and al-Tahir to be Abdullah's titles.
 describe('settledTies', () => {
   it('leaves out the children a scholar\'s note settles, and only when its words are in the tie it is on', () => {
     const prophet = (peopleJson as AppPerson[]).find(person => person.slug === 'prophet-muhammad')!;

@@ -15,14 +15,9 @@ import { GHARIB_BOOK, GHARIB_EDITION, MUFRADAT_BOOK, MUFRADAT_EDITION } from '@s
 import { QuranWord } from '@/components/quran/text/AyahFlow';
 import { toTab } from '@/lib/ways';
 
-/** Words listed with no search (the most frequent) and at most with one. */
 export const WORDS_SHOWN = 40;
 
-/**
- * The website's /quran/words on the phone, kept small (owner, 2026-11-13): search a word, see how often the Quran uses it,
- * and tap it for its own page (screens/word.tsx: its ayat and its meanings). With no search it lists the most frequent words. docs/plans/word-counts-app.md
- */
-/** Where the counts come from, and our page of sources and licences. */
+// see docs/plans/word-counts-app.md
 const source = sourceById(WORDS_SOURCE);
 const WEBSITE = 'https://namaq.vercel.app';
 
@@ -37,14 +32,11 @@ export default function WordsScreen() {
   const found = useMemo(() => (query.trim() ? searchWords(words, query, WORDS_SHOWN) : words.lemmas.slice(0, WORDS_SHOWN).map((_, id) => id)), [query]);
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      {/* The search in the top bar, as on every list page (owner, 2026-11-24: never inside the page). */}
       <TopBar hub hideOnScroll search={{ value: query, onChangeText: setQuery, placeholder: 'ابحث في ألفاظ القرآن', label: 'ابحث عن كلمة في القرآن' }} />
       <View style={{ paddingHorizontal: 16, paddingBottom: 8 }}>
-        {/* The page's book as the line under its search, as the home cards carry theirs (owner, 2026-11-20). */}
         {source && <View style={{ paddingTop: 8 }}>
           <SourceLine palette={palette} sources={[{ line: source.title.ar, quotes: WORDS_COUNTING.map(text => ({ text })),
             links: [{ label: source.link.label, url: source.link.url }, { label: 'المصادر والتراخيص', url: `${WEBSITE}/attributions#${WORDS_SOURCE}` }] },
-            // The meanings on each word's page (owner, 2026-11-21).
             { line: GHARIB_BOOK, quotes: [{ text: `${GHARIB_BOOK}، ${GHARIB_EDITION}.` }] },
             { line: MUFRADAT_BOOK, quotes: [{ text: `${MUFRADAT_BOOK}، ${MUFRADAT_EDITION}.` }] }]} />
         </View>}

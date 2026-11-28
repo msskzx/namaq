@@ -1,27 +1,17 @@
-/**
- * Every book, text, data set, font and library Namaq draws on, with its licence and the pages that use it.
- * The website's /sources lists the books and /attributions lists everything. A PR that adds a source adds it here
- * (AGENTS.md, "Sources and attributions"). Links point outside: Namaq hosts no book in full.
- */
 export type SourceGroup = 'books' | 'quran' | 'data' | 'fonts' | 'code';
 export type Bi = { ar: string; en: string };
-/** One place a source is used: the website page, where there is one. */
 export type SourceUse = Bi & { href?: string };
 export type Source = {
   id: string;
   group: SourceGroup;
   title: Bi;
   author?: Bi;
-  /** The printed edition the citations follow, in Arabic. */
   edition?: string;
   link: { url: string; label: string };
   licence: Bi;
   uses: SourceUse[];
-  /** The website's reader for a book whose pages Namaq holds (/sources/<shelf>). */
   shelf?: string;
-  /** The data files and fonts built from it, as paths from the repo root; a path ending in / is a whole folder (guard proposal 24). */
   files?: string[];
-  /** Used by the website alone, so the app's own sources page leaves it out. */
   websiteOnly?: true;
 };
 
@@ -33,7 +23,6 @@ export const GROUPS: { group: SourceGroup; title: Bi }[] = [
   { group: 'code', title: { ar: 'المكتبات البرمجية', en: 'Code libraries' } },
 ];
 
-/** Shamela library's page for a book. */
 export const shamela = (id: number) => ({ url: `https://shamela.ws/book/${id}`, label: 'المكتبة الشاملة' });
 
 const PUBLIC_DOMAIN: Bi = {
@@ -81,7 +70,6 @@ const USE = {
 } satisfies Record<string, SourceUse>;
 
 export const SOURCES: Source[] = [
-  // Books
   {
     id: 'adhkar-nawawi', group: 'books',
     title: { ar: 'الأذكار', en: 'al-Adhkar' }, author: { ar: 'يحيى بن شرف النووي', en: 'al-Nawawi' },
@@ -191,7 +179,6 @@ export const SOURCES: Source[] = [
     edition: 'تحقيق شعيب الأرنؤوط وإبراهيم باجس، مؤسسة الرسالة، بيروت، الطبعة السابعة ١٤١٧هـ؛ من نسخة turath.io، ٢٠٢٦-١١-١٩', link: shamela(4268), licence: PUBLIC_DOMAIN, uses: [USE.forty],
   },
   {
-    // links.json: every link the catalog holds, cited from al-Siyar, the two Sahihs and Tafsir al-Sa'di.
     id: 'siyar', group: 'books', files: ['shared/data/links.json'],
     title: { ar: 'سير أعلام النبلاء', en: 'Siyar A‘lam al-Nubala’' }, author: { ar: 'شمس الدين الذهبي', en: 'al-Dhahabi' },
     edition: 'مؤسسة الرسالة، الطبعة الثالثة، ١٤٠٥هـ/١٩٨٥م', link: shamela(10906), licence: PUBLIC_DOMAIN,
@@ -250,7 +237,6 @@ export const SOURCES: Source[] = [
     link: shamela(1404), licence: PUBLIC_DOMAIN, uses: [USE.order, USE.topics],
   },
   {
-    // tanasubTrees.json: the trunks of the surah-order books' cards that grow a tree (all four, from al-Suyuti's links).
     id: 'tanasuq-al-durar', group: 'books', files: ['shared/data/quran/tanasubTrees.json'],
     title: { ar: 'تناسق الدرر في تناسب السور', en: 'Tanasuq al-Durar' }, author: { ar: 'جلال الدين السيوطي', en: 'al-Suyuti' },
     edition: 'دار الفضيلة، ٢٠٠٢م', link: shamela(9992), licence: PUBLIC_DOMAIN, uses: [USE.order],
@@ -398,7 +384,6 @@ export const SOURCES: Source[] = [
     },
     uses: [USE.tuhfa],
   },
-  // Quran text
   {
     id: 'kfgqpc-hafs', group: 'quran', files: ['shared/data/quran/mushaf/'],
     title: { ar: 'مصحف المدينة برواية حفص، طبعة ١٤٤١هـ', en: 'The Madinah mushaf, Hafs, 1441 edition' }, author: { ar: 'مجمع الملك فهد لطباعة المصحف الشريف', en: 'King Fahd Glorious Quran Printing Complex' },
@@ -455,7 +440,6 @@ export const SOURCES: Source[] = [
     },
     uses: [USE.qiraat],
   },
-  // Data
   {
     id: 'hadith-api', group: 'data',
     title: { ar: 'hadith-api: نصا صحيح البخاري وصحيح مسلم', en: 'hadith-api: the texts of Sahih al-Bukhari and Sahih Muslim' },
@@ -553,7 +537,6 @@ export const SOURCES: Source[] = [
     },
     uses: [USE.hijri],
   },
-  // Fonts
   {
     id: 'kfgqpc-font', group: 'fonts', files: ['mobile/assets/fonts/UthmanicHafs1Ver18.ttf', 'public/fonts/UthmanicHafs1Ver18.ttf'],
     title: { ar: 'خط حفص العثماني، الإصدار ١٨', en: 'KFGQPC HAFS Uthmanic Script, version 18' }, author: { ar: 'مجمع الملك فهد لطباعة المصحف الشريف', en: 'King Fahd Glorious Quran Printing Complex' },
@@ -579,7 +562,6 @@ export const SOURCES: Source[] = [
     link: { url: 'https://github.com/vercel/geist-font', label: 'vercel/geist-font' },
     licence: { ar: 'SIL Open Font License 1.1', en: 'SIL Open Font License 1.1' }, uses: [{ ar: 'الأرقام في الموقع', en: 'numbers on the website' }],
   },
-  // Code
   {
     id: 'expo', group: 'code',
     title: { ar: 'Expo', en: 'Expo' }, author: { ar: 'Expo', en: 'Expo' },

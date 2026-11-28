@@ -13,7 +13,6 @@ import { FORTY } from './hadith';
 import bukhari from '@shared/data/hadith/bukhari.json';
 import muslim from '@shared/data/hadith/muslim.json';
 
-/** The sira stories' chapters first (a chapter is what one looks for by «الوفود»), then each story. */
 const SIRA_ITEMS = [...STORY_CHAPTERS.map(chapter => ({ title: chapter.name, chapter: chapter.name })), ...STORIES.map(story => ({ title: story.name, slug: story.slug }))];
 
 export { GROUP_MAX, warmSearch } from '@shared/quran/searchSources';
@@ -21,17 +20,11 @@ export { GROUP_MAX, warmSearch } from '@shared/quran/searchSources';
 let bundled: SearchSources | undefined;
 
 
-/** The app's sources for the one search: everything bundled, the adhkar, and the reader's notes on this device. */
 export function appSources(): SearchSources {
   const notes = readAyahNotes();
   return { ...(bundled ??= bundledSources(listedPairs)), adhkar: ADHKAR_ITEMS, sira: SIRA_ITEMS, notes: notesByDate(notes).map(key => ({ key, text: notes[key].text })) };
 }
 
-/**
- * What the app finds besides the website's kinds (owner, 2026-11-24: the search found no people, hadith or battles):
- * a person by name, kunya or laqab; a battle by its name or place; a hadith of the Forty by its words, or a Sahih bab by
- * its heading (the bab headings ship with the app; the Sahihs' words are searched in the hadith tab once downloaded).
- */
 export type AppHit = SearchHit
   | { kind: 'person'; slug: string; name: string; line: string }
   | { kind: 'battle'; slug: string; name: string; line: string }
@@ -39,20 +32,16 @@ export type AppHit = SearchHit
 export type AppKind = AppHit['kind'];
 export type AppGroup = { kind: AppKind; hits: AppHit[] };
 
-/** Names first, as they are few and exact: a surah, a person, a battle; then the website's order, the hadith after the sira. */
 export const APP_ORDER: AppKind[] = (['surah', 'person', 'battle', ...SEARCH_ORDER.filter(kind => kind !== 'surah')] as AppKind[])
   .flatMap(kind => (kind === 'sira' ? ['sira', 'hadith'] as AppKind[] : [kind]));
 
 const FIND = GROUP_MAX + 1;
-/** The Sahihs' kitabs and bab headings, which ship with the app (lib/sahih.ts reads the same files; it also reaches the downloads). */
 const SAHIH: Record<SahihSlug, SahihIndex> = { bukhari: bukhari as SahihIndex, muslim: muslim as SahihIndex };
 const SAHIH_SLUGS: SahihSlug[] = ['bukhari', 'muslim'];
 
 function hadithHits(query: string): Extract<AppHit, { kind: 'hadith' }>[] {
-  // searchForty keeps every entry when nothing Arabic is typed («12»), so the Forty are searched only for Arabic words.
   const forty = (/[ء-ي]/.test(query) ? searchForty(FORTY.entries, query) : [])
     .map(entry => ({ kind: 'hadith' as const, book: 'forty' as const, n: entry.n, title: sayingStart(entry.text), place: `${FORTY.books.nawawi.title}، ${entry.heading}` }));
-  // Each book with its own limit, so a common word that fills the list from al-Bukhari still shows Muslim's babs.
   const babs = SAHIH_SLUGS.flatMap(slug => searchSahih([{ index: SAHIH[slug] }], query, FIND).babs).map(hit => {
     const book = SAHIH[hit.book];
     const kitab = book.kitabs.find(each => each.n === hit.kitab);

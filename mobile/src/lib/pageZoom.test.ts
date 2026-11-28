@@ -12,7 +12,6 @@ describe('mushaf text size', () => {
   it('wraps whole words onto lines no wider than the page', () => {
     expect(breakLines([30, 30, 30, 30], 100, 5)).toEqual([0, 3]);
     expect(breakLines([30, 30, 30], 100, 5)).toEqual([0]);
-    // A word wider than the line stands alone.
     expect(breakLines([40, 120, 40], 100, 5)).toEqual([0, 1, 2]);
     expect(breakLines([], 100, 5)).toEqual([]);
   });

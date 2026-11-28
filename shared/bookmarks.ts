@@ -1,12 +1,9 @@
 import { reportError } from './errors';
-/** Saved trees, kept on this device for now. Accounts can later sync this list behind the same functions. */
 export type Bookmark = { id: string; text: string; href: string; savedAt: number };
 
-/** Where the list is kept: localStorage on the website, the app's own key-value store on the phone. */
 export type BookmarkStorage = {
   getItem(key: string): string | null;
   setItem(key: string, value: string): void;
-  /** Changes made elsewhere (another browser tab). */
   subscribe?(listener: () => void): () => void;
 };
 
@@ -50,7 +47,6 @@ function write(list: Bookmark[]) {
 
 export const isBookmarked = (id: string) => readBookmarks().some(item => item.id === id);
 
-/** Saves the tree, or removes it when it is already saved. Returns whether it is saved now. */
 export function toggleBookmark(item: Omit<Bookmark, 'savedAt'>, aliases: string[] = []): boolean {
   const list = readBookmarks();
   const ids = new Set([item.id, ...aliases]);

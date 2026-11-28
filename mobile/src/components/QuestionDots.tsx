@@ -8,9 +8,7 @@ import { Tap } from '@/ui/Tap';
 
 const LABELS: Record<QuestionState, string> = { correct: 'صحيح', partial: 'صحيح جزئيًا', incorrect: 'خطأ', unanswered: 'بدون إجابة' };
 
-/** One round button per question, coloured by its state: green right, amber half right, terracotta wrong. */
 export default function QuestionDots({ states, current, onPick, palette, inBar }: { states: QuestionState[]; current: number; onPick: (index: number) => void; palette: Palette;
-  /** In the top bar, in place of the title (owner, 2026-11-17): a little smaller, no padding of its own. */
   inBar?: boolean }) {
   const size = inBar ? 34 : 40;
   return (

@@ -15,10 +15,6 @@ const mix = (a: string, b: string, t: number) => {
   return `#${[0, 1, 2].map(i => Math.round(channel(a, i) * t + channel(b, i) * (1 - t)).toString(16).padStart(2, '0')).join('')}`;
 };
 
-/**
- * The tree's ayat in the order they grow, as the chips and the ayah card show them. The card's words are the matrix's row for the
- * ayah, coloured as MatrixCard colours them (sharedTone).
- */
 export function videoAyat(beats: Beat[], presentation: Presentation | undefined, palette: Palette): VideoAyah[] {
   const matrix = presentation && matrixOf(presentation, false);
   return [...new Set(beats.map(beat => beat.key).filter(Boolean))].map(key => {
@@ -29,20 +25,17 @@ export function videoAyat(beats: Beat[], presentation: Presentation | undefined,
     const words = row.flatMap(ayah => [
       ...ayah.words.map((word, i) => {
         const color = sharedTone(palette, ayah, i) ?? palette.ink;
-        // The tour's read-along lights the word it reads (withPathReading's ids).
         return { text: mushafText(word), color, id: readId(r, ayah.key, i) };
       }),
       { text: num(Number(ayah.key.split(':')[1])), color: palette.accent, end: true },
     ]);
     const [lastSurah, last] = row[row.length - 1].key.split(':').map(Number);
     const name = surahNames[surah] ?? num(surah);
-    // As the matrix card names it, a run into the next surah included.
     const label = lastSurah !== surah ? `الآية ${num(number)} ثم سورة ${surahNames[lastSurah]} ${num(last)}` : row.length > 1 ? `الآيات ${num(number)}–${num(last)}` : `الآية ${num(number)}`;
     return { key, chip: `${name} ${num(number)}`, name, label, words };
   });
 }
 
-/** What the video of a growing tree records: the drawn tree, the beats of the studio's mode, and the screen's colours. */
 export function treeVideo(scene: TreeScene, beats: { watch: Beat[]; ask: Beat[] }, palette: Palette, presentation?: Presentation): VideoInput {
   const state = growthState();
   const played = state.mode === 'ask' ? beats.ask : beats.watch;

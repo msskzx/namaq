@@ -31,23 +31,15 @@ import { lastOpened } from '@/lib/sahih';
 const body = (palette: Palette, big = false) => ({ color: palette.ink, fontSize: big ? 21 : 19, lineHeight: big ? 40 : 36, textAlign: 'right' as const });
 const pagesName = (pages: number[]) => (pages.length > 1 ? `ص ${num(pages[0])}–${num(pages[pages.length - 1])}` : `ص ${num(pages[0])}`);
 
-/** A page of a Sahih on Shamela, by the page's id there. */
 export const sahihPage = (book: SahihIndex, shamela: number) => `https://shamela.ws/book/${book.shamela}/${shamela}`;
 
-/** The opening of a hadith's words, for a list: its first route's words after the chain. */
 export const opening = (hadith: SahihHadith) => splitRoute(hadith.routes[0]).words.trim();
 
-/** A plain chain (one line, no ح) drawn as the metro line, the collector on top. */
 export function SahihChain({ book, route, palette }: { book: SahihIndex; route: SahihRoute; palette: Palette }) {
   return <Isnad isnad={chainIsnad(book.slug === 'bukhari' ? 'البخاري' : 'مسلم', route.chain ?? [])} palette={palette} />;
 }
 
-/**
- * The printed words after the drawn chain (owner 2026-11-24, sketch hadith-design/sketch4): the last narrator's link with
- * what he tells, muted, then the saying; when the Prophet ﷺ is named just before it, the saying under that line in amber.
- */
 export function ChainSaying({ chain, links, words, palette, big, lines }: { chain: string; links: readonly ChainLink[]; words: string; palette: Palette; big?: boolean;
-  /** At most these lines of the words, for a card that opens the whole (never cut with «…»). */
   lines?: number }) {
   const { lead, prophet } = leadIn(chain, links) ?? { lead: '' };
   return <>
@@ -58,7 +50,6 @@ export function ChainSaying({ chain, links, words, palette, big, lines }: { chai
   </>;
 }
 
-/** One printed text: its chain drawn and its words under it, or the whole text with the chain in muted ink; its page folded. */
 export function SahihRouteView({ book, n, route, mode, palette, big }: { book: SahihIndex; n: number; route: SahihRoute; mode: DrawMode; palette: Palette; big?: boolean }) {
   const { chain, words } = splitRoute(route);
   const drawsWhole = !!route.chain && leadIn(chain, route.chain) !== undefined;
@@ -68,18 +59,12 @@ export function SahihRouteView({ book, n, route, mode, palette, big }: { book: S
       {mode === 'drawing' && drawsWhole
         ? <><SahihChain book={book} route={route} palette={palette} /><ChainSaying chain={chain} links={route.chain!} words={words} palette={palette} big={big} /></>
         : <Text style={body(palette, big)}><Text style={{ color: palette.muted }}>{chain}</Text>{words}</Text>}
-      {/* In a card with a row, the book joins its line and the page (linked to al-Shamela) its sheet (owner 2026-11-20). */}
       <Reference title={book.title} palette={palette} places={[place]} editions={[book.edition]}
         quotes={[{ text: '', cite: place, url: sahihPage(book, route.shamela) }, { text: `${book.title}، ${book.edition}` }]} />
     </View>
   );
 }
 
-/**
- * A hadith of a Sahih whole (owner's sketch, 2026-11-19): the narrator it comes from, its words large, «الرسم» or «النص»
- * when its chain is drawn, and in Muslim its other routes folded under the first. The page, the feed card and a quiz's
- * look-up all draw it.
- */
 export function SahihHadithView({ book, hadith, palette }: { book: SahihIndex; hadith: SahihHadith; palette: Palette }) {
   const [mode, setMode] = useState<DrawMode>('drawing');
   const [first, ...rest] = hadith.routes;
@@ -100,7 +85,6 @@ export function SahihHadithView({ book, hadith, palette }: { book: SahihIndex; h
   );
 }
 
-/** A hadith in a kitab's list: its number, the narrator it comes from and the opening of its words; a tap opens it. */
 export function SahihHadithCard({ hadith, palette, onPress }: { hadith: SahihHadith; palette: Palette; onPress: () => void }) {
   const from = lastLink(hadith.routes[0]);
   const numbers = [hadith.n, ...(hadith.also ?? [])].map(n => num(n)).join(' - ');
@@ -116,7 +100,6 @@ export function SahihHadithCard({ hadith, palette, onPress }: { hadith: SahihHad
   );
 }
 
-/** A Sahih's text is not on the phone yet: what it is and a button to download it once, or the loader while it comes. */
 export function SahihDownload({ slug, state, palette }: { slug: SahihIndex['slug']; state: BookState; palette: Palette }) {
   const book = bookOf(slug);
   if (state === 'downloading') return <LoadingDots label={`ينزل ${book.title}`} />;
@@ -129,17 +112,10 @@ export function SahihDownload({ slug, state, palette }: { slug: SahihIndex['slug
   );
 }
 
-/** «باب واحد», «بابان», «٣ أبواب», «٤٣ بابًا». */
 const babsName = (n: number) => (n === 1 ? 'باب واحد' : n === 2 ? 'بابان' : `${num(n)} ${n % 100 >= 3 && n % 100 <= 10 ? 'أبواب' : n % 100 >= 11 ? 'بابًا' : 'باب'}`);
 
-/** How many hadith a kitab holds by its numbers (none for a kitab of headings only). */
 const sizeOf = (kitab: SahihIndex['kitabs'][number]) => (kitab.from ? kitab.to - kitab.from + 1 : 0);
 
-/**
- * A Sahih's shape (owner, 2026-11-23: sketch hadith-design): its name and author, how many kitabs and hadith, and a bar for
- * each kitab as tall as its hadith, the first on the right. A touch names the kitab under the finger and lifting it opens
- * that kitab; the mark is over the kitab read last. On the hadith tab its head opens the book.
- */
 export function SahihShape({ book, onOpenBook, onOpenKitab, palette }: { book: SahihIndex; onOpenBook?: () => void; onOpenKitab: (kitab: number) => void; palette: Palette }) {
   const [picked, setPicked] = useState<number | null>(null);
   const last = lastOpened(book.slug);
@@ -176,19 +152,10 @@ export function SahihShape({ book, onOpenBook, onOpenKitab, palette }: { book: S
   );
 }
 
-/**
- * A Sahih's kitabs on one line down the card (owner, 2026-11-23: sketch hadith-design), each its number in a ring, its
- * name, a bar as long as its hadith beside the longest kitab's, its babs and hadith numbers; «وقفت هنا» on the kitab read
- * last when `here`. `mark` checks one (a quiz's answer). The book's page opens a kitab on a tap; a quiz's look-up opens its bab headings under it.
- */
 export function SahihKitabList({ book, onOpen, onOpenBab, mark, open, found, here: showHere = false, palette, source }: { book: SahihIndex; onOpen: (kitab: number) => void; mark?: number; open?: number; palette: Palette;
-  /** A bab a search found opens its page (the book's page); without it the found babs are only named (a quiz). */
   onOpenBab?: (kitab: number, bab: number) => void;
-  /** «وقفت هنا» on the kitab read last (the book's page, never a quiz). */
   here?: boolean;
-  /** A search's hits: only these kitabs, each with the bab headings that hold the words (none when its name holds them). */
   found?: Map<number, number[]>;
-  /** The book itself, on the line under the list (the book's page). */
   source?: Source[] }) {
   const longest = Math.max(1, ...book.kitabs.map(sizeOf));
   const last = showHere ? lastOpened(book.slug) : undefined;
@@ -233,7 +200,6 @@ export function SahihKitabList({ book, onOpen, onOpenBab, mark, open, found, her
   );
 }
 
-/** A quiz's look-up for «في أيّ كتاب؟»: a search over the book's bab headings, or its kitabs, each opening its headings. */
 export function SahihLook({ book, mark, palette }: { book: SahihIndex; mark?: number; palette: Palette }) {
   const [query, setQuery] = useState('');
   const [open, setOpen] = useState<number | undefined>();

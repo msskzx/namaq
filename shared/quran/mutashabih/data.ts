@@ -12,30 +12,18 @@ const artifact = dataOf(artifactFile);
 
 const keyOrder = (key: string) => { const [surah, ayah] = key.split(':').map(Number); return surah * 1000 + ayah; };
 
-/**
- * mutashabih.json keeps places only (owner 2026-11-17): a group's words are its
- * first place's words on the Madina page, and its differing words are the page
- * words at its columns' positions. Only a book's own example is stored.
- */
 type Stored = Omit<Group, 'text' | 'tree' | 'examples'> & { tree: Omit<Group['tree'], 'text'> };
 
 const words = new Map(corpus.ayat.map(ayah => [ayah.key, ayah.words]));
 const textAt = ({ key, start, end }: PhraseOccurrence) => words.get(key)!.slice(start, Math.max(end, start + 1)).join(' ');
 
-/** The groups as built, their words put back from the pages. */
 export const builtGroups: Group[] = (artifact as unknown as Stored[]).map(group => {
   const text = textAt(group.tree.occurrences[0]);
   const examples = Object.fromEntries(group.tags.flatMap(tag => { const quoted = quotedExample(group, tag); return quoted ? [[tag, quoted]] : []; }));
-  // A citation shows the group's quoted example for its tags when the book gives none (evidenceGroup reads citations only).
   const citations = group.citations.map(citation => ({ ...citation, examples: { ...Object.fromEntries(citation.tags.flatMap(tag => examples[tag] ? [[tag, examples[tag]]] : [])), ...citation.examples } }));
   return { ...group, text, tree: { ...group.tree, text }, citations, examples, words: differenceWordsOf(group, (key, index) => words.get(key)?.[index]) };
 });
 
-/**
- * The surah-order books' cards, the compare page's «في كتب تناسب السور» on branches too (owner 2026-11-20): each holds the whole
- * ayat its link names. Only a meaningful one grows a tree (its trunk from tanasubTree); the rest are their ayat with no trunk,
- * which keeps them matrix only (branchVerdicts.ts matrixOnly).
- */
 export const tanasubGroups: Group[] = TANASUB_LINKS.map(link => {
   const keys = [...new Set(link.pairs.flatMap(pair => pair))].sort((x, y) => keyOrder(x) - keyOrder(y));
   const id = `tanasub:${link.link}`;

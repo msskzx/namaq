@@ -37,10 +37,6 @@ export function distinctBranchPieces(pieces: BranchPiece[]): BranchPiece[] {
 const isFamily = (piece: BranchPiece) => !!piece.group && piece.group.kind !== 'shared_phrase';
 const trunk = (piece: BranchPiece) => piece.phrase.occurrences[0] ? piece.phrase.occurrences[0].end - piece.phrase.occurrences[0].start : 0;
 
-/**
- * Drops a family (a whole-ayah likeness) when a phrase tree in the same list holds all its ayat on a trunk at least as long:
- * the phrase tree already shows what the family would. The family's ids move to that tree so a saved family still opens.
- */
 export function withoutCoveredFamilies(pieces: BranchPiece[]): BranchPiece[] {
   const holding = new Map<string, BranchPiece[]>();
   for (const piece of pieces) if (!isFamily(piece)) for (const key of piece.keys) holding.set(key, [...holding.get(key) ?? [], piece]);
@@ -54,10 +50,6 @@ export function withoutCoveredFamilies(pieces: BranchPiece[]): BranchPiece[] {
   });
 }
 
-/**
- * The cards to browse. Cards the owner dropped are left out unless `withDropped` (review) asks for them.
- * A card a book of mutashabih or of surah order names always shows: every book entry is a card (owner 2026-11-18, 2026-11-20).
- */
 export function branchInventory(filters: GroupFilters, range: JuzRange | null, withDropped = false): BranchPiece[] {
   const all = allBranchPieces(filters, range);
   return withDropped ? all : all.filter(piece => !!piece.group?.citations.length || !!piece.group?.tanasub || !droppedBranch(piece));
@@ -66,7 +58,6 @@ export function branchInventory(filters: GroupFilters, range: JuzRange | null, w
 export const REVIEW_MAX = 35;
 export const reviewFilters = (filters: GroupFilters): GroupFilters => filters.categories ? filters : { ...filters, categories: ALL_KINDS };
 
-/** The pool the owner judges: every kind of tree with at most REVIEW_MAX ayat, dropped ones included. A verdict is keyed by a piece's `id`. */
 export const reviewPool = (filters: GroupFilters = {}, range: JuzRange | null = null): BranchPiece[] =>
   branchInventory(reviewFilters(filters), range, true).filter(piece => piece.keys.length <= REVIEW_MAX);
 
@@ -105,10 +96,6 @@ function allBranchPieces(filters: GroupFilters, range: JuzRange | null): BranchP
 
 export const OUTSIDE_SUGGESTIONS = 5;
 
-/**
- * Trees a search finds that the current filters hide, for the search box's «خارج التصفية الحالية» section.
- * Searched among every kind of tree with no range, surah or saved-only limit; picking one resets the filters to that.
- */
 export function outsideMatches(query: string, shown: BranchPiece[], limit = OUTSIDE_SUGGESTIONS): BranchPiece[] {
   if (!query.trim()) return [];
   const seen = new Set(shown.flatMap(piece => [piece.id, piece.legacyId, ...(piece.legacyIds ?? []), ...(piece.group?.aliases ?? [])]));

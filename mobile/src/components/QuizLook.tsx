@@ -53,14 +53,11 @@ import { TermQuotes } from './BalaghaTerm';
 import LitAyat from './quran/text/LitAyat';
 import { ayahMushafWords } from '@/lib/mushaf';
 
-/** Names a search lists before asking for more letters. */
 const FOUND = 20;
 
-/** A person's ties round him, any person found by a search or tapped on the ring moving to the middle; the trail goes back. */
 function TiesLook({ slug, mark, width, palette }: { slug: string; mark?: string; width: number; palette: Palette }) {
   const [trail, setTrail] = useState([slug]);
   const [query, setQuery] = useState('');
-  // Already in a sheet: a name with no page shows the sentence that names him under the ring.
   const [shown, setShown] = useState<Tie | undefined>();
   const at = trail[trail.length - 1];
   const go = (to: string) => { setTrail([...trail, to]); setQuery(''); setShown(undefined); };
@@ -87,7 +84,6 @@ function TiesLook({ slug, mark, width, palette }: { slug: string; mark?: string;
   );
 }
 
-/** The virtues each offered person's entry gives, one person at a time; once shown, the asked one is green. */
 function VirtuesLook({ slugs, mark, palette }: { slugs: string[]; mark?: { slug: string; index: number }; palette: Palette }) {
   const people = slugs.map(findPerson).filter(p => !!p);
   const [at, setAt] = useState(mark?.slug ?? people[0]?.slug);
@@ -99,7 +95,6 @@ function VirtuesLook({ slugs, mark, palette }: { slugs: string[]; mark?: { slug:
         {people.map(p => <Chip key={p.slug} label={personName(p)} on={p.slug === person.slug} palette={palette} onPress={() => setAt(p.slug)}
           Icon={p.slug === mark?.slug ? Check : undefined} accessibilityLabel={p.slug === mark?.slug ? `${personName(p)}، الجواب` : undefined} />)}
       </View>
-      {/* The virtues reach the card's edges (the Prophet's ﷺ band), as on his page. */}
       <Card palette={palette} pad={0} clip>
         <Text style={{ color: palette.accent, fontSize: 15, textAlign: 'right', paddingHorizontal: 16, paddingTop: 14 }}>{person.sex === 'FEMALE' ? 'مناقبها' : 'مناقبه'}</Text>
         {person.virtues.length
@@ -110,7 +105,6 @@ function VirtuesLook({ slugs, mark, palette }: { slugs: string[]; mark?: { slug:
   );
 }
 
-/** The definition of each term offered, one at a time («مصطلحات البلاغة»'s own card); once shown, the asked one first. */
 function TermsLook({ names, mark, palette }: { names: string[]; mark?: string; palette: Palette }) {
   const offered = names.filter(name => termNamed(terms, name));
   const [at, setAt] = useState(mark ?? offered[0]);
@@ -126,7 +120,6 @@ function TermsLook({ names, mark, palette }: { names: string[]; mark?: string; p
   );
 }
 
-/** Al-Nawawi's Forty with a search over their words; a hadith opens whole, as on its page. Once shown, the asked one is open. */
 function HadithLook({ mark, palette }: { mark?: number; palette: Palette }) {
   const [query, setQuery] = useState('');
   const [open, setOpen] = useState(mark);
@@ -148,7 +141,6 @@ function HadithLook({ mark, palette }: { mark?: number; palette: Palette }) {
   );
 }
 
-/** Al-Sa'di on each offered ayah, one at a time, as the reader's tafsir sheet shows him; once shown, the asked one first and checked. */
 function TafsirLook({ keys, mark, palette }: { keys: string[]; mark?: string; palette: Palette }) {
   useBooks();
   const [at, setAt] = useState(mark ?? keys[0]);
@@ -169,7 +161,6 @@ function TafsirLook({ keys, mark, palette }: { keys: string[]; mark?: string; pa
   );
 }
 
-/** A run of ayat as the mushaf sets them, under the surah's name and their numbers; once marked, the ayah that answers lit. */
 function AyatLook({ keys, mark, palette }: { keys: string[]; mark?: string; palette: Palette }) {
   const [surah, first] = keys[0].split(':').map(Number);
   const last = Number(keys[keys.length - 1].split(':')[1]);
@@ -188,7 +179,6 @@ function AyatLook({ keys, mark, palette }: { keys: string[]; mark?: string; pale
 
 const TUHFA = numberVerses(poemData as Poem);
 
-/** Tuhfat al-Atfal whole, as on its page; once marked, the chapter of the verse that answers, the verse lit. */
 function TuhfaLook({ mark, palette }: { mark?: number; palette: Palette }) {
   const chapters = mark === undefined ? TUHFA : TUHFA.filter(chapter => chapter.verses.some(verse => verse.number === mark));
   return (
@@ -203,14 +193,8 @@ function TuhfaLook({ mark, palette }: { mark?: number; palette: Palette }) {
   );
 }
 
-/** The reader's sheets draw their own side margins, so inside the look they take back the sheet's. */
 const bleed = { marginHorizontal: -16 } as const;
 
-/**
- * The feature's own view a question looks its answer up in (owner, 2026-11-19; sketch /mnt/project-files/quiz-lookup): the
- * same drawing as the feature's page and feed card. `shown` once the answer is: then what the look marks is lit.
- */
-/** A page's view in a quiz's look-up: its sections share nothing here (ui/CardShare NoShare). */
 export function LookView(props: { look: QuizLook; shown: boolean; palette: Palette }) {
   return <NoShare.Provider value><LookViewOf {...props} /></NoShare.Provider>;
 }
@@ -243,15 +227,8 @@ function LookViewOf({ look, shown, palette }: { look: QuizLook; shown: boolean; 
   }
 }
 
-/**
- * «ابحث عن الجواب» under a question's choices: opens its view in a sheet. `onLook` runs as it opens (a party counts the
- * look then, whether or not the answer is found). `costs` says under the button what a look costs in a party.
- */
-/** `top`: kept in sight above the looked-up view, such as a party's clock (owner, 2026-11-19: the time left shows while looking). */
 export function LookButton({ look, onLook, costs = false, palette, top }: { look: QuizLook; onLook?: () => void; costs?: boolean; palette: Palette; top?: React.ReactNode }) {
   const [open, setOpen] = useState(false);
-  // In a feed card the button joins the row of icons under the card (owner: no buttons in a card), framed with its words so it
-  // does not read as a search (owner, 2026-11-20).
   const inRow = useCardRow();
   const press = () => { setOpen(true); onLook?.(); };
   return (
@@ -271,10 +248,6 @@ export function LookButton({ look, onLook, costs = false, palette, top }: { look
   );
 }
 
-/**
- * «الموضع كاملًا» (owner, 2026-11-24; sketch question-look design أ): after the answer, the view it was looked up in opens in
- * a sheet, the answer lit there, so the answered card stays short (the whole view under it ran to two or three screens).
- */
 export function PlaceButton({ look, palette }: { look: QuizLook; palette: Palette }) {
   const [open, setOpen] = useState(false);
   const inRow = useCardRow();
@@ -292,7 +265,6 @@ export function PlaceButton({ look, palette }: { look: QuizLook; palette: Palett
   );
 }
 
-/** What a party player sees after looking: the look costs half the points of a right answer. */
 export function LookedNote({ palette }: { palette: Palette }) {
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 6, alignSelf: 'flex-start' }}>

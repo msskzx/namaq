@@ -1,11 +1,8 @@
-// Draws every tree both ways in the web build and writes their sizes to src/lib/treeSizes.json.
-// Run with `npm run tree-sizes` after changing how trees are drawn or which trees exist. Needs Playwright.
 import { createServer } from 'node:http';
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { extname, join } from 'node:path';
 import { createRequire } from 'node:module';
 
-// Playwright is not an app dependency: use the one installed on the machine.
 const { chromium } = createRequire(import.meta.url)('playwright');
 
 const dist = new URL('../dist/', import.meta.url).pathname;

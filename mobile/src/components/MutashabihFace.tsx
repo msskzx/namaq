@@ -17,15 +17,9 @@ import DifferenceWords from './quran/text/DifferenceWords';
 import BookRuns from './quran/text/BookRuns';
 import { FEATURE_ICON } from './featureIcons';
 
-/** «كتاب واحد», «كتابان», «٣ كتب»: how many books set the card's ayat side by side. */
 const booksCount = (count: number) => (count === 1 ? 'كتاب واحد' : counted(count, ['كتاب', 'كتابان', 'كتب', 'كتابًا']));
-/** The page his answer starts on, as the book's own pages are named: al-Kirmani's one volume by page, the others by part and page. */
 const pageName = (answer: CardAnswer) => { const [part, page] = answer.page.split(':').map(Number); return answer.book === 'K' ? `ص ${num(page)}` : `ج ${num(part)} ص ${num(page)}`; };
 
-/**
- * Under a book card's ayat (owner, 2026-11-24: sketch quran-design/mutashabih-page, design أ): how many places it joins, the
- * kinds of difference its books name and how many books name it, then the words the ayat differ by.
- */
 export function MutashabihCells({ group, palette }: { group: Group; palette: Palette }) {
   const books = new Set(group.citations.map(citation => citation.book.split('،')[0])).size;
   const differing = group.tags.map(tag => group.words?.[tag]).find(Boolean);
@@ -41,10 +35,6 @@ export function MutashabihCells({ group, palette }: { group: Group; palette: Pal
   );
 }
 
-/**
- * «لماذا؟» after a book card (design أ): each book that sets its ayat side by side gives its reason in its own words, from
- * where its answer starts (shared/quran/mutashabih/bookAnswer.ts), oldest author first; «اقرأ الباقي» opens his book at that page.
- */
 export function BookAnswers({ group, palette }: { group: Group; palette: Palette }) {
   const shown = useMemo(() => cardAnswers(group.citations, answers), [group]);
   if (!shown.length) return null;

@@ -6,14 +6,8 @@ import surahRows from '../data/quran/surahs.json';
 import type { AyahWordsOf } from './quranText/ayahWords';
 import { SURAH_NAMES } from './surahNames';
 
-/**
- * Surah order from al-Fatiha to al-Nas (owner, 2026-11-13): each surah's aim in al-Biqa'i's words and what joins it to the
- * surah before in al-Suyuti's words (Ibn al-Zubayr's where al-Suyuti gives no link of his own). Nothing here is ours: every
- * text is quoted from the page it cites, «…» marks a cut, and obvious typos of the digital text are corrected.
- * A pair is two ayat the quote itself names. docs/plans/quran-order-sources.md
- */
+// see docs/plans/quran-order-sources.md
 export type Book = 'nazm' | 'masaid' | 'tanasuq' | 'burhan';
-/** A page of a book: printed volume and page (`to`, the last page, when a quote runs over), and `sh`, the first page's number in the Shamela library. */
 export type Cite = { book: Book; vol?: number; page: number; to?: number; sh: number };
 export type Aim = { text: string; src: Cite };
 export type Link = { text: string; src: Cite; pairs: [string, string][] };
@@ -269,19 +263,16 @@ export const ORDER_HELP = [
 
 export type OrderWord = { text: string; shared: boolean };
 export type OrderAyah = { key: string; place: string; words: OrderWord[] };
-/** A book's words, or a Quran quote in them (﴿…﴾) set as the page prints it: each ayah's page words, `end` where the quote runs past the ayah's end. */
 export type QuoteRun = { text: string } | { quran: { key: string; words: string[]; end: boolean }[] };
 export type OrderLinkView = Omit<Link, 'pairs'> & { pairs: [OrderAyah, OrderAyah][]; runs: QuoteRun[] };
 export type OrderSurah = { surah: number; name: string; juz: [number, number]; opening: { ayah: number; text: string }[]; aim: Aim & { runs: QuoteRun[] }; link?: OrderLinkView };
 
-/** A word's letters with و / ف and the article or a joined lam taken off, to find a word both ayat of a pair carry. */
 const core = (word: string) => normalizeWord(word).replace(/^[وف]/, '').replace(/^(ال|لل|ل)/, '');
 const words = (text: string) => text.split(' ').filter(w => normalizeWord(w) !== '');
 
 const names: Record<number, string> = SURAH_NAMES;
 const counts: Record<number, number> = Object.fromEntries(surahRows.map(row => [row.number, row.numberOfAyat]));
 
-/** A surah's opening: whole ayat from the first until ten words, four ayat or the surah's end. */
 function openingKeys(surah: number, text: (key: string) => string) {
   const keys: string[] = [];
   for (let ayah = 1, count = 0; ayah <= counts[surah] && count < 10 && keys.length < 4; ayah++) {
@@ -291,8 +282,7 @@ function openingKeys(surah: number, text: (key: string) => string) {
   return keys;
 }
 
-// A word's consonants, so the book's spelling meets the page's rasm (docs/records/R0043): one leading و ف ل ب ك may differ.
-// A word of long vowels only (أو، يا) keeps its letters.
+// see R0043
 const consonants = (word: string) => { const n = normalizeWord(word); return n.replace(/[اويءئؤ\u0654\u0655]/g, '') || n; };
 const PREFIX = /^[وفلبك]/;
 const sameWord = (a: string, b: string) => a === b || (a.length > 1 && b.length > 1 && ((PREFIX.test(a) && a.slice(1) === b) || (PREFIX.test(b) && b.slice(1) === a)));
@@ -303,10 +293,6 @@ const keysOf = (surah: number) => Array.from({ length: counts[surah] ?? 0 }, (_,
 const DIGITS = '٠١٢٣٤٥٦٧٨٩';
 const latin = (digits: string) => Number([...digits].map(d => DIGITS.indexOf(d)).join(''));
 
-/**
- * The ayat a book names right after a quote: «"الحجر: ٩٨"», «"الشعراء: ١٨، ١٩"», «"إبراهيم: ٤٨-٥٠"», or the numbers alone
- * («"١"») for ayat of the surah in hand.
- */
 function namedAyat(after: string, surah: number) {
   const m = after.match(/^\s*["[(](?:([^:"\])٠-٩]+):\s*)?([٠-٩]+(?:\s*[-–،,]\s*[٠-٩]+)*)["\])]/);
   if (!m) return null;
@@ -319,22 +305,15 @@ function namedAyat(after: string, surah: number) {
   return ayat.map(ayah => `${named}:${ayah}`);
 }
 
-/** The first run of page words that holds a quote's words in order, or none. */
 function firstRun(stream: Stream, want: string[]) {
   for (let i = 0; i + want.length <= stream.length; i++) if (want.every((w, j) => sameWord(w, stream[i + j].skeleton))) return stream.slice(i, i + want.length);
   return null;
 }
 
-/**
- * A book's text with each Quran quote put back on the page words it quotes (owner, 2026-11-21: Quran text on the order page
- * goes through the pipeline). A quote is looked for in the ayat the book names after it, else in its own surah and then the
- * one before it; a quote not found there stays in the book's words.
- */
 export function quoteRuns(text: string, surah: number, ayahWords: AyahWordsOf): QuoteRun[] {
   const parts = text.split(/(﴿[^﴾]*﴾)/).filter(Boolean);
   return parts.map((run, i): QuoteRun => {
     if (!run.startsWith('﴿')) return { text: run };
-    // The page writes the vocative «يَٰٓأَيُّهَا» as one word, books as two.
     const want = run.slice(1, -1).replace(/(^|\s)(يَ?ا)\s+(?=أ)/g, '$1$2').split(/[\s،.:؛]+/).filter(w => normalizeWord(w) !== '').map(consonants);
     const named = namedAyat(parts[i + 1] ?? '', surah);
     const found = want.length ? (named ? firstRun(streamOf(named, ayahWords), want)
@@ -350,7 +329,6 @@ export function quoteRuns(text: string, surah: number, ayahWords: AyahWordsOf): 
   });
 }
 
-/** The surahs of /quran/order, their openings and the ayat of each link as the Madina pages print them (AGENTS.md, "Quran text"). */
 export function orderSurahs(ayahWords: AyahWordsOf, num: (n: number) => string): OrderSurah[] {
   const text = (key: string) => {
     const found = ayahWords(key);
@@ -378,41 +356,27 @@ export function orderSurahs(ayahWords: AyahWordsOf, num: (n: number) => string):
   });
 }
 
-/**
- * The surahs the juz chips leave showing: every surah in any picked juz (owner, 2026-11-20: several juz at once), all of
- * them when none is picked. A surah that runs over two juz shows under both.
- */
 export const orderInJuz = (surahs: OrderSurah[], juz: readonly number[]) =>
   (juz.length ? surahs.filter(s => juz.some(j => s.juz[0] <= j && j <= s.juz[1])) : surahs);
 
-/** A juz chip pressed: picked if it was not, put back if it was, the rest kept in the mushaf's order. */
 export const toggledJuz = (juz: readonly number[], j: number) => (juz.includes(j) ? juz.filter(other => other !== j) : [...juz, j].sort((a, b) => a - b));
 
-/** Whether the link into the `i`th shown surah shows: only when the surah before it in the mushaf shows above it. */
 export const linkShows = (shown: OrderSurah[], i: number) => !!shown[i].link && i > 0 && shown[i - 1].surah === shown[i].surah - 1;
 
-/** «السيوطي، تناسق الدرر ص١٥٩» or «البقاعي، نظم الدرر ٢٢/٦٩». */
 export const citeLabel = (c: Cite, num: (n: number) => string) => {
   const pages = `${num(c.page)}${c.to ? `–${num(c.to)}` : ''}`;
   return `${BOOKS[c.book].short} ${c.vol ? `${num(c.vol)}/${pages}` : `ص${pages}`}`;
 };
 export const citeUrl = (c: Cite) => `https://shamela.ws/book/${BOOKS[c.book].shamela}/${c.sh}`;
 
-/** A quote's book on its card's source line, its page (linked to al-Shamela) and the book's full title in the line's sheet. */
 export const orderSource = (c: Cite, num: (n: number) => string): SourceEntry =>
   ({ line: BOOKS[c.book].short, quotes: [{ text: '', cite: citeLabel(c, num), url: citeUrl(c) }, { text: BOOKS[c.book].title }] });
 
-/**
- * The surah-order page's feed cards (owner, 2026-11-21; sketch surah-order-feed/sketch-dark.png), each under «تناسب السور»:
- * «مقصود السورة», a surah's card by its number, and «بين سورتين», the link into a surah from the one before it, by the
- * later surah's number.
- */
 export const aimItems = () => Object.keys(ORDER_AIMS).map(Number).sort((a, b) => a - b).map(String);
 export const linkItems = () => Object.keys(ORDER_LINKS).map(Number).sort((a, b) => a - b).map(String);
 export const aimSources = (item: string) => (ORDER_AIMS[Number(item)] ? [orderCiteSource(ORDER_AIMS[Number(item)].src)] : []);
 export const linkSources = (item: string) => (ORDER_LINKS[Number(item)] ? [orderCiteSource(ORDER_LINKS[Number(item)].src)] : []);
 
-/** A quote's page as a card's or a question's source: the book (al-Shamela's page linked) and the volume and page. */
 export function orderCiteSource(c: Cite): QuizSource {
   const pages = `${arabic(c.page)}${c.to ? `–${arabic(c.to)}` : ''}`;
   return { book: BOOKS[c.book].short, at: c.vol ? `${arabic(c.vol)}/${pages}` : `ص${pages}`, url: citeUrl(c) };

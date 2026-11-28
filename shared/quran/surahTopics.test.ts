@@ -34,7 +34,6 @@ describe('surah topics', () => {
     expect(surahTopicsOf(44)).toMatchObject({ volume: 7, page: 140 });
     expect(surahTopicsOf(44)!.sections.map(s => [s.from, s.to])).toEqual([[1, 9], [10, 16], [17, 33], [34, 39], [40, 50], [51, 59]]);
     expect(surahTopicsOf(44)!.sections[0].title).toBe('إعجاز القرآن وإنزاله في ليلة مباركة');
-    // Al-Fatiha's seven topics sit on the words they come from: two on ayah 5, two on ayah 7.
     expect(surahTopicsOf(1)!.sections.map(s => s.from)).toEqual([2, 4, 5, 5, 6, 7, 7]);
   });
 
@@ -54,7 +53,6 @@ describe('surah topics', () => {
     expect(sectionsStartingAt(1, 5)).toEqual([2, 3]);
     expect(sectionAt(78, 20)).toBe(2);
     expect(sectionAt(1, 1)).toBe(-1);
-    // Several sections at one ayah: the first of them. A heading that only groups parts starts at its first part.
     expect(sectionAt(1, 5)).toBe(2);
     expect(sectionAt(8, 1)).toBe(0);
     expect(sectionsStartingAt(8, 1)).toEqual([0]);

@@ -20,11 +20,9 @@ import { findPerson, PEOPLE, personName, PROPHET, searchPeople } from '@/lib/tar
 import { Credit } from './person';
 
 const LINE = 1.5;
-/** The smallest a wide tree is drawn to fit the screen's width; past it, it scrolls sideways. */
 const MIN_SCALE = 0.5;
 
 
-/** A father's name in the tree, in the one card; a picked person's is picked and opens his page. */
 function Box({ node, palette, linked, scale }: { node: NasabNode; palette: Palette; linked: boolean; scale: number }) {
   const slug = node.people[0];
   const name = node.name + (slug === PROPHET ? ' ﷺ' : '');
@@ -38,16 +36,6 @@ function Box({ node, palette, linked, scale }: { node: NasabNode; palette: Palet
 
 type Tree = { palette: Palette; linked: boolean; scale: number };
 
-/**
- * A node and his sons under him, joined by lines: a stem down from the father, a bar across the sons, a stem down to
- * each (each son draws his half of the bar, so the bar spans from the first son's middle to the last's). Every father
- * is drawn: the tree never folds (owner 2026-11-22). An only son hangs as far below as sons under a bar do, so each
- * generation stands on one row across the tree (owner 2026-11-22).
- *
- * A run of fathers each with one son is drawn as one flat column, and views nest only where the tree parts: nesting a
- * view per generation made the phone's layout time double with each one, and a 22-generation line (Abu Bakr's, to
- * Adnan) froze the app for minutes (owner, 2026-11-23).
- */
 function Branch({ node, path, tree }: { node: NasabNode; path: string; tree: Tree }) {
   const { palette, scale } = tree;
   const stem = { width: LINE, height: 16 * scale, backgroundColor: palette.muted, alignSelf: 'center' as const };
@@ -61,7 +49,6 @@ function Branch({ node, path, tree }: { node: NasabNode; path: string; tree: Tre
         <View key={`${i}:${father.key}`} style={{ alignItems: 'center' }}>
           <Box node={father} palette={palette} linked={tree.linked} scale={scale} />
           {father.children.length > 0 && <View style={stem} />}
-          {/* An only son: the stem down to him, as long as a son's under a bar. */}
           {father.children.length === 1 && <View style={{ ...stem, height: stem.height + LINE }} />}
         </View>
       ))}
@@ -83,15 +70,8 @@ function Branch({ node, path, tree }: { node: NasabNode; path: string; tree: Tre
   );
 }
 
-/**
- * The tree drawn to the screen's width (owner: a wide tree opens fitted): measured as drawn, then drawn again smaller until
- * it fits, down to MIN_SCALE; past that it scrolls sideways.
- */
 function Fitted({ children }: { children: (scale: number) => React.ReactNode }) {
   const [room, setRoom] = useState(0);
-  // The tree's width at scale 1. It only ever grows (a «…» opened), so measuring cannot swing back and forth: the tree's
-  // fixed parts (lines, a node's least width) do not shrink with the scale, and correcting for them each layout froze the
-  // phone in a loop of layouts (owner, 2026-11-23: a person's page would not open).
   const [natural, setNatural] = useState(0);
   const scale = room && natural > room ? Math.max(MIN_SCALE, room / (natural * 1.02)) : 1;
   return (
@@ -104,27 +84,14 @@ function Fitted({ children }: { children: (scale: number) => React.ReactNode }) 
   );
 }
 
-/**
- * The nasab tree (owner, 2026-11-18; sketch tarajim-app/sketch-dark.png, screen 3): the tree of `slugs`' fathers (one person's line, or several that part where their nasabs part), the fathers they
- * share above the meeting in one «…» node that opens them (owner 2026-11-22), every name below it drawn. «الرسم | النص» shows the tree or the text (owner 2026-11-20, the drawing
- * first): each one's chain of fathers written out, or with `meetings`, where each pair meets and the chain to it. The
- * «النسب» screen draws it, and so does a quiz that asks where two nasabs meet (the meetings only after the answer).
- */
 export function NasabTree({ slugs, palette, meetings: showMeetings = true, linked = true, text: withText = true, start = 'drawing', inCard = false }: { slugs: string[]; palette: Palette; meetings?: boolean;
-  /** In a home card, whose source line names the entries (owner 2026-11-20: no folded credit inside a card). */
   inCard?: boolean;
-  /** A picked person's name opens his page; not inside a quiz, which would close under it. */
   linked?: boolean;
-  /** The «الرسم | النص» switch; without it only the tree (the person page has its own switch, the text being the book's). */
   text?: boolean;
-  /** Which of the two shows first: a quiz on the nasab's words opens on the text. */
   start?: DrawingOrText }) {
   const [picked, setShown] = useState<DrawingOrText>(start);
-  // One person's line is never drawn (owner, 2026-11-23: a long chain as a tree adds nothing): his nasab is the text; the
-  // tree is for two or more, where it shows where they part.
   const single = slugs.length < 2;
   const shown: DrawingOrText = single ? 'text' : picked;
-  // The trees whose shared fathers above the meeting are opened.
   const [opened, setOpened] = useState<string[]>([]);
   const inside = useInsideCard();
   const lines = useMemo(() => slugs.filter(s => findPerson(s)).map(s => ({ slug: s, line: lineOf(findPerson(s)!, PEOPLE) })), [slugs]);
@@ -136,14 +103,11 @@ export function NasabTree({ slugs, palette, meetings: showMeetings = true, linke
     return { a: first, b: other, at };
   }) : [];
   const chain = (slug: string, line: Parameters<typeof chainOf>[1], to: number) => chainOf(findPerson(slug)!, line, to);
-  // Every entry a name on the page comes from: a line carried on through another entry rests on that entry's nasab too.
   const sources = [...new Set(lines.flatMap(({ line }) => line.map(n => n.from)))].map(s => findPerson(s)?.fullName).filter(f => !!f);
   const tree = (scale: number): Tree => ({ palette, linked, scale });
   const bodyText = { color: palette.ink, fontSize: 17, lineHeight: 30, textAlign: 'right' as const };
   const body = <>
     {shown === 'drawing' || (!withText && !single) ? roots.map((root, r) => {
-      // Several people: the tree from where they part, the fathers they share above it in one «…» node of the tree's own
-      // style, which opens them as nodes in place (owner 2026-11-22).
       const { above, start: top } = lines.length > 1 && !opened.includes(root.key) ? foldTop(root) : { above: [], start: root };
       const id = `${r}:${root.key}`;
       return (
@@ -183,22 +147,16 @@ export function NasabTree({ slugs, palette, meetings: showMeetings = true, linke
     </Text>
     {!inCard && <Credit facts={sources} palette={palette} />}
   </>;
-  // On its own page the tree is a section in the home card's shape, its books on the line under it (owner 2026-11-20).
   return <>
     {withText && !single && <Tabs palette={palette} label="كيف يُعرض النسب" value={shown} onChange={setShown} options={DRAWING_OR_TEXT} />}
     {inside ? body : <CardWithRow palette={palette} gap={10}>{body}</CardWithRow>}
   </>;
 }
 
-/**
- * The «النسب» screen: the people picked (one to start, more added) and their tree. Opened from the tarajim hub (`pick`), it
- * starts with the search of people open (owner 2026-11-20).
- */
 export default function NasabScreen() {
   const palette = usePalette();
   const bottom = useTabBarSpace();
   const { slug = '', pick } = useLocalSearchParams<{ slug?: string; pick?: string }>();
-  // One person, or several from a feed card («أين يلتقي نسبهما؟»).
   const [picked, setPicked] = useState(() => slug.split(',').filter(s => findPerson(s)));
   const [adding, setAdding] = useState(!!pick || !picked.length);
   const [query, setQuery] = useState('');

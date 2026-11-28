@@ -18,7 +18,6 @@ import { openDhikr } from '@/lib/adhkar';
 import { openIntent as go, toTab } from '@/lib/ways';
 import type { Palette } from '@/lib/theme';
 
-/** Results a group shows until its arrow opens the rest. */
 export const GROUP_SHOWN = 3;
 
 export const GROUPS: Record<SearchKind, { title: string; Icon: (props: LucideProps) => React.ReactNode }> = {
@@ -39,7 +38,6 @@ export const GROUPS: Record<SearchKind, { title: string; Icon: (props: LucidePro
 
 const ayahLabel = (key: string) => { const [surah, ayah] = key.split(':').map(Number); return `${surahName(surah)} ${num(ayah)}`; };
 
-/** One row or card per result; a tap opens it where it lives. */
 function HitRow({ hit, palette, onWord }: { hit: SearchHit; palette: Palette; onWord: (id: number) => void }) {
   const row = { flexDirection: 'row', alignItems: 'center', gap: 10, minHeight: 48, paddingHorizontal: 6, paddingVertical: 6, borderBottomWidth: 1, borderColor: `${palette.rule}60` } as const;
   const pressed = (on: boolean) => (on ? { backgroundColor: palette.paperDeep } : null);
@@ -52,8 +50,6 @@ function HitRow({ hit, palette, onWord }: { hit: SearchHit; palette: Palette; on
         </Pressable>
       );
     case 'ayah':
-      // The whole ayah as the page sets it, its number after it, the words found on the band (the Quran text pipeline:
-      // an ayah is never cut to a few words around the find).
       return (
         <Card palette={palette} pad={[8, 12]} onPress={() => go({ tab: 'read', at: hit.key })} accessibilityRole="link" accessibilityLabel={ayahLabel(hit.key)} style={{ marginBottom: 8 }}>
           <LitAyat ayat={[{ words: hit.words, lit: [[hit.from, hit.to]], number: Number(hit.key.split(':')[1]) }]} menu={hit.key} palette={palette} />
@@ -80,7 +76,6 @@ function HitRow({ hit, palette, onWord }: { hit: SearchHit; palette: Palette; on
         </Pressable>
       );
     case 'event': case 'sira':
-      // A prophet's story, a sira story, or a chapter of the sira (which opens «الفهرس» at it).
       return (
         <Pressable accessibilityRole="link" style={({ pressed: on }) => [row, pressed(on)]} onPress={() => (hit.kind === 'event'
           ? router.push({ pathname: '/prophets/[slug]', params: { slug: hit.slug, event: String(hit.event) } })
@@ -97,7 +92,6 @@ function HitRow({ hit, palette, onWord }: { hit: SearchHit; palette: Palette; on
         </TapRow>
       );
     case 'hadith':
-      // A hadith of the Forty opens its page; a Sahih bab opens at its first hadith, or its kitab where the bab has none.
       return (
         <TapRow role="link" label={hit.title} style={row} onPress={() => toTab(hit.book === 'forty'
           ? { pathname: '/hadith-forty', params: { n: String(hit.n) } }
@@ -153,14 +147,9 @@ const hitKey = (hit: SearchHit) => {
   }
 };
 
-/**
- * The one search's results for what is typed, a moment after the typing stops (the home search page and the Quran tab share it).
- * `keep` limits the groups, as the Quran tab leaves out the adhkar. The ayah index is built once the page has opened, not on the first letter typed.
- */
 export function useAppSearch(query: string, keep?: (kind: SearchKind) => boolean) {
   const [found, setFound] = useState<{ query: string; groups: SearchGroup[] }>({ query: '', groups: [] });
   useEffect(() => { const timer = setTimeout(warmSearch, 400); return () => clearTimeout(timer); }, []);
-  // A note written or changed elsewhere shows on coming back, with the same search still typed.
   const notes = useSyncExternalStore(subscribeAyahNotes, readAyahNotes);
   useEffect(() => {
     const typed = query.trim();
@@ -174,7 +163,6 @@ export function useAppSearch(query: string, keep?: (kind: SearchKind) => boolean
   return { found, waiting: query.trim() !== found.query };
 }
 
-/** The groups found, each with three results until its arrow opens the rest (`open`); a word opens its sheet. */
 export function SearchResults({ groups, open, onOpen, palette }: {
   groups: SearchGroup[]; open: SearchKind | null; onOpen: (kind: SearchKind | null) => void; palette: Palette;
 }) {

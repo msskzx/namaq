@@ -14,10 +14,8 @@ describe('adhan alerts plan', () => {
 
   it('starts from the next time today and matches the prayer page times', () => {
     const today = times(cairo)(new Date(2026, 10, 13, 12));
-    // Dhuhr, in whatever zone the tests run in, so Fajr is behind and Asr ahead.
     const now = today.dhuhr;
     const plan = planAlerts({ ...NO_ALERTS, asr: true, fajr: true }, cairo, now, times(cairo));
-    // Fajr today has passed, so the first alert is today's Asr, then tomorrow's Fajr.
     expect(plan[0]).toMatchObject({ prayer: 'asr', at: today.asr });
     expect(plan[1].prayer).toBe('fajr');
     expect(plan[1].at.getTime()).toBe(times(cairo)(new Date(2026, 10, 14, 12)).fajr.getTime());
@@ -78,7 +76,6 @@ describe('adhkar reminders', () => {
     expect(adhkarAt(today, 'evening').getTime()).toBe(today.asr.getTime() + ADHKAR_AFTER * 60_000);
     expect(adhkarAt(today, 'morning').getTime()).toBeLessThan(today.sunrise.getTime());
     expect(adhkarAt(today, 'evening').getTime()).toBeLessThan(today.maghrib.getTime());
-    // A short morning (sunrise ten minutes after fajr) rings halfway instead of after sunrise.
     const short = { ...today, sunrise: new Date(today.fajr.getTime() + 10 * 60_000) };
     expect(adhkarAt(short, 'morning').getTime()).toBe(today.fajr.getTime() + 5 * 60_000);
   });
@@ -92,7 +89,6 @@ describe('adhkar reminders', () => {
     expect(plan.adhkar[0]).toMatchObject({ adhkar: 'morning', title: 'أذكار الصباح', body: 'حان وقت أذكار الصباح' });
     expect(plan.adhkar[1]).toMatchObject({ adhkar: 'evening', title: 'أذكار المساء' });
     expect(new Set(plan.adhkar.filter(item => item.adhkar === 'morning').map(item => day(item.at))).size).toBe(MAX_DAYS);
-    // Not one today once the time has passed.
     const evening = planAll(NO_ALERTS, both, cairo, new Date(2026, 10, 18, 23), times(cairo));
     expect(day(evening.adhkar[0].at)).toBe(day(new Date(2026, 10, 19)));
   });
@@ -102,7 +98,6 @@ describe('adhkar reminders', () => {
     const now = new Date(2026, 10, 18, 1);
     const plan = planAll(all, both, cairo, now, times(cairo));
     expect(plan.prayers.length + plan.adhkar.length).toBe(MAX_ALERTS);
-    // The 60 kept are the 60 soonest of everything switched on.
     const every = Array.from({ length: MAX_DAYS }, (_, i) => times(cairo)(new Date(2026, 10, 18 + i, 12))).flatMap(that => [
       that.fajr, that.dhuhr, that.asr, that.maghrib, that.isha, adhkarAt(that, 'morning'), adhkarAt(that, 'evening'),
     ]).map(at => at.getTime()).filter(at => at > now.getTime()).sort((a, b) => a - b).slice(0, MAX_ALERTS);
@@ -114,7 +109,6 @@ describe('adhkar reminders', () => {
 
   it('keeps one reminder per local day across a clock change', () => {
     const berlin: Place = { name: 'برلين', lat: 52.52, lng: 13.4 };
-    // Europe moves its clocks back on 25 October 2026.
     const plan = planAll(NO_ALERTS, both, berlin, new Date(2026, 9, 20, 1), times(berlin));
     for (const time of ['morning', 'evening'] as const) {
       const days = plan.adhkar.filter(item => item.adhkar === time).map(item => day(item.at));

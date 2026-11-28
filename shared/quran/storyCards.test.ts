@@ -1,6 +1,4 @@
-// Guard (owner sign-off 2026-11-19, docs/plans/guard-proposals.md no. 26): on a page of two surahs with a prophet's story,
-// an ayah on a part of the story sits on no other card of the page, so the story is not told twice. (Ordinary cards may
-// share an ayah: one ayah is often like two others.)
+// see docs/plans/guard-proposals.md
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
@@ -9,17 +7,14 @@ import corpus from './quranText/corpus';
 import { shownCards, type PairCard, type StoredCards } from './compareCards';
 
 const stored = generated as unknown as StoredCards;
-/** The pages already breaking the rule when the guard came (2026-11-19), page by page: the list only shrinks. */
 const BASELINE = join(__dirname, 'storyCards.baseline.json');
 const words = new Map(corpus.ayat.map(ayah => [ayah.key, ayah.words]));
 
-/** Every ayah a card shows, as `surah:ayah`, on both sides and in every option of a card with many. */
 const ayatOf = (card: PairCard) => new Set([
   ...card.sides.flatMap(side => side.ayat.map(ayah => `${side.surah}:${ayah.number}`)),
   ...(card.many?.options.map(option => `${card.sides[card.many!.side].surah}:${option.ayah.number}`) ?? []),
 ]);
 
-/** The ayat of a story part that sit on another card too, each with the cards' ids. `parts` marks the story parts. */
 export function sharedAyat(cards: PairCard[], parts: boolean[]) {
   const on = new Map<string, string[]>();
   for (const card of cards) for (const key of ayatOf(card)) on.set(key, [...(on.get(key) ?? []), card.id]);
@@ -34,12 +29,10 @@ describe('story pages', () => {
     expect(pages.some(page => stored.stories![page].some(item => item.t === 1))).toBe(true);
     const twice = pages.flatMap(page => {
       const [a, b] = page.split(':').map(Number);
-      // shownCards decodes the stored story page in order, so its cards line up with the stored ones (t marks a story part).
       const parts = stored.stories![page].map(item => item.t === 1);
       return sharedAyat(shownCards(stored, key => words.get(key), a, b), parts).map(line => `${page}: ${line}`);
     });
     const known: string[] = JSON.parse(readFileSync(BASELINE, 'utf8'));
-    // Rewriting the list only drops lines that are fixed.
     if (process.env.UPDATE_BASELINE) writeFileSync(BASELINE, `${JSON.stringify(known.filter(line => twice.includes(line)), null, 2)}\n`);
     expect(twice.filter(line => !known.includes(line)), 'new').toEqual([]);
     expect(known.filter(line => !twice.includes(line)), 'fixed: run with UPDATE_BASELINE=1').toEqual([]);

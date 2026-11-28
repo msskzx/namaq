@@ -3,7 +3,6 @@ import type { Place } from '@shared/quran/prophets/story';
 import type { Palette } from '@/lib/theme';
 import AyahFlow, { AyahWords } from './quran/text/AyahFlow';
 
-/** The website's PlaceText: a place's ayat as the page sets them (AyahFlow), words another surah also has (`shared`, from sharedWords) in colour. */
 export default function PlaceText({ place, shared, palette }: { place: Place; shared: boolean[][][]; palette: Palette }) {
   return (
     <>

@@ -17,7 +17,6 @@ describe('foldForms', () => {
     const folded = foldForms({ tree, prefixes: [prefix('فَٱتَّبِعُوا۟', ['3:95']), prefix('قِيَمًۭا', ['6:161'])], offsets: { '3:95': 4, '6:161': 9 } });
     expect(folded.prefixes.map(p => [p.word, p.differs])).toEqual([['فَٱتَّبِعُوا۟ مِلَّةَ', [1]], ['قِيَمًۭا مِّلَّةَ', [1]]]);
     expect(folded.tree.words).toEqual(['إِبْرَٰهِيمَ']);
-    // The trunk keeps its old spelling for its tree id and links.
     expect(folded.tree.spelled).toEqual(['مِلَّةَ', 'إِبْرَٰهِيمَ']);
     expect(folded.tree.forms).toBeUndefined();
     expect(folded.offsets).toEqual({ '3:95': 5, '6:161': 10 });
@@ -80,7 +79,6 @@ describe('writtenPieces and writtenStrands', () => {
 describe('every tree of the default list, folded', () => {
   const ayat = corpus.ayat as BranchAyah[];
   const byKey = new Map(ayat.map(ayah => [ayah.key, ayah]));
-  // A matrix-only card shows no tree.
   const pieces = branchInventory({}, null).filter(piece => !matrixOnly(piece));
   const presentations = pieces.map(piece => [piece.id, piece.group ? groupPresentation(piece.group, byKey) : phrasePresentation(piece.phrase, ayat, true, true)] as const);
 

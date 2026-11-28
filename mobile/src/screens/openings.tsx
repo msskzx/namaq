@@ -27,7 +27,6 @@ const words = (key: string) => ayahOf(key)?.words ?? [];
 
 type Light = { lit: string | null; onWord: (link: string) => void };
 
-/** A row's words: shared ones coloured as the matrix colours them; a tap on one lights it and its partners on the highlight, as in the matrix and compare. */
 function Ayah({ words: list, menu, palette, light }: { words: OpeningWord[]; menu: string | string[]; palette: Palette; light?: Light }) {
   return (
     <AyahFlow color={palette.ink} menu={menu}>
@@ -42,7 +41,6 @@ function Ayah({ words: list, menu, palette, light }: { words: OpeningWord[]; men
   );
 }
 
-/** The rest of a surah's conditions after its opening, the answer marked, and what the mufassirun say of the answer with its source. */
 function Conditions({ surah, after, palette }: { surah: number; after: number; palette: Palette }) {
   const note = CONDITION_NOTES[surah];
   return (
@@ -59,9 +57,7 @@ function Conditions({ surah, after, palette }: { surah: number; after: number; p
   );
 }
 
-/** A card's surahs, each its name (opening the mushaf there) over its opening ayah: the page's card and its feed card. */
 export function OpeningRows({ card, palette, still, conditions }: { card: OpeningCard; palette: Palette; still?: boolean;
-  /** The page's card: a surah of «إذا السماء» folds out its conditions (the feed card and the share image leave them out). */
   conditions?: boolean }) {
   const [lit, setLit] = useState<string | null>(null);
   const light = still ? undefined : { lit, onWord: (link: string) => setLit(now => (now === link ? null : link)) };
@@ -102,7 +98,6 @@ function Opening({ card, palette, onLayout }: { card: OpeningCard; palette: Pale
   );
 }
 
-/** The website's /quran/openings on the phone (owner, 2026-11-13): the ten kinds of opening as chips, and cards of surahs whose openings look alike. */
 export default function OpeningsScreen() {
   const palette = usePalette();
   const shrink = useShrinkOnScroll();
@@ -115,7 +110,6 @@ export default function OpeningsScreen() {
   const typed = useDeferredValue(query.trim());
   const shown = (k: OpeningKindId) => cards.filter(card => (kind ? inKind(card, k) : card.kind === k) && openingFound(card, typed, surah => surahNames[surah]));
   const kinds = OPENING_KINDS.filter(k => (!kind || k.id === kind) && shown(k.id).length > 0);
-  // Opened at a card (`at`, its id: the home feed's card): scrolled to it once its kind's block and the card are placed.
   const { at } = useLocalSearchParams<{ at?: string }>();
   const atKind = cards.find(card => card.id === at)?.kind;
   const place = useRef<{ kind?: number; card?: number; done?: boolean }>({});

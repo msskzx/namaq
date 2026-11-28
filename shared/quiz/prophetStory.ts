@@ -1,8 +1,3 @@
-// «في قصة مَن هذه الآية؟» (release-1 plan 2026-11-23: every interest gets a quiz kind; «قصص الأنبياء» had none): an ayah of a
-// prophet's story in the app (shared/quran/prophets) and four prophets to pick from. Only an ayah that does not name a
-// prophet itself, inside a passage of the story where another ayah names him, so the Quran's own words settle the answer:
-// that naming ayah is the question's reference. An ayah two stories share, or one worded like an ayah of another
-// prophet's story, is not asked.
 import corpus from '../quran/quranText/corpus';
 import type { BranchAyah } from '../quran/branches';
 import { filteredAyat } from '../quran/mutashabih/browse';
@@ -16,15 +11,9 @@ import { mushafSource } from './sources';
 export const PROPHET_STORY = 'PROPHET_STORY';
 export const PROPHET_STORY_NAME = 'في قصة مَن هذه الآية؟';
 const CHOICES = 4;
-/** Longer ayat fill a card before the choices. */
 const MOST_WORDS = 40;
-/** Words in a row two ayat share before they count as worded alike. */
 const ALIKE_RUN = 4;
 
-/**
- * How each prophet is named in the mushaf, as words come out of `bare`: his name, and what the Quran calls him by
- * («ذا النون», «صاحب الحوت», «المسيح»). The Prophet ﷺ's own story is the sira's, and stays out.
- */
 const NAMES: Record<string, string[]> = {
   adam: ['ادم'], idris: ['ادريس'], nuh: ['نوح'], hud: ['هود'], salih: ['صلح', 'صالح'], ibrahim: ['ابرهيم', 'ابرهم', 'ابراهيم'],
   lut: ['لوط'], shuayb: ['شعيب'], yaqub: ['يعقوب', 'اسريل', 'اسرءيل'], yusuf: ['يوسف'], ayyub: ['ايوب'], 'dhul-kifl': ['الكفل'],
@@ -33,25 +22,15 @@ const NAMES: Record<string, string[]> = {
 };
 const ASKED = PROPHETS.filter(prophet => NAMES[prophet.slug] && STORIES[prophet.slug]);
 
-/** A word bare of its marks and a joined «و ف ب ل ك» before the article. */
 const bare = (word: string) => normalizeWord(word).replace(/[^ء-ي]/g, '').replace(/^[وفبلك](?=ال)/, '');
-/**
- * The name anywhere in the word, so «يا موسى» (one word on the page), «بموسى», «لموسى» and «ولوطا» all count. A word that
- * only looks like a name («يهود») drops a question, never lets one through.
- */
 const names = (word: string, slug: string) => {
   const plain = normalizeWord(word).replace(/[^ء-ي]/g, '');
   return NAMES[slug].some(name => plain.includes(name));
 };
-/** Prophets the stories here do not tell but who point at one (Isma'il and Ishaq at Ibrahim): an ayah naming them is not asked. */
 const POINTING = ['اسمعيل', 'اسحق', 'اسماعيل', 'اسحاق'];
-/** Musa and Harun are told together: neither is offered as the other's wrong choice. */
 const TOLD_TOGETHER: Record<string, string> = { musa: 'harun', harun: 'musa' };
-/** Ayat spoken to the Prophet ﷺ inside a story, where nothing in the ayah points at whose story it is. */
 const SPOKEN_TO_HIM = new Set(['2:252', '3:60', '5:74']);
-/** How far the naming ayah may be from the asked one. */
 const NEAR = 3;
-/** Ayat on either side of the asked one: a prophet whose story holds any of them is never a wrong choice. */
 const AROUND = 2;
 
 let ayat: Map<string, BranchAyah> | undefined;
@@ -61,7 +40,6 @@ const namesAny = (key: string) => wordsOf(key).some(word => ASKED.some(prophet =
 
 export type ProphetAyah = { key: string; slug: string; event: number; named: string; passage: string[]; nearby: string[] };
 
-/** Each story's ayat in the order told, with the event they are in and the passage (one run of ayat) around them. */
 function storyAyat() {
   return ASKED.flatMap(prophet => STORIES[prophet.slug].events.flatMap((event, n) => event.segments.flatMap(({ surah, range: [lo, hi] }) => {
     const passage = Array.from({ length: hi - lo + 1 }, (_, k) => `${surah}:${lo + k}`);
@@ -69,14 +47,12 @@ function storyAyat() {
   })));
 }
 
-/** Runs of `ALIKE_RUN` words, bare, for telling ayat worded alike. */
 const runsOf = (key: string) => {
   const words = wordsOf(key).map(bare);
   return new Set(words.slice(0, words.length - ALIKE_RUN + 1).map((_, i) => words.slice(i, i + ALIKE_RUN).join(' ')));
 };
 
 let built: ProphetAyah[] | undefined;
-/** Every ayah the kind can ask, with the ayah of its passage that names its prophet. */
 export function prophetAyat(): ProphetAyah[] {
   if (built) return built;
   const all = storyAyat();
@@ -91,7 +67,6 @@ export function prophetAyat(): ProphetAyah[] {
     const words = wordsOf(item.key);
     if (!words.length || words.length > MOST_WORDS || namesAny(item.key)) return [];
     if ([...runsOf(item.key)].some(run => runsBySlug.get(run)!.size > 1)) return [];
-    // The nearest ayah of the passage that names him.
     const named = [...item.passage].sort((a, b) => Math.abs(item.passage.indexOf(a) - item.passage.indexOf(item.key)) - Math.abs(item.passage.indexOf(b) - item.passage.indexOf(item.key)))
       .find(key => wordsOf(key).some(word => names(word, item.slug)));
     if (!named || Math.abs(item.passage.indexOf(named) - item.passage.indexOf(item.key)) > NEAR) return [];
@@ -117,9 +92,7 @@ function question(item: ProphetAyah, random: Random): ChoiceQuestion {
     choices: choices.map(prophet => ({ value: prophet.slug, labelArabic: prophetName(prophet) })),
     correctAnswer: item.slug,
     ayahKey: item.key,
-    // The passage it is told in, in the mushaf: the ayah that names him is in it.
     look: { view: 'ayat', keys: item.passage, mark: item.named },
-    // The ayah of the same passage that names him, in the Quran's words.
     sources: [{ ...mushafSource(item.named), quote: namedWords.join(' ') }],
     evidence: { claimKeys: [] },
   };

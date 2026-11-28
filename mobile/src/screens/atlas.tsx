@@ -28,12 +28,10 @@ import BattleMap from '@/components/battles/BattleMap';
 import { BattleYears } from '@/components/battles/BattleTimeline';
 import { battleLine, Refs } from '@/components/battles/BattleParts';
 
-/** Room kept between the lowest pin and the resting sheet's edge, for the pin's own dot. */
 const PIN_ROOM = 12;
 
 const openBattle = (slug: string) => router.push({ pathname: '/battle', params: { slug } });
 
-/** A battle in the atlas's lists: its name and «غزوة · السنة ٥ للهجرة», opening its page (or `onPress`: a search result shows it on the map); «لا موضع» where no book pins it. */
 function BattleRow({ battle, onPress, palette }: { battle: AppBattle; onPress?: () => void; palette: Palette }) {
   return (
     <TapRow role={onPress ? 'button' : 'link'} label={onPress ? battle.name : `افتح ${battle.name}`} onPress={onPress ?? (() => openBattle(battle.slug))}
@@ -47,10 +45,6 @@ function BattleRow({ battle, onPress, palette }: { battle: AppBattle; onPress?: 
   );
 }
 
-/**
- * A battle in the atlas's sheet as a passage (owner, 2026-11-23; sketch tools-design/atlas sketch-v2, list ب): a bar down
- * its right, its kind, its name, its place in its book's words with who says them and the page, and the way to its page.
- */
 function AtlasBattle({ battle, palette }: { battle: AppBattle; palette: Palette }) {
   const said = battle.place?.refs.find(ref => ref.text && placeSayer(ref.cite));
   return (
@@ -67,12 +61,7 @@ function AtlasBattle({ battle, palette }: { battle: AppBattle; palette: Palette 
   );
 }
 
-/**
- * A pin's sheet: the place, in its books' words with their pages and the GeoNames record of its coordinates, then each
- * battle there with its open button (owner, 2026-11-23: every pin carries its reference).
- */
 function PlaceSheet({ battles, onClose, palette }: { battles: AppBattle[]; onClose: () => void; palette: Palette }) {
-  // A pin may hold several places (Makkah and al-Hudaybiyah): each with its own books.
   const places = [...new Map(battles.map(battle => [battle.place!.name, battle] as const)).values()];
   return (
     <Sheet open={battles.length > 0} onClose={onClose} palette={palette}>
@@ -99,15 +88,6 @@ function PlaceSheet({ battles, onClose, palette }: { battles: AppBattle[]; onClo
   );
 }
 
-/**
- * «الأطلس» (owner, 2026-11-23; sketch /mnt/project-files/atlas/sketch2-dark.png, laid out anew from sketch
- * tools-design/atlas sketch-v2: the map fills the screen, the year and its battles in a sheet over its foot): the battles we have on one still map,
- * in two layers. «في حياته ﷺ»: a year at a time on the battles' own year axis, the year's places lit and the earlier
- * ones quiet, its battles listed in the sheet. «بعده ﷺ»: every later battle with a sourced place, no year axis since
- * most have no cited year; the dated ones listed first, the rest under «لم يذكر المصدر سنتها». A pin opens its sheet. The
- * search in the top bar finds a year, a place, or a battle by its name or place, on either layer. Opened with `layer`, `year` or `place`
- * (a quiz's answer, the feed's year card), it shows that.
- */
 export default function AtlasScreen() {
   const palette = usePalette();
   const bottom = useTabBarSpace();
@@ -121,8 +101,6 @@ export default function AtlasScreen() {
   const [year, setYear] = useState(years[0]);
   const [query, setQuery] = useState('');
   const [sheet, setSheet] = useState<AppBattle[]>([]);
-  // The feed's year card or a quiz's answer opens the atlas on its year or place; each opening carries its own `at`, so the
-  // same year opened again still comes back to it after the reader moved on.
   useEffect(() => {
     setQuery('');
     const at = params.place ? BATTLES.find(battle => battle.place?.name === params.place) : undefined;
@@ -132,20 +110,15 @@ export default function AtlasScreen() {
     if (toYear && years.includes(toYear)) setYear(toYear);
     if (at) setSheet(battlesAt(BATTLES, layerOf(at), [at.place!.name], toYear));
   }, [params.layer, params.year, params.place, params.at, years]);
-  // The bars over the map's top (the search, then the layers, measured), and where the sheet rests: the map is open between
-  // them, its pins kept a pin's room (PIN_ROOM) clear of the sheet's edge.
   const low = Math.round(size.height * 0.56);
   const box = useMemo(() => (size.width && barsEnd ? screenBox(BATTLES, layer, { width: size.width, height: size.height, top: barsEnd, bottom: low - PIN_ROOM }) : undefined),
     [layer, size.width, size.height, barsEnd, low]);
   const pins = useMemo(() => atlasPins(BATTLES, layer, year), [layer, year]);
   const madinah = useMemo(() => battleTimeline(layerBattles(BATTLES, 'life')).madinah, []);
-  // The search finds a year of his life ﷺ by its number, the places by name, and the battles by name or place
-  // (owner, 2026-11-24: it said «ابحث في الأطلس» and found battles only).
   const found = useMemo(() => searchBattles(BATTLES, query), [query]);
   const foundPlaces = useMemo(() => {
     const typed = query.trim();
     if (!typed) return [];
-    // Each place by its last battle (BATTLES runs earliest first): its sheet then lists every battle there up to that year.
     const last = new Map<string, AppBattle>();
     for (const battle of BATTLES) if (battle.place && holdsTerms(battle.place.name, typed)) last.set(battle.place.name, battle);
     return [...last.values()];
@@ -159,7 +132,6 @@ export default function AtlasScreen() {
   const undated = battles.filter(battle => !battle.year);
   const sources = sourcesOf(atlasSources(BATTLES, layer, year));
   const showPlace = (names: string[]) => setSheet(battlesAt(BATTLES, layer, names, year));
-  // A battle found by the search: its layer and year on the map, and its place's sheet, or its page where no book pins it.
   const pickFound = (battle: AppBattle) => {
     setQuery('');
     if (!battle.place) return openBattle(battle.slug);
@@ -170,7 +142,6 @@ export default function AtlasScreen() {
   };
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper, overflow: 'hidden' }} onLayout={event => setSize({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height })}>
-      {/* The map fills the screen (owner, 2026-11-23: as a maps app), the year's places in the open band above the sheet. */}
       {box && <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, overflow: 'hidden' }}>
         <BattleMap places={pins} box={box} palette={palette} onPin={showPlace} />
       </View>}

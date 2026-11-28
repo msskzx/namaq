@@ -5,7 +5,6 @@ import sizes from './treeSizes.json';
 describe('the tree sizes the app ships', () => {
   it('has every tree, both ways, with and without the surrounding ayat (else run `npm run tree-sizes` in mobile/)', () => {
     const known = sizes as Record<string, number[]>;
-    // A book's one-ayah entry has no tree to draw, so no size.
     const missing = branchList(EMPTY_LIST).filter(piece => piece.keys.length > 1).flatMap(piece => [piece.id, `${piece.id}+`]).filter(key => !(known[key]?.length === 5 && known[key].every(value => value > 0)));
     expect(missing).toEqual([]);
   });

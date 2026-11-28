@@ -5,10 +5,6 @@ import { BATTLES } from '@/lib/battles';
 import type { Palette } from '@/lib/theme';
 import BattleMap, { type MapPlace } from './BattleMap';
 
-/**
- * «أين كانت؟» on the atlas's own map (owner, 2026-11-23; atlas sketch, panel 4): each place of the layer a pin with no
- * name, the one tapped framed; once answered the right one green and named, a wrong tap framed in the accent and named.
- */
 export default function AtlasQuizMap({ layer, choices, picked, right, onPick, palette }: {
   layer: AtlasLayer; choices: string[]; picked?: string; right?: string; onPick?: (name: string) => void; palette: Palette;
 }) {

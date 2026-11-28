@@ -1,4 +1,4 @@
-// docs/plans/quran-relations-page.md
+// see docs/plans/quran-relations-page.md
 export function wordDiff(a: string[], b: string[]): { a: number[]; b: number[] } {
   const table = Array.from({ length: a.length + 1 }, () => new Array<number>(b.length + 1).fill(0));
   for (let i = a.length - 1; i >= 0; i--) {

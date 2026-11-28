@@ -1,6 +1,5 @@
 import { num } from './arabicNumber';
 
-/** Where a post's ayat are, for its head: «البقرة ٦١ · آل عمران ٢١، ١١٢», surah first, in the mushaf's order. */
 export function ayahPlaces(keys: string[], names: Record<number, string>) {
   const bySurah = new Map<number, number[]>();
   for (const key of keys) {

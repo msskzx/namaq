@@ -12,7 +12,6 @@ describe('one rule for words the ayat share', () => {
     expect(likeness(['ٱللَّهِ', 'ٱللَّهِ'])).toBe('exact');
     expect(likeness(['ٱلرَّحْمَـٰنِ', 'ٱلرَّحْمَٰنِ'])).toBe('exact');
     expect(likeness(['لَعْنَةُ', 'لَعْنَةَ'])).toBe('written');
-    // A hamza's seat and idgham's shadda are writing too.
     expect(likeness(['مِّن', 'مِن'])).toBe('written');
     expect(likeness(['يُؤْمِنُونَ', 'ءَامَنُوا۟'])).toBe('root');
   });

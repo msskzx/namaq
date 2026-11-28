@@ -10,10 +10,6 @@ import { back } from '@/lib/ways';
 import { words } from '@/lib/words';
 import { WordView } from '@/components/WordSheet';
 
-/**
- * A word's own page, opened from the words page (owner, 2026-11-21: a page, not a sheet): its ayat, Ibn Qutaybah on it
- * and al-Raghib's article (components/WordSheet.tsx WordView). Its top slides away with the top bar while reading down.
- */
 export default function WordScreen() {
   const palette = usePalette();
   const onScroll = useShrinkOnScroll();

@@ -1,6 +1,3 @@
-// Quiz difficulty (owner, 2026-11-13): easy, medium or hard trees. A tree is hard when its ayat are nearly the
-// same word for word, and a little harder for each ayah past two. Size alone cannot tell trees apart: most quiz
-// trees have just two ayat.
 import { normalizeWord } from '../quran/normalize';
 import type { QuizTopic } from './settings';
 
@@ -11,12 +8,7 @@ export const DIFFICULTY_NAMES: Record<Difficulty, string> = { easy: 'سهل', me
 
 export const parseDifficulty = (value: unknown): Difficulty => DIFFICULTIES.includes(value as Difficulty) ? value as Difficulty : DEFAULT_DIFFICULTY;
 
-/** How much a tree grows harder for each ayah past two. */
 const PER_AYAH = 0.05;
-/**
- * Where easy ends and hard begins: the thirds of the 819 quiz trees of the whole Quran (all kinds) on 2026-11-13,
- * so each level holds about a third of them. With a juz range, only the ayat inside it are scored.
- */
 const EASY_BELOW = 0.308;
 export const HARD_FROM = 0.468;
 
@@ -30,10 +22,8 @@ function common(a: string[], b: string[]) {
   return row[b.length];
 }
 
-/** The share of two ayat's words they have in common, in order, out of the longer one. */
 export const wordShare = (a: string[], b: string[]) => common(a.map(normalizeWord), b.map(normalizeWord)) / Math.max(a.length, b.length, 1);
 
-/** The tree's score: the share of words its ayat have in common (in order), two by two, plus a little per extra ayah. */
 export function treeScore(ayat: string[][]): number {
   const words = ayat.map(ayah => ayah.map(normalizeWord));
   let sum = 0, pairs = 0;
@@ -46,19 +36,13 @@ export function treeScore(ayat: string[][]): number {
 
 export const levelOf = (score: number): Difficulty => score < EASY_BELOW ? 'easy' : score >= HARD_FROM ? 'hard' : 'medium';
 
-/** How far one level is from another: 0 the same, 1 next to it, 2 the other end. */
 const distance = (a: Difficulty, b: Difficulty) => Math.abs(DIFFICULTIES.indexOf(a) - DIFFICULTIES.indexOf(b));
 
-/**
- * The trees of the chosen level first, then the levels next to it, so a narrow choice still fills the quiz.
- * Keeps the order otherwise (callers shuffle first).
- */
 export function byDifficulty<T>(items: T[], difficulty: Difficulty, level: (item: T) => Difficulty): T[] {
   const levels = new Map(items.map(item => [item, distance(level(item), difficulty)]));
   return [0, 1, 2].flatMap(far => items.filter(item => levels.get(item) === far));
 }
 
-/** What the difficulty changes in each topic that has one. */
 export const DIFFICULTY_NOTES: Partial<Record<QuizTopic, { en: string; ar: string }>> = {
   BRANCHES: {
     ar: 'الأشجار، سهل: آيات تفترق سريعًا. صعب: آيات تكاد تتطابق إلا كلمة أو كلمتين.',

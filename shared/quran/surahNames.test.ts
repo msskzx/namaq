@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { SURAH_NAMES, surahName } from './surahNames';
 
-/** Marks typed here may come in another order than the title's; compare them in one order. */
 const named = (n: number) => surahName(n).normalize('NFC');
 
 describe('surah names', () => {

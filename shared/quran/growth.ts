@@ -1,6 +1,5 @@
 import { keys, type Branch } from './branches';
 
-/** One ayah of a growing tree: the nodes from the root to where the ayah ends, and the first one not drawn yet. */
 export type GrowthStep = { key: string; nodes: number[]; fresh: number };
 
 const position = (key: string) => key.split(':').map(Number);
@@ -10,11 +9,6 @@ export function byMushaf(a: string, b: string) {
   return x[0] - y[0] || x[1] - y[1];
 }
 
-/**
- * Grows a tree depth first, one ayah at a time: each ayah walks from the root to its end,
- * reusing the nodes earlier ayat drew and growing its own branch from where it splits off (`fresh`).
- * Nodes are numbered as BranchTree numbers them: the root is -1, then depth first.
- */
 export function growthPlan(tree: Branch, starts: string[][] = []): GrowthStep[] {
   const index = new Map<Branch, number>();
   const visit = (node: Branch) => {
@@ -36,13 +30,10 @@ export function growthPlan(tree: Branch, starts: string[][] = []): GrowthStep[] 
   });
 }
 
-// Ayah ends (۝, ﴿٣﴾) are the card's ayah numbers, not words; a run into the next surah carries its basmala in the tree,
-// which the card sets apart, so those four words are not the card's either.
 const isEnd = (word: string) => word === '۝' || word.startsWith('﴿');
 const letters = (word: string) => word.replace(/[أإآٱ]/g, 'ا').normalize('NFD').replace(/\u0640/g, '').replace(/[^\u0621-\u064A]/g, '');
 const BASMALA = ['بسم', 'الله', 'الرحمن', 'الرحيم'];
 
-/** How many of a node's words its ayah's card shows; `afterEnd` carries whether the last word read closed an ayah. */
 export function cardWords(words: string[], afterEnd: boolean): { count: number; afterEnd: boolean } {
   let count = 0;
   for (let i = 0; i < words.length; i++) {
@@ -54,13 +45,8 @@ export function cardWords(words: string[], afterEnd: boolean): { count: number; 
   return { count, afterEnd };
 }
 
-/** Every word an ayah's card shows once its branch has grown. */
 export const ALL_WORDS = 10000;
 
-/**
- * For each growing ayah, how many of its words (from the ayah's start) its card shows: before any box (`start`), once its
- * words-before-the-phrase box is drawn (`prefix`), and after each of its nodes (`nodes`, as the step lists them).
- */
 export type StepWords = { start: number; prefix: number; nodes: number[] };
 export function growthWords(tree: Branch, plan: GrowthStep[], { offsets = {}, prefixed = [] }: { offsets?: Record<string, number>; prefixed?: string[] } = {}): StepWords[] {
   const nodes = new Map<number, Branch>();

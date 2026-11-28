@@ -12,10 +12,8 @@ import { usePalette, type Palette } from '@/lib/theme';
 
 type Scroller = ComponentRef<typeof ScrollView>;
 
-/** One utility, scrolled up and down on its own. */
 function Page({ view, width, height, palette, on, current, bottom, onPlace, scrollers, query }: { view: UtilityView; width: number; height: number; palette: Palette; on: boolean; current: boolean; bottom: number; onPlace: () => void; scrollers: Map<UtilityView, Scroller>; query: string }) {
   const shrink = useShrinkOnScroll();
-  // How far down the page has been seen, in steps of 50 so a scroll redraws it seldom: the qibla waits for it.
   const [reach, setReach] = useState(height);
   useEffect(() => { setReach(seen => Math.max(seen, height)); }, [height]);
   const scrolled = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -32,15 +30,9 @@ function Page({ view, width, height, palette, on, current, bottom, onPlace, scro
   );
 }
 
-/**
- * The utilities tab: the tools (prayer times, the qibla and the Hijri calendar, owner 2026-11-13, on one page since 2026-11-23) and the adhkar (owner, 2026-11-17), side by side.
- * A sideways swipe follows the finger and shows the next one coming in (owner, 2026-11-15); the icons in the top bar jump to one.
- * As in the reading order, the first is on the right and swiping right brings the next from the left.
- */
 export default function UtilitiesTab() {
   const palette = usePalette();
   const bottom = useTabBarSpace();
-  // The compass runs only while this tab and its page are on screen.
   const focused = useIsFocused();
   const [view, setView] = utilityView.use();
   const index = Math.max(0, UTILITY_VIEWS.indexOf(view));
@@ -49,15 +41,9 @@ export default function UtilitiesTab() {
   const [query, setQuery] = useState('');
   const pick = useCallback(() => setPicking(true), []);
   const list = useRef<FlatList<UtilityView>>(null);
-  // The pager's place, 0 on the first page, which the highlight on the top icons follows.
   const progress = useRef(new Animated.Value(index)).current;
   const scrollers = useRef(new Map<UtilityView, Scroller>()).current;
-  // Where the pager rests, so a tap on an icon scrolls it and a swipe that lands does not scroll it again.
   const shown = useRef(index);
-  // The page grows and shrinks as the top bar hides and comes back. On the web that can throw the pager back to its first
-  // page with no finger on it, and settling there switched to the tools mid-count, which ended the adhkar count (the
-  // adhkar test's flake, 2026-11-24). A rest on the first page that no swipe brought, after such a change, goes back to
-  // the open page (a tap on a card is no swipe, so it keeps the guard).
   const resized = useRef(false);
   useEffect(() => {
     if (!width || shown.current === index) return;
@@ -74,11 +60,9 @@ export default function UtilitiesTab() {
     }
     if (at === shown.current || at < 0 || at >= UTILITY_VIEWS.length) return;
     shown.current = at;
-    // Each page has its own scroll, so the bars come back with the next one.
     setCompact(false);
     setView(UTILITY_VIEWS[at]);
   }, [width, setView]);
-  // The web build snaps with CSS and sends no momentum event, so it settles when scrolling stops.
   const quiet = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const scrolled = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
     const { nativeEvent } = event;
@@ -89,7 +73,6 @@ export default function UtilitiesTab() {
   }, [settle, width, progress]);
   return (
     <View style={{ flex: 1, backgroundColor: palette.paper }}>
-      {/* On the adhkar the search sits in the top bar beside the picker (owner, 2026-11-24: never inside the page); the tools have none. */}
       {view === 'adhkar'
         ? <TopBar back={back} hideOnScroll search={{ value: query, onChangeText: setQuery, placeholder: 'ابحث في الأذكار', label: 'ابحث في الأذكار' }}><UtilityPicker palette={palette} progress={progress} /></TopBar>
         : <TopBar center back={back} hideOnScroll><UtilityPicker palette={palette} progress={progress} /></TopBar>}
