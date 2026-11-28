@@ -13,7 +13,6 @@ import { Text } from '@/ui/Text';
 import { SourceSlotContext } from '@/ui/sourceSlot';
 import { AyahMenuContext } from './ayahMenuContext';
 import IconButton from '@/ui/IconButton';
-import { useAdjustOn } from '@/lib/hooks/useAdjustOn';
 import { useOnChange } from '@/lib/hooks/useOnChange';
 
 const OPEN_MS = 260;
@@ -27,9 +26,9 @@ export default function Sheet({ open, onClose, palette, tall, full, title, onDis
   const drag = useSharedValue(open ? 0 : screen);
   const keyboard = useKeyboardHeight(shown && !!tall);
 
-  useAdjustOn([open], () => { if (open) setShown(true); });
   useOnChange([open], () => {
     if (open) {
+      setShown(true);
       drag.value = withTiming(0, { duration: OPEN_MS, easing: Easing.out(Easing.cubic) });
     } else {
       drag.value = withTiming(screen, { duration: CLOSE_MS, easing: Easing.in(Easing.quad) }, done => { if (done) scheduleOnRN(setShown, false); });
