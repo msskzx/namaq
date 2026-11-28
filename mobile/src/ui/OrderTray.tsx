@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ComponentRef } from 'react';
+import { useRef, useState, type ComponentRef } from 'react';
 import { ScrollView, View } from 'react-native';
 import { BookSearch, Check } from 'lucide-react-native';
 import { Text } from '@/ui/Text';
@@ -9,6 +9,7 @@ import { num } from '@shared/quran/arabicNumber';
 import { boxNumbers, emptyTray, inTray, put, sentTray, tapBox, trayOf, trayResults, type Tray } from '@shared/quiz/orderTray';
 import { sentOrder } from '@shared/quiz/orderAnswer';
 import { CARD, type Palette } from '@/lib/theme';
+import { useOnChange } from '@/lib/hooks/useOnChange';
 
 type Choice = { value: string; labelArabic: string };
 const BOX = 46;
@@ -40,9 +41,9 @@ export default function OrderTray({ question, picked, palette, onPick, onDraft, 
     setTray(next);
     onDraft?.(sentTray(next));
   };
-  useEffect(() => {
+  useOnChange([pinned, tray.at], () => {
     if (pinned && tray.at !== null) scroll.current?.scrollTo({ y: Math.max(0, (tray.at - 2) * (BOX + GAP)), animated: true });
-  }, [pinned, tray.at]);
+  });
   const answered = picked !== undefined && !!question.order?.length;
 
   const box = (n: number, i: number) => {

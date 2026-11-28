@@ -10,7 +10,6 @@ import { setCompact, useShrinkOnScroll } from '@/lib/chrome';
 import { utilityView, type UtilityView } from '@/lib/settings';
 import { usePalette, type Palette } from '@/lib/theme';
 import { useWebScrollEnd } from '@/lib/hooks/useWebScrollEnd';
-import { useAdjustOn } from '@/lib/hooks/useAdjustOn';
 import { useOnChange } from '@/lib/hooks/useOnChange';
 
 type Scroller = ComponentRef<typeof ScrollView>;
@@ -18,7 +17,7 @@ type Scroller = ComponentRef<typeof ScrollView>;
 function Page({ view, width, height, palette, on, current, bottom, onPlace, scrollers, query }: { view: UtilityView; width: number; height: number; palette: Palette; on: boolean; current: boolean; bottom: number; onPlace: () => void; scrollers: Map<UtilityView, Scroller>; query: string }) {
   const shrink = useShrinkOnScroll();
   const [reach, setReach] = useState(height);
-  useAdjustOn([height], () => setReach(seen => Math.max(seen, height)));
+  useOnChange([height], () => setReach(seen => Math.max(seen, height)));
   const scrolled = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
     shrink(event);
     const bottom = Math.ceil((event.nativeEvent.contentOffset.y + height) / 50) * 50;

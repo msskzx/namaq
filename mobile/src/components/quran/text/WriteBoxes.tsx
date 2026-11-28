@@ -1,4 +1,4 @@
-import { useEffect, useRef, type ComponentRef } from 'react';
+import { useRef, type ComponentRef } from 'react';
 import { Pressable, View } from 'react-native';
 import { Text } from '@/ui/Text';
 import { num } from '@shared/quran/arabicNumber';
@@ -6,6 +6,7 @@ import type { WriteBlank } from '@shared/quiz/writeBlanks';
 import type { WriteBlanks } from '../../recite/useRecite';
 import { useAyahSize } from './AyahFlow';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
+import { useOnChange } from '@/lib/hooks/useOnChange';
 
 
 export const tint = (hex: string, alpha: number) => `${hex}${Math.round(alpha * 255).toString(16).padStart(2, '0')}`;
@@ -24,9 +25,9 @@ export function WriteBox({ text, size, palette, typed, active, onPress, onActive
   hint?: string;
   label?: string }) {
   const box = useRef<ComponentRef<typeof View>>(null);
-  useEffect(() => {
+  useOnChange([active, onActive], () => {
     if (active) box.current?.measureInWindow((_x: number, y: number, _w: number, h: number) => onActive?.(y, h));
-  }, [active, onActive]);
+  });
   return (
     <Pressable ref={box} onPress={onPress} accessibilityRole="button" accessibilityLabel={label ? `${label}${typed ? `: ${typed}` : ''}` : typed ? `كلمة مكتوبة: ${typed}` : 'اكتب هذه الكلمة'} accessibilityState={{ selected: active }}
       style={{ height: size * 1.25, overflow: 'hidden', justifyContent: 'center', borderRadius: 5, backgroundColor: palette.paper, borderWidth: active ? 2 : 1, borderColor: active ? palette.accent : palette.rule }}>

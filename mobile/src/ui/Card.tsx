@@ -1,4 +1,4 @@
-import { useContext, useId, useLayoutEffect, useMemo, useState } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import { ScrollView, View, useWindowDimensions, type AccessibilityRole, type GestureResponderEvent, type LayoutChangeEvent, type StyleProp, type ViewStyle } from 'react-native';
 import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 import { CARD_CAP_SHARE } from '@shared/homeFeed';
@@ -11,14 +11,13 @@ import { SourceSlotContext, type Source } from '@/ui/sourceSlot';
 import SourceLine from '@/ui/SourceLine';
 import Reference from '@/ui/Reference';
 import { InsideCard, RowSlot, type Slot } from '@/ui/cardContext';
+import { useLiftInto } from '@/lib/hooks/useLiftInto';
 
 export { OutsideCard, useCardRow, useInsideCard } from '@/ui/cardContext';
 
 export function UnderCard({ children }: { children: React.ReactNode }) {
   const slot = useContext(RowSlot);
-  const id = useId();
-  useLayoutEffect(() => { slot?.set(id, children); });
-  useLayoutEffect(() => () => slot?.set(id, null), [slot, id]);
+  useLiftInto<React.ReactNode>(slot, children);
   return slot ? null : <>{children}</>;
 }
 

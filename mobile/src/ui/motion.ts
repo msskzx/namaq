@@ -1,12 +1,12 @@
-import { useEffect } from 'react';
 import { Easing, interpolate, useAnimatedStyle, useSharedValue, withTiming, type SharedValue } from 'react-native-reanimated';
+import { useOnChange } from '@/lib/hooks/useOnChange';
 
 export const HIDE = { duration: 200, easing: Easing.in(Easing.cubic) };
 export const SHOW = { duration: 260, easing: Easing.out(Easing.cubic) };
 
 export function useHidden(hidden: boolean): SharedValue<number> {
   const away = useSharedValue(hidden ? 1 : 0);
-  useEffect(() => { away.value = withTiming(hidden ? 1 : 0, hidden ? HIDE : SHOW); }, [hidden, away]);
+  useOnChange([hidden, away], () => { away.value = withTiming(hidden ? 1 : 0, hidden ? HIDE : SHOW); });
   return away;
 }
 

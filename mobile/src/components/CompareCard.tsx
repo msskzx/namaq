@@ -1,4 +1,4 @@
-import { memo, useEffect, useMemo, useRef, useState, useSyncExternalStore, type ReactNode } from 'react';
+import { memo, useMemo, useRef, useState, useSyncExternalStore, type ReactNode } from 'react';
 import OpenButton from '@/ui/OpenButton';
 import { View } from 'react-native';
 import { Text } from '@/ui/Text';
@@ -178,8 +178,6 @@ function CompareCard({ card, palette, onPageVideo, onOpen, aside }: { card: Pair
   const partName = (cardSide: CardSide, row: number) => `${surahName(cardSide.surah)} ${runsLabel(cardSide.rows![row])}`.trim();
 
   const scale = useSharedValue(1);
-  const [pop, setPop] = useState(0);
-  useEffect(() => { if (pop) scale.value = withSequence(withTiming(1.35, { duration: 120 }), withTiming(1, { duration: 160 })); }, [pop, scale]);
   const popped = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
   const lastTap = useRef(0);
   const tap = () => {
@@ -187,7 +185,7 @@ function CompareCard({ card, palette, onPageVideo, onOpen, aside }: { card: Pair
     if (now - lastTap.current < DOUBLE_TAP) {
       lastTap.current = 0;
       if (!saved) toggleCardSaved(card);
-      setPop(value => value + 1);
+      scale.set(withSequence(withTiming(1.35, { duration: 120 }), withTiming(1, { duration: 160 })));
     } else lastTap.current = now;
   };
 

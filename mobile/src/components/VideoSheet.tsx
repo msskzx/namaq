@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { Pressable, View } from 'react-native';
 import Sheet from '@/ui/Sheet';
 import { Text } from '@/ui/Text';
@@ -10,6 +10,7 @@ import { fontFace, shareVideo } from '@/lib/shareVideo';
 import type { Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
 import { reportError } from '@shared/errors';
+import { useOnChange } from '@/lib/hooks/useOnChange';
 
 type Video = { data: string; mime: string };
 
@@ -25,7 +26,7 @@ export default function VideoSheet({ input, page, onClose, palette, part, onNext
   const request = useRef(0);
   const [own, setOwn] = useState(0);
   const begin = () => { request.current++; setOwn(request.current); return request.current; };
-  useEffect(() => {
+  useOnChange([input, page, open], () => {
     const own = begin();
     setVideo(null);
     setFailed(false);
@@ -34,7 +35,7 @@ export default function VideoSheet({ input, page, onClose, palette, part, onNext
     setFont(null);
     if (!open) return;
     fontFace().then(face => { if (request.current === own) setFont(face); }, error => { reportError('video: load font', error); if (request.current === own) setFont(''); });
-  }, [input, page, open]);
+  });
   const message = useCallback((own: number, data: string) => {
     if (request.current !== own) return;
     const said = readRecorderMessage(data);

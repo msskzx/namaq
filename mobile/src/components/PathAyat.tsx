@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { ArrowLeftRight } from 'lucide-react-native';
 import { num } from '@shared/quran/arabicNumber';
@@ -9,6 +9,7 @@ import type { Palette } from '@/lib/theme';
 import CompareTargetsSheet from './CompareTargetsSheet';
 import { Cell } from './MatrixCard';
 import IconButton from '@/ui/IconButton';
+import { useOnChange } from '@/lib/hooks/useOnChange';
 
 export default function PathAyat({ ayahKeys, presentation, palette, width, onLayout, maxHeight, shown, around = false, reading, onContent }: {
   onContent?: (height: number) => void;
@@ -42,11 +43,11 @@ export default function PathAyat({ ayahKeys, presentation, palette, width, onLay
     return [count([...(earlier ? [earlier] : []), ...row?.before?.ayat ?? []]), count(row?.after?.ayat ?? [])];
   }, [withAround, matrix, ayahKeys, mixed, context]); // eslint-disable-line react-hooks/exhaustive-deps
   const place = readAt ?? shown;
-  useEffect(() => {
+  useOnChange([place, total, wordsBefore, wordsAfter, maxHeight, heights], () => {
     if (!maxHeight || !total || heights.content <= heights.view) return;
     const along = Math.min(1, (wordsBefore + (place ?? 0)) / (wordsBefore + total + wordsAfter));
     scroller.current?.scrollTo({ y: Math.max(0, along * heights.content - heights.view * 0.75), animated: true });
-  }, [place, total, wordsBefore, wordsAfter, maxHeight, heights]);
+  });
   if (!matrix || ayahKeys.length === 0) return null;
   return (
     <View {...({ dir: 'ltr' } as object)} onLayout={event => onLayout?.(event.nativeEvent.layout.height)} style={{ paddingHorizontal: 12, paddingBottom: 8, marginTop: maxHeight ? 0 : -18, direction: 'ltr' }}>

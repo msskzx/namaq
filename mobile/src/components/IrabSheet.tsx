@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { ListTree } from 'lucide-react-native';
 import { Text } from '@/ui/Text';
@@ -19,6 +19,7 @@ import Sheet from '@/ui/Sheet';
 import Card from '@/ui/Card';
 import Chip from '@/ui/Chip';
 import { QuranWord } from '@/components/quran/text/AyahFlow';
+import { useLoaded } from '@/lib/hooks/useLoaded';
 
 export type IrabTarget = { key: string; word: number };
 
@@ -43,13 +44,7 @@ export function IrabBody({ target, palette, onClose }: { target: IrabTarget; pal
   const corpus = corpusWords(key, picked);
   const shortOn = bookState('irab-words') === 'on';
   const ukbariOn = bookState('ukbari') === 'on';
-  const [ukbari, setUkbari] = useState<UkbariData | null | false>(null);
-  useEffect(() => {
-    let live = true;
-    setUkbari(null);
-    if (ukbariOn) void readBook<UkbariData>('ukbari').then(data => { if (live) setUkbari(data ?? false); });
-    return () => { live = false; };
-  }, [ukbariOn]);
+  const ukbari = useLoaded(ukbariOn ? 'ukbari' : null, () => readBook<UkbariData>('ukbari').then(data => data ?? false));
   const passages = ukbari ? ukbariOf(ukbari, key, corpus) : [];
   const heads = new Set(corpus.map(i => lines[i]?.head).filter((head): head is number => head !== null && head !== undefined));
   const headChip = words.findIndex((_, i) => corpusWords(key, i).some(c => heads.has(c)));

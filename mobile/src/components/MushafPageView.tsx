@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useMemo, useRef, useState, type ComponentRef } from 'react';
+import { memo, useCallback, useMemo, useRef, useState, type ComponentRef } from 'react';
 import Svg, { Ellipse } from 'react-native-svg';
 import { Pressable, View, type GestureResponderEvent, type LayoutChangeEvent } from 'react-native';
 import { Text } from '@/ui/Text';
@@ -10,6 +10,7 @@ import type { PageModel, reciteView } from '@shared/quran/recitePage';
 import { Mistyped, tint, Veil, WriteBox } from './quran/text/WriteBoxes';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
 import { breakLines, FLOW_LINE, flowSize } from '@/lib/pageZoom';
+import { useOnChange } from '@/lib/hooks/useOnChange';
 
 const BASMALA = 'بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ';
 const BASE = 40;
@@ -193,9 +194,9 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
   const findFocus = useCallback(() => {
     focusRow.current?.measureInWindow((_x: number, y: number, _w: number, h: number) => onFocus?.(y, h));
   }, [onFocus]);
-  useEffect(() => {
+  useOnChange([flowing, focus, findFocus, rows], () => {
     if (flowing && focus) findFocus();
-  }, [flowing, focus, findFocus, rows]);
+  });
 
   const first = data.items[0];
   const current = first && 'surah' in first ? first.surah : top;

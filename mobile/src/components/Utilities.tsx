@@ -12,7 +12,7 @@ import { dayDigits, FACING, hijriMonth, METHODS, MY_LOCATION, nextPrayer, PRAYER
 import { locate, qiblaFor, timesFor, useHeading, useMinute } from '@/lib/prayer';
 import { adhanAlerts, prayerPlace, prayerView, type PrayerView, prayerSettings, utilityView, type UtilityView } from '@/lib/settings';
 import { buzz } from '@/lib/haptics';
-import { ALERTS_SUPPORTED, allowAlerts, alertsAllowed, openPhoneSettings, useForeground } from '@/lib/adhan';
+import { ALERTS_SUPPORTED, allowAlerts, openPhoneSettings, useAlertsBlocked, useForeground } from '@/lib/adhan';
 import { anyAlert } from '@shared/adhanAlerts';
 import { type Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
@@ -158,14 +158,8 @@ function Times({ place, palette, onPlace }: { place: Place; palette: Palette; on
   const [alerts, setAlerts] = adhanAlerts.use();
   const [view, setView] = prayerView.use();
   const upcoming = { key: next ?? 'fajr', at: nextAt, left } as const;
-  const [blocked, setBlocked] = useState(false);
   const back = useForeground();
-  useEffect(() => {
-    if (!ALERTS_SUPPORTED || !anyAlert(alerts)) { setBlocked(false); return; }
-    let gone = false;
-    alertsAllowed().then(ok => { if (!gone) setBlocked(!ok); });
-    return () => { gone = true; };
-  }, [alerts, dayKey, back]);
+  const [blocked, setBlocked] = useAlertsBlocked(ALERTS_SUPPORTED && anyAlert(alerts), [alerts, dayKey, back]);
   const toggle = async (key: PrayerKey) => {
     buzz();
     if (alerts[key]) { setAlerts({ ...adhanAlerts.get(), [key]: false }); return; }

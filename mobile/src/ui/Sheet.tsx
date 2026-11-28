@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { OutsideCard } from '@/ui/cardContext';
 import { Modal, Pressable, View, useWindowDimensions } from 'react-native';
 import { COLUMN, PageWidthProvider } from './column';
@@ -13,6 +13,7 @@ import { Text } from '@/ui/Text';
 import { SourceSlotContext } from '@/ui/sourceSlot';
 import { AyahMenuContext } from './ayahMenuContext';
 import IconButton from '@/ui/IconButton';
+import { useOnChange } from '@/lib/hooks/useOnChange';
 
 const OPEN_MS = 260;
 export const CLOSE_MS = 220;
@@ -25,14 +26,14 @@ export default function Sheet({ open, onClose, palette, tall, full, title, onDis
   const drag = useSharedValue(open ? 0 : screen);
   const keyboard = useKeyboardHeight(shown && !!tall);
 
-  useEffect(() => {
+  useOnChange([open], () => {
     if (open) {
       setShown(true);
       drag.value = withTiming(0, { duration: OPEN_MS, easing: Easing.out(Easing.cubic) });
     } else {
       drag.value = withTiming(screen, { duration: CLOSE_MS, easing: Easing.in(Easing.quad) }, done => { if (done) scheduleOnRN(setShown, false); });
     }
-  }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
+  });
 
   const swipe = Gesture.Pan()
     .activeOffsetY(10)

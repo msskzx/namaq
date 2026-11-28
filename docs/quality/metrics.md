@@ -68,3 +68,10 @@ Counts are of product code: test files are left out. "Empty catch blocks" counts
 | 2026-11-28 | 9 import rules | app | ui/ imports of features or pages | 3 | 3 | the logo and the settings sheet; frozen |
 | 2026-11-28 | 9 import rules | shared | imports from outside shared/ | 0 | 0 | the rule now guards it; it was a written rule only |
 | 2026-11-28 | 9 import rules | app | imports of the website's code | 0 | 0 | the rule now guards it |
+| 2026-11-28 | 7, ui and small components | app ui/ | useEffect / useLayoutEffect calls | 19 | 0 | animations, scrolls and the card's lifted row and source line |
+| 2026-11-28 | 7, ui and small components | app components (12 files) | useEffect calls / timers | 11 / 2 | 0 / 0 | the reminder checks, two book reads, the Skia load on web, the video frame's listener, two handler timers |
+| 2026-11-28 | 7, ui and small components | app | effects on the shrink-only list | 110 | 80 | |
+| 2026-11-28 | 7, ui and small components | app | timers on the shrink-only list | 27 | 25 | |
+| 2026-11-28 | 7, ui and small components | app | React Compiler findings | 151 | 143 | 8 set-state-in-effect went with the effects |
+| 2026-11-28 | 7, ui and small components | app | shared hooks | 9 | 12 | useOnLeave, useWindowEvent, useLiftInto |
+| 2026-11-28 | 7, ui and small components | app | effects replaced by the event handler itself | 0 | 1 | the compare card's double-tap pop animates in the tap, with no state in between |

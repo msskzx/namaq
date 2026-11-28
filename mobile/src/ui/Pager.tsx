@@ -1,6 +1,7 @@
-import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
+import { useCallback, useRef, useState, type ReactNode } from 'react';
 import { FlatList, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
 import { useWebScrollEnd } from '@/lib/hooks/useWebScrollEnd';
+import { useOnChange } from '@/lib/hooks/useOnChange';
 
 export default function Pager<T>({ data, index, onIndex, keyOf, renderPage }: {
   data: readonly T[]; index: number; onIndex: (index: number) => void; keyOf: (item: T) => string;
@@ -11,11 +12,11 @@ export default function Pager<T>({ data, index, onIndex, keyOf, renderPage }: {
   const { width } = size;
   const shown = useRef(index);
   const resized = useRef(0);
-  useEffect(() => {
+  useOnChange([index, width], () => {
     if (!width || shown.current === index) return;
     shown.current = index;
     list.current?.scrollToIndex({ index, animated: true });
-  }, [index, width]);
+  });
   const settle = useCallback((event: NativeSyntheticEvent<NativeScrollEvent>) => {
     if (!width) return;
     const at = Math.round(Math.abs(event.nativeEvent.contentOffset.x) / width);
@@ -29,7 +30,7 @@ export default function Pager<T>({ data, index, onIndex, keyOf, renderPage }: {
     onIndex(at);
   }, [width, data.length, onIndex]);
   const scrolled = useWebScrollEnd(settle);
-  useEffect(() => { if (width) list.current?.scrollToIndex({ index: shown.current, animated: false }); }, [width]);
+  useOnChange([width], () => { if (width) list.current?.scrollToIndex({ index: shown.current, animated: false }); });
   const layout = useCallback((_: unknown, at: number) => ({ length: width, offset: width * at, index: at }), [width]);
   return (
     <View style={{ flex: 1, direction: 'ltr' }} onLayout={event => {

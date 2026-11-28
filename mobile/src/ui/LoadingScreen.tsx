@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { StyleSheet, View, useColorScheme } from 'react-native';
 import Animated, { FadeIn, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { scheduleOnRN } from 'react-native-worklets';
@@ -6,15 +5,16 @@ import { Text } from '@/ui/Text';
 import Logo from '@/components/Logo';
 import { dark, light } from '@/lib/theme';
 import { APP_NAME, OPENING, SLOGAN } from '@shared/brand';
+import { useOnChange } from '@/lib/hooks/useOnChange';
 
 export const SPLASH_LOGO = 150;
 
 export default function LoadingScreen({ words, done, onLayout, onGone }: { words: boolean; done: boolean; onLayout?: () => void; onGone: () => void }) {
   const palette = useColorScheme() === 'dark' ? dark : light;
   const opacity = useSharedValue(1);
-  useEffect(() => {
+  useOnChange([done, opacity, onGone], () => {
     if (done) opacity.value = withTiming(0, { duration: 500 }, finished => { if (finished) scheduleOnRN(onGone); });
-  }, [done, opacity, onGone]);
+  });
   const fade = useAnimatedStyle(() => ({ opacity: opacity.value }));
   return (
     <Animated.View style={[StyleSheet.absoluteFill, { backgroundColor: palette.paper }, fade]} onLayout={onLayout} pointerEvents={done ? 'none' : 'auto'}>

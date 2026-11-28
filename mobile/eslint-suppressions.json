@@ -1,12 +1,4 @@
 {
-  "src/components/Adhkar.tsx": {
-    "quality/no-raw-effects": {
-      "count": 1
-    },
-    "react-hooks/set-state-in-effect": {
-      "count": 1
-    }
-  },
   "src/components/AppShell.tsx": {
     "no-restricted-globals": {
       "count": 1
@@ -29,11 +21,6 @@
     },
     "react-hooks/refs": {
       "count": 3
-    }
-  },
-  "src/components/CompareCard.tsx": {
-    "quality/no-raw-effects": {
-      "count": 1
     }
   },
   "src/components/ComparePager.tsx": {
@@ -93,19 +80,8 @@
     }
   },
   "src/components/Interests.tsx": {
-    "quality/no-raw-effects": {
-      "count": 1
-    },
     "react-hooks/refs": {
       "count": 2
-    }
-  },
-  "src/components/IrabSheet.tsx": {
-    "quality/no-raw-effects": {
-      "count": 1
-    },
-    "react-hooks/set-state-in-effect": {
-      "count": 1
     }
   },
   "src/components/Logo.tsx": {
@@ -141,11 +117,6 @@
       "count": 1
     }
   },
-  "src/components/MushafPageView.tsx": {
-    "quality/no-raw-effects": {
-      "count": 1
-    }
-  },
   "src/components/NoteSheet.tsx": {
     "no-restricted-globals": {
       "count": 1
@@ -154,16 +125,6 @@
       "count": 2
     },
     "react-hooks/set-state-in-effect": {
-      "count": 1
-    }
-  },
-  "src/components/PageVideo.tsx": {
-    "no-restricted-globals": {
-      "count": 1
-    }
-  },
-  "src/components/PathAyat.tsx": {
-    "quality/no-raw-effects": {
       "count": 1
     }
   },
@@ -246,11 +207,6 @@
       "count": 2
     }
   },
-  "src/components/SettingsSheet.tsx": {
-    "no-restricted-globals": {
-      "count": 1
-    }
-  },
   "src/components/SharePages.tsx": {
     "no-restricted-globals": {
       "count": 1
@@ -311,23 +267,10 @@
   },
   "src/components/Utilities.tsx": {
     "quality/no-raw-effects": {
-      "count": 5
+      "count": 4
     },
     "react-hooks/set-state-in-effect": {
-      "count": 3
-    }
-  },
-  "src/components/VideoFrame.web.tsx": {
-    "quality/no-raw-effects": {
-      "count": 1
-    }
-  },
-  "src/components/VideoSheet.tsx": {
-    "quality/no-raw-effects": {
-      "count": 1
-    },
-    "react-hooks/set-state-in-effect": {
-      "count": 1
+      "count": 2
     }
   },
   "src/components/WordSheet.tsx": {
@@ -344,21 +287,11 @@
       "count": 1
     }
   },
-  "src/components/quran/text/WriteBoxes.tsx": {
-    "quality/no-raw-effects": {
-      "count": 1
-    }
-  },
   "src/components/recite/useRecite.ts": {
     "quality/no-raw-effects": {
       "count": 2
     },
     "react-hooks/set-state-in-effect": {
-      "count": 1
-    }
-  },
-  "src/components/scenes/SeaArt.web.tsx": {
-    "quality/no-raw-effects": {
       "count": 1
     }
   },
@@ -461,53 +394,18 @@
       "count": 1
     }
   },
-  "src/ui/BulbPop.tsx": {
-    "quality/no-raw-effects": {
-      "count": 1
-    }
-  },
-  "src/ui/Card.tsx": {
-    "quality/no-raw-effects": {
-      "count": 2
-    }
-  },
   "src/ui/DrawerSheet.tsx": {
-    "quality/no-raw-effects": {
-      "count": 3
-    },
     "react-hooks/refs": {
       "count": 5
-    },
-    "react-hooks/set-state-in-effect": {
-      "count": 2
     }
   },
   "src/ui/FloatingBar.tsx": {
-    "quality/no-raw-effects": {
-      "count": 1
-    },
     "react-hooks/immutability": {
       "count": 9
     }
   },
-  "src/ui/FloatingMenu.tsx": {
-    "quality/no-raw-effects": {
-      "count": 1
-    },
-    "react-hooks/set-state-in-effect": {
-      "count": 1
-    }
-  },
-  "src/ui/LoadingDots.tsx": {
-    "quality/no-raw-effects": {
-      "count": 1
-    }
-  },
   "src/ui/LoadingScreen.tsx": {
     "quality/import-boundaries": {
-      "count": 1
-    },
-    "quality/no-raw-effects": {
       "count": 1
     }
   },
@@ -516,49 +414,13 @@
       "count": 6
     }
   },
-  "src/ui/OrderTray.tsx": {
-    "quality/no-raw-effects": {
-      "count": 1
-    }
-  },
-  "src/ui/Pager.tsx": {
-    "quality/no-raw-effects": {
-      "count": 2
-    }
-  },
   "src/ui/Sheet.tsx": {
-    "quality/no-raw-effects": {
-      "count": 1
-    },
     "react-hooks/immutability": {
       "count": 2
-    },
-    "react-hooks/set-state-in-effect": {
-      "count": 1
-    }
-  },
-  "src/ui/StripTabs.tsx": {
-    "quality/no-raw-effects": {
-      "count": 1
-    }
-  },
-  "src/ui/TabBar.tsx": {
-    "quality/no-raw-effects": {
-      "count": 1
     }
   },
   "src/ui/TopBar.tsx": {
     "quality/import-boundaries": {
-      "count": 2
-    }
-  },
-  "src/ui/motion.ts": {
-    "quality/no-raw-effects": {
-      "count": 1
-    }
-  },
-  "src/ui/sourceSlot.ts": {
-    "quality/no-raw-effects": {
       "count": 2
     }
   }

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { AppState, Linking, Platform } from 'react-native';
 import * as Notifications from 'expo-notifications';
 import * as adhan from 'adhan';
@@ -7,6 +7,8 @@ import { prayerDay, type Adhan } from '@shared/prayer';
 import { adhanAlerts, adhkarAlerts, prayerPlace, prayerSettings } from './settings';
 import { openAdhkar } from './adhkar';
 import { reportError } from '@shared/errors';
+import { useOnChange } from './hooks/useOnChange';
+import { useOnLeave } from './hooks/useOnLeave';
 
 const lib = adhan as unknown as Adhan;
 const CHANNEL = 'adhan';
@@ -110,4 +112,16 @@ export function useForeground() {
     return () => listener.remove();
   }, []);
   return count;
+}
+
+export function useAlertsBlocked(asking: boolean, again: readonly unknown[]) {
+  const [blocked, setBlocked] = useState(false);
+  const run = useRef(0);
+  useOnLeave(() => { run.current++; });
+  useOnChange([asking, ...again], () => {
+    const mine = ++run.current;
+    if (!asking) { setBlocked(false); return; }
+    alertsAllowed().then(ok => { if (run.current === mine) setBlocked(!ok); }, error => reportError('alerts: read permission', error));
+  });
+  return [blocked, setBlocked] as const;
 }

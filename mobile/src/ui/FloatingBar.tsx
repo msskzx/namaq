@@ -1,4 +1,4 @@
-import { useEffect, useSyncExternalStore } from 'react';
+import { useSyncExternalStore } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue } from 'react-native-reanimated';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
@@ -8,6 +8,7 @@ import { clampBox, keepBarPlace, readBarPlaces, serverBarPlaces, subscribeBarPla
 import type { Palette } from '@/lib/theme';
 import GlassBar from '@/ui/GlassBar';
 import { Tap } from '@/ui/Tap';
+import { useOnChange } from '@/lib/hooks/useOnChange';
 
 export const BAR_CIRCLE = 56;
 
@@ -34,11 +35,11 @@ export default function FloatingBar({ id, label, Icon, screen, clear, start, pal
   const h = useSharedValue(0);
   const from = useSharedValue({ x: 0, y: 0 });
   const dragging = useSharedValue(false);
-  useEffect(() => {
+  useOnChange([saved?.x, saved?.y, screen.width, screen.height, start.x, start.y], () => {
     if (dragging.value) return;
     cx.value = saved ? saved.x * screen.width : start.x;
     cy.value = saved ? saved.y * screen.height : start.y;
-  }, [saved?.x, saved?.y, screen.width, screen.height, start.x, start.y]); // eslint-disable-line react-hooks/exhaustive-deps
+  });
 
   const keep = (x: number, y: number, fold: boolean) => keepBarPlace(id, { x, y }, screen, fold);
   const fold = (on: boolean) => keep(cx.value, cy.value, on);

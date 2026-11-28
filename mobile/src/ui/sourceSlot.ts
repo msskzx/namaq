@@ -1,4 +1,5 @@
-import { createContext, useContext, useId, useLayoutEffect } from 'react';
+import { createContext, useContext } from 'react';
+import { useLiftInto } from '@/lib/hooks/useLiftInto';
 
 export type Quote = { text: string; cite?: string; url?: string };
 
@@ -10,9 +11,7 @@ export const SourceSlotContext = createContext<SourceSlot | null>(null);
 
 export function useLiftSource(source: Source) {
   const slot = useContext(SourceSlotContext);
-  const id = useId();
-  useLayoutEffect(() => { slot?.set(id, source); });
-  useLayoutEffect(() => () => slot?.set(id, null), [slot, id]);
+  useLiftInto(slot, source);
   return !!slot;
 }
 

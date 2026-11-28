@@ -13,6 +13,7 @@ import Sheet from '@/ui/Sheet';
 import VideoSheet from './VideoSheet';
 import { nextSpeed, useReadSpeed } from './useReadAlong';
 import IconButton from '@/ui/IconButton';
+import { useLater } from '@/lib/hooks/useLater';
 
 export default function PageVideo({ lead, other, cards, open, onClose, palette }: { lead: number; other: number; cards: PairCard[]; open: boolean; onClose: () => void; palette: Palette }) {
   const speed = useReadSpeed();
@@ -24,7 +25,8 @@ export default function PageVideo({ lead, other, cards, open, onClose, palette }
   const [part, setPart] = useState(0);
   const all = off.length === 0;
   const toggle = (id: string) => setOff(list => (list.includes(id) ? list.filter(other => other !== id) : [...list, id]));
-  const record = () => { const next = pageVideoPages(lead, other, picked, speed, palette); onClose(); setTimeout(() => { setPart(0); setPages(next); }, 500); };
+  const later = useLater();
+  const record = () => { const next = pageVideoPages(lead, other, picked, speed, palette); onClose(); later.after(500, () => { setPart(0); setPages(next); }); };
   const total = lengths.reduce((sum, length) => sum + length, 0);
   const summary = !lengths.length ? '' : lengths.length > 1 ? `الأجزاء ${num(lengths.length)} · ${clock(total)}` : clock(total);
   return (

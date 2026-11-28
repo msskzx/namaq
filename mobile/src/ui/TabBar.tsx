@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { BlurView } from 'expo-blur';
 import Animated, { interpolate, useAnimatedStyle } from 'react-native-reanimated';
@@ -15,6 +14,7 @@ import { openPage, tapOnOpen } from '@/lib/tabGroups';
 import { toTab } from '@/lib/ways';
 import { Tap } from '@/ui/Tap';
 import { useColumnSide } from '@/ui/column';
+import { useOnChange } from '@/lib/hooks/useOnChange';
 
 const BUTTONS: { key: string; label: string; Icon: (props: LucideProps) => React.ReactNode }[] = [
   { key: '(quran)', label: 'القرآن', Icon: BookOpenText },
@@ -40,7 +40,7 @@ export default function TabBar({ state, navigateToTab }: BottomTabBarProps) {
   const segments = useSegments();
   const open = state.routes[state.index]?.name ?? '(home)';
   const { page } = openPage(segments);
-  useEffect(() => { setCompact(false); }, [page]);
+  useOnChange([page], () => setCompact(false));
   const row = useAnimatedStyle(() => ({ height: interpolate(shrink.value, [0, 1], [FULL, SMALL]) }));
   const icon = useAnimatedStyle(() => ({ transform: [{ scale: interpolate(shrink.value, [0, 1], [1, ICON_SMALL]) }] }));
   const away = page === 'read' && immersive;

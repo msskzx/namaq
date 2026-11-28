@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { OutsideCard } from '@/ui/cardContext';
 import { Modal, Pressable, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { Palette } from '@/lib/theme';
+import { useOnChange } from '@/lib/hooks/useOnChange';
 
 export type MenuAt = { x: number; y: number };
 
@@ -15,7 +16,7 @@ export default function FloatingMenu({ at, label, onClose, overlay = false, top:
   const { width, height } = useWindowDimensions();
   const [measured, setMeasured] = useState<{ at: MenuAt; width: number; height: number } | null>(null);
   const size = measured && at && measured.at.x === at.x && measured.at.y === at.y ? measured : null;
-  useEffect(() => { if (!at) setMeasured(null); }, [at]);
+  useOnChange([at], () => { if (!at) setMeasured(null); });
   if (!at && !overlay) return null;
   const gap = bubble ? 6 : 20;
   const above = at && size ? at.y - gap - size.height : 0;
