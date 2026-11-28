@@ -51,7 +51,7 @@ const rows = Object.entries(AREAS).map(([area, dir]) => {
     total.lintDirectives += found.directives;
     total.useEffect += count(text, /\buse(Layout)?Effect\(/g);
     total.setTimeout += count(text, /\bset(Timeout|Interval)\(|\brequestAnimationFrame\(/g);
-    total.emptyCatch += count(text, /catch\s*(\([^)]*\))?\s*\{\s*\}/g);
+    total.emptyCatch += count(text, /catch\s*(\([^)]*\))?\s*\{\s*\}/g) + count(text, /\.catch\(\s*(\(\s*\w*\s*\)|\w+)\s*=>\s*(\{\s*\}|undefined|null)\s*\)|\.catch\(function\s*\(\w*\)\s*\{\s*\}\)/g);
   }
   return total;
 });
