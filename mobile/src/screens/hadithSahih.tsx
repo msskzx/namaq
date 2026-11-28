@@ -24,12 +24,12 @@ import { SAHIH, fortyOf, isSahihSlug, rememberOpened, useSahihText } from '@/lib
 import { SahihDownload, SahihHadithView, opening } from '@/components/Sahih';
 import HadithBooks from '@/components/HadithBooks';
 import { recordedIn, type BookBox } from '@shared/hadith';
-import { openBab, openKitab, openSahih } from './hadith';
+import { openBab, openKitab } from './hadith';
 import { useWebScrollEnd } from '@/lib/hooks/useWebScrollEnd';
 
 const openBox = (box: BookBox) => {
   const [book, n] = box.key.split(':');
-  if (isSahihSlug(book) && n) openSahih(book, Number(n));
+  if (isSahihSlug(book) && n) router.push({ pathname: '/hadith-sahih', params: { book, n } });
 };
 
 function SahihPage({ book, hadith, width, palette }: { book: SahihIndex; hadith: SahihHadith; width: number; palette: Palette }) {

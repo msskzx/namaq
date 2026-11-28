@@ -5,6 +5,8 @@ import { Text } from '@/ui/Text';
 import EdgeBar from '@/ui/EdgeBar';
 import Folded from '@/ui/Folded';
 import SourceLine, { sourcesOf } from '@/ui/SourceLine';
+import OpenButton from '@/ui/OpenButton';
+import { openSahih } from '@/screens/hadith';
 import type { Palette } from '@/lib/theme';
 
 const leadOf = (words: string) => {
@@ -37,6 +39,9 @@ export default function SahihSaying({ fact, names, palette, tone, marked }: { fa
   return (
     <View style={{ gap: 4 }}>
       <Route quote={first} names={names} palette={palette} size={18} tone={tone} marked={marked} />
+      <View style={{ flexDirection: 'row' }}>
+        <OpenButton what="الحديث" label={`افتح ${sahihPlace(first)}`} onPress={() => openSahih(first.book, first.n)} />
+      </View>
       <SourceLine label={sahihLabel(fact)} sources={books} named={books} palette={palette} small />
       {rest.length > 0 && (
         <Folded credit={`روايات أخرى في الصحيحين (${num(rest.length)})`} palette={palette}>

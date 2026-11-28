@@ -286,7 +286,7 @@ const SectionPart = memo(function SectionPart({ section, ayah, word, palette, op
       if (!person || !facts.length) return null;
       return (
         <Part {...common} Icon={FEATURE_ICON.person} title={section.kind === 'REVEALED_ABOUT' ? 'فيمن نزلت' : 'في التراجم'} sub={personName(person)}
-          label={`افتح ${personName(person)}`} open={() => router.push({ pathname: '/person', params: { slug: person.slug } })} source={sourcesOf(factSources(facts, true))}>
+          label={`افتح ${personName(person)}`} open={() => toTab({ pathname: '/person', params: { slug: person.slug } })} source={sourcesOf(factSources(facts, true))}>
           {facts.map(fact => (
             <QuoteBar key={fact.text} by={saidBy(fact) ?? `قال ${pageSources(fact.refs)[0]?.author ?? 'الذهبي'}:`} palette={palette}>
               <Text numberOfLines={LINES} style={{ color: palette.ink, fontSize: 17, lineHeight: 30, textAlign: 'right' }}>{fact.text}</Text>

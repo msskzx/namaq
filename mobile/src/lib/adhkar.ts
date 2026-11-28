@@ -1,6 +1,5 @@
 import { useEffect, useState, useSyncExternalStore } from 'react';
 import { AppState } from 'react-native';
-import { router } from 'expo-router';
 import type { AdhkarOccasion } from '@shared/adhkar';
 import { countsOnDay, localDay, sayOnce, type SaidToday } from '@shared/adhkarCount';
 import { adhkarSaid, utilityView } from './settings';
@@ -25,7 +24,7 @@ export function openAdhkar(occasion: AdhkarOccasion) {
 }
 
 export function openDhikr(occasion: AdhkarOccasion, id: string) {
-  router.push({ pathname: '/dhikr', params: { occasion, id } });
+  toTab({ pathname: '/dhikr', params: { occasion, id } });
 }
 
 function useToday() {

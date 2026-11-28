@@ -241,7 +241,7 @@ function NotMineMenu() {
 const sourceLine = (palette: Palette) => function SourceLineOf(named: Source[], all: Source[]) { return <SourceLine named={named} sources={all} palette={palette} />; };
 
 const topic = (href: Href, label: string) => ({ onPress: () => toTab(href), label });
-const personTopic = (slug: string) => ({ onPress: () => router.push({ pathname: '/person', params: { slug } }), label: `افتح ترجمة ${personName(GRAPH.nodes.get(slug)!)}` });
+const personTopic = (slug: string) => ({ onPress: () => toTab({ pathname: '/person', params: { slug } }), label: `افتح ترجمة ${personName(GRAPH.nodes.get(slug)!)}` });
 const fortyTopic = () => topic({ pathname: '/hadith-book', params: { book: 'forty' } }, 'افتح الأربعين النووية');
 
 const placesOf = (keys: string[]) => ayahPlaces(keys, shortNames);
@@ -332,7 +332,7 @@ export function ForgottenPost({ ayah: asked, review, due: dueOne, title = 'هل 
     {review && <Action Icon={EyeOff} label={REVIEW_LABEL} onPress={review} palette={palette} />}
   </>;
   const open = <OpenButton label="افتح صفحة الآية" onPress={() => openAyahPage(ayah)} palette={palette} />;
-  const head = ownHead ?? (forgotten ? { onPress: () => router.push({ pathname: '/library', params: { tab: 'forgotten' } }), label: 'افتح ما نسيته' } : topic('/quizzes', 'افتح الاختبارات'));
+  const head = ownHead ?? (forgotten ? { onPress: () => toTab({ pathname: '/library', params: { tab: 'forgotten' } }), label: 'افتح ما نسيته' } : topic('/quizzes', 'افتح الاختبارات'));
   return <Recall key={`${ayah}-${writing}`} ayah={ayah} gaps={gaps} title={title} Icon={Icon} head={head} writing={writing} onWriting={toggleWriting} open={open} marks={marks} revealed={!!done} palette={palette} />;
 }
 
@@ -373,7 +373,7 @@ function ReciteAction({ palette }: { palette: Palette }) {
 }
 
 function openAnswer(question: SoloQuestion) {
-  const person = (slug: string) => router.push({ pathname: '/person', params: { slug } });
+  const person = (slug: string) => toTab({ pathname: '/person', params: { slug } });
   if (isTree(question)) return openTreesOf(questionAyat(question)[0]);
   if (isCompare(question)) {
     const [a, b] = [question.compare.shown.key, question.compare.asked.key];
@@ -385,7 +385,7 @@ function openAnswer(question: SoloQuestion) {
   switch (look?.view) {
     case 'ties': case 'life': return person(look.slug);
     case 'virtues': return person(look.mark?.slug ?? look.slugs[0]);
-    case 'nasab': return router.push({ pathname: '/nasab', params: { slug: look.slugs.join(',') } });
+    case 'nasab': return toTab({ pathname: '/nasab', params: { slug: look.slugs.join(',') } });
     case 'terms': return toTab({ pathname: '/term', params: { name: look.mark ?? look.names[0] } });
     case 'hadith': return toTab(look.mark ? { pathname: '/hadith-forty', params: { n: String(look.mark) } } : { pathname: '/hadith-book', params: { book: 'forty' } });
     case 'sahih': return look.mark ? toTab({ pathname: '/hadith-kitab', params: { book: look.book, kitab: String(look.mark) } }) : toTab('/hadith');
@@ -399,7 +399,7 @@ function openAnswer(question: SoloQuestion) {
   const dhikr = askedDhikr(question.key);
   if (dhikr) return openDhikrCard(dhikr);
   if (question.ayahKey) return readAyah(question.ayahKey);
-  if (question.order?.length) return router.push({ pathname: '/order', params: { juz: String(orderJuz(question.order)) } });
+  if (question.order?.length) return toTab({ pathname: '/order', params: { juz: String(orderJuz(question.order)) } });
   const aimed = question.family === 'SURAH_AIM' && orderSurahOf(question.correctAnswer);
   if (aimed) return openOrder(aimed);
   const slug = question.key.split(':')[1];
@@ -490,7 +490,7 @@ function OpeningPost({ seed, palette }: { seed: number; palette: Palette }) {
 function TarajimPost({ id, palette }: { id: string; palette: Palette }) {
   const pick = virtueOf(id);
   if (!pick) return null;
-  const open = () => router.push({ pathname: '/person', params: { slug: pick.person.slug } });
+  const open = () => toTab({ pathname: '/person', params: { slug: pick.person.slug } });
   return (
     <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.person} title="من التراجم" sub={personName(pick.person)} open={topic('/tarajim', 'افتح التراجم')} palette={palette} />}
       open={<OpenButton label={`افتح ترجمة ${personName(pick.person)}`} onPress={open} palette={palette} />}
@@ -509,7 +509,7 @@ function TiePost({ id, palette }: { id: string; palette: Palette }) {
   if (!pair) return null;
   const nodes = [...new Set(pair.steps.flatMap(step => [step.from, step.to]))];
   const name = (slug: string) => personName(GRAPH.nodes.get(slug)!);
-  const open = () => router.push({ pathname: '/between', params: { slugs: `${pair.a},${pair.b}` } });
+  const open = () => toTab({ pathname: '/between', params: { slugs: `${pair.a},${pair.b}` } });
   return (
     <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.ties} title="صلة" sub={`${name(pair.a)} و${name(pair.b)}`} open={topic('/tarajim', 'افتح التراجم')} palette={palette} />}
       open={<OpenButton label={`ارسم الصلة بين ${name(pair.a)} و${name(pair.b)}`} onPress={open} palette={palette} />}
@@ -529,7 +529,7 @@ function NamePost({ kind, id, palette }: { kind: 'laqab' | 'kunya'; id: string; 
   if (!pick) return null;
   const { person, name, fact } = pick;
   const who = personName(person);
-  const open = () => router.push({ pathname: '/person', params: { slug: person.slug } });
+  const open = () => toTab({ pathname: '/person', params: { slug: person.slug } });
   const quote = unvowelled(fact.text).trim() !== name ? fact.text : '';
   return (
     <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.person} title={kind === 'laqab' ? 'لقب وصاحبه' : 'كنية وصاحبها'} sub={who} open={topic('/tarajim', 'افتح التراجم')} palette={palette} />}
@@ -549,7 +549,7 @@ function LifePost({ slug, palette }: { slug: string; palette: Palette }) {
   if (!person) return null;
   const items = personLife(person);
   const she = person.sex === 'FEMALE';
-  const open = () => router.push({ pathname: '/person', params: { slug } });
+  const open = () => toTab({ pathname: '/person', params: { slug } });
   return (
     <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.life} title={she ? 'من حياتها' : 'من حياته'} sub={personName(person)} open={personTopic(slug)} palette={palette} />}
       open={<OpenButton label={`افتح ترجمة ${personName(person)}`} onPress={open} palette={palette} />}
@@ -566,7 +566,7 @@ const herOrHis = (slug: string, his: string, hers: string) => (findPerson(slug)?
 function NasabPost({ slug, palette }: { slug: string; palette: Palette }) {
   const person = findPerson(slug);
   if (!person) return null;
-  const open = () => router.push({ pathname: '/nasab', params: { slug } });
+  const open = () => toTab({ pathname: '/nasab', params: { slug } });
   return (
     <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.nasab} title={herOrHis(slug, 'نسبه', 'نسبها')} sub={personName(person)} open={personTopic(slug)} palette={palette} />}
       open={<OpenButton label={`افتح نسب ${personName(person)}`} onPress={open} palette={palette} />}
@@ -582,13 +582,13 @@ function TiesPost({ slug, palette }: { slug: string; palette: Palette }) {
   const person = findPerson(slug);
   if (!person) return null;
   const title = herOrHis(slug, 'صلاته', 'صلاتها');
-  const open = () => router.push({ pathname: '/ties', params: { slug } });
+  const open = () => toTab({ pathname: '/ties', params: { slug } });
   return (
     <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.ties} title={title} sub={personName(person)} open={personTopic(slug)} palette={palette} />}
       open={<OpenButton label={`افتح ${title}: ${personName(person)}`} onPress={open} palette={palette} />}
       source={sourcesOf(tiesSources(GRAPH, slug))}>
       <View style={{ padding: 14 }}>
-        <TiesRing slug={slug} width={Math.min(width - 60, 480)} palette={palette} onPick={to => router.push({ pathname: '/person', params: { slug: to } })} onShow={setTie} />
+        <TiesRing slug={slug} width={Math.min(width - 60, 480)} palette={palette} onPick={to => toTab({ pathname: '/person', params: { slug: to } })} onShow={setTie} />
       </View>
       <TieSheet tie={tie} onClose={() => setTie(undefined)} palette={palette} />
     </Post>
@@ -607,7 +607,7 @@ function GroupPost({ id, palette }: { id: string; palette: Palette }) {
   const inLaws = group.id.startsWith('inlaws:');
   const title = inLaws ? herOrHis(group.slugs[0], 'أصهاره', 'أصهارها') : 'صلة بينهم';
   const sub = inLaws ? personName(GRAPH.nodes.get(group.slugs[0])!) : group.name;
-  const open = () => router.push({ pathname: '/between', params: { slugs: picked.join(',') } });
+  const open = () => toTab({ pathname: '/between', params: { slugs: picked.join(',') } });
   return (
     <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.ties} title={title} sub={sub} open={topic('/tarajim', 'افتح التراجم')} palette={palette} />}
       open={<OpenButton label="ارسم الصلة بينهم" onPress={open} palette={palette} />}
@@ -627,7 +627,7 @@ function LivesPost({ id, palette }: { id: string; palette: Palette }) {
   const slugs = id.split(',');
   if (slugs.length !== 2 || !slugs.every(slug => findPerson(slug))) return null;
   const names = slugs.map(slug => personName(findPerson(slug)!));
-  const open = () => router.push({ pathname: '/life', params: { slugs: id } });
+  const open = () => toTab({ pathname: '/life', params: { slugs: id } });
   return (
     <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.life} title="حياتهما" sub={`${names[0]} و${names[1]}`} open={topic('/tarajim', 'افتح التراجم')} palette={palette} />}
       open={<OpenButton label={`قارن حياة ${names[0]} و${names[1]}`} onPress={open} palette={palette} />}
@@ -645,7 +645,7 @@ function MeetPost({ id, palette }: { id: string; palette: Palette }) {
   if (!slugs.every(slug => findPerson(slug))) return null;
   const caliphs = id === CALIPHS_MEET.join(',');
   const names = slugs.map(slug => personName(findPerson(slug)!));
-  const open = () => router.push({ pathname: '/nasab', params: { slug: slugs.join(',') } });
+  const open = () => toTab({ pathname: '/nasab', params: { slug: slugs.join(',') } });
   return (
     <Post palette={palette} head={<PostHead Icon={FEATURE_ICON.nasab} title={caliphs ? 'أين يلتقي نسبه ﷺ بنسب الخلفاء الأربعة؟' : 'أين يلتقي نسبهما؟'}
       sub={caliphs ? names.slice(1).join('، ') : `${names[0]} و${names[1]}`} open={topic('/tarajim', 'افتح التراجم')} palette={palette} />}
@@ -669,7 +669,7 @@ function RingPost({ id, palette }: { id: string; palette: Palette }) {
   const [doubtedOpen, setDoubtedOpen] = useState(false);
   const ring = ringList_().find(each => each.id === id);
   if (!ring) return null;
-  const go = (slug: string) => router.push({ pathname: '/person', params: { slug } });
+  const go = (slug: string) => toTab({ pathname: '/person', params: { slug } });
   const drawW = Math.min(width - 60, 480);
   const kin = ring.by === 'kin' ? kinOf(GRAPH, ring.slug, ring.kind) : undefined;
   const nodes = ring.people.map(slug => {
@@ -685,8 +685,8 @@ function RingPost({ id, palette }: { id: string; palette: Palette }) {
   const head = ring.by === 'kin'
     ? <PostHead Icon={Users} title={`${title} ${ring.slug === 'prophet-muhammad' ? 'ﷺ' : ''}`.trim()} sub={middle} open={personTopic(ring.slug)} palette={palette} />
     : <PostHead Icon={Users} title={title} sub={ring.by === 'hadith' ? `الحديث ${num(ring.n)}` : 'كما جمعهم العلماء'} open={ring.by === 'hadith' ? topic({ pathname: '/hadith-book', params: { book: ring.book } }, `افتح ${SAHIH_NAMES[ring.book].book}`) : topic('/tarajim', 'افتح التراجم')} palette={palette} />;
-  const open = ring.by === 'kin' ? () => router.push({ pathname: '/ties', params: { slug: ring.slug } })
-    : ring.by === 'title' ? () => router.push({ pathname: '/people', params: { title: ring.title } })
+  const open = ring.by === 'kin' ? () => toTab({ pathname: '/ties', params: { slug: ring.slug } })
+    : ring.by === 'title' ? () => toTab({ pathname: '/people', params: { title: ring.title } })
     : () => toTab({ pathname: '/hadith-sahih', params: { book: ring.book, n: String(ring.n) } });
   const source = ring.by === 'hadith'
     ? [ring, ...(ring.also ? [ring.also] : [])].map(each => ({ ...SAHIH_NAMES[each.book], at: num(each.n) }))
@@ -837,7 +837,7 @@ function OathPost({ id, palette }: { id: string; palette: Palette }) {
 }
 
 const orderSurahOf = (item: string) => orderSurahList().find(each => each.surah === Number(item));
-const openOrder = (s: OrderSurah) => router.push({ pathname: '/order', params: { juz: String(s.juz[0]) } });
+const openOrder = (s: OrderSurah) => toTab({ pathname: '/order', params: { juz: String(s.juz[0]) } });
 
 function SurahAimPost({ id, palette }: { id: string; palette: Palette }) {
   const s = orderSurahOf(id);

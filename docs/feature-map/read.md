@@ -6,6 +6,7 @@
 flowchart RL
   me["المصحف"]
   style me stroke-width:3px
+  me -- "…" --> out0["صفحة الآية"]
   me -.-> sheet0{{"AyahPreviewSheet"}}
   me -.-> sheet1{{"BalaghaSheet"}}
   me -.-> sheet2{{"FloatingMenu"}}
@@ -43,6 +44,7 @@ flowchart RL
 
 | Part of the screen | Label | Opens | Code |
 | --- | --- | --- | --- |
+| `Reader` | (page) | [صفحة الآية](ayah.md) | [components/Reader.tsx:437](../../mobile/src/components/Reader.tsx#L437) |
 | `WordView` | (open) | [المصحف](read.md) | [components/WordSheet.tsx:111](../../mobile/src/components/WordSheet.tsx#L111) |
 
 ## Sheets

@@ -2,7 +2,7 @@ import { View } from 'react-native';
 import { isnadParts, narratorOf, rangeName, reportLines, reportSlots, whenName, type AppReport, type AppStory, type AppStoryAyat } from '@shared/stories/story';
 import HadithScene, { sceneBlocks } from '@/components/HadithScene';
 import { BookMarked, ChevronDown, ChevronLeft, ChevronUp, Send } from 'lucide-react-native';
-import { router } from 'expo-router';
+import { toTab } from '@/lib/ways';
 import { useState } from 'react';
 import TapRow from '@/ui/TapRow';
 import IconButton from '@/ui/IconButton';
@@ -128,7 +128,7 @@ export function StoryLinkRow({ story, palette, first = false }: { story: AppStor
   first?: boolean }) {
   const line = [whenName(story), story.reports[0]?.cite].filter(Boolean).join(' · ');
   return (
-    <TapRow onPress={() => router.push({ pathname: '/story', params: { slug: story.slug } })} role="link" label={story.name}
+    <TapRow onPress={() => toTab({ pathname: '/story', params: { slug: story.slug } })} role="link" label={story.name}
       style={{ alignItems: 'center', gap: 8, paddingVertical: 8, ...(first ? {} : { borderTopWidth: 1, borderColor: `${palette.rule}70` }) }}>
       <View style={{ flex: 1, gap: 2 }}>
         <Text style={{ color: palette.ink, fontSize: 17, textAlign: 'right' }}>{story.name}</Text>

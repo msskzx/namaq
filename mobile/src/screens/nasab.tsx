@@ -28,7 +28,7 @@ function Box({ node, palette, linked, scale }: { node: NasabNode; palette: Palet
   const name = node.name + (slug === PROPHET ? ' ﷺ' : '');
   return (
     <Card palette={palette} node pad={[6 * scale, 12 * scale]} picked={!!slug} accessibilityRole={slug && linked ? 'link' : undefined} accessibilityLabel={slug ? name : undefined}
-      onPress={slug && linked ? () => router.push({ pathname: '/person', params: { slug } }) : undefined}>
+      onPress={slug && linked ? () => toTab({ pathname: '/person', params: { slug } }) : undefined}>
       <Text numberOfLines={1} style={{ color: slug ? palette.accent : palette.ink, fontSize: 16 * scale, textAlign: 'center' }}>{name}</Text>
     </Card>
   );

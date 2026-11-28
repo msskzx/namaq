@@ -18,21 +18,21 @@ flowchart RL
 
 | Part of the screen | Label | Opens | Code |
 | --- | --- | --- | --- |
-| `HitRow` | (onPress) | [المصحف](read.md) | [components/SearchResults.tsx:47](../../mobile/src/components/SearchResults.tsx#L47) |
-|  | (onPress) | [المصحف](read.md) | [components/SearchResults.tsx:54](../../mobile/src/components/SearchResults.tsx#L54) |
-|  | (onPress) | [متشابهات القرآن](branches.md) | [components/SearchResults.tsx:68](../../mobile/src/components/SearchResults.tsx#L68) |
-|  | (onPress) | [مقارنة السور](compare.md) | [components/SearchResults.tsx:74](../../mobile/src/components/SearchResults.tsx#L74) |
-|  | (onPress) | [قصة النبي](prophets-slug.md) | [components/SearchResults.tsx:81](../../mobile/src/components/SearchResults.tsx#L81) |
-|  | (onPress) | [القصة](story.md) | [components/SearchResults.tsx:82](../../mobile/src/components/SearchResults.tsx#L82) |
-|  | (onPress) | [قصص السيرة](stories.md) | [components/SearchResults.tsx:82](../../mobile/src/components/SearchResults.tsx#L82) |
-|  | (onPress) | [الترجمة](person.md) | [components/SearchResults.tsx:89](../../mobile/src/components/SearchResults.tsx#L89) |
-|  | (onPress) | [الغزوة](battle.md) | [components/SearchResults.tsx:89](../../mobile/src/components/SearchResults.tsx#L89) |
-|  | (onPress) | [حديث الأربعين](hadith-forty.md) | [components/SearchResults.tsx:96](../../mobile/src/components/SearchResults.tsx#L96) |
-|  | (onPress) | [حديث الصحيح](hadith-sahih.md) | [components/SearchResults.tsx:96](../../mobile/src/components/SearchResults.tsx#L96) |
-|  | (onPress) | [أبواب الكتاب](hadith-kitab.md) | [components/SearchResults.tsx:96](../../mobile/src/components/SearchResults.tsx#L96) |
-|  | (onPress) | [تحفة الأطفال](tuhfa.md) | [components/SearchResults.tsx:107](../../mobile/src/components/SearchResults.tsx#L107) |
-|  | (onPress) | [الذكر](dhikr.md) | [components/SearchResults.tsx:117](../../mobile/src/components/SearchResults.tsx#L117) |
-|  | (onPress) | [المصحف](read.md) | [components/SearchResults.tsx:123](../../mobile/src/components/SearchResults.tsx#L123) |
+| `HitRow` | (onPress) | [المصحف](read.md) | [components/SearchResults.tsx:49](../../mobile/src/components/SearchResults.tsx#L49) |
+|  | (onPress) | [المصحف](read.md) | [components/SearchResults.tsx:56](../../mobile/src/components/SearchResults.tsx#L56) |
+|  | (onPress) | [متشابهات القرآن](branches.md) | [components/SearchResults.tsx:70](../../mobile/src/components/SearchResults.tsx#L70) |
+|  | (onPress) | [مقارنة السور](compare.md) | [components/SearchResults.tsx:76](../../mobile/src/components/SearchResults.tsx#L76) |
+|  | (onPress) | [قصة النبي](prophets-slug.md) | [components/SearchResults.tsx:83](../../mobile/src/components/SearchResults.tsx#L83) |
+|  | (onPress) | [القصة](story.md) | [components/SearchResults.tsx:84](../../mobile/src/components/SearchResults.tsx#L84) |
+|  | (onPress) | [قصص السيرة](stories.md) | [components/SearchResults.tsx:84](../../mobile/src/components/SearchResults.tsx#L84) |
+|  | (onPress) | [الترجمة](person.md) | [components/SearchResults.tsx:91](../../mobile/src/components/SearchResults.tsx#L91) |
+|  | (onPress) | [الغزوة](battle.md) | [components/SearchResults.tsx:91](../../mobile/src/components/SearchResults.tsx#L91) |
+|  | (onPress) | [حديث الأربعين](hadith-forty.md) | [components/SearchResults.tsx:98](../../mobile/src/components/SearchResults.tsx#L98) |
+|  | (onPress) | [حديث الصحيح](hadith-sahih.md) | [components/SearchResults.tsx:98](../../mobile/src/components/SearchResults.tsx#L98) |
+|  | (onPress) | [أبواب الكتاب](hadith-kitab.md) | [components/SearchResults.tsx:98](../../mobile/src/components/SearchResults.tsx#L98) |
+|  | (onPress) | [تحفة الأطفال](tuhfa.md) | [components/SearchResults.tsx:109](../../mobile/src/components/SearchResults.tsx#L109) |
+|  | (onPress) | [الذكر](dhikr.md) | [components/SearchResults.tsx:119](../../mobile/src/components/SearchResults.tsx#L119) |
+|  | (onPress) | [المصحف](read.md) | [components/SearchResults.tsx:125](../../mobile/src/components/SearchResults.tsx#L125) |
 | `WordView` | (open) | [المصحف](read.md) | [components/WordSheet.tsx:111](../../mobile/src/components/WordSheet.tsx#L111) |
 
 ## Sheets

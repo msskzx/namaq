@@ -18,7 +18,7 @@
   "owner": "DhikrRow",
   "key": "onPress",
   "label": "‹›‹›",
-  "how": "push",
+  "how": "tab",
   "route": "/dhikr",
   "opens": "الذكر",
   "on": [
@@ -624,7 +624,7 @@
   "owner": "ForgottenPost",
   "key": "onPress",
   "label": "افتح ما نسيته",
-  "how": "push",
+  "how": "tab",
   "route": "/library",
   "opens": "مدونتي",
   "on": [
@@ -682,7 +682,7 @@
   "owner": "QuizPost",
   "key": "onPress",
   "label": "افتح ما يشرح الجواب",
-  "how": "push",
+  "how": "tab",
   "route": "/person",
   "opens": "الترجمة",
   "on": [
@@ -752,7 +752,7 @@
   "owner": "QuizPost",
   "key": "onPress",
   "label": "افتح ما يشرح الجواب",
-  "how": "push",
+  "how": "tab",
   "route": "/nasab",
   "opens": "النسب",
   "on": [
@@ -892,7 +892,7 @@
   "owner": "QuizPost",
   "key": "onPress",
   "label": "افتح ما يشرح الجواب",
-  "how": "push",
+  "how": "tab",
   "route": "/dhikr",
   "opens": "الذكر",
   "on": [
@@ -906,7 +906,7 @@
   "owner": "QuizPost",
   "key": "onPress",
   "label": "افتح ما يشرح الجواب",
-  "how": "push",
+  "how": "tab",
   "route": "/order",
   "opens": "ترتيب السور",
   "on": [
@@ -920,7 +920,7 @@
   "owner": "TarajimPost",
   "key": "open",
   "label": "افتح ترجمة ‹›",
-  "how": "push",
+  "how": "tab",
   "route": "/person",
   "opens": "الترجمة",
   "on": [
@@ -948,7 +948,7 @@
   "owner": "TiePost",
   "key": "open",
   "label": "ارسم الصلة بين ‹› و‹›",
-  "how": "push",
+  "how": "tab",
   "route": "/between",
   "opens": "بين عدة أشخاص",
   "on": [
@@ -976,7 +976,7 @@
   "owner": "NamePost",
   "key": "open",
   "label": "افتح ترجمة ‹›",
-  "how": "push",
+  "how": "tab",
   "route": "/person",
   "opens": "الترجمة",
   "on": [
@@ -1004,7 +1004,7 @@
   "owner": "LifePost",
   "key": "open",
   "label": "افتح ترجمة ‹›",
-  "how": "push",
+  "how": "tab",
   "route": "/person",
   "opens": "الترجمة",
   "on": [
@@ -1018,7 +1018,7 @@
   "owner": "LifePost",
   "key": "open",
   "label": null,
-  "how": "push",
+  "how": "tab",
   "route": "/person",
   "opens": "الترجمة",
   "on": [
@@ -1032,7 +1032,7 @@
   "owner": "NasabPost",
   "key": "open",
   "label": "افتح نسب ‹›",
-  "how": "push",
+  "how": "tab",
   "route": "/nasab",
   "opens": "النسب",
   "on": [
@@ -1046,7 +1046,7 @@
   "owner": "NasabPost",
   "key": "open",
   "label": null,
-  "how": "push",
+  "how": "tab",
   "route": "/person",
   "opens": "الترجمة",
   "on": [
@@ -1060,7 +1060,7 @@
   "owner": "TiesPost",
   "key": "open",
   "label": "افتح ‹›: ‹›",
-  "how": "push",
+  "how": "tab",
   "route": "/ties",
   "opens": "الصلات",
   "on": [
@@ -1074,7 +1074,7 @@
   "owner": "TiesPost",
   "key": "open",
   "label": null,
-  "how": "push",
+  "how": "tab",
   "route": "/person",
   "opens": "الترجمة",
   "on": [
@@ -1088,7 +1088,7 @@
   "owner": "TiesPost",
   "key": "onPick",
   "label": null,
-  "how": "push",
+  "how": "tab",
   "route": "/person",
   "opens": "الترجمة",
   "on": [
@@ -1102,7 +1102,7 @@
   "owner": "GroupPost",
   "key": "open",
   "label": "ارسم الصلة بينهم",
-  "how": "push",
+  "how": "tab",
   "route": "/between",
   "opens": "بين عدة أشخاص",
   "on": [
@@ -1130,7 +1130,7 @@
   "owner": "LivesPost",
   "key": "open",
   "label": "قارن حياة ‹› و‹›",
-  "how": "push",
+  "how": "tab",
   "route": "/life",
   "opens": "حياتهم جنبًا إلى جنب",
   "on": [
@@ -1158,7 +1158,7 @@
   "owner": "MeetPost",
   "key": "open",
   "label": "افتح النسب",
-  "how": "push",
+  "how": "tab",
   "route": "/nasab",
   "opens": "النسب",
   "on": [
@@ -1186,7 +1186,7 @@
   "owner": "RingPost",
   "key": "go",
   "label": null,
-  "how": "push",
+  "how": "tab",
   "route": "/person",
   "opens": "الترجمة",
   "on": [
@@ -1200,7 +1200,7 @@
   "owner": "RingPost",
   "key": "open",
   "label": null,
-  "how": "push",
+  "how": "tab",
   "route": "/person",
   "opens": "الترجمة",
   "on": [
@@ -1242,7 +1242,7 @@
   "owner": "RingPost",
   "key": "open",
   "label": null,
-  "how": "push",
+  "how": "tab",
   "route": "/ties",
   "opens": "الصلات",
   "on": [
@@ -1256,7 +1256,7 @@
   "owner": "RingPost",
   "key": "open",
   "label": null,
-  "how": "push",
+  "how": "tab",
   "route": "/people",
   "opens": "كل التراجم",
   "on": [
@@ -1508,7 +1508,7 @@
   "owner": "SurahAimPost",
   "key": "onPress",
   "label": "افتح سورة ‹› في ترتيب السور",
-  "how": "push",
+  "how": "tab",
   "route": "/order",
   "opens": "ترتيب السور",
   "on": [
@@ -1536,7 +1536,7 @@
   "owner": "SurahLinkPost",
   "key": "onPress",
   "label": "افتح ‹› و‹› في ترتيب السور",
-  "how": "push",
+  "how": "tab",
   "route": "/order",
   "opens": "ترتيب السور",
   "on": [
@@ -2223,7 +2223,7 @@
   "owner": "DhikrPost",
   "key": "onPress",
   "label": "افتح الذكر في الأذكار",
-  "how": "push",
+  "how": "tab",
   "route": "/dhikr",
   "opens": "الذكر",
   "on": [
@@ -2265,7 +2265,7 @@
   "owner": "Cell",
   "key": "onPress",
   "label": null,
-  "how": "push",
+  "how": "tab",
   "route": "/story",
   "opens": "القصة",
   "on": [
@@ -2276,7 +2276,7 @@
  },
  {
   "file": "mobile/src/components/LifeTimeline.tsx",
-  "line": 107,
+  "line": 106,
   "owner": "Item",
   "key": "onPress",
   "label": null,
@@ -2294,11 +2294,11 @@
  },
  {
   "file": "mobile/src/components/LifeTimeline.tsx",
-  "line": 107,
+  "line": 106,
   "owner": "Item",
   "key": "onPress",
   "label": null,
-  "how": "push",
+  "how": "tab",
   "route": "/story",
   "opens": "القصة",
   "on": [
@@ -2312,7 +2312,7 @@
  },
  {
   "file": "mobile/src/components/LifeTimeline.tsx",
-  "line": 146,
+  "line": 145,
   "owner": "LifeSheet",
   "key": "onPress",
   "label": null,
@@ -2331,11 +2331,11 @@
  },
  {
   "file": "mobile/src/components/LifeTimeline.tsx",
-  "line": 146,
+  "line": 145,
   "owner": "LifeSheet",
   "key": "onPress",
   "label": null,
-  "how": "push",
+  "how": "tab",
   "route": "/story",
   "opens": "القصة",
   "on": [
@@ -2491,8 +2491,39 @@
   ]
  },
  {
+  "file": "mobile/src/components/Reader.tsx",
+  "line": 437,
+  "owner": "Reader",
+  "key": "page",
+  "label": null,
+  "how": "push",
+  "route": "/ayah",
+  "opens": "صفحة الآية",
+  "on": [
+   "المصحف"
+  ]
+ },
+ {
+  "file": "mobile/src/components/SahihSaying.tsx",
+  "line": 43,
+  "owner": "SahihSaying",
+  "key": "onPress",
+  "label": "افتح ‹›",
+  "how": "tab",
+  "route": "/hadith-sahih",
+  "opens": "حديث الصحيح",
+  "on": [
+   "الرئيسية",
+   "مدونتي",
+   "الترجمة",
+   "الاختبارات",
+   "غرفة الاختبار الجماعي",
+   "الاختبار"
+  ]
+ },
+ {
   "file": "mobile/src/components/SearchResults.tsx",
-  "line": 47,
+  "line": 49,
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
@@ -2506,7 +2537,7 @@
  },
  {
   "file": "mobile/src/components/SearchResults.tsx",
-  "line": 54,
+  "line": 56,
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
@@ -2520,7 +2551,7 @@
  },
  {
   "file": "mobile/src/components/SearchResults.tsx",
-  "line": 68,
+  "line": 70,
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
@@ -2534,7 +2565,7 @@
  },
  {
   "file": "mobile/src/components/SearchResults.tsx",
-  "line": 74,
+  "line": 76,
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
@@ -2548,7 +2579,7 @@
  },
  {
   "file": "mobile/src/components/SearchResults.tsx",
-  "line": 81,
+  "line": 83,
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
@@ -2562,7 +2593,7 @@
  },
  {
   "file": "mobile/src/components/SearchResults.tsx",
-  "line": 82,
+  "line": 84,
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
@@ -2576,7 +2607,7 @@
  },
  {
   "file": "mobile/src/components/SearchResults.tsx",
-  "line": 82,
+  "line": 84,
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
@@ -2590,7 +2621,7 @@
  },
  {
   "file": "mobile/src/components/SearchResults.tsx",
-  "line": 89,
+  "line": 91,
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
@@ -2604,7 +2635,7 @@
  },
  {
   "file": "mobile/src/components/SearchResults.tsx",
-  "line": 89,
+  "line": 91,
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
@@ -2618,7 +2649,7 @@
  },
  {
   "file": "mobile/src/components/SearchResults.tsx",
-  "line": 96,
+  "line": 98,
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
@@ -2632,7 +2663,7 @@
  },
  {
   "file": "mobile/src/components/SearchResults.tsx",
-  "line": 96,
+  "line": 98,
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
@@ -2646,7 +2677,7 @@
  },
  {
   "file": "mobile/src/components/SearchResults.tsx",
-  "line": 96,
+  "line": 98,
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
@@ -2660,7 +2691,7 @@
  },
  {
   "file": "mobile/src/components/SearchResults.tsx",
-  "line": 107,
+  "line": 109,
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
@@ -2674,11 +2705,11 @@
  },
  {
   "file": "mobile/src/components/SearchResults.tsx",
-  "line": 117,
+  "line": 119,
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
-  "how": "push",
+  "how": "tab",
   "route": "/dhikr",
   "opens": "الذكر",
   "on": [
@@ -2688,7 +2719,7 @@
  },
  {
   "file": "mobile/src/components/SearchResults.tsx",
-  "line": 123,
+  "line": 125,
   "owner": "HitRow",
   "key": "onPress",
   "label": null,
@@ -2908,7 +2939,7 @@
   "owner": "TiesChain",
   "key": "open",
   "label": null,
-  "how": "push",
+  "how": "tab",
   "route": "/ties",
   "opens": "الصلات",
   "on": [
@@ -2989,7 +3020,7 @@
   "owner": "People",
   "key": "onPress",
   "label": null,
-  "how": "push",
+  "how": "tab",
   "route": "/person",
   "opens": "الترجمة",
   "on": [
@@ -3010,7 +3041,7 @@
   "owner": "Hadith",
   "key": "onPress",
   "label": "افتح الحديث كاملًا: ‹›",
-  "how": "push",
+  "how": "tab",
   "route": "/hadith-sahih",
   "opens": "حديث الصحيح",
   "on": [
@@ -3026,7 +3057,7 @@
   "owner": "StoryLinkRow",
   "key": "onPress",
   "label": null,
-  "how": "push",
+  "how": "tab",
   "route": "/story",
   "opens": "القصة",
   "on": [
@@ -3210,7 +3241,7 @@
   "owner": "SectionPart",
   "key": "onPress",
   "label": null,
-  "how": "push",
+  "how": "tab",
   "route": "/hadith-sahih",
   "opens": "حديث الصحيح",
   "on": [
@@ -3223,7 +3254,7 @@
   "owner": "SectionPart",
   "key": "open",
   "label": "افتح ‹›",
-  "how": "push",
+  "how": "tab",
   "route": "/person",
   "opens": "الترجمة",
   "on": [
@@ -3258,7 +3289,7 @@
  },
  {
   "file": "mobile/src/screens/book.tsx",
-  "line": 116,
+  "line": 117,
   "owner": "BookReader",
   "key": "openAyah",
   "label": null,
@@ -3338,11 +3369,11 @@
  },
  {
   "file": "mobile/src/screens/hadith.tsx",
-  "line": 53,
+  "line": 54,
   "owner": "ContinueCard",
   "key": "onPress",
   "label": "افتح ‹›",
-  "how": "push",
+  "how": "tab",
   "route": "/hadith-sahih",
   "opens": "حديث الصحيح",
   "on": [
@@ -3351,7 +3382,7 @@
  },
  {
   "file": "mobile/src/screens/hadith.tsx",
-  "line": 71,
+  "line": 72,
   "owner": "FortyShape",
   "key": "onOpen",
   "label": null,
@@ -3364,11 +3395,11 @@
  },
  {
   "file": "mobile/src/screens/hadith.tsx",
-  "line": 86,
+  "line": 87,
   "owner": "Hit",
   "key": "onPress",
   "label": null,
-  "how": "push",
+  "how": "tab",
   "route": "/hadith-sahih",
   "opens": "حديث الصحيح",
   "on": [
@@ -3377,7 +3408,7 @@
  },
  {
   "file": "mobile/src/screens/hadith.tsx",
-  "line": 86,
+  "line": 87,
   "owner": "Hit",
   "key": "onPress",
   "label": null,
@@ -3390,7 +3421,7 @@
  },
  {
   "file": "mobile/src/screens/hadith.tsx",
-  "line": 86,
+  "line": 87,
   "owner": "Hit",
   "key": "onPress",
   "label": null,
@@ -3403,7 +3434,7 @@
  },
  {
   "file": "mobile/src/screens/hadith.tsx",
-  "line": 134,
+  "line": 135,
   "owner": "HadithScreen",
   "key": "onPress",
   "label": null,
@@ -3416,7 +3447,7 @@
  },
  {
   "file": "mobile/src/screens/hadith.tsx",
-  "line": 148,
+  "line": 149,
   "owner": "HadithScreen",
   "key": "onOpenBook",
   "label": null,
@@ -3429,7 +3460,7 @@
  },
  {
   "file": "mobile/src/screens/hadith.tsx",
-  "line": 148,
+  "line": 149,
   "owner": "HadithScreen",
   "key": "onOpenKitab",
   "label": null,
@@ -3442,7 +3473,7 @@
  },
  {
   "file": "mobile/src/screens/hadith.tsx",
-  "line": 152,
+  "line": 153,
   "owner": "HadithScreen",
   "key": "onOpenBook",
   "label": null,
@@ -3615,7 +3646,7 @@
   "owner": "BabPage",
   "key": "onPress",
   "label": null,
-  "how": "push",
+  "how": "tab",
   "route": "/hadith-sahih",
   "opens": "حديث الصحيح",
   "on": [
@@ -3637,7 +3668,7 @@
  },
  {
   "file": "mobile/src/screens/hadithSahih.tsx",
-  "line": 42,
+  "line": 43,
   "owner": "SahihPage",
   "key": "onPress",
   "label": "‹›‹›",
@@ -3650,7 +3681,7 @@
  },
  {
   "file": "mobile/src/screens/hadithSahih.tsx",
-  "line": 42,
+  "line": 43,
   "owner": "SahihPage",
   "key": "onPress",
   "label": "‹›‹›",
@@ -3663,7 +3694,7 @@
  },
  {
   "file": "mobile/src/screens/hadithSahih.tsx",
-  "line": 53,
+  "line": 54,
   "owner": "SahihPage",
   "key": "onOpen",
   "label": null,
@@ -3676,7 +3707,7 @@
  },
  {
   "file": "mobile/src/screens/hadithSahih.tsx",
-  "line": 55,
+  "line": 56,
   "owner": "SahihPage",
   "key": "onPress",
   "label": null,
@@ -3689,7 +3720,7 @@
  },
  {
   "file": "mobile/src/screens/hadithSahih.tsx",
-  "line": 76,
+  "line": 77,
   "owner": "InHadith",
   "key": "onPress",
   "label": "‹› · ‹›",
@@ -3702,7 +3733,7 @@
  },
  {
   "file": "mobile/src/screens/hadithSahih.tsx",
-  "line": 113,
+  "line": 108,
   "owner": "HadithSahihScreen",
   "key": "back",
   "label": null,
@@ -3892,7 +3923,7 @@
   "owner": "Box",
   "key": "onPress",
   "label": null,
-  "how": "push",
+  "how": "tab",
   "route": "/person",
   "opens": "الترجمة",
   "on": [
@@ -4129,7 +4160,7 @@
  },
  {
   "file": "mobile/src/screens/quiz/party/code.tsx",
-  "line": 360,
+  "line": 357,
   "owner": "QuestionStage",
   "key": "onOpen",
   "label": null,
@@ -4142,7 +4173,7 @@
  },
  {
   "file": "mobile/src/screens/quiz/party/code.tsx",
-  "line": 400,
+  "line": 397,
   "owner": "QuestionStage",
   "key": "onOpen",
   "label": null,
@@ -4155,7 +4186,7 @@
  },
  {
   "file": "mobile/src/screens/quiz/party/code.tsx",
-  "line": 434,
+  "line": 431,
   "owner": "FinalResults",
   "key": "onOpen",
   "label": null,
@@ -4441,7 +4472,7 @@
  },
  {
   "file": "mobile/src/screens/stories.tsx",
-  "line": 34,
+  "line": 35,
   "owner": "StoryRow",
   "key": "onPress",
   "label": null,
@@ -4454,7 +4485,7 @@
  },
  {
   "file": "mobile/src/screens/stories.tsx",
-  "line": 55,
+  "line": 56,
   "owner": "ChapterCard",
   "key": "onPress",
   "label": null,
@@ -4471,7 +4502,7 @@
   "owner": "HadithOpen",
   "key": "onPress",
   "label": "افتح ‹›",
-  "how": "push",
+  "how": "tab",
   "route": "/hadith-sahih",
   "opens": "حديث الصحيح",
   "on": [

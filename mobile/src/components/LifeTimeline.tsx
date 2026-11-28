@@ -1,6 +1,5 @@
 import { useMemo, useState } from 'react';
 import { View } from 'react-native';
-import { router } from 'expo-router';
 import { Plus } from 'lucide-react-native';
 import Folded from '@/ui/Folded';
 import { num } from '@shared/quran/arabicNumber';
@@ -24,7 +23,7 @@ export const placeLabel = (place: { year?: number; before?: boolean }) => (place
 
 export function openItem(item: LifeItem, show: (item: LifeItem) => void) {
   if (item.open?.to === 'battle') toTab({ pathname: '/battle', params: { slug: item.open.slug } });
-  else if (item.open?.to === 'story') router.push({ pathname: '/story', params: { slug: item.open.slug } });
+  else if (item.open?.to === 'story') toTab({ pathname: '/story', params: { slug: item.open.slug } });
   else show(item);
 }
 

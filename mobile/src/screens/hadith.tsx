@@ -1,6 +1,7 @@
 import { useCallback, useDeferredValue, useMemo, useRef, useState, type ComponentRef } from 'react';
 import { ScrollView, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
+import { toTab } from '@/lib/ways';
 import { fromCompanion, sayingStart, searchForty, type FortyEntry } from '@shared/hadith';
 import { placeOf, searchSahih, type SahihHit, type SahihSlug } from '@shared/sahih';
 import { num } from '@shared/quran/arabicNumber';
@@ -43,7 +44,7 @@ export function FortyCard({ entry, palette, onPress }: { entry: FortyEntry; pale
 export const openBook = (book: SahihSlug | 'forty') => router.push({ pathname: '/hadith-book', params: { book } });
 export const openKitab = (book: SahihSlug, kitab: number) => router.push({ pathname: '/hadith-kitab', params: { book, kitab: String(kitab) } });
 export const openBab = (book: SahihSlug, kitab: number, bab: number) => router.push({ pathname: '/hadith-kitab', params: { book, kitab: String(kitab), bab: String(bab) } });
-export const openSahih = (book: SahihSlug, n: number) => router.push({ pathname: '/hadith-sahih', params: { book, n: String(n) } });
+export const openSahih = (book: SahihSlug, n: number) => toTab({ pathname: '/hadith-sahih', params: { book, n: String(n) } });
 
 function ContinueCard({ read, palette }: { read: LastRead; palette: Palette }) {
   const book = SAHIH[read.slug];
