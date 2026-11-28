@@ -32,6 +32,14 @@ Counts are of product code: test files are left out. "Empty catch blocks" counts
 | 2026-11-28 | 2 errors show their cause | app + shared | failures that dropped their reason | 14 | 0 | a refused storage save, adhan scheduling and permission, book download and open, party questions, location, audio download (each ayah and the pack), video font, share and recording, home card warm-up, screen preload |
 | 2026-11-28 | 2 errors show their cause | app + shared | catches that recover without the error (judged expected) | 26 | 23 | parsing a saved value or a URL, reading storage; a failure here is an expected answer, not an error |
 | 2026-11-28 | 2 errors show their cause | website | empty catch blocks | 44 | 44 | the website is paused; its turn comes when it returns |
+| 2026-11-28 | 3 feature map | app | screens with a name on the map | 0 | 52 | every route file in `mobile/src/app`; a new one fails the test until it is named (#1247) |
+| 2026-11-28 | 3 feature map | app | screens reachable from the tab bar | | 51 | all but `tree-sizes`, a developer tool |
+| 2026-11-28 | 3 feature map | app | ways into a screen on the map | 59 | 339 | first written by hand; now every place in the code that opens a screen, 563 screen-to-screen pairs |
+| 2026-11-28 | 3 feature map | app | sheets and menus found | 0 | 62 | 27 kinds |
+| 2026-11-28 | 3 feature map | app | screens whose ayah menu has no «صفحة الآية» | 1 | | the mushaf; rule agreed by the owner |
+| 2026-11-28 | 3 feature map | app | page searches that leave their page | 0 | | the tarajim search did before #1225; now a test fails if one does |
+| 2026-11-28 | 3 feature map | app | single-thing pages linked one way only | 1 | | hadith → person (a long press on an ayah counts as a way to its page) |
+| 2026-11-28 | 3 feature map | app | links into another tab without its first page under it | 79 | | `router.push` or `router.navigate` instead of `toTab`, mostly home feed and quiz cards into the tarajim tab |
 | 2026-11-28 | 4 no comments | app | comment lines | 4477 | 20 | the 20 left are "see docs/… / see R00xx" pointers and `@vitest-environment` lines |
 | 2026-11-28 | 4 no comments | shared | comment lines | 3511 | 62 | pointers, plus the header of each generated `.d.ts` data file |
 | 2026-11-28 | 4 no comments | app + shared | comments turned into a doc or record pointer | 0 | 87 | a removed comment that named docs/… or R00xx kept only that name |

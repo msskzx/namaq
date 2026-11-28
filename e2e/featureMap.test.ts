@@ -1,7 +1,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { SCREENS, SECTIONS, nameAt, renderDoc, routeFiles, urlNamed, urlOf } from './featureMap.mjs';
+import { SCREENS, SECTIONS, nameAt, routeFiles, urlNamed, urlOf } from './featureMap.mjs';
+import { REPO, mapData, renderPages } from './featureMapPages.mjs';
 
 const repo = path.resolve(__dirname, '..');
 const named = new Map(SCREENS.map(screen => [screen.name, screen]));
@@ -55,7 +56,26 @@ describe('the feature map', () => {
     }
   });
 
-  it('is drawn in docs/feature-map.md as the map now stands (run npm run feature-map)', () => {
-    expect(fs.readFileSync(path.join(repo, 'docs/feature-map.md'), 'utf8')).toBe(renderDoc());
+  it('sends every link in the code to a screen on the map', () => {
+    const { links } = mapData();
+    expect(links.length).toBeGreaterThan(0);
+    expect(links.filter(link => !link.target).map(link => `${link.route} at ${link.file}:${link.line}`)).toEqual([]);
+  });
+
+  it('draws every link and sheet on a screen, or on every screen', () => {
+    const { links, sheets } = mapData();
+    expect([...links, ...sheets].filter(item => !item.everywhere && !item.in.length).map(item => `${item.file}:${item.line}`)).toEqual([]);
+  });
+
+  it('finds in the code a way into every screen the tab bar does not open', () => {
+    const opened = new Set(mapData().links.map(link => link.target?.name));
+    expect(SCREENS.filter(screen => !screen.tabBar && !screen.unlinked && !opened.has(screen.name)).map(screen => screen.name)).toEqual([]);
+  });
+
+  it('is written in docs/feature-map.md and docs/feature-map/ as the code now stands (run npm run feature-map)', () => {
+    const pages = renderPages();
+    const onDisk = fs.readdirSync(path.join(REPO, 'docs/feature-map')).map(file => `docs/feature-map/${file}`);
+    expect(onDisk.sort()).toEqual([...pages.keys()].filter(file => file.startsWith('docs/feature-map/')).sort());
+    for (const [file, text] of pages) expect(fs.readFileSync(path.join(REPO, file), 'utf8'), file).toBe(text);
   });
 });

@@ -1,0 +1,4875 @@
+[
+ {
+  "file": "mobile/src/app/(tabs)/(home)/index.tsx",
+  "line": 59,
+  "owner": "HomeScreen",
+  "key": "search",
+  "label": null,
+  "how": "tab",
+  "route": "/search",
+  "opens": "البحث",
+  "on": [
+   "الرئيسية"
+  ]
+ },
+ {
+  "file": "mobile/src/components/Adhkar.tsx",
+  "line": 110,
+  "owner": "DhikrRow",
+  "key": "onPress",
+  "label": "‹›‹›",
+  "how": "push",
+  "route": "/dhikr",
+  "opens": "الذكر",
+  "on": [
+   "الأدوات والأذكار"
+  ]
+ },
+ {
+  "file": "mobile/src/components/AppShell.tsx",
+  "line": 21,
+  "owner": "AppShell",
+  "key": null,
+  "label": null,
+  "how": "tab",
+  "route": "/utilities",
+  "opens": "الأدوات والأذكار",
+  "on": "every screen"
+ },
+ {
+  "file": "mobile/src/components/AyahMenuHost.tsx",
+  "line": 48,
+  "owner": "AyahMenuHost",
+  "key": "page",
+  "label": null,
+  "how": "push",
+  "route": "/ayah",
+  "opens": "صفحة الآية",
+  "on": "every screen"
+ },
+ {
+  "file": "mobile/src/components/AyahMenuHost.tsx",
+  "line": 49,
+  "owner": "AyahMenuHost",
+  "key": "mushaf",
+  "label": null,
+  "how": "tab",
+  "route": "/read",
+  "opens": "المصحف",
+  "on": "every screen"
+ },
+ {
+  "file": "mobile/src/components/AyahMenuHost.tsx",
+  "line": 50,
+  "owner": "AyahMenuHost",
+  "key": "recite",
+  "label": null,
+  "how": "tab",
+  "route": "/read",
+  "opens": "المصحف",
+  "on": "every screen"
+ },
+ {
+  "file": "mobile/src/components/AyahMenuHost.tsx",
+  "line": 67,
+  "owner": "AyahMenuHost",
+  "key": "onJump",
+  "label": null,
+  "how": "tab",
+  "route": "/read",
+  "opens": "المصحف",
+  "on": "every screen"
+ },
+ {
+  "file": "mobile/src/components/AyahPreviewSheet.tsx",
+  "line": 41,
+  "owner": "AyahPreviewSheet",
+  "key": "open",
+  "label": null,
+  "how": "tab",
+  "route": "/branches",
+  "opens": "متشابهات القرآن",
+  "on": "every screen"
+ },
+ {
+  "file": "mobile/src/components/AyahPreviewSheet.tsx",
+  "line": 80,
+  "owner": "AyahPreviewSheet",
+  "key": "onPress",
+  "label": "‹›، ‹› ‹›",
+  "how": "tab",
+  "route": "/compare",
+  "opens": "مقارنة السور",
+  "on": "every screen"
+ },
+ {
+  "file": "mobile/src/components/AyahPreviewSheet.tsx",
+  "line": 102,
+  "owner": "AyahPreviewSheet",
+  "key": "onPress",
+  "label": null,
+  "how": "tab",
+  "route": "/branches",
+  "opens": "متشابهات القرآن",
+  "on": "every screen"
+ },
+ {
+  "file": "mobile/src/components/AyahPreviewSheet.tsx",
+  "line": 102,
+  "owner": "AyahPreviewSheet",
+  "key": "onPress",
+  "label": null,
+  "how": "tab",
+  "route": "/compare",
+  "opens": "مقارنة السور",
+  "on": "every screen"
+ },
+ {
+  "file": "mobile/src/components/BalaghaSheet.tsx",
+  "line": 94,
+  "owner": "Itqan",
+  "key": "onPress",
+  "label": "افتح ‹› ‹› في المصحف",
+  "how": "tab",
+  "route": "/read",
+  "opens": "المصحف",
+  "on": "every screen"
+ },
+ {
+  "file": "mobile/src/components/BalaghaSheet.tsx",
+  "line": 110,
+  "owner": "TermLink",
+  "key": "onPress",
+  "label": "‹› في مصطلحات البلاغة",
+  "how": "tab",
+  "route": "/term",
+  "opens": "المصطلح",
+  "on": "every screen"
+ },
+ {
+  "file": "mobile/src/components/BalaghaTerm.tsx",
+  "line": 57,
+  "owner": "TermExampleCard",
+  "key": "onPress",
+  "label": "افتح ‹› في المصحف",
+  "how": "tab",
+  "route": "/read",
+  "opens": "المصحف",
+  "on": [
+   "المصطلح"
+  ]
+ },
+ {
+  "file": "mobile/src/components/CompareCard.tsx",
+  "line": 101,
+  "owner": "SideHead",
+  "key": "onPress",
+  "label": null,
+  "how": "navigate",
+  "route": "/read",
+  "opens": "المصحف",
+  "on": [
+   "الرئيسية",
+   "مقارنة السور"
+  ]
+ },
+ {
+  "file": "mobile/src/components/CompareCard.tsx",
+  "line": 102,
+  "owner": "SideHead",
+  "key": "onPress",
+  "label": "افتح في متشابهات القرآن",
+  "how": "tab",
+  "route": "/branches",
+  "opens": "متشابهات القرآن",
+  "on": [
+   "الرئيسية",
+   "مقارنة السور"
+  ]
+ },
+ {
+  "file": "mobile/src/components/CompareCard.tsx",
+  "line": 113,
+  "owner": "LaneHead",
+  "key": "onPress",
+  "label": "اقرأ ‹› في المصحف",
+  "how": "navigate",
+  "route": "/read",
+  "opens": "المصحف",
+  "on": [
+   "الرئيسية",
+   "مقارنة السور"
+  ]
+ },
+ {
+  "file": "mobile/src/components/CompareCard.tsx",
+  "line": 114,
+  "owner": "LaneHead",
+  "key": "onPress",
+  "label": "افتح في متشابهات القرآن",
+  "how": "tab",
+  "route": "/branches",
+  "opens": "متشابهات القرآن",
+  "on": [
+   "الرئيسية",
+   "مقارنة السور"
+  ]
+ },
+ {
+  "file": "mobile/src/components/CompareCard.tsx",
+  "line": 346,
+  "owner": "CompareCard",
+  "key": "onPress",
+  "label": "اقرأ ‹› في المصحف",
+  "how": "navigate",
+  "route": "/read",
+  "opens": "المصحف",
+  "on": [
+   "الرئيسية",
+   "مقارنة السور"
+  ]
+ },
+ {
+  "file": "mobile/src/components/CompareCard.tsx",
+  "line": 353,
+  "owner": "CompareCard",
+  "key": "onPress",
+  "label": "افتح في متشابهات القرآن",
+  "how": "tab",
+  "route": "/branches",
+  "opens": "متشابهات القرآن",
+  "on": [
+   "الرئيسية",
+   "مقارنة السور"
+  ]
+ },
+ {
+  "file": "mobile/src/components/CrashScreen.tsx",
+  "line": 26,
+  "owner": "ErrorBoundary",
+  "key": "onPress",
+  "label": "الرئيسية",
+  "how": "replace",
+  "route": "/",
+  "opens": "الرئيسية",
+  "on": "every screen"
+ },
+ {
+  "file": "mobile/src/components/DarkSea.tsx",
+  "line": 138,
+  "owner": "DarkSea",
+  "key": "onPress",
+  "label": "رجوع",
+  "how": "tab",
+  "route": "/lataif",
+  "opens": "مشاهد",
+  "on": [
+   "المشهد"
+  ]
+ },
+ {
+  "file": "mobile/src/components/DarkSea.tsx",
+  "line": 229,
+  "owner": "DarkSeaActions",
+  "key": "onPress",
+  "label": "افتح مشهد ‹›",
+  "how": "push",
+  "route": "/scene",
+  "opens": "المشهد",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/DarkSea.tsx",
+  "line": 230,
+  "owner": "DarkSeaActions",
+  "key": "onPress",
+  "label": "افتح ‹› في المصحف",
+  "how": "navigate",
+  "route": "/read",
+  "opens": "المصحف",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/EventPlaces.tsx",
+  "line": 92,
+  "owner": "EventPlaces",
+  "key": "onPress",
+  "label": "‹›:‹›",
+  "how": "navigate",
+  "route": "/read",
+  "opens": "المصحف",
+  "on": [
+   "الرئيسية",
+   "مدونتي",
+   "قصص الأنبياء",
+   "قصة النبي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/EventPlaces.tsx",
+  "line": 106,
+  "owner": "EventPlaces",
+  "key": "onPick",
+  "label": null,
+  "how": "tab",
+  "route": "/compare",
+  "opens": "مقارنة السور",
+  "on": [
+   "الرئيسية",
+   "مدونتي",
+   "قصص الأنبياء",
+   "قصة النبي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/EventPlaces.tsx",
+  "line": 116,
+  "owner": "CompareButton",
+  "key": "onPress",
+  "label": "قارن ‹›",
+  "how": "tab",
+  "route": "/compare",
+  "opens": "مقارنة السور",
+  "on": [
+   "الرئيسية",
+   "مدونتي",
+   "قصص الأنبياء",
+   "قصة النبي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeButtons.tsx",
+  "line": 10,
+  "owner": "BUTTONS",
+  "key": "open",
+  "label": "القبلة",
+  "how": "tab",
+  "route": "/utilities",
+  "opens": "الأدوات والأذكار",
+  "on": [
+   "الرئيسية"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeButtons.tsx",
+  "line": 11,
+  "owner": "BUTTONS",
+  "key": "open",
+  "label": "الأذكار",
+  "how": "tab",
+  "route": "/utilities",
+  "opens": "الأدوات والأذكار",
+  "on": [
+   "الرئيسية"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeButtons.tsx",
+  "line": 12,
+  "owner": "BUTTONS",
+  "key": "open",
+  "label": "المكتبة",
+  "how": "tab",
+  "route": "/books",
+  "opens": "المكتبة",
+  "on": [
+   "الرئيسية"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeButtons.tsx",
+  "line": 13,
+  "owner": "BUTTONS",
+  "key": "open",
+  "label": "مشاهد",
+  "how": "tab",
+  "route": "/lataif",
+  "opens": "مشاهد",
+  "on": [
+   "الرئيسية"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeButtons.tsx",
+  "line": 14,
+  "owner": "BUTTONS",
+  "key": "open",
+  "label": "مدونتي",
+  "how": "push",
+  "route": "/library",
+  "opens": "مدونتي",
+  "on": [
+   "الرئيسية"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeCards.tsx",
+  "line": 81,
+  "owner": "useHomeCards",
+  "key": "onPress",
+  "label": null,
+  "how": "tab",
+  "route": "/read",
+  "opens": "المصحف",
+  "on": [
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeCards.tsx",
+  "line": 81,
+  "owner": "useHomeCards",
+  "key": "onPress",
+  "label": null,
+  "how": "tab",
+  "route": "/branches",
+  "opens": "متشابهات القرآن",
+  "on": [
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeCards.tsx",
+  "line": 81,
+  "owner": "useHomeCards",
+  "key": "onPress",
+  "label": null,
+  "how": "tab",
+  "route": "/compare",
+  "opens": "مقارنة السور",
+  "on": [
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeCards.tsx",
+  "line": 100,
+  "owner": "useHomeCards",
+  "key": "onPress",
+  "label": "افتح صفحة الآية",
+  "how": "push",
+  "route": "/ayah",
+  "opens": "صفحة الآية",
+  "on": [
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeCards.tsx",
+  "line": 103,
+  "owner": "useHomeCards",
+  "key": "onPress",
+  "label": "افتح المقارنة",
+  "how": "tab",
+  "route": "/branches",
+  "opens": "متشابهات القرآن",
+  "on": [
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeCards.tsx",
+  "line": 103,
+  "owner": "useHomeCards",
+  "key": "onPress",
+  "label": "افتح المقارنة",
+  "how": "tab",
+  "route": "/compare",
+  "opens": "مقارنة السور",
+  "on": [
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeCards.tsx",
+  "line": 103,
+  "owner": "useHomeCards",
+  "key": "onPress",
+  "label": "افتح المقارنة",
+  "how": "tab",
+  "route": "/read",
+  "opens": "المصحف",
+  "on": [
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeCards.tsx",
+  "line": 107,
+  "owner": "useHomeCards",
+  "key": "onPress",
+  "label": "افتح صفحة الآية",
+  "how": "push",
+  "route": "/ayah",
+  "opens": "صفحة الآية",
+  "on": [
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeCards.tsx",
+  "line": 110,
+  "owner": "useHomeCards",
+  "key": "onPick",
+  "label": null,
+  "how": "tab",
+  "route": "/read",
+  "opens": "المصحف",
+  "on": [
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeCards.tsx",
+  "line": 110,
+  "owner": "useHomeCards",
+  "key": "onPick",
+  "label": null,
+  "how": "tab",
+  "route": "/branches",
+  "opens": "متشابهات القرآن",
+  "on": [
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeCards.tsx",
+  "line": 110,
+  "owner": "useHomeCards",
+  "key": "onPick",
+  "label": null,
+  "how": "tab",
+  "route": "/compare",
+  "opens": "مقارنة السور",
+  "on": [
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 270,
+  "owner": "ContinueReading",
+  "key": "read",
+  "label": "افتح المصحف ‹›، سورة ‹›",
+  "how": "tab",
+  "route": "/read",
+  "opens": "المصحف",
+  "on": [
+   "الرئيسية"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 273,
+  "owner": "ContinueReading",
+  "key": "open",
+  "label": "افتح القرآن",
+  "how": "tab",
+  "route": "/quran",
+  "opens": "القرآن",
+  "on": [
+   "الرئيسية"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 285,
+  "owner": "PairPost",
+  "key": "compare",
+  "label": null,
+  "how": "tab",
+  "route": "/compare",
+  "opens": "مقارنة السور",
+  "on": [
+   "الرئيسية"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 292,
+  "owner": "PairPost",
+  "key": "open",
+  "label": "افتح الآيات المتشابهة",
+  "how": "tab",
+  "route": "/compare",
+  "opens": "مقارنة السور",
+  "on": [
+   "الرئيسية"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 334,
+  "owner": "ForgottenPost",
+  "key": "onPress",
+  "label": "افتح صفحة الآية",
+  "how": "push",
+  "route": "/ayah",
+  "opens": "صفحة الآية",
+  "on": [
+   "الرئيسية",
+   "مدونتي",
+   "الاختبارات"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 335,
+  "owner": "ForgottenPost",
+  "key": "onPress",
+  "label": "افتح ما نسيته",
+  "how": "push",
+  "route": "/library",
+  "opens": "مدونتي",
+  "on": [
+   "الرئيسية",
+   "مدونتي",
+   "الاختبارات"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 335,
+  "owner": "ForgottenPost",
+  "key": "head",
+  "label": "افتح الاختبارات",
+  "how": "tab",
+  "route": "/quizzes",
+  "opens": "الاختبارات",
+  "on": [
+   "الرئيسية",
+   "مدونتي",
+   "الاختبارات"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 372,
+  "owner": "ReciteAction",
+  "key": "onPress",
+  "label": "تسميع",
+  "how": "tab",
+  "route": "/read",
+  "opens": "المصحف",
+  "on": [
+   "الرئيسية",
+   "الاختبارات"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 454,
+  "owner": "QuizPost",
+  "key": "open",
+  "label": "افتح الاختبارات",
+  "how": "tab",
+  "route": "/quizzes",
+  "opens": "الاختبارات",
+  "on": [
+   "الرئيسية",
+   "الاختبارات"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 455,
+  "owner": "QuizPost",
+  "key": "onPress",
+  "label": "افتح ما يشرح الجواب",
+  "how": "push",
+  "route": "/person",
+  "opens": "الترجمة",
+  "on": [
+   "الرئيسية",
+   "الاختبارات"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 455,
+  "owner": "QuizPost",
+  "key": "onPress",
+  "label": "افتح ما يشرح الجواب",
+  "how": "tab",
+  "route": "/branches",
+  "opens": "متشابهات القرآن",
+  "on": [
+   "الرئيسية",
+   "الاختبارات"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 455,
+  "owner": "QuizPost",
+  "key": "onPress",
+  "label": "افتح ما يشرح الجواب",
+  "how": "tab",
+  "route": "/compare",
+  "opens": "مقارنة السور",
+  "on": [
+   "الرئيسية",
+   "الاختبارات"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 455,
+  "owner": "QuizPost",
+  "key": "onPress",
+  "label": "افتح ما يشرح الجواب",
+  "how": "tab",
+  "route": "/atlas",
+  "opens": "الأطلس",
+  "on": [
+   "الرئيسية",
+   "الاختبارات"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 455,
+  "owner": "QuizPost",
+  "key": "onPress",
+  "label": "افتح ما يشرح الجواب",
+  "how": "push",
+  "route": "/prophets/[slug]",
+  "opens": "قصة النبي",
+  "on": [
+   "الرئيسية",
+   "الاختبارات"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 455,
+  "owner": "QuizPost",
+  "key": "onPress",
+  "label": "افتح ما يشرح الجواب",
+  "how": "push",
+  "route": "/nasab",
+  "opens": "النسب",
+  "on": [
+   "الرئيسية",
+   "الاختبارات"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 455,
+  "owner": "QuizPost",
+  "key": "onPress",
+  "label": "افتح ما يشرح الجواب",
+  "how": "tab",
+  "route": "/term",
+  "opens": "المصطلح",
+  "on": [
+   "الرئيسية",
+   "الاختبارات"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 455,
+  "owner": "QuizPost",
+  "key": "onPress",
+  "label": "افتح ما يشرح الجواب",
+  "how": "tab",
+  "route": "/hadith-forty",
+  "opens": "حديث الأربعين",
+  "on": [
+   "الرئيسية",
+   "الاختبارات"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 455,
+  "owner": "QuizPost",
+  "key": "onPress",
+  "label": "افتح ما يشرح الجواب",
+  "how": "tab",
+  "route": "/hadith-book",
+  "opens": "كتاب الحديث",
+  "on": [
+   "الرئيسية",
+   "الاختبارات"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 455,
+  "owner": "QuizPost",
+  "key": "onPress",
+  "label": "افتح ما يشرح الجواب",
+  "how": "tab",
+  "route": "/hadith-kitab",
+  "opens": "أبواب الكتاب",
+  "on": [
+   "الرئيسية",
+   "الاختبارات"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 455,
+  "owner": "QuizPost",
+  "key": "onPress",
+  "label": "افتح ما يشرح الجواب",
+  "how": "tab",
+  "route": "/hadith",
+  "opens": "الحديث",
+  "on": [
+   "الرئيسية",
+   "الاختبارات"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 455,
+  "owner": "QuizPost",
+  "key": "onPress",
+  "label": "افتح ما يشرح الجواب",
+  "how": "tab",
+  "route": "/story",
+  "opens": "القصة",
+  "on": [
+   "الرئيسية",
+   "الاختبارات"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 455,
+  "owner": "QuizPost",
+  "key": "onPress",
+  "label": "افتح ما يشرح الجواب",
+  "how": "tab",
+  "route": "/battle",
+  "opens": "الغزوة",
+  "on": [
+   "الرئيسية",
+   "الاختبارات"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 455,
+  "owner": "QuizPost",
+  "key": "onPress",
+  "label": "افتح ما يشرح الجواب",
+  "how": "navigate",
+  "route": "/read",
+  "opens": "المصحف",
+  "on": [
+   "الرئيسية",
+   "الاختبارات"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 455,
+  "owner": "QuizPost",
+  "key": "onPress",
+  "label": "افتح ما يشرح الجواب",
+  "how": "tab",
+  "route": "/tuhfa",
+  "opens": "تحفة الأطفال",
+  "on": [
+   "الرئيسية",
+   "الاختبارات"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 455,
+  "owner": "QuizPost",
+  "key": "onPress",
+  "label": "افتح ما يشرح الجواب",
+  "how": "push",
+  "route": "/dhikr",
+  "opens": "الذكر",
+  "on": [
+   "الرئيسية",
+   "الاختبارات"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 455,
+  "owner": "QuizPost",
+  "key": "onPress",
+  "label": "افتح ما يشرح الجواب",
+  "how": "push",
+  "route": "/order",
+  "opens": "ترتيب السور",
+  "on": [
+   "الرئيسية",
+   "الاختبارات"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 493,
+  "owner": "TarajimPost",
+  "key": "open",
+  "label": "افتح ترجمة ‹›",
+  "how": "push",
+  "route": "/person",
+  "opens": "الترجمة",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 495,
+  "owner": "TarajimPost",
+  "key": "open",
+  "label": "افتح التراجم",
+  "how": "tab",
+  "route": "/tarajim",
+  "opens": "التراجم",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 512,
+  "owner": "TiePost",
+  "key": "open",
+  "label": "ارسم الصلة بين ‹› و‹›",
+  "how": "push",
+  "route": "/between",
+  "opens": "بين عدة أشخاص",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 514,
+  "owner": "TiePost",
+  "key": "open",
+  "label": "افتح التراجم",
+  "how": "tab",
+  "route": "/tarajim",
+  "opens": "التراجم",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 532,
+  "owner": "NamePost",
+  "key": "open",
+  "label": "افتح ترجمة ‹›",
+  "how": "push",
+  "route": "/person",
+  "opens": "الترجمة",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 535,
+  "owner": "NamePost",
+  "key": "open",
+  "label": "افتح التراجم",
+  "how": "tab",
+  "route": "/tarajim",
+  "opens": "التراجم",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 552,
+  "owner": "LifePost",
+  "key": "open",
+  "label": "افتح ترجمة ‹›",
+  "how": "push",
+  "route": "/person",
+  "opens": "الترجمة",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 554,
+  "owner": "LifePost",
+  "key": "open",
+  "label": null,
+  "how": "push",
+  "route": "/person",
+  "opens": "الترجمة",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 569,
+  "owner": "NasabPost",
+  "key": "open",
+  "label": "افتح نسب ‹›",
+  "how": "push",
+  "route": "/nasab",
+  "opens": "النسب",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 571,
+  "owner": "NasabPost",
+  "key": "open",
+  "label": null,
+  "how": "push",
+  "route": "/person",
+  "opens": "الترجمة",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 585,
+  "owner": "TiesPost",
+  "key": "open",
+  "label": "افتح ‹›: ‹›",
+  "how": "push",
+  "route": "/ties",
+  "opens": "الصلات",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 587,
+  "owner": "TiesPost",
+  "key": "open",
+  "label": null,
+  "how": "push",
+  "route": "/person",
+  "opens": "الترجمة",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 591,
+  "owner": "TiesPost",
+  "key": "onPick",
+  "label": null,
+  "how": "push",
+  "route": "/person",
+  "opens": "الترجمة",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 610,
+  "owner": "GroupPost",
+  "key": "open",
+  "label": "ارسم الصلة بينهم",
+  "how": "push",
+  "route": "/between",
+  "opens": "بين عدة أشخاص",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 612,
+  "owner": "GroupPost",
+  "key": "open",
+  "label": "افتح التراجم",
+  "how": "tab",
+  "route": "/tarajim",
+  "opens": "التراجم",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 630,
+  "owner": "LivesPost",
+  "key": "open",
+  "label": "قارن حياة ‹› و‹›",
+  "how": "push",
+  "route": "/life",
+  "opens": "حياتهم جنبًا إلى جنب",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 632,
+  "owner": "LivesPost",
+  "key": "open",
+  "label": "افتح التراجم",
+  "how": "tab",
+  "route": "/tarajim",
+  "opens": "التراجم",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 648,
+  "owner": "MeetPost",
+  "key": "open",
+  "label": "افتح النسب",
+  "how": "push",
+  "route": "/nasab",
+  "opens": "النسب",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 651,
+  "owner": "MeetPost",
+  "key": "open",
+  "label": "افتح التراجم",
+  "how": "tab",
+  "route": "/tarajim",
+  "opens": "التراجم",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 672,
+  "owner": "RingPost",
+  "key": "go",
+  "label": null,
+  "how": "push",
+  "route": "/person",
+  "opens": "الترجمة",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 686,
+  "owner": "RingPost",
+  "key": "open",
+  "label": null,
+  "how": "push",
+  "route": "/person",
+  "opens": "الترجمة",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 687,
+  "owner": "RingPost",
+  "key": "open",
+  "label": "افتح ‹›",
+  "how": "tab",
+  "route": "/hadith-book",
+  "opens": "كتاب الحديث",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 687,
+  "owner": "RingPost",
+  "key": "open",
+  "label": "افتح التراجم",
+  "how": "tab",
+  "route": "/tarajim",
+  "opens": "التراجم",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 688,
+  "owner": "RingPost",
+  "key": "open",
+  "label": null,
+  "how": "push",
+  "route": "/ties",
+  "opens": "الصلات",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 689,
+  "owner": "RingPost",
+  "key": "open",
+  "label": null,
+  "how": "push",
+  "route": "/people",
+  "opens": "كل التراجم",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 690,
+  "owner": "RingPost",
+  "key": "open",
+  "label": null,
+  "how": "tab",
+  "route": "/hadith-sahih",
+  "opens": "حديث الصحيح",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 713,
+  "owner": "BattlePost",
+  "key": "open",
+  "label": "افتح ‹›",
+  "how": "tab",
+  "route": "/battle",
+  "opens": "الغزوة",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 715,
+  "owner": "BattlePost",
+  "key": "open",
+  "label": "افتح الغزوات والمعارك",
+  "how": "tab",
+  "route": "/battles",
+  "opens": "الغزوات والمعارك",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 732,
+  "owner": "BattleYearPost",
+  "key": "toYear",
+  "label": null,
+  "how": "tab",
+  "route": "/atlas",
+  "opens": "الأطلس",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 736,
+  "owner": "BattleYearPost",
+  "key": "open",
+  "label": "افتح الأطلس",
+  "how": "tab",
+  "route": "/atlas",
+  "opens": "الأطلس",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 746,
+  "owner": "BattleYearPost",
+  "key": "onPress",
+  "label": "افتح ‹›",
+  "how": "tab",
+  "route": "/battle",
+  "opens": "الغزوة",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 765,
+  "owner": "ArmiesPost",
+  "key": "open",
+  "label": "افتح الغزوات والمعارك",
+  "how": "tab",
+  "route": "/battles",
+  "opens": "الغزوات والمعارك",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 766,
+  "owner": "ArmiesPost",
+  "key": "onPress",
+  "label": "افتح الغزوات والمعارك",
+  "how": "tab",
+  "route": "/battles",
+  "opens": "الغزوات والمعارك",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 775,
+  "owner": "ArmiesPost",
+  "key": "onPress",
+  "label": "افتح ‹›",
+  "how": "tab",
+  "route": "/battle",
+  "opens": "الغزوة",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 791,
+  "owner": "HadithScenePost",
+  "key": "open",
+  "label": "افتح الحديث في ‹›",
+  "how": "tab",
+  "route": "/hadith-unit",
+  "opens": "رواية الصحيح",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 793,
+  "owner": "HadithScenePost",
+  "key": "open",
+  "label": "افتح الحديث",
+  "how": "tab",
+  "route": "/hadith",
+  "opens": "الحديث",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 811,
+  "owner": "OpeningCardPost",
+  "key": "open",
+  "label": "افتح «‹›» في فواتح السور",
+  "how": "tab",
+  "route": "/openings",
+  "opens": "فواتح السور",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 813,
+  "owner": "OpeningCardPost",
+  "key": "open",
+  "label": "افتح فواتح السور",
+  "how": "tab",
+  "route": "/openings",
+  "opens": "فواتح السور",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 828,
+  "owner": "OathPost",
+  "key": "open",
+  "label": "افتح ‹› في الأقسام",
+  "how": "tab",
+  "route": "/oaths",
+  "opens": "الأقسام",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 830,
+  "owner": "OathPost",
+  "key": "open",
+  "label": "افتح الأقسام",
+  "how": "tab",
+  "route": "/oaths",
+  "opens": "الأقسام",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 832,
+  "owner": "OathPost",
+  "key": "onPress",
+  "label": "افتح ‹› في المصحف",
+  "how": "navigate",
+  "route": "/read",
+  "opens": "المصحف",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 846,
+  "owner": "SurahAimPost",
+  "key": "open",
+  "label": "افتح ترتيب السور",
+  "how": "tab",
+  "route": "/order",
+  "opens": "ترتيب السور",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 847,
+  "owner": "SurahAimPost",
+  "key": "onPress",
+  "label": "افتح سورة ‹› في ترتيب السور",
+  "how": "push",
+  "route": "/order",
+  "opens": "ترتيب السور",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 859,
+  "owner": "SurahLinkPost",
+  "key": "open",
+  "label": "افتح ترتيب السور",
+  "how": "tab",
+  "route": "/order",
+  "opens": "ترتيب السور",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 860,
+  "owner": "SurahLinkPost",
+  "key": "onPress",
+  "label": "افتح ‹› و‹› في ترتيب السور",
+  "how": "push",
+  "route": "/order",
+  "opens": "ترتيب السور",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 876,
+  "owner": "EventPost",
+  "key": "open",
+  "label": "افتح ‹› في القصة",
+  "how": "push",
+  "route": "/prophets/[slug]",
+  "opens": "قصة النبي",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 878,
+  "owner": "EventPost",
+  "key": "open",
+  "label": "افتح قصص الأنبياء",
+  "how": "tab",
+  "route": "/prophets",
+  "opens": "قصص الأنبياء",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 911,
+  "owner": "TreePost",
+  "key": "open",
+  "label": null,
+  "how": "tab",
+  "route": "/branches",
+  "opens": "متشابهات القرآن",
+  "on": [
+   "الرئيسية"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 918,
+  "owner": "TreePost",
+  "key": "open",
+  "label": "افتح متشابهات القرآن",
+  "how": "tab",
+  "route": "/branches",
+  "opens": "متشابهات القرآن",
+  "on": [
+   "الرئيسية"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 930,
+  "owner": "SavedAyahPost",
+  "key": "onPress",
+  "label": "افتح المحفوظات",
+  "how": "push",
+  "route": "/library",
+  "opens": "مدونتي",
+  "on": [
+   "الرئيسية"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 931,
+  "owner": "SavedAyahPost",
+  "key": "onPress",
+  "label": "افتح صفحة الآية",
+  "how": "push",
+  "route": "/ayah",
+  "opens": "صفحة الآية",
+  "on": [
+   "الرئيسية"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 958,
+  "owner": "StoryPost",
+  "key": "open",
+  "label": null,
+  "how": "push",
+  "route": "/prophets/[slug]",
+  "opens": "قصة النبي",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 960,
+  "owner": "StoryPost",
+  "key": "open",
+  "label": "افتح قصص الأنبياء",
+  "how": "tab",
+  "route": "/prophets",
+  "opens": "قصص الأنبياء",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 981,
+  "owner": "JuzPost",
+  "key": "open",
+  "label": "اقرأ ‹›، جزء اليوم",
+  "how": "tab",
+  "route": "/read",
+  "opens": "المصحف",
+  "on": [
+   "الرئيسية"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 984,
+  "owner": "JuzPost",
+  "key": "open",
+  "label": "افتح القرآن",
+  "how": "tab",
+  "route": "/quran",
+  "opens": "القرآن",
+  "on": [
+   "الرئيسية"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 995,
+  "owner": "KahfPost",
+  "key": "read",
+  "label": "اقرأ سورة الكهف",
+  "how": "tab",
+  "route": "/read",
+  "opens": "المصحف",
+  "on": [
+   "الرئيسية"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 997,
+  "owner": "KahfPost",
+  "key": "open",
+  "label": "افتح القرآن",
+  "how": "tab",
+  "route": "/quran",
+  "opens": "القرآن",
+  "on": [
+   "الرئيسية"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 1013,
+  "owner": "PrayerPost",
+  "key": "open",
+  "label": "افتح مواقيت الصلاة",
+  "how": "tab",
+  "route": "/utilities",
+  "opens": "الأدوات والأذكار",
+  "on": [
+   "الرئيسية"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 1016,
+  "owner": "PrayerPost",
+  "key": "onPress",
+  "label": "مواقيت الصلاة",
+  "how": "tab",
+  "route": "/utilities",
+  "opens": "الأدوات والأذكار",
+  "on": [
+   "الرئيسية"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 1017,
+  "owner": "PrayerPost",
+  "key": "onPress",
+  "label": "القبلة",
+  "how": "tab",
+  "route": "/utilities",
+  "opens": "الأدوات والأذكار",
+  "on": [
+   "الرئيسية"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 1066,
+  "owner": "BooksPost",
+  "key": "onPress",
+  "label": "افتح المكتبة",
+  "how": "tab",
+  "route": "/books",
+  "opens": "المكتبة",
+  "on": [
+   "الرئيسية"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 1069,
+  "owner": "BooksPost",
+  "key": "onPress",
+  "label": null,
+  "how": "tab",
+  "route": "/tuhfa",
+  "opens": "تحفة الأطفال",
+  "on": [
+   "الرئيسية"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 1082,
+  "owner": "ScenePost",
+  "key": "onPress",
+  "label": "افتح المشاهد",
+  "how": "tab",
+  "route": "/lataif",
+  "opens": "مشاهد",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 1084,
+  "owner": "ScenePost",
+  "key": "onPress",
+  "label": null,
+  "how": "push",
+  "route": "/scene",
+  "opens": "المشهد",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 1089,
+  "owner": "ScenePost",
+  "key": "onPress",
+  "label": "افتح المشاهد",
+  "how": "tab",
+  "route": "/lataif",
+  "opens": "مشاهد",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 1092,
+  "owner": "ScenePost",
+  "key": "onPress",
+  "label": null,
+  "how": "push",
+  "route": "/scene",
+  "opens": "المشهد",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 1102,
+  "owner": "SiraPost",
+  "key": "open",
+  "label": "افتح ‹›",
+  "how": "tab",
+  "route": "/story",
+  "opens": "القصة",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 1104,
+  "owner": "SiraPost",
+  "key": "open",
+  "label": "افتح قصص السيرة",
+  "how": "tab",
+  "route": "/stories",
+  "opens": "قصص السيرة",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 1127,
+  "owner": "RajabPost",
+  "key": "open",
+  "label": "افتح ‹›",
+  "how": "tab",
+  "route": "/hadith-forty",
+  "opens": "حديث الأربعين",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 1129,
+  "owner": "RajabPost",
+  "key": "open",
+  "label": null,
+  "how": "tab",
+  "route": "/hadith-book",
+  "opens": "كتاب الحديث",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 1142,
+  "owner": "HadithPost",
+  "key": "open",
+  "label": "افتح ‹›",
+  "how": "tab",
+  "route": "/hadith-forty",
+  "opens": "حديث الأربعين",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 1144,
+  "owner": "HadithPost",
+  "key": "open",
+  "label": null,
+  "how": "tab",
+  "route": "/hadith-book",
+  "opens": "كتاب الحديث",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 1162,
+  "owner": "SahihPost",
+  "key": "open",
+  "label": "افتح ‹› ‹›",
+  "how": "tab",
+  "route": "/hadith-sahih",
+  "opens": "حديث الصحيح",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 1165,
+  "owner": "SahihPost",
+  "key": "open",
+  "label": "افتح ‹›",
+  "how": "tab",
+  "route": "/hadith-book",
+  "opens": "كتاب الحديث",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 1178,
+  "owner": "RecordedPost",
+  "key": "open",
+  "label": "افتح ‹›",
+  "how": "tab",
+  "route": "/hadith-forty",
+  "opens": "حديث الأربعين",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 1180,
+  "owner": "RecordedPost",
+  "key": "open",
+  "label": null,
+  "how": "tab",
+  "route": "/hadith-book",
+  "opens": "كتاب الحديث",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 1197,
+  "owner": "IsnadPost",
+  "key": "open",
+  "label": "افتح ‹›",
+  "how": "tab",
+  "route": "/hadith-forty",
+  "opens": "حديث الأربعين",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 1199,
+  "owner": "IsnadPost",
+  "key": "open",
+  "label": null,
+  "how": "tab",
+  "route": "/hadith-book",
+  "opens": "كتاب الحديث",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 1219,
+  "owner": "TermPost",
+  "key": "open",
+  "label": "‹›: تعريفه وأمثلته",
+  "how": "tab",
+  "route": "/term",
+  "opens": "المصطلح",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 1221,
+  "owner": "TermPost",
+  "key": "open",
+  "label": "افتح مصطلحات البلاغة",
+  "how": "tab",
+  "route": "/terms",
+  "opens": "مصطلحات البلاغة",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 1223,
+  "owner": "TermPost",
+  "key": "onPress",
+  "label": "مصطلحات البلاغة",
+  "how": "tab",
+  "route": "/terms",
+  "opens": "مصطلحات البلاغة",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 1255,
+  "owner": "GharibPost",
+  "key": "open",
+  "label": "افتح صفحة الآية",
+  "how": "tab",
+  "route": "/word",
+  "opens": "الكلمة",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 1255,
+  "owner": "GharibPost",
+  "key": "open",
+  "label": "افتح صفحة الآية",
+  "how": "push",
+  "route": "/ayah",
+  "opens": "صفحة الآية",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 1257,
+  "owner": "GharibPost",
+  "key": "open",
+  "label": "افتح ألفاظ القرآن",
+  "how": "tab",
+  "route": "/words",
+  "opens": "ألفاظ القرآن",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 1274,
+  "owner": "TuhfaPost",
+  "key": "open",
+  "label": "افتح تحفة الأطفال",
+  "how": "tab",
+  "route": "/tuhfa",
+  "opens": "تحفة الأطفال",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 1275,
+  "owner": "TuhfaPost",
+  "key": "onPress",
+  "label": "افتح المنظومة",
+  "how": "tab",
+  "route": "/tuhfa",
+  "opens": "تحفة الأطفال",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 1294,
+  "owner": "MomentPost",
+  "key": "open",
+  "label": "افتح ‹›",
+  "how": "tab",
+  "route": "/battle",
+  "opens": "الغزوة",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 1296,
+  "owner": "MomentPost",
+  "key": "open",
+  "label": "افتح ‹›",
+  "how": "tab",
+  "route": "/battle",
+  "opens": "الغزوة",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 1331,
+  "owner": "NOTE_TOPICS",
+  "key": "tafsir",
+  "label": "افتح تفسير السعدي",
+  "how": "tab",
+  "route": "/book",
+  "opens": "الكتاب",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 1332,
+  "owner": "NOTE_TOPICS",
+  "key": "balagha",
+  "label": "افتح مصطلحات البلاغة",
+  "how": "tab",
+  "route": "/terms",
+  "opens": "مصطلحات البلاغة",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 1333,
+  "owner": "NOTE_TOPICS",
+  "key": "irab",
+  "label": "افتح المكتبة",
+  "how": "tab",
+  "route": "/books",
+  "opens": "المكتبة",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 1334,
+  "owner": "NOTE_TOPICS",
+  "key": "qiraat",
+  "label": "افتح القراءات",
+  "how": "tab",
+  "route": "/qiraat",
+  "opens": "القراءات",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 1347,
+  "owner": "AyahNotePost",
+  "key": "show",
+  "label": "افتح صفحة الآية، ‹›",
+  "how": "push",
+  "route": "/ayah",
+  "opens": "صفحة الآية",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 1387,
+  "owner": "DhikrPost",
+  "key": "onPress",
+  "label": "افتح الأذكار",
+  "how": "tab",
+  "route": "/utilities",
+  "opens": "الأدوات والأذكار",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 1388,
+  "owner": "DhikrPost",
+  "key": "onPress",
+  "label": "افتح الذكر في الأذكار",
+  "how": "push",
+  "route": "/dhikr",
+  "opens": "الذكر",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/HomeFeed.tsx",
+  "line": 1646,
+  "owner": "Feed",
+  "key": "review",
+  "label": null,
+  "how": "tab",
+  "route": "/read",
+  "opens": "المصحف",
+  "on": [
+   "الرئيسية"
+  ]
+ },
+ {
+  "file": "mobile/src/components/LifeColumns.tsx",
+  "line": 17,
+  "owner": "Cell",
+  "key": "onPress",
+  "label": null,
+  "how": "tab",
+  "route": "/battle",
+  "opens": "الغزوة",
+  "on": [
+   "الرئيسية",
+   "مدونتي",
+   "حياتهم جنبًا إلى جنب"
+  ]
+ },
+ {
+  "file": "mobile/src/components/LifeColumns.tsx",
+  "line": 17,
+  "owner": "Cell",
+  "key": "onPress",
+  "label": null,
+  "how": "push",
+  "route": "/story",
+  "opens": "القصة",
+  "on": [
+   "الرئيسية",
+   "مدونتي",
+   "حياتهم جنبًا إلى جنب"
+  ]
+ },
+ {
+  "file": "mobile/src/components/LifeTimeline.tsx",
+  "line": 107,
+  "owner": "Item",
+  "key": "onPress",
+  "label": null,
+  "how": "tab",
+  "route": "/battle",
+  "opens": "الغزوة",
+  "on": [
+   "الرئيسية",
+   "مدونتي",
+   "الترجمة",
+   "الاختبارات",
+   "غرفة الاختبار الجماعي",
+   "الاختبار"
+  ]
+ },
+ {
+  "file": "mobile/src/components/LifeTimeline.tsx",
+  "line": 107,
+  "owner": "Item",
+  "key": "onPress",
+  "label": null,
+  "how": "push",
+  "route": "/story",
+  "opens": "القصة",
+  "on": [
+   "الرئيسية",
+   "مدونتي",
+   "الترجمة",
+   "الاختبارات",
+   "غرفة الاختبار الجماعي",
+   "الاختبار"
+  ]
+ },
+ {
+  "file": "mobile/src/components/LifeTimeline.tsx",
+  "line": 146,
+  "owner": "LifeSheet",
+  "key": "onPress",
+  "label": null,
+  "how": "tab",
+  "route": "/battle",
+  "opens": "الغزوة",
+  "on": [
+   "الرئيسية",
+   "مدونتي",
+   "حياتهم جنبًا إلى جنب",
+   "الترجمة",
+   "الاختبارات",
+   "غرفة الاختبار الجماعي",
+   "الاختبار"
+  ]
+ },
+ {
+  "file": "mobile/src/components/LifeTimeline.tsx",
+  "line": 146,
+  "owner": "LifeSheet",
+  "key": "onPress",
+  "label": null,
+  "how": "push",
+  "route": "/story",
+  "opens": "القصة",
+  "on": [
+   "الرئيسية",
+   "مدونتي",
+   "حياتهم جنبًا إلى جنب",
+   "الترجمة",
+   "الاختبارات",
+   "غرفة الاختبار الجماعي",
+   "الاختبار"
+  ]
+ },
+ {
+  "file": "mobile/src/components/MatrixCard.tsx",
+  "line": 137,
+  "owner": "Cell",
+  "key": "onPress",
+  "label": "قراءة ‹› ‹›",
+  "how": "navigate",
+  "route": "/read",
+  "opens": "المصحف",
+  "on": "every screen"
+ },
+ {
+  "file": "mobile/src/components/MutashabihFace.tsx",
+  "line": 52,
+  "owner": "BookAnswers",
+  "key": "onPress",
+  "label": "اقرأ كلام ‹› كاملًا في ‹›",
+  "how": "tab",
+  "route": "/book",
+  "opens": "الكتاب",
+  "on": "every screen"
+ },
+ {
+  "file": "mobile/src/components/OpenInBook.tsx",
+  "line": 11,
+  "owner": "OpenInBook",
+  "key": "onPress",
+  "label": "اقرأ في الكتاب",
+  "how": "tab",
+  "route": "/book",
+  "opens": "الكتاب",
+  "on": "every screen"
+ },
+ {
+  "file": "mobile/src/components/OpenInBook.tsx",
+  "line": 11,
+  "owner": "OpenInBook",
+  "key": "onPress",
+  "label": "اقرأ في الكتاب",
+  "how": "tab",
+  "route": "/book",
+  "opens": "الكتاب",
+  "on": "every screen"
+ },
+ {
+  "file": "mobile/src/components/OrderSurah.tsx",
+  "line": 95,
+  "owner": "SurahCard",
+  "key": "onPress",
+  "label": "‹›:1",
+  "how": "navigate",
+  "route": "/read",
+  "opens": "المصحف",
+  "on": [
+   "الرئيسية",
+   "ترتيب السور",
+   "الاختبارات",
+   "غرفة الاختبار الجماعي",
+   "الاختبار"
+  ]
+ },
+ {
+  "file": "mobile/src/components/PathAyat.tsx",
+  "line": 68,
+  "owner": "PathAyat",
+  "key": "onPress",
+  "label": "قارن ‹›",
+  "how": "tab",
+  "route": "/compare",
+  "opens": "مقارنة السور",
+  "on": "every screen"
+ },
+ {
+  "file": "mobile/src/components/PathAyat.tsx",
+  "line": 71,
+  "owner": "PathAyat",
+  "key": "onPick",
+  "label": null,
+  "how": "tab",
+  "route": "/compare",
+  "opens": "مقارنة السور",
+  "on": "every screen"
+ },
+ {
+  "file": "mobile/src/components/QuizCompare.tsx",
+  "line": 120,
+  "owner": "CompareFeedback",
+  "key": "open",
+  "label": "افتح في مقارنة السور",
+  "how": "tab",
+  "route": "/compare",
+  "opens": "مقارنة السور",
+  "on": [
+   "الرئيسية",
+   "الاختبارات",
+   "غرفة الاختبار الجماعي",
+   "الاختبار"
+  ]
+ },
+ {
+  "file": "mobile/src/components/QuizTree.tsx",
+  "line": 181,
+  "owner": "TreeActions",
+  "key": "onPress",
+  "label": "افتح في متشابهات القرآن",
+  "how": "tab",
+  "route": "/branches",
+  "opens": "متشابهات القرآن",
+  "on": [
+   "الرئيسية",
+   "الاختبارات",
+   "غرفة الاختبار الجماعي",
+   "الاختبار"
+  ]
+ },
+ {
+  "file": "mobile/src/components/RahmanScene.tsx",
+  "line": 121,
+  "owner": "RahmanScene",
+  "key": "onPress",
+  "label": "رجوع",
+  "how": "tab",
+  "route": "/lataif",
+  "opens": "مشاهد",
+  "on": [
+   "المشهد"
+  ]
+ },
+ {
+  "file": "mobile/src/components/RahmanScene.tsx",
+  "line": 182,
+  "owner": "RahmanActions",
+  "key": "onPress",
+  "label": "افتح مشهد ‹›",
+  "how": "push",
+  "route": "/scene",
+  "opens": "المشهد",
+  "on": [
+   "الرئيسية",
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/components/SearchResults.tsx",
+  "line": 47,
+  "owner": "HitRow",
+  "key": "onPress",
+  "label": null,
+  "how": "tab",
+  "route": "/read",
+  "opens": "المصحف",
+  "on": [
+   "البحث",
+   "القرآن"
+  ]
+ },
+ {
+  "file": "mobile/src/components/SearchResults.tsx",
+  "line": 54,
+  "owner": "HitRow",
+  "key": "onPress",
+  "label": null,
+  "how": "tab",
+  "route": "/read",
+  "opens": "المصحف",
+  "on": [
+   "البحث",
+   "القرآن"
+  ]
+ },
+ {
+  "file": "mobile/src/components/SearchResults.tsx",
+  "line": 68,
+  "owner": "HitRow",
+  "key": "onPress",
+  "label": null,
+  "how": "tab",
+  "route": "/branches",
+  "opens": "متشابهات القرآن",
+  "on": [
+   "البحث",
+   "القرآن"
+  ]
+ },
+ {
+  "file": "mobile/src/components/SearchResults.tsx",
+  "line": 74,
+  "owner": "HitRow",
+  "key": "onPress",
+  "label": null,
+  "how": "tab",
+  "route": "/compare",
+  "opens": "مقارنة السور",
+  "on": [
+   "البحث",
+   "القرآن"
+  ]
+ },
+ {
+  "file": "mobile/src/components/SearchResults.tsx",
+  "line": 81,
+  "owner": "HitRow",
+  "key": "onPress",
+  "label": null,
+  "how": "push",
+  "route": "/prophets/[slug]",
+  "opens": "قصة النبي",
+  "on": [
+   "البحث",
+   "القرآن"
+  ]
+ },
+ {
+  "file": "mobile/src/components/SearchResults.tsx",
+  "line": 82,
+  "owner": "HitRow",
+  "key": "onPress",
+  "label": null,
+  "how": "tab",
+  "route": "/story",
+  "opens": "القصة",
+  "on": [
+   "البحث",
+   "القرآن"
+  ]
+ },
+ {
+  "file": "mobile/src/components/SearchResults.tsx",
+  "line": 82,
+  "owner": "HitRow",
+  "key": "onPress",
+  "label": null,
+  "how": "tab",
+  "route": "/stories",
+  "opens": "قصص السيرة",
+  "on": [
+   "البحث",
+   "القرآن"
+  ]
+ },
+ {
+  "file": "mobile/src/components/SearchResults.tsx",
+  "line": 89,
+  "owner": "HitRow",
+  "key": "onPress",
+  "label": null,
+  "how": "tab",
+  "route": "/person",
+  "opens": "الترجمة",
+  "on": [
+   "البحث",
+   "القرآن"
+  ]
+ },
+ {
+  "file": "mobile/src/components/SearchResults.tsx",
+  "line": 89,
+  "owner": "HitRow",
+  "key": "onPress",
+  "label": null,
+  "how": "tab",
+  "route": "/battle",
+  "opens": "الغزوة",
+  "on": [
+   "البحث",
+   "القرآن"
+  ]
+ },
+ {
+  "file": "mobile/src/components/SearchResults.tsx",
+  "line": 96,
+  "owner": "HitRow",
+  "key": "onPress",
+  "label": null,
+  "how": "tab",
+  "route": "/hadith-forty",
+  "opens": "حديث الأربعين",
+  "on": [
+   "البحث",
+   "القرآن"
+  ]
+ },
+ {
+  "file": "mobile/src/components/SearchResults.tsx",
+  "line": 96,
+  "owner": "HitRow",
+  "key": "onPress",
+  "label": null,
+  "how": "tab",
+  "route": "/hadith-sahih",
+  "opens": "حديث الصحيح",
+  "on": [
+   "البحث",
+   "القرآن"
+  ]
+ },
+ {
+  "file": "mobile/src/components/SearchResults.tsx",
+  "line": 96,
+  "owner": "HitRow",
+  "key": "onPress",
+  "label": null,
+  "how": "tab",
+  "route": "/hadith-kitab",
+  "opens": "أبواب الكتاب",
+  "on": [
+   "البحث",
+   "القرآن"
+  ]
+ },
+ {
+  "file": "mobile/src/components/SearchResults.tsx",
+  "line": 107,
+  "owner": "HitRow",
+  "key": "onPress",
+  "label": null,
+  "how": "tab",
+  "route": "/tuhfa",
+  "opens": "تحفة الأطفال",
+  "on": [
+   "البحث",
+   "القرآن"
+  ]
+ },
+ {
+  "file": "mobile/src/components/SearchResults.tsx",
+  "line": 117,
+  "owner": "HitRow",
+  "key": "onPress",
+  "label": null,
+  "how": "push",
+  "route": "/dhikr",
+  "opens": "الذكر",
+  "on": [
+   "البحث",
+   "القرآن"
+  ]
+ },
+ {
+  "file": "mobile/src/components/SearchResults.tsx",
+  "line": 123,
+  "owner": "HitRow",
+  "key": "onPress",
+  "label": null,
+  "how": "tab",
+  "route": "/read",
+  "opens": "المصحف",
+  "on": [
+   "البحث",
+   "القرآن"
+  ]
+ },
+ {
+  "file": "mobile/src/components/SettingsSheet.tsx",
+  "line": 25,
+  "owner": "SettingsSheet",
+  "key": null,
+  "label": "عن نمق",
+  "how": "push",
+  "route": "/about",
+  "opens": "عن نمق",
+  "on": [
+   "كتاب الحديث",
+   "حديث الأربعين",
+   "أبواب الكتاب",
+   "حديث الصحيح",
+   "رواية الصحيح",
+   "الحديث",
+   "الذكر",
+   "الرئيسية",
+   "مدونتي",
+   "البحث",
+   "الأدوات والأذكار",
+   "الكتاب",
+   "المكتبة",
+   "متشابهات القرآن",
+   "مقارنة السور",
+   "مشاهد",
+   "الأقسام",
+   "فواتح السور",
+   "ترتيب السور",
+   "قصص الأنبياء",
+   "القراءات",
+   "القرآن",
+   "المصطلح",
+   "مصطلحات البلاغة",
+   "تحفة الأطفال",
+   "الكلمة",
+   "ألفاظ القرآن",
+   "الأطلس",
+   "الغزوة",
+   "الغزوات والمعارك",
+   "بين عدة أشخاص",
+   "حياتهم جنبًا إلى جنب",
+   "النسب",
+   "كل التراجم",
+   "الترجمة",
+   "قصص السيرة",
+   "القصة",
+   "التراجم",
+   "الصلات",
+   "الاختبارات",
+   "المصحف",
+   "عن نمق",
+   "المصادر والتراخيص",
+   "صفحة الآية",
+   "سياسة الخصوصية",
+   "قصة النبي",
+   "غرفة الاختبار الجماعي",
+   "اختبار جماعي",
+   "الاختبار",
+   "اختبار مخصص"
+  ]
+ },
+ {
+  "file": "mobile/src/components/SettingsSheet.tsx",
+  "line": 26,
+  "owner": "SettingsSheet",
+  "key": null,
+  "label": "المصادر والتراخيص",
+  "how": "push",
+  "route": "/attributions",
+  "opens": "المصادر والتراخيص",
+  "on": [
+   "كتاب الحديث",
+   "حديث الأربعين",
+   "أبواب الكتاب",
+   "حديث الصحيح",
+   "رواية الصحيح",
+   "الحديث",
+   "الذكر",
+   "الرئيسية",
+   "مدونتي",
+   "البحث",
+   "الأدوات والأذكار",
+   "الكتاب",
+   "المكتبة",
+   "متشابهات القرآن",
+   "مقارنة السور",
+   "مشاهد",
+   "الأقسام",
+   "فواتح السور",
+   "ترتيب السور",
+   "قصص الأنبياء",
+   "القراءات",
+   "القرآن",
+   "المصطلح",
+   "مصطلحات البلاغة",
+   "تحفة الأطفال",
+   "الكلمة",
+   "ألفاظ القرآن",
+   "الأطلس",
+   "الغزوة",
+   "الغزوات والمعارك",
+   "بين عدة أشخاص",
+   "حياتهم جنبًا إلى جنب",
+   "النسب",
+   "كل التراجم",
+   "الترجمة",
+   "قصص السيرة",
+   "القصة",
+   "التراجم",
+   "الصلات",
+   "الاختبارات",
+   "المصحف",
+   "عن نمق",
+   "المصادر والتراخيص",
+   "صفحة الآية",
+   "سياسة الخصوصية",
+   "قصة النبي",
+   "غرفة الاختبار الجماعي",
+   "اختبار جماعي",
+   "الاختبار",
+   "اختبار مخصص"
+  ]
+ },
+ {
+  "file": "mobile/src/components/SettingsSheet.tsx",
+  "line": 27,
+  "owner": "SettingsSheet",
+  "key": null,
+  "label": "سياسة الخصوصية",
+  "how": "push",
+  "route": "/privacy",
+  "opens": "سياسة الخصوصية",
+  "on": [
+   "كتاب الحديث",
+   "حديث الأربعين",
+   "أبواب الكتاب",
+   "حديث الصحيح",
+   "رواية الصحيح",
+   "الحديث",
+   "الذكر",
+   "الرئيسية",
+   "مدونتي",
+   "البحث",
+   "الأدوات والأذكار",
+   "الكتاب",
+   "المكتبة",
+   "متشابهات القرآن",
+   "مقارنة السور",
+   "مشاهد",
+   "الأقسام",
+   "فواتح السور",
+   "ترتيب السور",
+   "قصص الأنبياء",
+   "القراءات",
+   "القرآن",
+   "المصطلح",
+   "مصطلحات البلاغة",
+   "تحفة الأطفال",
+   "الكلمة",
+   "ألفاظ القرآن",
+   "الأطلس",
+   "الغزوة",
+   "الغزوات والمعارك",
+   "بين عدة أشخاص",
+   "حياتهم جنبًا إلى جنب",
+   "النسب",
+   "كل التراجم",
+   "الترجمة",
+   "قصص السيرة",
+   "القصة",
+   "التراجم",
+   "الصلات",
+   "الاختبارات",
+   "المصحف",
+   "عن نمق",
+   "المصادر والتراخيص",
+   "صفحة الآية",
+   "سياسة الخصوصية",
+   "قصة النبي",
+   "غرفة الاختبار الجماعي",
+   "اختبار جماعي",
+   "الاختبار",
+   "اختبار مخصص"
+  ]
+ },
+ {
+  "file": "mobile/src/components/TermSheet.tsx",
+  "line": 34,
+  "owner": "TermChips",
+  "key": "onPress",
+  "label": "أمثلته في مصطلحات البلاغة",
+  "how": "tab",
+  "route": "/term",
+  "opens": "المصطلح",
+  "on": [
+   "الرئيسية",
+   "الاختبارات",
+   "غرفة الاختبار الجماعي",
+   "الاختبار"
+  ]
+ },
+ {
+  "file": "mobile/src/components/TiesChain.tsx",
+  "line": 135,
+  "owner": "TiesChain",
+  "key": "open",
+  "label": null,
+  "how": "push",
+  "route": "/ties",
+  "opens": "الصلات",
+  "on": [
+   "الرئيسية",
+   "مدونتي",
+   "بين عدة أشخاص"
+  ]
+ },
+ {
+  "file": "mobile/src/components/TreePager.tsx",
+  "line": 201,
+  "owner": "TreePager",
+  "key": "openCompare",
+  "label": null,
+  "how": "tab",
+  "route": "/compare",
+  "opens": "مقارنة السور",
+  "on": "every screen"
+ },
+ {
+  "file": "mobile/src/components/Utilities.tsx",
+  "line": 381,
+  "owner": "Month",
+  "key": "onPress",
+  "label": "اقرأ جزء اليوم: ‹›",
+  "how": "tab",
+  "route": "/read",
+  "opens": "المصحف",
+  "on": [
+   "الأدوات والأذكار"
+  ]
+ },
+ {
+  "file": "mobile/src/components/Utilities.tsx",
+  "line": 411,
+  "owner": "Calendar",
+  "key": "onPress",
+  "label": "اقرأ جزء اليوم: ‹›",
+  "how": "tab",
+  "route": "/read",
+  "opens": "المصحف",
+  "on": [
+   "الأدوات والأذكار"
+  ]
+ },
+ {
+  "file": "mobile/src/components/WordSheet.tsx",
+  "line": 111,
+  "owner": "WordView",
+  "key": "open",
+  "label": null,
+  "how": "navigate",
+  "route": "/read",
+  "opens": "المصحف",
+  "on": [
+   "البحث",
+   "القرآن",
+   "الكلمة",
+   "المصحف"
+  ]
+ },
+ {
+  "file": "mobile/src/components/battles/BattleLine.tsx",
+  "line": 30,
+  "owner": "Station",
+  "key": "onPress",
+  "label": null,
+  "how": "push",
+  "route": "/battle",
+  "opens": "الغزوة",
+  "on": [
+   "الغزوات والمعارك"
+  ]
+ },
+ {
+  "file": "mobile/src/components/battles/BattleParts.tsx",
+  "line": 113,
+  "owner": "People",
+  "key": "onPress",
+  "label": null,
+  "how": "push",
+  "route": "/person",
+  "opens": "الترجمة",
+  "on": [
+   "حديث الصحيح",
+   "الرئيسية",
+   "مدونتي",
+   "الغزوة",
+   "القصة",
+   "الاختبارات",
+   "صفحة الآية",
+   "غرفة الاختبار الجماعي",
+   "الاختبار"
+  ]
+ },
+ {
+  "file": "mobile/src/components/scenes/RahmanPage.tsx",
+  "line": 119,
+  "owner": "Hadith",
+  "key": "onPress",
+  "label": "افتح الحديث كاملًا: ‹›",
+  "how": "push",
+  "route": "/hadith-sahih",
+  "opens": "حديث الصحيح",
+  "on": [
+   "الرئيسية",
+   "مدونتي",
+   "مشاهد",
+   "المشهد"
+  ]
+ },
+ {
+  "file": "mobile/src/components/stories/StoryParts.tsx",
+  "line": 131,
+  "owner": "StoryLinkRow",
+  "key": "onPress",
+  "label": null,
+  "how": "push",
+  "route": "/story",
+  "opens": "القصة",
+  "on": [
+   "حديث الصحيح",
+   "الترجمة"
+  ]
+ },
+ {
+  "file": "mobile/src/components/tarajim/PersonRows.tsx",
+  "line": 16,
+  "owner": "PersonRows",
+  "key": "onPress",
+  "label": null,
+  "how": "push",
+  "route": "/person",
+  "opens": "الترجمة",
+  "on": [
+   "كل التراجم",
+   "التراجم"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/atlas.tsx",
+  "line": 37,
+  "owner": "BattleRow",
+  "key": "onPress",
+  "label": "افتح ‹›",
+  "how": "push",
+  "route": "/battle",
+  "opens": "الغزوة",
+  "on": [
+   "الأطلس"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/atlas.tsx",
+  "line": 58,
+  "owner": "AtlasBattle",
+  "key": "onPress",
+  "label": "افتح ‹›",
+  "how": "push",
+  "route": "/battle",
+  "opens": "الغزوة",
+  "on": [
+   "الأطلس"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/atlas.tsx",
+  "line": 81,
+  "owner": "PlaceSheet",
+  "key": "onPress",
+  "label": "افتح ‹›",
+  "how": "push",
+  "route": "/battle",
+  "opens": "الغزوة",
+  "on": [
+   "الأطلس"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/atlas.tsx",
+  "line": 137,
+  "owner": "AtlasScreen",
+  "key": "pickFound",
+  "label": null,
+  "how": "push",
+  "route": "/battle",
+  "opens": "الغزوة",
+  "on": [
+   "الأطلس"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/ayah.tsx",
+  "line": 106,
+  "owner": "AyahScreen",
+  "key": "back",
+  "label": null,
+  "how": "tab",
+  "route": "/",
+  "opens": "الرئيسية",
+  "on": [
+   "صفحة الآية"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/ayah.tsx",
+  "line": 109,
+  "owner": "AyahScreen",
+  "key": "onPress",
+  "label": "افتح ‹› في المصحف",
+  "how": "tab",
+  "route": "/read",
+  "opens": "المصحف",
+  "on": [
+   "صفحة الآية"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/ayah.tsx",
+  "line": 111,
+  "owner": "AyahScreen",
+  "key": "onPress",
+  "label": "سمّع من هذه الآية",
+  "how": "tab",
+  "route": "/read",
+  "opens": "المصحف",
+  "on": [
+   "صفحة الآية"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/ayah.tsx",
+  "line": 139,
+  "owner": "AyahScreen",
+  "key": "onJump",
+  "label": null,
+  "how": "tab",
+  "route": "/read",
+  "opens": "المصحف",
+  "on": [
+   "صفحة الآية"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/ayah.tsx",
+  "line": 234,
+  "owner": "SectionPart",
+  "key": "open",
+  "label": "افتح «‹›» في فواتح السور",
+  "how": "tab",
+  "route": "/openings",
+  "opens": "فواتح السور",
+  "on": [
+   "صفحة الآية"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/ayah.tsx",
+  "line": 242,
+  "owner": "SectionPart",
+  "key": "open",
+  "label": "افتح ‹› في الأقسام",
+  "how": "tab",
+  "route": "/oaths",
+  "opens": "الأقسام",
+  "on": [
+   "صفحة الآية"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/ayah.tsx",
+  "line": 253,
+  "owner": "SectionPart",
+  "key": "open",
+  "label": "افتح ‹› في القصة",
+  "how": "push",
+  "route": "/prophets/[slug]",
+  "opens": "قصة النبي",
+  "on": [
+   "صفحة الآية"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/ayah.tsx",
+  "line": 262,
+  "owner": "SectionPart",
+  "key": "openStory",
+  "label": "افتح ‹›",
+  "how": "tab",
+  "route": "/story",
+  "opens": "القصة",
+  "on": [
+   "صفحة الآية"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/ayah.tsx",
+  "line": 271,
+  "owner": "SectionPart",
+  "key": "onPress",
+  "label": null,
+  "how": "push",
+  "route": "/hadith-sahih",
+  "opens": "حديث الصحيح",
+  "on": [
+   "صفحة الآية"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/ayah.tsx",
+  "line": 289,
+  "owner": "SectionPart",
+  "key": "open",
+  "label": "افتح ‹›",
+  "how": "push",
+  "route": "/person",
+  "opens": "الترجمة",
+  "on": [
+   "صفحة الآية"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/balaghaTerms.tsx",
+  "line": 42,
+  "owner": "BalaghaTermsScreen",
+  "key": "onPress",
+  "label": null,
+  "how": "tab",
+  "route": "/term",
+  "opens": "المصطلح",
+  "on": [
+   "مصطلحات البلاغة"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/between.tsx",
+  "line": 34,
+  "owner": "BetweenScreen",
+  "key": "back",
+  "label": null,
+  "how": "tab",
+  "route": "/tarajim",
+  "opens": "التراجم",
+  "on": [
+   "بين عدة أشخاص"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/book.tsx",
+  "line": 116,
+  "owner": "BookReader",
+  "key": "openAyah",
+  "label": null,
+  "how": "tab",
+  "route": "/read",
+  "opens": "المصحف",
+  "on": [
+   "الكتاب"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/books.tsx",
+  "line": 44,
+  "owner": "LibraryScreen",
+  "key": "back",
+  "label": null,
+  "how": "tab",
+  "route": "/",
+  "opens": "الرئيسية",
+  "on": [
+   "المكتبة"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/books.tsx",
+  "line": 53,
+  "owner": "LibraryScreen",
+  "key": "onPress",
+  "label": null,
+  "how": "tab",
+  "route": "/tuhfa",
+  "opens": "تحفة الأطفال",
+  "on": [
+   "المكتبة"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/books.tsx",
+  "line": 62,
+  "owner": "BookCard",
+  "key": "open",
+  "label": null,
+  "how": "tab",
+  "route": "/hadith-book",
+  "opens": "كتاب الحديث",
+  "on": [
+   "الرئيسية",
+   "المكتبة"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/books.tsx",
+  "line": 63,
+  "owner": "BookCard",
+  "key": "open",
+  "label": null,
+  "how": "tab",
+  "route": "/book",
+  "opens": "الكتاب",
+  "on": [
+   "الرئيسية",
+   "المكتبة"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/dhikr.tsx",
+  "line": 75,
+  "owner": "DhikrScreen",
+  "key": "back",
+  "label": null,
+  "how": "tab",
+  "route": "/utilities",
+  "opens": "الأدوات والأذكار",
+  "on": [
+   "الذكر"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/hadith.tsx",
+  "line": 53,
+  "owner": "ContinueCard",
+  "key": "onPress",
+  "label": "افتح ‹›",
+  "how": "push",
+  "route": "/hadith-sahih",
+  "opens": "حديث الصحيح",
+  "on": [
+   "الحديث"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/hadith.tsx",
+  "line": 71,
+  "owner": "FortyShape",
+  "key": "onOpen",
+  "label": null,
+  "how": "push",
+  "route": "/hadith-forty",
+  "opens": "حديث الأربعين",
+  "on": [
+   "الحديث"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/hadith.tsx",
+  "line": 86,
+  "owner": "Hit",
+  "key": "onPress",
+  "label": null,
+  "how": "push",
+  "route": "/hadith-sahih",
+  "opens": "حديث الصحيح",
+  "on": [
+   "الحديث"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/hadith.tsx",
+  "line": 86,
+  "owner": "Hit",
+  "key": "onPress",
+  "label": null,
+  "how": "push",
+  "route": "/hadith-kitab",
+  "opens": "أبواب الكتاب",
+  "on": [
+   "الحديث"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/hadith.tsx",
+  "line": 86,
+  "owner": "Hit",
+  "key": "onPress",
+  "label": null,
+  "how": "push",
+  "route": "/hadith-kitab",
+  "opens": "أبواب الكتاب",
+  "on": [
+   "الحديث"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/hadith.tsx",
+  "line": 134,
+  "owner": "HadithScreen",
+  "key": "onPress",
+  "label": null,
+  "how": "push",
+  "route": "/hadith-forty",
+  "opens": "حديث الأربعين",
+  "on": [
+   "الحديث"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/hadith.tsx",
+  "line": 148,
+  "owner": "HadithScreen",
+  "key": "onOpenBook",
+  "label": null,
+  "how": "push",
+  "route": "/hadith-book",
+  "opens": "كتاب الحديث",
+  "on": [
+   "الحديث"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/hadith.tsx",
+  "line": 148,
+  "owner": "HadithScreen",
+  "key": "onOpenKitab",
+  "label": null,
+  "how": "push",
+  "route": "/hadith-kitab",
+  "opens": "أبواب الكتاب",
+  "on": [
+   "الحديث"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/hadith.tsx",
+  "line": 152,
+  "owner": "HadithScreen",
+  "key": "onOpenBook",
+  "label": null,
+  "how": "push",
+  "route": "/hadith-book",
+  "opens": "كتاب الحديث",
+  "on": [
+   "الحديث"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/hadithBook.tsx",
+  "line": 27,
+  "owner": "HadithBookScreen",
+  "key": "back",
+  "label": null,
+  "how": "tab",
+  "route": "/hadith",
+  "opens": "الحديث",
+  "on": [
+   "كتاب الحديث"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/hadithBook.tsx",
+  "line": 35,
+  "owner": "HadithBookScreen",
+  "key": "onPress",
+  "label": null,
+  "how": "push",
+  "route": "/hadith-forty",
+  "opens": "حديث الأربعين",
+  "on": [
+   "كتاب الحديث"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/hadithBook.tsx",
+  "line": 45,
+  "owner": "HadithBookScreen",
+  "key": "onOpenKitab",
+  "label": null,
+  "how": "push",
+  "route": "/hadith-kitab",
+  "opens": "أبواب الكتاب",
+  "on": [
+   "كتاب الحديث"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/hadithBook.tsx",
+  "line": 50,
+  "owner": "HadithBookScreen",
+  "key": "onOpen",
+  "label": null,
+  "how": "push",
+  "route": "/hadith-kitab",
+  "opens": "أبواب الكتاب",
+  "on": [
+   "كتاب الحديث"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/hadithBook.tsx",
+  "line": 50,
+  "owner": "HadithBookScreen",
+  "key": "onOpenBab",
+  "label": null,
+  "how": "push",
+  "route": "/hadith-kitab",
+  "opens": "أبواب الكتاب",
+  "on": [
+   "كتاب الحديث"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/hadithForty.tsx",
+  "line": 157,
+  "owner": "HadithFortyScreen",
+  "key": "back",
+  "label": null,
+  "how": "tab",
+  "route": "/hadith",
+  "opens": "الحديث",
+  "on": [
+   "حديث الأربعين"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/hadithForty.tsx",
+  "line": 159,
+  "owner": "HadithFortyScreen",
+  "key": "unit",
+  "label": null,
+  "how": "push",
+  "route": "/hadith-unit",
+  "opens": "رواية الصحيح",
+  "on": [
+   "حديث الأربعين"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/hadithKitab.tsx",
+  "line": 37,
+  "owner": "BabRow",
+  "key": "onPress",
+  "label": null,
+  "how": "push",
+  "route": "/hadith-kitab",
+  "opens": "أبواب الكتاب",
+  "on": [
+   "أبواب الكتاب"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/hadithKitab.tsx",
+  "line": 59,
+  "owner": "KitabIndex",
+  "key": "back",
+  "label": null,
+  "how": "tab",
+  "route": "/hadith",
+  "opens": "الحديث",
+  "on": [
+   "أبواب الكتاب"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/hadithKitab.tsx",
+  "line": 93,
+  "owner": "BabPage",
+  "key": "back",
+  "label": null,
+  "how": "tab",
+  "route": "/hadith",
+  "opens": "الحديث",
+  "on": [
+   "أبواب الكتاب"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/hadithKitab.tsx",
+  "line": 94,
+  "owner": "BabPage",
+  "key": "go",
+  "label": null,
+  "how": "replace",
+  "route": "/hadith-kitab",
+  "opens": "أبواب الكتاب",
+  "on": [
+   "أبواب الكتاب"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/hadithKitab.tsx",
+  "line": 104,
+  "owner": "BabPage",
+  "key": "onPress",
+  "label": "‹›‹›",
+  "how": "replace",
+  "route": "/hadith-kitab",
+  "opens": "أبواب الكتاب",
+  "on": [
+   "أبواب الكتاب"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/hadithKitab.tsx",
+  "line": 117,
+  "owner": "BabPage",
+  "key": "onPress",
+  "label": null,
+  "how": "push",
+  "route": "/hadith-sahih",
+  "opens": "حديث الصحيح",
+  "on": [
+   "أبواب الكتاب"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/hadithKitab.tsx",
+  "line": 133,
+  "owner": "HadithKitabScreen",
+  "key": "back",
+  "label": null,
+  "how": "tab",
+  "route": "/hadith",
+  "opens": "الحديث",
+  "on": [
+   "أبواب الكتاب"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/hadithSahih.tsx",
+  "line": 42,
+  "owner": "SahihPage",
+  "key": "onPress",
+  "label": "‹›‹›",
+  "how": "push",
+  "route": "/hadith-kitab",
+  "opens": "أبواب الكتاب",
+  "on": [
+   "حديث الصحيح"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/hadithSahih.tsx",
+  "line": 42,
+  "owner": "SahihPage",
+  "key": "onPress",
+  "label": "‹›‹›",
+  "how": "push",
+  "route": "/hadith-kitab",
+  "opens": "أبواب الكتاب",
+  "on": [
+   "حديث الصحيح"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/hadithSahih.tsx",
+  "line": 53,
+  "owner": "SahihPage",
+  "key": "onOpen",
+  "label": null,
+  "how": "push",
+  "route": "/hadith-sahih",
+  "opens": "حديث الصحيح",
+  "on": [
+   "حديث الصحيح"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/hadithSahih.tsx",
+  "line": 55,
+  "owner": "SahihPage",
+  "key": "onPress",
+  "label": null,
+  "how": "push",
+  "route": "/hadith-forty",
+  "opens": "حديث الأربعين",
+  "on": [
+   "حديث الصحيح"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/hadithSahih.tsx",
+  "line": 76,
+  "owner": "InHadith",
+  "key": "onPress",
+  "label": "‹› · ‹›",
+  "how": "push",
+  "route": "/ayah",
+  "opens": "صفحة الآية",
+  "on": [
+   "حديث الصحيح"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/hadithSahih.tsx",
+  "line": 113,
+  "owner": "HadithSahihScreen",
+  "key": "back",
+  "label": null,
+  "how": "tab",
+  "route": "/hadith",
+  "opens": "الحديث",
+  "on": [
+   "حديث الصحيح"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/hadithUnit.tsx",
+  "line": 53,
+  "owner": "HadithUnitScreen",
+  "key": "back",
+  "label": null,
+  "how": "tab",
+  "route": "/hadith",
+  "opens": "الحديث",
+  "on": [
+   "رواية الصحيح"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/hadithUnit.tsx",
+  "line": 57,
+  "owner": "HadithUnitScreen",
+  "key": "open",
+  "label": null,
+  "how": "push",
+  "route": "/hadith-unit",
+  "opens": "رواية الصحيح",
+  "on": [
+   "رواية الصحيح"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/info.tsx",
+  "line": 31,
+  "owner": "About",
+  "key": "onPress",
+  "label": null,
+  "how": "push",
+  "route": "/attributions",
+  "opens": "المصادر والتراخيص",
+  "on": [
+   "عن نمق",
+   "المصادر والتراخيص",
+   "سياسة الخصوصية"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/info.tsx",
+  "line": 104,
+  "owner": "InfoScreen",
+  "key": "back",
+  "label": null,
+  "how": "tab",
+  "route": "/",
+  "opens": "الرئيسية",
+  "on": [
+   "عن نمق",
+   "المصادر والتراخيص",
+   "سياسة الخصوصية"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/lataif.tsx",
+  "line": 25,
+  "owner": "LataifScreen",
+  "key": "onPress",
+  "label": null,
+  "how": "push",
+  "route": "/scene",
+  "opens": "المشهد",
+  "on": [
+   "مشاهد"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/lataif.tsx",
+  "line": 28,
+  "owner": "LataifScreen",
+  "key": "onPress",
+  "label": null,
+  "how": "push",
+  "route": "/scene",
+  "opens": "المشهد",
+  "on": [
+   "مشاهد"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/library.tsx",
+  "line": 77,
+  "owner": "LibraryScreen",
+  "key": "{ cards, noteCards, savedItems, noteItems, openOf, openAyah, menus }",
+  "label": null,
+  "how": "tab",
+  "route": "/read",
+  "opens": "المصحف",
+  "on": [
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/library.tsx",
+  "line": 77,
+  "owner": "LibraryScreen",
+  "key": "{ cards, noteCards, savedItems, noteItems, openOf, openAyah, menus }",
+  "label": null,
+  "how": "tab",
+  "route": "/branches",
+  "opens": "متشابهات القرآن",
+  "on": [
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/library.tsx",
+  "line": 77,
+  "owner": "LibraryScreen",
+  "key": "{ cards, noteCards, savedItems, noteItems, openOf, openAyah, menus }",
+  "label": null,
+  "how": "tab",
+  "route": "/compare",
+  "opens": "مقارنة السور",
+  "on": [
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/library.tsx",
+  "line": 77,
+  "owner": "LibraryScreen",
+  "key": "{ cards, noteCards, savedItems, noteItems, openOf, openAyah, menus }",
+  "label": null,
+  "how": "push",
+  "route": "/ayah",
+  "opens": "صفحة الآية",
+  "on": [
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/library.tsx",
+  "line": 120,
+  "owner": "LibraryScreen",
+  "key": "onPress",
+  "label": "افتح الآية في المصحف",
+  "how": "tab",
+  "route": "/read",
+  "opens": "المصحف",
+  "on": [
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/library.tsx",
+  "line": 132,
+  "owner": "LibraryScreen",
+  "key": "back",
+  "label": null,
+  "how": "tab",
+  "route": "/",
+  "opens": "الرئيسية",
+  "on": [
+   "مدونتي"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/life.tsx",
+  "line": 33,
+  "owner": "LifeScreen",
+  "key": "back",
+  "label": null,
+  "how": "tab",
+  "route": "/tarajim",
+  "opens": "التراجم",
+  "on": [
+   "حياتهم جنبًا إلى جنب"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/nasab.tsx",
+  "line": 31,
+  "owner": "Box",
+  "key": "onPress",
+  "label": null,
+  "how": "push",
+  "route": "/person",
+  "opens": "الترجمة",
+  "on": [
+   "الرئيسية",
+   "مدونتي",
+   "النسب",
+   "الاختبارات",
+   "غرفة الاختبار الجماعي",
+   "الاختبار"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/nasab.tsx",
+  "line": 163,
+  "owner": "NasabScreen",
+  "key": "back",
+  "label": null,
+  "how": "tab",
+  "route": "/tarajim",
+  "opens": "التراجم",
+  "on": [
+   "النسب"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/oaths.tsx",
+  "line": 58,
+  "owner": "OathCard",
+  "key": "onPress",
+  "label": "افتح ‹› في المصحف",
+  "how": "navigate",
+  "route": "/read",
+  "opens": "المصحف",
+  "on": [
+   "الأقسام"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/openings.tsx",
+  "line": 70,
+  "owner": "OpeningRows",
+  "key": "onPress",
+  "label": "‹›:1",
+  "how": "navigate",
+  "route": "/read",
+  "opens": "المصحف",
+  "on": [
+   "الرئيسية",
+   "مدونتي",
+   "فواتح السور"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/person.tsx",
+  "line": 214,
+  "owner": "Names",
+  "key": "onPress",
+  "label": null,
+  "how": "push",
+  "route": "/person",
+  "opens": "الترجمة",
+  "on": [
+   "الترجمة"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/person.tsx",
+  "line": 251,
+  "owner": "PersonScreen",
+  "key": "showBattle",
+  "label": null,
+  "how": "tab",
+  "route": "/battle",
+  "opens": "الغزوة",
+  "on": [
+   "الترجمة"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/person.tsx",
+  "line": 256,
+  "owner": "PersonScreen",
+  "key": "back",
+  "label": null,
+  "how": "tab",
+  "route": "/tarajim",
+  "opens": "التراجم",
+  "on": [
+   "الترجمة"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/person.tsx",
+  "line": 258,
+  "owner": "PersonScreen",
+  "key": "tree",
+  "label": "شجرة النسب",
+  "how": "push",
+  "route": "/nasab",
+  "opens": "النسب",
+  "on": [
+   "الترجمة"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/person.tsx",
+  "line": 298,
+  "owner": "PersonScreen",
+  "key": "onPress",
+  "label": null,
+  "how": "navigate",
+  "route": "/people",
+  "opens": "كل التراجم",
+  "on": [
+   "الترجمة"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/person.tsx",
+  "line": 320,
+  "owner": "PersonScreen",
+  "key": "onPress",
+  "label": "قارن حياته بغيره",
+  "how": "push",
+  "route": "/life",
+  "opens": "حياتهم جنبًا إلى جنب",
+  "on": [
+   "الترجمة"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/person.tsx",
+  "line": 331,
+  "owner": "PersonScreen",
+  "key": "onPin",
+  "label": null,
+  "how": "tab",
+  "route": "/battle",
+  "opens": "الغزوة",
+  "on": [
+   "الترجمة"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/person.tsx",
+  "line": 333,
+  "owner": "PersonScreen",
+  "key": "onPress",
+  "label": null,
+  "how": "tab",
+  "route": "/battle",
+  "opens": "الغزوة",
+  "on": [
+   "الترجمة"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/person.tsx",
+  "line": 342,
+  "owner": "PersonScreen",
+  "key": "onPress",
+  "label": "تنقّل في صلاته",
+  "how": "push",
+  "route": "/ties",
+  "opens": "الصلات",
+  "on": [
+   "الترجمة"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/person.tsx",
+  "line": 343,
+  "owner": "PersonScreen",
+  "key": "onPress",
+  "label": "بينه وبين…",
+  "how": "push",
+  "route": "/between",
+  "opens": "بين عدة أشخاص",
+  "on": [
+   "الترجمة"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/person.tsx",
+  "line": 346,
+  "owner": "PersonScreen",
+  "key": "onPick",
+  "label": null,
+  "how": "push",
+  "route": "/person",
+  "opens": "الترجمة",
+  "on": [
+   "الترجمة"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/person.tsx",
+  "line": 365,
+  "owner": "PersonScreen",
+  "key": "onPress",
+  "label": "‹›‹›",
+  "how": "push",
+  "route": "/ayah",
+  "opens": "صفحة الآية",
+  "on": [
+   "الترجمة"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/person.tsx",
+  "line": 374,
+  "owner": "PersonScreen",
+  "key": "onPress",
+  "label": null,
+  "how": "push",
+  "route": "/ayah",
+  "opens": "صفحة الآية",
+  "on": [
+   "الترجمة"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/prophets/slug.tsx",
+  "line": 8,
+  "owner": "ProphetScreen",
+  "key": "back",
+  "label": null,
+  "how": "tab",
+  "route": "/prophets",
+  "opens": "قصص الأنبياء",
+  "on": [
+   "قصة النبي"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/quiz/party/code.tsx",
+  "line": 360,
+  "owner": "QuestionStage",
+  "key": "onOpen",
+  "label": null,
+  "how": "navigate",
+  "route": "/read",
+  "opens": "المصحف",
+  "on": [
+   "غرفة الاختبار الجماعي"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/quiz/party/code.tsx",
+  "line": 400,
+  "owner": "QuestionStage",
+  "key": "onOpen",
+  "label": null,
+  "how": "navigate",
+  "route": "/read",
+  "opens": "المصحف",
+  "on": [
+   "غرفة الاختبار الجماعي"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/quiz/party/code.tsx",
+  "line": 434,
+  "owner": "FinalResults",
+  "key": "onOpen",
+  "label": null,
+  "how": "navigate",
+  "route": "/read",
+  "opens": "المصحف",
+  "on": [
+   "غرفة الاختبار الجماعي"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/quiz/party/index.tsx",
+  "line": 28,
+  "owner": "PartyStart",
+  "key": "start",
+  "label": "ابدأ",
+  "how": "push",
+  "route": "/quiz/party/[param]",
+  "opens": "غرفة الاختبار الجماعي",
+  "on": [
+   "اختبار جماعي"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/quiz/party/index.tsx",
+  "line": 37,
+  "owner": "PartyStart",
+  "key": "join",
+  "label": "انضم",
+  "how": "push",
+  "route": "/quiz/party/[param]",
+  "opens": "غرفة الاختبار الجماعي",
+  "on": [
+   "اختبار جماعي"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/quiz/play.tsx",
+  "line": 48,
+  "owner": "Results",
+  "key": "onOpen",
+  "label": null,
+  "how": "navigate",
+  "route": "/read",
+  "opens": "المصحف",
+  "on": [
+   "الاختبار"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/quiz/play.tsx",
+  "line": 107,
+  "owner": "QuizPlay",
+  "key": "onOpen",
+  "label": null,
+  "how": "navigate",
+  "route": "/read",
+  "opens": "المصحف",
+  "on": [
+   "الاختبار"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/quiz/solo.tsx",
+  "line": 64,
+  "owner": "SoloSetup",
+  "key": "start",
+  "label": "ابدأ الاختبار",
+  "how": "push",
+  "route": "/quiz/play",
+  "opens": "الاختبار",
+  "on": [
+   "اختبار مخصص"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/quiz/solo.tsx",
+  "line": 79,
+  "owner": "SoloSetup",
+  "key": "onPress",
+  "label": "أكمله",
+  "how": "push",
+  "route": "/quiz/play",
+  "opens": "الاختبار",
+  "on": [
+   "اختبار مخصص"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/quizzes.tsx",
+  "line": 76,
+  "owner": "QuizzesScreen",
+  "key": "five",
+  "label": null,
+  "how": "push",
+  "route": "/quiz/play",
+  "opens": "الاختبار",
+  "on": [
+   "الاختبارات"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/quizzes.tsx",
+  "line": 92,
+  "owner": "QuizzesScreen",
+  "key": "onPress",
+  "label": "اختبار مخصص",
+  "how": "push",
+  "route": "/quiz/solo",
+  "opens": "اختبار مخصص",
+  "on": [
+   "الاختبارات"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/quizzes.tsx",
+  "line": 93,
+  "owner": "QuizzesScreen",
+  "key": "onPress",
+  "label": "اختبار جماعي",
+  "how": "push",
+  "route": "/quiz/party",
+  "opens": "اختبار جماعي",
+  "on": [
+   "الاختبارات"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/quran.tsx",
+  "line": 19,
+  "owner": "QURAN_TILES",
+  "key": null,
+  "label": "المصحف",
+  "how": "tab",
+  "route": "/read",
+  "opens": "المصحف",
+  "on": [
+   "القرآن"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/quran.tsx",
+  "line": 20,
+  "owner": "QURAN_TILES",
+  "key": null,
+  "label": "متشابهات القرآن",
+  "how": "tab",
+  "route": "/branches",
+  "opens": "متشابهات القرآن",
+  "on": [
+   "القرآن"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/quran.tsx",
+  "line": 21,
+  "owner": "QURAN_TILES",
+  "key": null,
+  "label": "مقارنة السور",
+  "how": "tab",
+  "route": "/compare",
+  "opens": "مقارنة السور",
+  "on": [
+   "القرآن"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/quran.tsx",
+  "line": 22,
+  "owner": "QURAN_TILES",
+  "key": null,
+  "label": "قصص الأنبياء",
+  "how": "tab",
+  "route": "/prophets",
+  "opens": "قصص الأنبياء",
+  "on": [
+   "القرآن"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/quran.tsx",
+  "line": 23,
+  "owner": "QURAN_TILES",
+  "key": null,
+  "label": "تحفة الأطفال",
+  "how": "tab",
+  "route": "/tuhfa",
+  "opens": "تحفة الأطفال",
+  "on": [
+   "القرآن"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/quran.tsx",
+  "line": 24,
+  "owner": "QURAN_TILES",
+  "key": null,
+  "label": "ألفاظ القرآن",
+  "how": "tab",
+  "route": "/words",
+  "opens": "ألفاظ القرآن",
+  "on": [
+   "القرآن"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/quran.tsx",
+  "line": 25,
+  "owner": "QURAN_TILES",
+  "key": null,
+  "label": "الأقسام",
+  "how": "tab",
+  "route": "/oaths",
+  "opens": "الأقسام",
+  "on": [
+   "القرآن"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/quran.tsx",
+  "line": 26,
+  "owner": "QURAN_TILES",
+  "key": null,
+  "label": "مشاهد",
+  "how": "tab",
+  "route": "/lataif",
+  "opens": "مشاهد",
+  "on": [
+   "القرآن"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/quran.tsx",
+  "line": 27,
+  "owner": "QURAN_TILES",
+  "key": null,
+  "label": "مصطلحات البلاغة",
+  "how": "tab",
+  "route": "/terms",
+  "opens": "مصطلحات البلاغة",
+  "on": [
+   "القرآن"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/quran.tsx",
+  "line": 28,
+  "owner": "QURAN_TILES",
+  "key": null,
+  "label": "القراءات",
+  "how": "tab",
+  "route": "/qiraat",
+  "opens": "القراءات",
+  "on": [
+   "القرآن"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/quran.tsx",
+  "line": 29,
+  "owner": "QURAN_TILES",
+  "key": null,
+  "label": "فواتح السور",
+  "how": "tab",
+  "route": "/openings",
+  "opens": "فواتح السور",
+  "on": [
+   "القرآن"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/quran.tsx",
+  "line": 30,
+  "owner": "QURAN_TILES",
+  "key": null,
+  "label": "ترتيب السور",
+  "how": "tab",
+  "route": "/order",
+  "opens": "ترتيب السور",
+  "on": [
+   "القرآن"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/stories.tsx",
+  "line": 34,
+  "owner": "StoryRow",
+  "key": "onPress",
+  "label": null,
+  "how": "push",
+  "route": "/story",
+  "opens": "القصة",
+  "on": [
+   "قصص السيرة"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/stories.tsx",
+  "line": 55,
+  "owner": "ChapterCard",
+  "key": "onPress",
+  "label": null,
+  "how": "tab",
+  "route": "/battle",
+  "opens": "الغزوة",
+  "on": [
+   "قصص السيرة"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/story.tsx",
+  "line": 68,
+  "owner": "HadithOpen",
+  "key": "onPress",
+  "label": "افتح ‹›",
+  "how": "push",
+  "route": "/hadith-sahih",
+  "opens": "حديث الصحيح",
+  "on": [
+   "الرئيسية",
+   "القصة",
+   "الاختبارات",
+   "غرفة الاختبار الجماعي",
+   "الاختبار"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/tarajim.tsx",
+  "line": 43,
+  "owner": "TarajimScreen",
+  "key": "onPress",
+  "label": "كل التراجم",
+  "how": "push",
+  "route": "/people",
+  "opens": "كل التراجم",
+  "on": [
+   "التراجم"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/tarajim.tsx",
+  "line": 46,
+  "owner": "TarajimScreen",
+  "key": "onPress",
+  "label": "قصص السيرة",
+  "how": "push",
+  "route": "/stories",
+  "opens": "قصص السيرة",
+  "on": [
+   "التراجم"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/tarajim.tsx",
+  "line": 47,
+  "owner": "TarajimScreen",
+  "key": "onPress",
+  "label": "الغزوات والمعارك",
+  "how": "push",
+  "route": "/battles",
+  "opens": "الغزوات والمعارك",
+  "on": [
+   "التراجم"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/tarajim.tsx",
+  "line": 48,
+  "owner": "TarajimScreen",
+  "key": "onPress",
+  "label": "الأطلس",
+  "how": "push",
+  "route": "/atlas",
+  "opens": "الأطلس",
+  "on": [
+   "التراجم"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/tarajim.tsx",
+  "line": 52,
+  "owner": "TarajimScreen",
+  "key": "onPress",
+  "label": "النسب",
+  "how": "push",
+  "route": "/nasab",
+  "opens": "النسب",
+  "on": [
+   "التراجم"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/tarajim.tsx",
+  "line": 53,
+  "owner": "TarajimScreen",
+  "key": "onPress",
+  "label": "بين عدة أشخاص",
+  "how": "push",
+  "route": "/between",
+  "opens": "بين عدة أشخاص",
+  "on": [
+   "التراجم"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/tarajim.tsx",
+  "line": 54,
+  "owner": "TarajimScreen",
+  "key": "onPress",
+  "label": "حياتهم جنبًا إلى جنب",
+  "how": "push",
+  "route": "/life",
+  "opens": "حياتهم جنبًا إلى جنب",
+  "on": [
+   "التراجم"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/ties.tsx",
+  "line": 31,
+  "owner": "TiesScreen",
+  "key": "back",
+  "label": null,
+  "how": "tab",
+  "route": "/tarajim",
+  "opens": "التراجم",
+  "on": [
+   "الصلات"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/ties.tsx",
+  "line": 50,
+  "owner": "TiesScreen",
+  "key": "onPress",
+  "label": "ترجمته",
+  "how": "push",
+  "route": "/person",
+  "opens": "الترجمة",
+  "on": [
+   "الصلات"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/ties.tsx",
+  "line": 51,
+  "owner": "TiesScreen",
+  "key": "onPress",
+  "label": "النسب",
+  "how": "push",
+  "route": "/nasab",
+  "opens": "النسب",
+  "on": [
+   "الصلات"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/ties.tsx",
+  "line": 52,
+  "owner": "TiesScreen",
+  "key": "onPress",
+  "label": "بينه وبين…",
+  "how": "push",
+  "route": "/between",
+  "opens": "بين عدة أشخاص",
+  "on": [
+   "الصلات"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/ties.tsx",
+  "line": 60,
+  "owner": "TiesScreen",
+  "key": "onPress",
+  "label": null,
+  "how": "tab",
+  "route": "/battle",
+  "opens": "الغزوة",
+  "on": [
+   "الصلات"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/ties.tsx",
+  "line": 69,
+  "owner": "TiesScreen",
+  "key": "onPress",
+  "label": null,
+  "how": "navigate",
+  "route": "/people",
+  "opens": "كل التراجم",
+  "on": [
+   "الصلات"
+  ]
+ },
+ {
+  "file": "mobile/src/screens/words.tsx",
+  "line": 49,
+  "owner": "WordsScreen",
+  "key": "onPress",
+  "label": "‹›، ‹› مرة",
+  "how": "tab",
+  "route": "/word",
+  "opens": "الكلمة",
+  "on": [
+   "ألفاظ القرآن"
+  ]
+ },
+ {
+  "file": "mobile/src/ui/TabBar.tsx",
+  "line": 63,
+  "owner": "TabBar",
+  "key": "press",
+  "label": null,
+  "how": "tab",
+  "route": "/quran",
+  "opens": "القرآن",
+  "on": "every screen"
+ },
+ {
+  "file": "mobile/src/ui/TabBar.tsx",
+  "line": 63,
+  "owner": "TabBar",
+  "key": "press",
+  "label": null,
+  "how": "tab",
+  "route": "/",
+  "opens": "الرئيسية",
+  "on": "every screen"
+ },
+ {
+  "file": "mobile/src/ui/TopBar.tsx",
+  "line": 50,
+  "owner": "TopBar",
+  "key": "onPress",
+  "label": "أدوات القرآن",
+  "how": "dismissTo",
+  "route": "/quran",
+  "opens": "القرآن",
+  "on": [
+   "كتاب الحديث",
+   "حديث الأربعين",
+   "أبواب الكتاب",
+   "حديث الصحيح",
+   "رواية الصحيح",
+   "الحديث",
+   "الذكر",
+   "الرئيسية",
+   "مدونتي",
+   "البحث",
+   "الأدوات والأذكار",
+   "الكتاب",
+   "المكتبة",
+   "متشابهات القرآن",
+   "مقارنة السور",
+   "مشاهد",
+   "الأقسام",
+   "فواتح السور",
+   "ترتيب السور",
+   "قصص الأنبياء",
+   "القراءات",
+   "القرآن",
+   "المصطلح",
+   "مصطلحات البلاغة",
+   "تحفة الأطفال",
+   "الكلمة",
+   "ألفاظ القرآن",
+   "الأطلس",
+   "الغزوة",
+   "الغزوات والمعارك",
+   "بين عدة أشخاص",
+   "حياتهم جنبًا إلى جنب",
+   "النسب",
+   "كل التراجم",
+   "الترجمة",
+   "قصص السيرة",
+   "القصة",
+   "التراجم",
+   "الصلات",
+   "الاختبارات",
+   "المصحف",
+   "عن نمق",
+   "المصادر والتراخيص",
+   "صفحة الآية",
+   "سياسة الخصوصية",
+   "قصة النبي",
+   "غرفة الاختبار الجماعي",
+   "اختبار جماعي",
+   "الاختبار",
+   "اختبار مخصص"
+  ]
+ },
+ {
+  "file": "mobile/src/ui/TopBar.tsx",
+  "line": 53,
+  "owner": "TopBar",
+  "key": "onPress",
+  "label": "المكتبة",
+  "how": "dismissTo",
+  "route": "/books",
+  "opens": "المكتبة",
+  "on": [
+   "كتاب الحديث",
+   "حديث الأربعين",
+   "أبواب الكتاب",
+   "حديث الصحيح",
+   "رواية الصحيح",
+   "الحديث",
+   "الذكر",
+   "الرئيسية",
+   "مدونتي",
+   "البحث",
+   "الأدوات والأذكار",
+   "الكتاب",
+   "المكتبة",
+   "متشابهات القرآن",
+   "مقارنة السور",
+   "مشاهد",
+   "الأقسام",
+   "فواتح السور",
+   "ترتيب السور",
+   "قصص الأنبياء",
+   "القراءات",
+   "القرآن",
+   "المصطلح",
+   "مصطلحات البلاغة",
+   "تحفة الأطفال",
+   "الكلمة",
+   "ألفاظ القرآن",
+   "الأطلس",
+   "الغزوة",
+   "الغزوات والمعارك",
+   "بين عدة أشخاص",
+   "حياتهم جنبًا إلى جنب",
+   "النسب",
+   "كل التراجم",
+   "الترجمة",
+   "قصص السيرة",
+   "القصة",
+   "التراجم",
+   "الصلات",
+   "الاختبارات",
+   "المصحف",
+   "عن نمق",
+   "المصادر والتراخيص",
+   "صفحة الآية",
+   "سياسة الخصوصية",
+   "قصة النبي",
+   "غرفة الاختبار الجماعي",
+   "اختبار جماعي",
+   "الاختبار",
+   "اختبار مخصص"
+  ]
+ },
+ {
+  "file": "mobile/src/ui/TopBar.tsx",
+  "line": 70,
+  "owner": "TopBar",
+  "key": "onPress",
+  "label": "الصفحة الرئيسية",
+  "how": "tab",
+  "route": "/",
+  "opens": "الرئيسية",
+  "on": [
+   "كتاب الحديث",
+   "حديث الأربعين",
+   "أبواب الكتاب",
+   "حديث الصحيح",
+   "رواية الصحيح",
+   "الحديث",
+   "الذكر",
+   "الرئيسية",
+   "مدونتي",
+   "البحث",
+   "الأدوات والأذكار",
+   "الكتاب",
+   "المكتبة",
+   "متشابهات القرآن",
+   "مقارنة السور",
+   "مشاهد",
+   "الأقسام",
+   "فواتح السور",
+   "ترتيب السور",
+   "قصص الأنبياء",
+   "القراءات",
+   "القرآن",
+   "المصطلح",
+   "مصطلحات البلاغة",
+   "تحفة الأطفال",
+   "الكلمة",
+   "ألفاظ القرآن",
+   "الأطلس",
+   "الغزوة",
+   "الغزوات والمعارك",
+   "بين عدة أشخاص",
+   "حياتهم جنبًا إلى جنب",
+   "النسب",
+   "كل التراجم",
+   "الترجمة",
+   "قصص السيرة",
+   "القصة",
+   "التراجم",
+   "الصلات",
+   "الاختبارات",
+   "المصحف",
+   "عن نمق",
+   "المصادر والتراخيص",
+   "صفحة الآية",
+   "سياسة الخصوصية",
+   "قصة النبي",
+   "غرفة الاختبار الجماعي",
+   "اختبار جماعي",
+   "الاختبار",
+   "اختبار مخصص"
+  ]
+ }
+]
