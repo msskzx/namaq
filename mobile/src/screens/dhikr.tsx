@@ -39,7 +39,7 @@ function DhikrPage({ item, occasion, count, onTap, onReset, height, palette }: {
         <DhikrBody item={item} palette={palette} />
         {item.fullReport && (
           <Folded credit="الحديث كاملًا كما رواه النووي" palette={palette}>
-            <Text style={{ color: palette.ink, fontSize: 17, lineHeight: 32, textAlign: 'justify' }}>{item.fullReport}</Text>
+            <Text style={{ color: palette.ink, fontSize: 17, lineHeight: 32, textAlign: 'right' }}>{item.fullReport}</Text>
           </Folded>
         )}
         <GradeLine item={item} palette={palette} />

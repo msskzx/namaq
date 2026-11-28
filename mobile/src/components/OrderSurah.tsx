@@ -23,7 +23,7 @@ function Source({ cite, palette }: { cite: Cite; palette: Palette }) {
   return <SourceLine named={source} sources={source} palette={palette} />;
 }
 
-const quote = (palette: Palette) => ({ color: palette.ink, fontSize: 17, lineHeight: 31, textAlign: 'justify' as const, writingDirection: 'rtl' as const });
+const quote = (palette: Palette) => ({ color: palette.ink, fontSize: 17, lineHeight: 31, textAlign: 'right' as const, writingDirection: 'rtl' as const });
 
 function BookWords({ runs, palette, style }: { runs: QuoteRun[]; palette: Palette; style?: TextStyle }) {
   return (

@@ -10,7 +10,7 @@ export function TanasubQuote({ link: key, palette }: { link: number; palette: Pa
   const sources = sourcesOf([tanasubSource(link)]);
   return (
     <View style={{ gap: 2, paddingTop: 10 }}>
-      <Text style={{ color: palette.ink, fontSize: 16, lineHeight: 28, textAlign: 'justify', writingDirection: 'rtl' }}>«{link.text}»</Text>
+      <Text style={{ color: palette.ink, fontSize: 16, lineHeight: 28, textAlign: 'right', writingDirection: 'rtl' }}>«{link.text}»</Text>
       <SourceLine named={sources} sources={sources} palette={palette} />
     </View>
   );

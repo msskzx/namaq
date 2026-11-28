@@ -10,12 +10,15 @@ import type { PageModel, reciteView } from '@shared/quran/recitePage';
 import { Mistyped, tint, Veil, WriteBox } from './quran/text/WriteBoxes';
 import { QURAN_FONT, type Palette } from '@/lib/theme';
 import { breakLines, FLOW_LINE, flowSize } from '@/lib/pageZoom';
+import { WORD_GAP } from '@shared/quran/quranText/flow';
+import { QuranLine } from './quran/text/QuranLines';
 import { useOnChange } from '@/lib/hooks/useOnChange';
 
 const BASMALA = 'بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ';
 const BASE = 40;
 const EMPTY_END = '\u06DD';
-const GAP = 0.2;
+const SAVED_CIRCLE = 0.86;
+const GAP = WORD_GAP;
 const SQUEEZE = 0.9;
 const STRETCH = 1.15;
 const SLICE_LINE = 1.9;
@@ -272,7 +275,7 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
     cells.forEach((cell, at) => {
       if (!cell.band) return;
       const run = runs[runs.length - 1];
-      if (run && run[run.length - 1] === at - 1 && cells[run[0]].band === cell.band) run.push(at);
+      if (run && run[run.length - 1] === at - 1 && BAND_TINT[cells[run[0]].band!](palette) === BAND_TINT[cell.band](palette)) run.push(at);
       else runs.push([at]);
     });
     return runs.map(run => {
@@ -375,12 +378,13 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
               return (
                 <View key={row.id} ref={holdsFocus ? focusRow : undefined} onLayout={holdsFocus ? findFocus : undefined}
                   style={[{ height: flowing ? size * FLOW_LINE : oval ? oneLine : lineHeight, flexDirection: 'row', alignItems: 'center', justifyContent: (centred && !flowing) || oval || (flowing && opening) ? 'center' : 'flex-start' }, inBlock]}>
-                  <View style={centred
-                    ? { flexDirection: 'row', alignItems: 'center', gap: GAP * size }
-                    : { width: width / scale, flexShrink: 0, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', transform: [{ scaleX: scale }], transformOrigin: oval ? 'center' : 'right' }}>
+                  <QuranLine spread={!centred} width={width} scale={scale} gap={GAP * size} origin={oval ? 'center' : 'right'}>
                     {bands(row.id, cells)}
                     {cells.map(({ group, key, wordHidden, rel, at: wordAt }, at) => {
                       const endHidden = (end: number) => !!hidden?.(`${group.surah}:${end}`, Number.MAX_SAFE_INTEGER);
+                      const isSaved = (end: number) => saved.has(`${group.surah}:${end}`) && !endHidden(end);
+                      const tone = (end: number) => (!endHidden(end) && forgot[`${group.surah}:${end}`] ? palette.accent : palette.muted);
+                      const loose = !group.marks.some(isSaved);
                       const writing = !!group.word && wordHidden && write?.key === key;
                       const graded = !wordHidden && checked?.key === key ? (checked.right.includes(rel) ? palette.green : checked.wrong.includes(rel) ? palette.amber : null) : null;
                       const mistyped = graded === palette.amber && group.word ? checked!.typed[rel] : '';
@@ -393,20 +397,27 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
                         {mistyped ? <Mistyped text={mistyped} size={size} palette={palette} /> : null}
                         <Text style={{ fontFamily: QURAN_FONT, fontSize: size, color: graded ?? palette.ink }}>
                           {wordHidden ? '' : group.word}
-                          {group.marks.map(end => (
+                          {loose ? group.marks.map(end => (
                             <Text key={end}>
                               {group.word ? ' ' : ''}
-                              <Text style={{ color: endHidden(end) ? palette.muted : saved.has(`${group.surah}:${end}`) ? palette.root : forgot[`${group.surah}:${end}`] ? palette.accent : palette.muted }}>
-                                {endHidden(end) ? EMPTY_END : num(end)}
-                              </Text>
+                              <Text style={{ color: tone(end) }}>{endHidden(end) ? EMPTY_END : num(end)}</Text>
                             </Text>
-                          ))}
+                          )) : null}
                         </Text>
+                        {loose ? null : group.marks.map(end => (
+                          <View key={end} style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            {group.word ? <Text style={{ fontFamily: QURAN_FONT, fontSize: size }}>{' '}</Text> : null}
+                            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                              {isSaved(end) ? <View style={{ position: 'absolute', width: size * SAVED_CIRCLE, height: size * SAVED_CIRCLE, borderRadius: size, backgroundColor: palette.bands.saved }} /> : null}
+                              <Text style={{ fontFamily: QURAN_FONT, fontSize: size, color: isSaved(end) ? palette.ink : tone(end) }}>{endHidden(end) ? EMPTY_END : num(end)}</Text>
+                            </View>
+                          </View>
+                        ))}
                         </View>
                         </Word>
                       );
                     })}
-                  </View>
+                  </QuranLine>
                 </View>
               );
             })}

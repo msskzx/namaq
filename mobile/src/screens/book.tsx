@@ -227,7 +227,7 @@ const BookPageView = memo(function BookPageView({ book, entries, page, index, pa
                 <Pressable key={at} onLongPress={event => onLong({ entry: slice.entry, at }, event.nativeEvent.pageY)} delayLongPress={350} onPress={onTap}
                   style={{ marginVertical: 3, borderRadius: 8, paddingHorizontal: 4, marginHorizontal: -4, backgroundColor: on ? `${palette.ink}14` : 'transparent' }}>
                   {saved.has(key) && <View style={{ position: 'absolute', right: -MARGIN + 4, top: 6 }}><FasilaRibbon color={palette.root} height={16} width={8} /></View>}
-                  <Text style={{ color: palette.ink, fontSize: 18, lineHeight: 36, textAlign: 'justify', writingDirection: 'rtl' }}>
+                  <Text style={{ color: palette.ink, fontSize: 18, lineHeight: 36, textAlign: 'right', writingDirection: 'rtl' }}>
                     {runsIn(entry.text, at, end).map((run, i) => (run.quran
                       ? <Text key={i} onPress={entry.surah ? () => onAyah(entry.surah, ayah) : undefined}><QuranWords style={{ color: palette.accent }}>{run.text}</QuranWords></Text>
                       : run.text))}
