@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { AppState, Dimensions, Platform, View } from 'react-native';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import { isTablet } from '@/ui/column';
@@ -14,23 +13,23 @@ import { useStackOptions } from '@/lib/stackOptions';
 import { noteRootPage } from '@/lib/ways';
 import { leave } from '@/lib/storage';
 import { reportError } from '@shared/errors';
+import { useWhileOpen } from '@/lib/hooks/useWhileOpen';
+
+const WARM_AFTER_MS = 1500;
 
 export default function AppShell({ onReady }: { onReady: () => void }) {
   const palette = usePalette();
   const stack = useStackOptions();
-  useEffect(startAlerts, []);
-  useEffect(() => {
+  useWhileOpen(() => {
+    onReady();
+    startAlerts();
+    syncPacks();
     const { width, height } = Dimensions.get('screen');
     if (Platform.OS !== 'web' && !isTablet(width, height)) void ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP).catch(error => reportError('app: lock portrait', error));
-  }, []);
-  useEffect(() => { syncPacks(); }, []);
-  useEffect(() => { const sub = AppState.addEventListener('change', state => { if (state !== 'active') leave(); }); return () => sub.remove(); }, []);
-  useEffect(() => {
-    onReady();
-    let stop = () => {};
-    const start = setTimeout(() => { stop = warmScreens(); }, 1500);
-    return () => { clearTimeout(start); stop(); };
-  }, [onReady]);
+    const sub = AppState.addEventListener('change', state => { if (state !== 'active') leave(); });
+    const stopWarming = warmScreens(WARM_AFTER_MS);
+    return () => { sub.remove(); stopWarming(); };
+  });
   const base = palette.scheme === 'dark' ? DarkTheme : DefaultTheme;
   const theme = { ...base, colors: { ...base.colors, background: palette.paper, card: palette.paper, text: palette.ink, border: palette.rule, primary: palette.accent } };
   return (

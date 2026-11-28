@@ -1,4 +1,4 @@
-import { Fragment, createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ComponentRef } from 'react';
+import { Fragment, createContext, useCallback, useContext, useMemo, useRef, useState, type ComponentRef } from 'react';
 import { View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
 import { Text } from '@/ui/Text';
 import { readAyah } from '@/lib/openReader';
@@ -22,6 +22,10 @@ import IconButton from '@/ui/IconButton';
 import { Tap } from '@/ui/Tap';
 import { useInsideCard } from '@/ui/Card';
 import { FEATURE_ICON } from '@/components/featureIcons';
+import { useOnChange } from '@/lib/hooks/useOnChange';
+import { useAdjustOn } from '@/lib/hooks/useAdjustOn';
+import { useLater } from '@/lib/hooks/useLater';
+import { useLatestRun } from '@/lib/hooks/useLatestRun';
 
 type Props = {
   onFit?: OnFit;
@@ -161,17 +165,17 @@ export default function MatrixCard({ onFit, presentation, palette, view, lane, a
   const shiftOf = (i: number) => view.width / 2 - (xOf(i) + width / 2);
   const start = matrix.columns.indexOf('ayah');
   const [column, setColumn] = useState(start);
-  useEffect(() => { if (column !== start) onColumn?.(); }, [column]); // eslint-disable-line react-hooks/exhaustive-deps
+  useOnChange([column], () => { if (column !== start) onColumn?.(); });
   const shift = useSharedValue(shiftOf(start));
   const base = useSharedValue(shiftOf(start));
   const at = useSharedValue(start);
   const mode = useSharedValue<'column' | 'swipe' | 'none'>('none');
   const from = useSharedValue(0);
   const shifts = matrix.columns.map((_, i) => shiftOf(i));
-  useEffect(() => {
+  useOnChange([view.width], () => {
     base.value = shifts[at.value];
     shift.value = shifts[at.value];
-  }, [view.width]); // eslint-disable-line react-hooks/exhaustive-deps
+  });
 
   const goTo = (i: number) => {
     at.value = i;
@@ -224,7 +228,7 @@ export default function MatrixCard({ onFit, presentation, palette, view, lane, a
   const asked = growth?.ask && lines.routes.find(route => route.id === growth.ask!.id);
   const keysOf = (cell: MatrixCell) => cell?.ayat.map(ayah => ayah.key) ?? [];
   const [lit, setLit] = useState<string | null>(null);
-  useEffect(() => setLit(null), [presentation]);
+  useAdjustOn([presentation], () => setLit(null));
   const light: Light = { lit, onWord: link => setLit(current => (current === link ? null : link)) };
   const fit = useFitReport(onFit);
 
@@ -291,15 +295,18 @@ function useConnectionLines(connections: Props['connections'], shown: boolean, p
   const [routes, setRoutes] = useState<Route[]>([]);
   const [layout, setLayout] = useState(0);
   const pending = useRef(false);
+  const frameLater = useLater();
   const measure = useCallback(() => {
     if (pending.current) return;
     pending.current = true;
-    requestAnimationFrame(() => { pending.current = false; setLayout(value => value + 1); });
-  }, []);
+    frameLater.nextFrame(() => { pending.current = false; setLayout(value => value + 1); });
+  }, [frameLater]);
+  const begin = useLatestRun();
   const registry = useMemo(() => ({ words, measure }), [words, measure]);
   const group = connections?.group;
   const tags = connections?.tags.join(' ') ?? '';
-  useEffect(() => {
+  useOnChange([group, tags, shown, layout, words, palette], () => {
+    const live = begin();
     const root = frame.current;
     if (!root || !group || !tags || !shown) { setRoutes([]); return; }
     const links = tags.split(' ').flatMap(tag => wordConnections(group, tag as Tag).map(link => ({ ...link, tag: tag as Tag })));
@@ -320,7 +327,6 @@ function useConnectionLines(connections: Props['connections'], shown: boolean, p
       const all = boxes as Box[];
       return { left: Math.min(...all.map(box => box.left)), right: Math.max(...all.map(box => box.right)), top: Math.min(...all.map(box => box.top)), bottom: Math.max(...all.map(box => box.bottom)) };
     };
-    let active = true;
     void Promise.all(links.map(async (link, index) => {
       const [a, b] = await Promise.all([end(link.from), end(link.to)]);
       if (!a || !b) return [];
@@ -328,8 +334,7 @@ function useConnectionLines(connections: Props['connections'], shown: boolean, p
       const to = { x: (b.left + b.right) / 2, y: b.top - 2 };
       const mid = (from.y + to.y) / 2;
       return [{ id: `r${index}`, tag: link.tag, from, to, d: `M ${from.x} ${from.y} C ${from.x} ${mid}, ${to.x} ${mid}, ${to.x} ${to.y}` }];
-    })).then(found => { if (active) setRoutes(found.flat()); });
-    return () => { active = false; };
-  }, [group, tags, shown, layout, words, palette]);
+    })).then(found => { if (live()) setRoutes(found.flat()); });
+  });
   return { registry, frame, routes, measure };
 }

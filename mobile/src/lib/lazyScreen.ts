@@ -15,7 +15,7 @@ export function lazyScreen(load: Loader, { warm = true } = {}): Screen {
   };
 }
 
-export function warmScreens(gap = 120) {
+export function warmScreens(first: number, gap = 120) {
   let stopped = false;
   const next = () => {
     if (stopped) return;
@@ -24,6 +24,6 @@ export function warmScreens(gap = 120) {
     try { get(); } catch (error) { reportError('lazy screen: preload', error); }
     setTimeout(next, gap);
   };
-  const start = setTimeout(next, gap);
+  const start = setTimeout(next, first);
   return () => { stopped = true; clearTimeout(start); };
 }

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, useSyncExternalStore, type ComponentRef } from 'react';
+import { useCallback, useMemo, useRef, useState, useSyncExternalStore, type ComponentRef } from 'react';
 import { Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
 import { BlurView } from 'expo-blur';
@@ -59,6 +59,10 @@ import { usePalette } from '@/lib/theme';
 import { mushafSpread, penRule } from '@/lib/settings';
 import { isWide } from '@/ui/column';
 import { surahName, SURAH_TITLES } from '@shared/quran/surahNames';
+import { useOnChange } from '@/lib/hooks/useOnChange';
+import { useBeforePaint } from '@/lib/hooks/useBeforePaint';
+import { useLater } from '@/lib/hooks/useLater';
+import { useWhileOpen } from '@/lib/hooks/useWhileOpen';
 
 const PLACE = 'reader-place';
 const INDICATOR = 20;
@@ -89,7 +93,7 @@ export default function Reader() {
   const [position, setPosition] = useState<RecitePosition | null>(place?.position ?? null);
   const [reviewing, setReviewing] = useState(!!place?.reviewing && !!place?.position);
   const [reviewFrom, setReviewFrom] = useState(place?.reviewFrom ?? null);
-  useEffect(() => { if (!reviewing) setReviewFrom(null); }, [reviewing]);
+  useOnChange([reviewing], () => { if (!reviewing) setReviewFrom(null); });
   const [reciteMenu, setReciteMenu] = useState<{ x: number; y: number } | null>(null);
   const [mark, setMark] = useState<{ key: string; page: number; words?: { from: number; to: number } } | null>(null);
   const [wordLemmas, setWordLemmas] = useState<number[] | null>(null);
@@ -118,9 +122,9 @@ export default function Reader() {
   const [listenOpen, setListenOpen] = useState(false);
   const [following, setFollowing] = useState(true);
   const listenPage = listening ? pageOfAyah(listening.key) ?? null : null;
-  useEffect(() => { if (listenPage && following && !position) setPage(listenPage); }, [listenPage, following, position]);
-  useEffect(() => { if (listening) setFollowing(true); }, [listening?.range]); // eslint-disable-line react-hooks/exhaustive-deps
-  useEffect(() => { if (!listening) setFollowing(true); }, [listening]);
+  useOnChange([listenPage, following, position], () => { if (listenPage && following && !position) setPage(listenPage); });
+  useOnChange([listening?.range], () => { if (listening) setFollowing(true); });
+  useOnChange([listening], () => { if (!listening) setFollowing(true); });
   const saved = useMemo(() => new Set(bookmarks.filter(item => item.id.startsWith('ayah:')).map(item => item.id.slice(5))), [bookmarks]);
   const forgotten = useMemo(() => forgottenAyat(Object.keys(forgot)), [forgot]);
   const last = useMemo(() => (focused ? readJson(LAST_RECITE, isPlace) : undefined), [focused, position]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -143,21 +147,21 @@ export default function Reader() {
   const write: Write | null = recite.write ? { ...recite.write, onActive: (y, h) => follow.current(y, h) } : null;
   const follow = useRef((_y: number, _h: number) => {});
 
-  useEffect(() => {
+  useWhileOpen(() => {
     setImmersive(focused && !tools);
     return () => setImmersive(false);
   }, [focused, tools]);
 
-  useEffect(() => {
+  useOnChange([reciting], () => {
     if (reciting) { setTools(false); setActions(null); }
-  }, [reciting]);
+  });
 
   const scrollY = useRef(place?.y ?? 0);
   const keep = () => writeJson(PLACE, { page, position, reviewing, ...(reviewFrom ? { reviewFrom } : {}), y: flowing ? Math.round(scrollY.current) : 0 } satisfies Place);
-  useEffect(() => {
+  useOnChange([page, position, reviewing, reviewFrom], () => {
     keep();
     if (position && !reviewing) writeJson(LAST_RECITE, { page, position } satisfies Place);
-  }, [page, position, reviewing, reviewFrom]); // eslint-disable-line react-hooks/exhaustive-deps
+  });
 
   const turnTo = useCallback((next: number) => {
     setPage(next);
@@ -297,20 +301,22 @@ export default function Reader() {
   }, []);
   const scrolled = useRef(0);
   const scrollTo = (y: number) => { scroller.current?.scrollTo({ y, animated: false }); scrolled.current = y; scrollY.current = y; };
-  useEffect(() => { if (!keyboard && !flowing) { scrollTo(0); setScrollTop(0); } }, [keyboard, flowing]);
+  useOnChange([keyboard, flowing], () => { if (!keyboard && !flowing) { scrollTo(0); setScrollTop(0); } });
   const pagerHeight = flowing ? Math.max(height, heights[page] ?? 0) : height;
   const [scrollTop, setScrollTop] = useState(0);
   const restoring = useRef(flowing && !!place?.y);
   const shownPage = useRef(page);
-  useLayoutEffect(() => {
+  useBeforePaint([page], () => {
     if (shownPage.current === page) return;
     shownPage.current = page;
     restoring.current = false;
     scrollTo(0);
     setScrollTop(0);
-  }, [page]);
+  });
   const drawnHeight = heights[page];
-  useEffect(() => {
+  const scrollLater = useLater();
+  useOnChange([drawnHeight, zoom], () => {
+    scrollLater.cancel();
     if (!drawnHeight) return;
     let y: number | null = null;
     if (restoring.current && drawnHeight > height + 1) {
@@ -322,9 +328,8 @@ export default function Reader() {
       y = flowing ? Math.max(0, Math.min(drawnHeight - height, share * drawnHeight - screen)) : 0;
     }
     if (y === null) return;
-    const frame = requestAnimationFrame(() => { scrollTo(y); setScrollTop(y); });
-    return () => cancelAnimationFrame(frame);
-  }, [drawnHeight, zoom]); // eslint-disable-line react-hooks/exhaustive-deps
+    scrollLater.nextFrame(() => { scrollTo(y); setScrollTop(y); });
+  });
   const zoomTo = useCallback((next: number, focalY: number) => {
     anchor.current = { share: focalY / Math.max(1, pagerHeight), screen: focalY - pinchFrom.current, from: heights[page] ?? 0 };
     restoring.current = false;
