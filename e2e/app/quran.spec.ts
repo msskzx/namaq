@@ -422,16 +422,16 @@ test('an opened word shows where it gathers: a bar picks a surah, names it with 
   await expect(page.getByRole('button', { name: new RegExp(`^افتح ${S(7)} .* في المصحف$`) }).first()).toBeInViewport();
 });
 
-test("a word's page opens with al-Raghib's words on its root and Ibn Qutaybah's meanings as chips at their ayat, each opening his entry", async ({ page }) => {
+test("a word's page opens with al-Raghib's words on its root and Ibn Qutaybah's meanings at their whole ayat, each opening his entry", async ({ page }) => {
   await open(page, '/words');
   await page.getByLabel('ابحث عن كلمة في القرآن').fill('فتنة');
   await page.getByRole('button', { name: /^فِتۡنَة، / }).click();
   await expect(page.getByText('قال الراغب:', { exact: true })).toBeVisible();
   await expect(page.getByText(/^أصل الفَتْنِ: إدخال الذّهب النار/)).toBeVisible();
-  // Each line: the ayah's words he explains, his meaning of them in his words, the ayah's place; the first is open.
-  const branches = page.getByRole('tab', { name: /، .* [٠-٩]+$/ });
-  await expect(branches.first()).toHaveAttribute('aria-selected', 'true');
-  await page.getByRole('tab', { name: new RegExp(`: الكفر، ${S(3)} ٧$`) }).click();
+  // Each place (owner, 2026-11-28): its whole ayah with his words lit, then the place and his meaning; the first is open.
+  const branches = page.getByRole('button', { name: /^.+ [٠-٩]+: .+$/ });
+  await expect(branches.first()).toHaveAttribute('aria-pressed', 'true');
+  await page.getByRole('button', { name: `${S(3)} ٧: الكفر`, exact: true }).click();
   await expect(page.getByText(`قال ابن قتيبة في ${S(3)} ٧:`)).toBeVisible();
   // «كاملًا» brings al-Raghib's whole article in the page's own section.
   await page.getByRole('button', { name: 'كلام الراغب فيها كاملًا' }).click();
