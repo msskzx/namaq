@@ -200,6 +200,7 @@ timeline), رتّب, من شهدها؟ / من أمير السرية؟, فيمَ 
 - Qibla: already on the prayer card.
 - Search, share and videos, settings, «ما أحفظه», «اهتماماتي»: tools, not content.
 - Party quizzes: played with others, not from the feed.
+- «الآيات» (the list of surahs and their ayat on the Quran tab): an index into the ayah page, which has its own cards («افتح صفحة الآية»).
 - «مشاهد» has no quiz kind yet: what the darknesses stand for differs between the scholars (each shown by name), so a question
   would ask a disputed point. An order question on the layers is a candidate once more scenes exist. «الرحمن» is still pages
   of ayat and hadith that the Quran and hadith quizzes already ask about.

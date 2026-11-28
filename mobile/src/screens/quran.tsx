@@ -18,17 +18,17 @@ import { useAdjustOn } from '@/lib/hooks/useAdjustOn';
 
 export const QURAN_TILES: { route: string; label: string; Icon: (props: LucideProps) => React.ReactNode }[] = [
   { route: '/read', label: 'المصحف', Icon: FEATURE_ICON.mushaf },
+  { route: '/ayat', label: 'الآيات', Icon: FEATURE_ICON.ayat },
+  { route: '/order', label: 'ترتيب السور', Icon: FEATURE_ICON.order },
+  { route: '/openings', label: 'فواتح السور', Icon: FEATURE_ICON.openings },
   { route: '/branches', label: 'متشابهات القرآن', Icon: FEATURE_ICON.trees },
   { route: '/compare', label: 'مقارنة السور', Icon: FEATURE_ICON.compare },
-  { route: '/prophets', label: 'قصص الأنبياء', Icon: FEATURE_ICON.prophets },
-  { route: '/tuhfa', label: 'تحفة الأطفال', Icon: FEATURE_ICON.tuhfa },
   { route: '/words', label: 'ألفاظ القرآن', Icon: FEATURE_ICON.words },
-  { route: '/oaths', label: 'الأقسام', Icon: FEATURE_ICON.oaths },
-  { route: '/lataif', label: 'مشاهد', Icon: FEATURE_ICON.scenes },
   { route: '/terms', label: 'مصطلحات البلاغة', Icon: FEATURE_ICON.balagha },
   { route: '/qiraat', label: 'القراءات', Icon: FEATURE_ICON.qiraat },
-  { route: '/openings', label: 'فواتح السور', Icon: FEATURE_ICON.openings },
-  { route: '/order', label: 'ترتيب السور', Icon: FEATURE_ICON.order },
+  { route: '/prophets', label: 'قصص الأنبياء', Icon: FEATURE_ICON.prophets },
+  { route: '/oaths', label: 'الأقسام', Icon: FEATURE_ICON.oaths },
+  { route: '/tuhfa', label: 'تحفة الأطفال', Icon: FEATURE_ICON.tuhfa },
 ];
 
 const ToolTile = ({ tile: { route, label, Icon }, palette }: { tile: (typeof QURAN_TILES)[number]; palette: Palette }) => (

@@ -11,7 +11,7 @@ export const PAGES: readonly PageEntry[] = [
   { id: 'search', app: ['(tabs)/(home)/search.tsx'], web: ['search'] },
   { id: 'utilities', app: ['(tabs)/(home)/utilities.tsx', '(tabs)/(home)/dhikr.tsx'], web: ['utilities'] },
   { id: 'library', app: ['(tabs)/(home)/library.tsx'], web: ['library'] },
-  { id: 'ayah', app: ['ayah.tsx'] },
+  { id: 'ayah', app: ['ayah.tsx', '(tabs)/(quran)/ayat.tsx', '(tabs)/(quran)/ayat-surah.tsx'] },
   { id: 'books', app: ['(tabs)/(library)/books.tsx'], web: ['quran/books'] },
   { id: 'book', app: ['(tabs)/(library)/book.tsx'], web: ['quran/books/[id]', 'quran/books/[id]/[page]'] },
   { id: 'hadith', app: ['(tabs)/(hadith)/hadith.tsx'], web: ['hadith'] },

@@ -1,0 +1,33 @@
+import { describe, expect, it } from 'vitest';
+import { ayatFound, SURAHS, surahAyat, surahAyatFound, typedAyah } from './ayatList';
+
+describe('the ayat list', () => {
+  it('lists every ayah of every surah once, in order, so each ayah page is reachable', () => {
+    for (const surah of SURAHS) {
+      const keys = surahAyat(surah.number).map(ayah => ayah.key);
+      expect(keys).toEqual(Array.from({ length: surah.numberOfAyat }, (_, at) => `${surah.number}:${at + 1}`));
+    }
+  });
+
+  it('reads a typed surah and ayah number as that ayah', () => {
+    expect(typedAyah('البقرة ٣٦')).toBe('2:36');
+    expect(typedAyah('2:255')).toBe('2:255');
+    expect(typedAyah('الفاتحة 8')).toBeNull();
+    expect(typedAyah('سورة ٢')).toBeNull();
+    expect(typedAyah('سورة ٢ ٣')).toBe('2:3');
+    expect(typedAyah('البقرة۳۶')).toBe('2:36');
+    expect(typedAyah('ال ٥')).toBeNull();
+    expect(typedAyah('ق ١')).toBe('50:1');
+    expect(ayatFound('يو').surahs.length).toBeGreaterThan(1);
+    expect(ayatFound('سورة ٢').surahs.map(surah => surah.number)).toEqual([2]);
+    expect(ayatFound('البقرة ٣٦').ayat[0]).toBe('2:36');
+  });
+
+  it('finds ayat by their words, and only inside the surah when searching a surah', () => {
+    expect(ayatFound('الحمد لله رب العالمين').ayat).toContain('1:2');
+    const inBaqara = surahAyatFound(2, 'الحمد لله');
+    expect(inBaqara.every(key => key.startsWith('2:'))).toBe(true);
+    expect(surahAyatFound(2, '٣٦')).toEqual(['2:36']);
+    expect(surahAyatFound(2, 'البقرة ٣٦')).toEqual(['2:36']);
+  });
+});

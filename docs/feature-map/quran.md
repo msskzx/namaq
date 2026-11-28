@@ -35,18 +35,18 @@ flowchart RL
 |  | (onPress) | [الذكر](dhikr.md) | [components/SearchResults.tsx:119](../../mobile/src/components/SearchResults.tsx#L119) |
 |  | (onPress) | [المصحف](read.md) | [components/SearchResults.tsx:125](../../mobile/src/components/SearchResults.tsx#L125) |
 | `WordView` | (open) | [المصحف](read.md) | [components/WordSheet.tsx:111](../../mobile/src/components/WordSheet.tsx#L111) |
-| `QURAN_TILES` | المصحف | [المصحف](read.md) | [screens/quran.tsx:19](../../mobile/src/screens/quran.tsx#L19) |
-|  | متشابهات القرآن | [متشابهات القرآن](branches.md) | [screens/quran.tsx:20](../../mobile/src/screens/quran.tsx#L20) |
-|  | مقارنة السور | [مقارنة السور](compare.md) | [screens/quran.tsx:21](../../mobile/src/screens/quran.tsx#L21) |
-|  | قصص الأنبياء | [قصص الأنبياء](prophets.md) | [screens/quran.tsx:22](../../mobile/src/screens/quran.tsx#L22) |
-|  | تحفة الأطفال | [تحفة الأطفال](tuhfa.md) | [screens/quran.tsx:23](../../mobile/src/screens/quran.tsx#L23) |
-|  | ألفاظ القرآن | [ألفاظ القرآن](words.md) | [screens/quran.tsx:24](../../mobile/src/screens/quran.tsx#L24) |
-|  | الأقسام | [الأقسام](oaths.md) | [screens/quran.tsx:25](../../mobile/src/screens/quran.tsx#L25) |
-|  | مشاهد | [مشاهد](lataif.md) | [screens/quran.tsx:26](../../mobile/src/screens/quran.tsx#L26) |
+| `QURAN_TILES` | المصحف | [المصحف](read.md) | [screens/quran.tsx:20](../../mobile/src/screens/quran.tsx#L20) |
+|  | الآيات | [الآيات](ayat.md) | [screens/quran.tsx:21](../../mobile/src/screens/quran.tsx#L21) |
+|  | ترتيب السور | [ترتيب السور](order.md) | [screens/quran.tsx:22](../../mobile/src/screens/quran.tsx#L22) |
+|  | فواتح السور | [فواتح السور](openings.md) | [screens/quran.tsx:23](../../mobile/src/screens/quran.tsx#L23) |
+|  | متشابهات القرآن | [متشابهات القرآن](branches.md) | [screens/quran.tsx:24](../../mobile/src/screens/quran.tsx#L24) |
+|  | مقارنة السور | [مقارنة السور](compare.md) | [screens/quran.tsx:25](../../mobile/src/screens/quran.tsx#L25) |
+|  | ألفاظ القرآن | [ألفاظ القرآن](words.md) | [screens/quran.tsx:26](../../mobile/src/screens/quran.tsx#L26) |
 |  | مصطلحات البلاغة | [مصطلحات البلاغة](terms.md) | [screens/quran.tsx:27](../../mobile/src/screens/quran.tsx#L27) |
 |  | القراءات | [القراءات](qiraat.md) | [screens/quran.tsx:28](../../mobile/src/screens/quran.tsx#L28) |
-|  | فواتح السور | [فواتح السور](openings.md) | [screens/quran.tsx:29](../../mobile/src/screens/quran.tsx#L29) |
-|  | ترتيب السور | [ترتيب السور](order.md) | [screens/quran.tsx:30](../../mobile/src/screens/quran.tsx#L30) |
+|  | قصص الأنبياء | [قصص الأنبياء](prophets.md) | [screens/quran.tsx:29](../../mobile/src/screens/quran.tsx#L29) |
+|  | الأقسام | [الأقسام](oaths.md) | [screens/quran.tsx:30](../../mobile/src/screens/quran.tsx#L30) |
+|  | تحفة الأطفال | [تحفة الأطفال](tuhfa.md) | [screens/quran.tsx:31](../../mobile/src/screens/quran.tsx#L31) |
 
 ## Sheets
 

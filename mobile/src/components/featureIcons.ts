@@ -1,14 +1,13 @@
-import { ArrowLeftRight, BookOpenText, BookMarked, DoorOpen, Gem, GitCommitVertical, Layers, Link2, ListTree, MessagesSquare, Milestone, Network,
+import { AlignRight, ArrowDownWideNarrow, ArrowLeftRight, BookOpenText, BookMarked, DoorOpen, Gem, GitCommitVertical, Layers, Link2, ListTree, MessagesSquare, Milestone, Network,
   Map as MapIcon, NotebookText, Presentation, ScrollText, SunMoon, Swords, TextSearch, type LucideProps } from 'lucide-react-native';
 import type { FeedKind } from '@shared/quiz/feedQuiz';
 import TreeIcon from './TreeIcon';
-import OrderIcon from './OrderIcon';
 import LifeIcon from './LifeIcon';
 
 type Icon = (props: LucideProps) => React.ReactNode;
 
 export const FEATURE_ICON = {
-  mushaf: BookOpenText, tafsir: NotebookText, trees: TreeIcon, compare: ArrowLeftRight, openings: DoorOpen, order: OrderIcon,
+  mushaf: BookOpenText, ayat: AlignRight, tafsir: NotebookText, trees: TreeIcon, compare: ArrowLeftRight, openings: DoorOpen, order: ArrowDownWideNarrow,
   oaths: SunMoon, words: TextSearch, balagha: Gem, qiraat: Layers, irab: ListTree, tuhfa: BookMarked, prophets: ScrollText,
   scenes: Presentation, person: Milestone, life: LifeIcon, nasab: Network, ties: Link2, battles: Swords, hadith: MessagesSquare,
   chain: GitCommitVertical, stories: ScrollText, adhkar: SunMoon, atlas: MapIcon,
