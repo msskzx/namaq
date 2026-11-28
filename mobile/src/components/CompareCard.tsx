@@ -29,8 +29,7 @@ import { toTab } from '@/lib/ways';
 import { readAyah } from '@/lib/openReader';
 import { compareMatrixOnly } from '@shared/quran/compareViews';
 import IconButton from '@/ui/IconButton';
-import Button, { Row } from '@/ui/Button';
-import Sheet from '@/ui/Sheet';
+import ChoiceSheet, { type Choice } from '@/ui/ChoiceSheet';
 import { Tap } from '@/ui/Tap';
 import SourceLine, { sourcesOf } from '@/ui/SourceLine';
 import { TANASUB_KIND, tanasubLink, tanasubSource } from '@shared/quran/tanasubCards';
@@ -92,22 +91,6 @@ function RunningAyat({ ayat, surah, before, after, palette, light, lane = false 
 
 const readAt = (name: SideName, side: CardSide, selected: number) =>
   (name.listed ? `${side.surah}:${name.numbers[selected] ?? name.numbers[0]}` : sideKeys(side)[0]);
-
-function ReadWhich({ sides, palette }: { sides: { label: string; at: string }[]; palette: Palette }) {
-  const [open, setOpen] = useState(false);
-  const read = (at: string) => { setOpen(false); readAyah(at); };
-  return (
-    <>
-      <IconButton Icon={FEATURE_ICON.mushaf} label="اقرأ في المصحف" onPress={() => setOpen(true)} />
-      <Sheet open={open} onClose={() => setOpen(false)} palette={palette}>
-        <View style={{ paddingHorizontal: 16, paddingBottom: 16, gap: 10 }}>
-          <Text accessibilityRole="header" style={{ color: palette.muted, fontSize: 16 }}>اقرأ في المصحف</Text>
-          <Row>{sides.map(side => <Button key={side.at} grow Icon={FEATURE_ICON.mushaf} label={side.label} accessibilityLabel={`اقرأ ${side.label} في المصحف`} onPress={() => read(side.at)} />)}</Row>
-        </View>
-      </Sheet>
-    </>
-  );
-}
 
 function SideHead({ label, at, palette, group, bare = false }: { label: string; at: string; palette: Palette; group?: string; bare?: boolean }) {
   const read = `اقرأ ${label} في المصحف`;
@@ -354,16 +337,25 @@ function CompareCard({ card, palette, onPageVideo, onOpen, aside }: { card: Pair
       {read.studio ? <Studio read={read} palette={palette} record={record} /> : (
         <View style={{ flexDirection: 'row', justifyContent: 'flex-start', flexWrap: 'wrap' }}>
           {onOpen && <OpenButton label="افتحها في المقارنة" onPress={onOpen} />}
-          {onOpen && <ReadWhich sides={([0, 1] as const).map(i => {
+          {onOpen && <ChoiceSheet Icon={FEATURE_ICON.mushaf} title="اقرأ في المصحف" choices={([0, 1] as const).map(i => {
             const view = sideView(card, i, selected, []);
-            return { label: sideTitle(view.name, surahName), at: readAt(view.name, sides[i], selected) };
-          })} palette={palette} />}
+            const label = sideTitle(view.name, surahName);
+            const at = readAt(view.name, sides[i], selected);
+            return { key: at, label, Icon: FEATURE_ICON.mushaf, accessibilityLabel: `اقرأ ${label} في المصحف`, onPress: () => readAyah(at) };
+          })} />}
           {!onOpen && saveButton}
           <IconButton Icon={Clapperboard} label="استوديو القراءة" onPress={read.open} />
           {!parts && <IconButton Icon={UnfoldHorizontal} label="الآيات المحيطة" onPress={() => setAround(!aroundOn)} on={aroundOn} />}
           {!tree && <IconButton Icon={beside ? Rows2 : Columns2} label={beside ? 'السورتان بعضهما تحت بعض' : 'السورتان جنبًا إلى جنب'} onPress={() => setBeside(!beside)} />}
-          {!matrixOnly && <IconButton Icon={view === 'tree' ? GalleryHorizontal : TreeIcon} label={view === 'tree' ? 'عرض المصفوفة' : 'عرض الشجرة'} onPress={() => setView(view === 'tree' ? 'matrix' : 'tree')} />}
-          {(tree || onOpen) && card.group && <IconButton Icon={TreeIcon} label="افتح في متشابهات القرآن" onPress={() => toTab({ pathname: '/branches', params: { tree: card.group } })} />}
+          {(() => {
+            const switchView: Choice | null = matrixOnly ? null : { key: 'view', label: view === 'tree' ? 'عرض المصفوفة' : 'عرض الشجرة', Icon: view === 'tree' ? GalleryHorizontal : TreeIcon,
+              onPress: () => setView(view === 'tree' ? 'matrix' : 'tree') };
+            const openTree: Choice | null = !(tree || onOpen) || !card.group ? null : { key: 'branches', label: 'افتح في المتشابهات', accessibilityLabel: 'افتح في متشابهات القرآن', Icon: FEATURE_ICON.trees,
+              onPress: () => toTab({ pathname: '/branches', params: { tree: card.group } }) };
+            const both = [switchView, openTree].filter((choice): choice is Choice => choice !== null);
+            if (both.length === 2 && view !== 'tree') return <ChoiceSheet Icon={FEATURE_ICON.trees} title="المتشابهات" choices={both} />;
+            return both.map(({ key, label, accessibilityLabel, Icon, onPress }) => <IconButton key={key} Icon={Icon} label={accessibilityLabel ?? label} onPress={onPress} />);
+          })()}
           {onOpen && saveButton}
           <IconButton Icon={Send} label="مشاركة" onPress={() => share()} />
           {aside ? <><View style={{ flex: 1 }} />{aside}</> : null}

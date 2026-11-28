@@ -32,6 +32,7 @@ below. Never copy one into a screen.
 | `column` | The tablet column (680pt), home's two columns lying down, `usePageWidth` for anything sized from the page, `isTablet`/`isWide` | sizing from the window width |
 | `FloatingMenu` (+ `MenuAt`) | A row of ActButtons over what was pressed, wrapping, above or below the finger; `groups` lays them in groups with a thin line between; `bubble` (+ `span`, the button's height) is the round reaction pop-up over one button of an open menu; `overlay` dims behind and closes on a tap outside | the mushaf and book long press, the home cards menu |
 | `MoreMenu` | A card's «⋯»: an icon button that opens a `FloatingMenu` of its choices (ActButtons); nothing when there is none | the feed cards' «ليس من اهتماماتي» |
+| `ChoiceSheet` | One icon button whose sheet lists its choices as buttons; use it where two buttons in a row would show the same icon (owner, 2026-11-28) | the home compare card's «اقرأ في المصحف» (which ayah) and its tree button (switch view or open the mutashabihat) |
 | `Sheet` | Rises from the bottom, tap outside or swipe down closes; `tall` one height above the keyboard, `full` whole screen with title and close | every sheet, full-screen ones included (share, video) |
 | `DrawerSheet` | A sheet that stays on the page over a full-screen picture: rests low with the picture open above, its handle (dragged or tapped) raises it to read the whole list; never closes, nothing dims; `lower` (a count) brings it down, `raised` keeps it up | the atlas's year and battles over its map, its search results |
 | `Toggle` | On means knob on the right | every on/off setting |
@@ -45,7 +46,7 @@ below. Never copy one into a screen.
 | `Folded` | A fold of more content under a rule at its card's foot (not a credit: a book goes on the card's line) | other routes and reports of a hadith or story; the ayat a balagha quote fits when al-Suyuti names none |
 | `SettingRow` | A settings row that folds: icon, name, what is chosen; a tap opens the picker under it | settings' «ما أحفظه» and «اهتماماتي» |
 | `TapRow` | A frameless row of a drawing: a tap opens what it names, a long press shows its source; 44 tall | the rows of the «حياته» timeline; a year's column on the battles timeline (`style` turns it into a column) |
-| `Pickable` | A block of a card that picks it on a tap, `aria-pressed` | a book's paragraph that lights the ayah words it quotes |
+| `Pickable` | A block of a card that picks it on a tap, `aria-pressed`; `label` names it to a screen reader in place of its text | a book's paragraph that lights the ayah words it quotes |
 | `Saying` | Someone's words with who says them on a muted line before them («قال فلان:»); `by` left out draws the words alone; `center` centres both | every quote from a book with its sayer (a person's virtues, a laqab's words, a tie's sentence) |
 | `Points` | Separate sayings or facts one under another, each with an accent point at its first line | a sayer's several sayings under one «قال فلان:» (a person's virtues) |
 | `TitleCells` | A card's name large, a muted line under it, then its `FactCells` | the person card's head; the feed's story, moment and ayah-note cards |

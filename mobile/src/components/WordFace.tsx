@@ -69,7 +69,7 @@ export default function WordFace({ name, root, count, ayat, counts, entries, art
           <CardWithRow palette={palette} pad={[10, 14]} gap={10} source={gharibSource(branch)}
             lead={<OpenButton label={`افتح ${placeOf(branch.key)} في المصحف`} onPress={() => onOpen(branch.key)} />}>
             {branches.length > 1 && branches.map((each, i) => (
-              <Pickable key={`${each.key}/${each.at}`} picked={picked === i} onPick={() => setPicked(i)}>
+              <Pickable key={`${each.key}/${each.at}`} picked={picked === i} onPick={() => setPicked(i)} label={`${placeOf(each.key)}: ${each.meaning}`}>
                 <View style={{ gap: 2, borderTopWidth: i ? 1 : 0, borderTopColor: palette.rule, paddingTop: i ? 10 : 0 }}>
                   <LitAyat ayat={[{ words: ayahMushafWords(each.key), lit: each.words }]} menu={each.key} palette={palette} />
                   <Text style={{ color: picked === i ? palette.accent : palette.muted, fontSize: 15, textAlign: 'right' }}>{`${placeOf(each.key)} · معناها: ${each.meaning}`}</Text>

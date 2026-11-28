@@ -72,6 +72,23 @@ test.describe('a new user', () => {
       await expect(page).toHaveURL(/\/read/);
     });
 
+    // Owner, 2026-11-28: in the matrix, the switch to the tree and the way to the mutashabihat share one tree button.
+    test('the pair card\'s one tree button switches to the tree or opens the mutashabihat', async ({ page }) => {
+      await open(page, '/');
+      const post = page.getByRole('button', { name: 'افتحها في المقارنة', exact: true }).first()
+        .locator('xpath=ancestor::div[.//*[@aria-label="المتشابهات" or @aria-label="عرض المصفوفة"]][1]');
+      const tree = post.getByRole('button', { name: 'المتشابهات', exact: true });
+      const sheet = page.getByRole('heading', { name: 'المتشابهات', exact: true }).locator('xpath=..');
+      await tree.scrollIntoViewIfNeeded();
+      await tree.click();
+      await sheet.getByRole('button', { name: 'عرض الشجرة', exact: true }).click();
+      await expect(post.getByRole('button', { name: 'عرض المصفوفة', exact: true })).toBeVisible();
+      await post.getByRole('button', { name: 'عرض المصفوفة', exact: true }).click();
+      await post.getByRole('button', { name: 'المتشابهات', exact: true }).click();
+      await sheet.getByRole('button', { name: 'افتح في متشابهات القرآن', exact: true }).click();
+      await expect(page).toHaveURL(/\/branches/);
+    });
+
     // Owner, 2026-11-19: no box inside a feed card, and the buttons sit in the row under the card, not in it.
     test('the tree quiz card holds no box and keeps its buttons under the card, before and after the answer', async ({ page }) => {
       await open(page, '/');
