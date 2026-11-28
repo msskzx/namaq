@@ -12,6 +12,7 @@ import StoryMap from '@/components/StoryMap';
 import { prophetStory } from '@/lib/prophets';
 import { usePalette } from '@/lib/theme';
 import { useShrinkOnScroll } from '@/lib/chrome';
+import { useLater } from '@/lib/hooks/useLater';
 
 export default function ProphetStory({ slug, header, inTab = false, startEvent, startSurah }: { slug: string; header: (help: () => void) => React.ReactNode; inTab?: boolean;
   startEvent?: number; startSurah?: number }) {
@@ -28,12 +29,13 @@ export default function ProphetStory({ slug, header, inTab = false, startEvent, 
   const placeY = useRef<Record<number, number>>({});
   const pending = useRef<number | undefined>(open?.surah);
   const onScroll = useShrinkOnScroll();
-  useTabRetap('prophets', () => { if (inTab) requestAnimationFrame(() => scroll.current?.scrollTo({ y: 0, animated: true })); });
+  const later = useLater();
+  useTabRetap('prophets', () => { if (inTab) later.nextFrame(() => scroll.current?.scrollTo({ y: 0, animated: true })); });
 
   if (!prophet || !map) return <View style={{ flex: 1, backgroundColor: palette.paper }}>{header(() => setHelp(true))}</View>;
 
   const { title, story, events } = prophet;
-  const scrollTo = (y: number) => requestAnimationFrame(() => scroll.current?.scrollTo({ y, animated: true }));
+  const scrollTo = (y: number) => later.nextFrame(() => scroll.current?.scrollTo({ y, animated: true }));
   const read = (event: number, surah?: number) => {
     pending.current = undefined;
     if (surah === undefined) scrollTo(detailY.current);

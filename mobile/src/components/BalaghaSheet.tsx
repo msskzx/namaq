@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { Sparkles } from 'lucide-react-native';
 import { Text } from '@/ui/Text';
@@ -24,6 +24,8 @@ import Pickable from '@/ui/Pickable';
 import Chip from '@/ui/Chip';
 import { openIntent, toTab } from '@/lib/ways';
 import { plainName, termOfParagraph } from '@shared/quran/balaghaTerms';
+import { useOnChange } from '@/lib/hooks/useOnChange';
+import { useLoaded } from '@/lib/hooks/useLoaded';
 
 // see docs/plans/balagha.md
 const band = (palette: Palette) => palette.bands.mark;
@@ -71,7 +73,7 @@ export function BalaghaBody({ ayah, palette, onClose }: { ayah: string; palette:
 function Itqan({ paragraphs, palette, onSpan, onClose }: { paragraphs: ItqanParagraph[]; palette: Palette; onSpan: (span: [number, number][]) => void; onClose?: () => void }) {
   useBooks();
   const [picked, setPicked] = useState(0);
-  useEffect(() => { onSpan(paragraphs[picked]?.words ?? []); }, [paragraphs, picked, onSpan]);
+  useOnChange([paragraphs, picked, onSpan], () => onSpan(paragraphs[picked]?.words ?? []));
   if (bookState('itqan') !== 'on') return <BookList kind="balagha" palette={palette} />;
   if (!paragraphs.length) return <Text style={{ color: palette.muted, fontSize: 15, textAlign: 'center', paddingVertical: 16 }}>لم يستشهد السيوطي بهذه الآية في أنواع البلاغة.</Text>;
   return paragraphs.map((paragraph, i) => (
@@ -114,18 +116,12 @@ function TermLink({ paragraph, palette, onClose }: { paragraph: ItqanParagraph; 
 function Kashshaf({ ayah, palette, onSpan, onClose }: { ayah: string; palette: Palette; onSpan: (span: [number, number][]) => void; onClose?: () => void }) {
   useBooks();
   const on = bookState('kashshaf') === 'on';
-  const [book, setBook] = useState<KashshafData | null | false>(null);
-  useEffect(() => {
-    let live = true;
-    setBook(null);
-    if (on) void readBook<KashshafData>('kashshaf').then(data => { if (live) setBook(data ?? false); });
-    return () => { live = false; };
-  }, [on]);
+  const book = useLoaded(on ? 'kashshaf' : null, () => readBook<KashshafData>('kashshaf').then(data => data ?? false));
   const passage = useMemo(() => (book ? kashshafAt(book, ayah) : null), [book, ayah]);
   const firstLit = passage ? passage.lit.findIndex((_, at) => litWords(passage, at, ayah)) : -1;
   const [picked, setPicked] = useState<number | null>(null);
   const lit = picked ?? (firstLit >= 0 ? firstLit : null);
-  useEffect(() => { const words = passage && lit !== null ? litWords(passage, lit, ayah) : null; onSpan(words ? [words] : []); }, [passage, lit, ayah, onSpan]);
+  useOnChange([passage, lit, ayah, onSpan], () => { const words = passage && lit !== null ? litWords(passage, lit, ayah) : null; onSpan(words ? [words] : []); });
   return (
     <>
       {passage && (

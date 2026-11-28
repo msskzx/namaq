@@ -1,7 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Svg, { Circle, G, Path } from 'react-native-svg';
 import { BERRIES, BOWL, BRANCHES } from '@/lib/logo';
 import { usePalette, type Palette } from '@/lib/theme';
+import { useLater } from '@/lib/hooks/useLater';
+import { useOnChange } from '@/lib/hooks/useOnChange';
 
 export default function Logo({ size = 32, palette: given }: { size?: number; palette?: Pick<Palette, 'ink' | 'accent'> }) {
   const theme = usePalette();
@@ -21,11 +23,11 @@ export function GrowingLogo({ size = 130, step = 140 }: { size?: number; step?: 
   const palette = usePalette();
   const parts = 1 + BRANCHES.length + 1;
   const [shown, setShown] = useState(0);
-  useEffect(() => {
-    if (shown >= parts) return;
-    const timer = setTimeout(() => setShown(count => count + 1), shown === 0 ? 300 : step);
-    return () => clearTimeout(timer);
-  }, [shown, parts, step]);
+  const next = useLater();
+  useOnChange([shown, parts, step], () => {
+    if (shown >= parts) { next.cancel(); return; }
+    next.after(shown === 0 ? 300 : step, () => setShown(count => count + 1));
+  });
   const on = (part: number) => (shown > part ? 1 : 0);
   return (
     <Svg width={size} height={size} viewBox="12 24.7 76 76">

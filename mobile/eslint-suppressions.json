@@ -7,56 +7,19 @@
       "count": 5
     }
   },
-  "src/components/BalaghaSheet.tsx": {
-    "quality/no-raw-effects": {
-      "count": 3
-    },
-    "react-hooks/set-state-in-effect": {
-      "count": 1
-    }
-  },
   "src/components/BranchTree.tsx": {
-    "quality/no-raw-effects": {
-      "count": 3
-    },
     "react-hooks/refs": {
       "count": 3
     }
   },
   "src/components/ComparePager.tsx": {
-    "no-restricted-globals": {
-      "count": 1
-    },
-    "quality/no-raw-effects": {
-      "count": 1
-    },
     "react-hooks/refs": {
       "count": 1
-    }
-  },
-  "src/components/CompareSheet.tsx": {
-    "quality/no-raw-effects": {
-      "count": 2
-    },
-    "react-hooks/set-state-in-effect": {
-      "count": 2
     }
   },
   "src/components/DarkSea.tsx": {
-    "no-restricted-globals": {
-      "count": 1
-    },
-    "quality/no-raw-effects": {
-      "count": 1
-    },
     "react-hooks/immutability": {
       "count": 3
-    },
-    "react-hooks/refs": {
-      "count": 1
-    },
-    "react-hooks/set-state-in-effect": {
-      "count": 1
     }
   },
   "src/components/HomeFeed.tsx": {
@@ -84,14 +47,6 @@
       "count": 2
     }
   },
-  "src/components/Logo.tsx": {
-    "no-restricted-globals": {
-      "count": 1
-    },
-    "quality/no-raw-effects": {
-      "count": 1
-    }
-  },
   "src/components/MatrixCard.tsx": {
     "no-restricted-globals": {
       "count": 1
@@ -109,61 +64,17 @@
       "count": 1
     }
   },
-  "src/components/Memorized.tsx": {
-    "quality/no-raw-effects": {
-      "count": 2
-    },
-    "react-hooks/set-state-in-effect": {
-      "count": 1
-    }
-  },
-  "src/components/NoteSheet.tsx": {
-    "no-restricted-globals": {
-      "count": 1
-    },
-    "quality/no-raw-effects": {
-      "count": 2
-    },
-    "react-hooks/set-state-in-effect": {
-      "count": 1
-    }
-  },
-  "src/components/ProphetStory.tsx": {
-    "no-restricted-globals": {
-      "count": 2
-    }
-  },
   "src/components/QuizLook.tsx": {
     "quality/import-boundaries": {
       "count": 6
     }
   },
   "src/components/QuizPage.tsx": {
-    "quality/no-raw-effects": {
-      "count": 2
-    },
     "react-hooks/refs": {
       "count": 1
     }
   },
-  "src/components/QuizTree.tsx": {
-    "no-restricted-globals": {
-      "count": 1
-    },
-    "quality/no-raw-effects": {
-      "count": 1
-    },
-    "react-hooks/set-state-in-effect": {
-      "count": 1
-    }
-  },
   "src/components/RahmanScene.tsx": {
-    "no-restricted-globals": {
-      "count": 1
-    },
-    "quality/no-raw-effects": {
-      "count": 1
-    },
     "react-hooks/refs": {
       "count": 1
     }
@@ -189,29 +100,10 @@
     }
   },
   "src/components/ReaderPager.tsx": {
-    "quality/no-raw-effects": {
-      "count": 3
-    },
     "react-hooks/immutability": {
       "count": 4
     },
     "react-hooks/refs": {
-      "count": 1
-    }
-  },
-  "src/components/ReaderSheets.tsx": {
-    "quality/no-raw-effects": {
-      "count": 2
-    },
-    "react-hooks/set-state-in-effect": {
-      "count": 2
-    }
-  },
-  "src/components/SharePages.tsx": {
-    "no-restricted-globals": {
-      "count": 1
-    },
-    "quality/no-raw-effects": {
       "count": 1
     }
   },
@@ -227,12 +119,6 @@
     }
   },
   "src/components/Tour.tsx": {
-    "no-restricted-globals": {
-      "count": 1
-    },
-    "quality/no-raw-effects": {
-      "count": 2
-    },
     "react-hooks/immutability": {
       "count": 3
     },
@@ -241,9 +127,6 @@
     }
   },
   "src/components/TreeCard.tsx": {
-    "quality/no-raw-effects": {
-      "count": 2
-    },
     "react-hooks/immutability": {
       "count": 7
     },
@@ -274,24 +157,10 @@
     }
   },
   "src/components/WordSheet.tsx": {
-    "no-restricted-globals": {
-      "count": 1
-    },
-    "quality/no-raw-effects": {
-      "count": 1
-    },
     "react-hooks/immutability": {
       "count": 1
     },
     "react-hooks/refs": {
-      "count": 1
-    }
-  },
-  "src/components/recite/useRecite.ts": {
-    "quality/no-raw-effects": {
-      "count": 2
-    },
-    "react-hooks/set-state-in-effect": {
       "count": 1
     }
   },

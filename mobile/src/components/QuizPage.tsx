@@ -1,4 +1,4 @@
-import { memo, useEffect, useMemo, useRef, useState } from 'react';
+import { memo, useMemo, useRef, useState } from 'react';
 import { UnderCard, useCardRow } from '@/ui/Card';
 import { View } from 'react-native';
 import type { RecitePosition } from '@shared/quran/recite';
@@ -14,6 +14,7 @@ import { isBoolean, readJson, writeJson } from '@/lib/storage';
 import type { Graded } from '@/lib/useWriteBoxes';
 import type { Palette } from '@/lib/theme';
 import { SURAH_TITLES } from '@shared/quran/surahNames';
+import { useOnChange } from '@/lib/hooks/useOnChange';
 
 const PAGE_TEXT_RATIO = 1.5;
 const NONE: Readonly<Record<string, unknown>> = {};
@@ -51,12 +52,12 @@ function QuizPage({ ayah, ask, shown, onWritten, onShown, party, palette }: { ay
   const typedSoFar = recite.write?.typed;
   const latest = useRef(party);
   latest.current = party;
-  useEffect(() => {
+  useOnChange([typedSoFar, sent], () => {
     if (typedSoFar && latest.current && !sent) latest.current.onWrite(latest.current.asked.map(at => typedSoFar[at] ?? ''), false);
-  }, [typedSoFar, sent]);
+  });
   const marked = shown && party?.words && party.answer ? { key: ayah, ...writtenGrade({ asked: party.asked, words: party.words }, party.answer) } : null;
   const open = shown || !ask.recite || recite.done;
-  useEffect(() => { if (recite.done) onShown?.(); }, [recite.done]); // eslint-disable-line react-hooks/exhaustive-deps
+  useOnChange([recite.done], () => { if (recite.done) onShown?.(); });
   const nameless = ask.title === 'hidden';
   const view = useMemo((): Recite | null => {
     if (!parts) return null;

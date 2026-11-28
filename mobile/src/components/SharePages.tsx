@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type ComponentRef } from 'react';
+import { useMemo, useRef, useState, type ComponentRef } from 'react';
 import { Image, View } from 'react-native';
 import { captureRef } from 'react-native-view-shot';
 import { sharePages } from '@shared/sharePages';
@@ -8,6 +8,9 @@ import Logo from './Logo';
 import { CAPTURE_RESULT } from '@/lib/shareFile';
 import { UI_FONT_BOLD, type Palette } from '@/lib/theme';
 import type { SharePaged } from '@/lib/shareImage';
+import { useLater } from '@/lib/hooks/useLater';
+import { useOnChange } from '@/lib/hooks/useOnChange';
+import { useOnLeave } from '@/lib/hooks/useOnLeave';
 
 export type Shot = { uri: string; width: number; height: number };
 
@@ -49,10 +52,14 @@ export default function SharePages({ paged, width, palette, onShots, onFail }: {
   }, [ready, sizes, height, paged]);
   const refs = useRef<(ComponentRef<typeof View> | null)[]>([]);
   const pictureCount = drawn ? drawn.length : pages?.length;
-  useEffect(() => {
-    if (!pictureCount) return;
-    let live = true;
-    const timer = setTimeout(() => {
+  const capture = useLater();
+  const run = useRef(0);
+  useOnLeave(() => { run.current++; });
+  useOnChange([pictureCount, onShots, onFail], () => {
+    const mine = ++run.current;
+    const live = () => run.current === mine;
+    if (!pictureCount) { capture.cancel(); return; }
+    capture.after(150, () => {
       void (async () => {
         const shots: Shot[] = [];
         for (const page of refs.current.slice(0, pictureCount)) {
@@ -60,11 +67,10 @@ export default function SharePages({ paged, width, palette, onShots, onFail }: {
           const uri = await captureRef(page, { format: 'png', result: CAPTURE_RESULT });
           shots.push(await new Promise<Shot>((resolve, reject) => Image.getSize(uri, (w, h) => resolve({ uri, width: w, height: h }), reject)));
         }
-        if (live) onShots(shots);
-      })().catch(() => { if (live) onFail(); });
-    }, 150);
-    return () => { live = false; clearTimeout(timer); };
-  }, [pictureCount, onShots, onFail]);
+        if (live()) onShots(shots);
+      })().catch(() => { if (live()) onFail(); });
+    });
+  });
   const total = pages?.length ?? 0;
   return (
     <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: 0 }}>

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useWindowDimensions, View } from 'react-native';
 import { router } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -29,6 +29,8 @@ import SeaArt from './scenes/SeaArt';
 import SeaThumb, { useSceneWords } from './scenes/SeaThumb';
 import SeaCover from './scenes/SeaCover';
 import { FEATURE_ICON } from '@/components/featureIcons';
+import { useLater } from '@/lib/hooks/useLater';
+import { useOnChange } from '@/lib/hooks/useOnChange';
 
 const PAGES = DARK_SEA_STEPS;
 const LAST = PAGES.length - 1;
@@ -77,7 +79,7 @@ export default function DarkSea() {
   const start = useSharedValue(0);
   const [page, setPage] = useState(0);
   const [playing, setPlaying] = useState(false);
-  const timer = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const timer = useLater();
   const words = useMemo(() => darkSeaWords(ayahMushafWords), []);
   const look = useDerivedValue(() => {
     const i = Math.min(LAST - 1, Math.floor(pos.value)), f = clamp(pos.value - i);
@@ -95,7 +97,7 @@ export default function DarkSea() {
       pos.value = withSequence(withTiming(base, { duration: Math.max(1, (base - from) * 600) }), step(1), withDelay(450, step(2)), withDelay(450, step(3)), withDelay(450, step(4)));
     } else pos.value = withTiming(to, { duration: 700 });
   };
-  const stop = () => { clearTimeout(timer.current); setPlaying(false); };
+  const stop = () => { timer.cancel(); setPlaying(false); };
   const pan = Gesture.Pan()
     .activeOffsetY([-12, 12])
     .onStart(() => { cancelAnimation(pos); start.value = pos.value; scheduleOnRN(stop); })
@@ -106,13 +108,11 @@ export default function DarkSea() {
       goTo(target);
     });
 
-  useEffect(() => {
-    if (!playing) return;
-    if (page >= LAST) { setPlaying(false); return; }
-    timer.current = setTimeout(() => goTo(page + 1, page), restOf(page) + (page === DARK ? 4600 : 0));
-    return () => clearTimeout(timer.current);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [playing, page]);
+  useOnChange([playing, page], () => {
+    if (!playing) { timer.cancel(); return; }
+    if (page >= LAST) { timer.cancel(); setPlaying(false); return; }
+    timer.after(restOf(page) + (page === DARK ? 4600 : 0), () => goTo(page + 1, page));
+  });
   const play = () => { if (playing) return stop(); if (page >= LAST) { pos.value = 0; setPage(0); } setPlaying(true); };
 
   const top = useAnimatedStyle(() => {

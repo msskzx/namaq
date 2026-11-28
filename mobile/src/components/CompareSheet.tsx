@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
+import { useMemo, useState, useSyncExternalStore } from 'react';
 import { FlatList, Pressable, ScrollView, View } from 'react-native';
 import Sheet from '@/ui/Sheet';
 import { Text } from '@/ui/Text';
@@ -15,6 +15,7 @@ import type { Palette } from '@/lib/theme';
 import IconButton from '@/ui/IconButton';
 import { SearchField } from '@/ui/Field';
 import { FEATURE_ICON } from '@/components/featureIcons';
+import { useAdjustOn } from '@/lib/hooks/useAdjustOn';
 
 const SORT_KEY = 'compare-pairs-sort';
 
@@ -43,7 +44,7 @@ export default function CompareSheet({ open, onClose, pairs, filter, onFilter, l
   const [expanded, setExpanded] = useState(() => new Set([lead]));
   const [filtering, setFiltering] = useState(false);
   const [draft, setDraftState] = useState<FilterDraft>(() => draftOf(listOfFilter(filter)));
-  useEffect(() => { if (open) { setDraftState(draftOf(listOfFilter(filter))); setFiltering(false); } }, [open]); // eslint-disable-line react-hooks/exhaustive-deps
+  useAdjustOn([open], () => { if (open) { setDraftState(draftOf(listOfFilter(filter))); setFiltering(false); } });
   const setDraft = (next: FilterDraft) => {
     setDraftState(next);
     const list = applyDraft(next);
@@ -57,7 +58,7 @@ export default function CompareSheet({ open, onClose, pairs, filter, onFilter, l
     onFilter(next);
     setDraftState(draftOf(listOfFilter(next)));
   };
-  useEffect(() => setExpanded(current => (current.has(lead) ? current : new Set([...current, lead]))), [lead]);
+  useAdjustOn([lead], () => setExpanded(current => (current.has(lead) ? current : new Set([...current, lead]))));
   const rows = useMemo(() => {
     const list: Row[] = [];
     const stories = filter.savedOnly ? [] : storiesIn(pairs, query);

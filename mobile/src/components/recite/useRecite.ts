@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { markForgotten, readDueMarks, rememberAyah, wordMarkKey } from '@shared/ayahMarks';
 import { atStart, revealAyah, stepBack, type RecitePosition } from '@shared/quran/recite';
 import { reciteView, type PageModel } from '@shared/quran/recitePage';
@@ -7,6 +7,7 @@ import { blankBoxes, blankText, boxesOf, type WriteBlank } from '@shared/quiz/wr
 import { ayahCounts } from '@/lib/mushaf';
 import { useWriteBoxes, type Graded } from '@/lib/useWriteBoxes';
 import type { Checked } from '../MushafPageView';
+import { useOnChange } from '@/lib/hooks/useOnChange';
 
 export function useRecite({ model, position, setPosition, writing, pen, until = null, floor = 0, onPastEnd, onWritten, onSubmit, autoFocus = false }: {
   model: PageModel | null; position: RecitePosition | null; setPosition: (position: RecitePosition) => void;
@@ -23,7 +24,7 @@ export function useRecite({ model, position, setPosition, writing, pen, until = 
   const offset = writeKey?.endsWith(':1') ? view?.titled.get(Number(writeKey.split(':')[0])) ?? 0 : 0;
   const asked = writeKey && view ? (gap ? [gap.at] : penTargets(words, pen)).filter(at => view.hidden(writeKey, at + offset)) : [];
   const [checked, setChecked] = useState<Checked | null>(null);
-  useEffect(() => setChecked(null), [position?.start, position?.gaps]);
+  useOnChange([position?.start, position?.gaps], () => setChecked(null));
   const boxes = useWriteBoxes({ ayah: writeKey && gap ? wordMarkKey(writeKey, gap.place) : writeKey, words, asked, autoFocus, onDone: (graded, typed) => {
     if (!writeKey || !position) return;
     if (onSubmit) { onSubmit(writeKey, typed); return; }
@@ -73,7 +74,7 @@ export function useWriteBlanks({ id, blanks, texts, onType }: { id: string; blan
   const boxes = useWriteBoxes({ ayah: id, words: layout.words, asked: layout.asked, start: boxesOf(blanks, layout.first, incoming), onDone: () => boxes.blur() });
   const written = blanks.map((blank, index) => blankText(blank, layout.first[index], boxes.typed));
   const last = useRef({ id, written, incoming });
-  useEffect(() => {
+  useOnChange([id, written.join('\u0000'), incoming.join('\u0000')], () => {
     const before = last.current;
     last.current = { id, written, incoming };
     if (before.id !== id || before.written.length !== written.length) return;

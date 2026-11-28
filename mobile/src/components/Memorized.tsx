@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
+import { useRef, useState, useSyncExternalStore } from 'react';
 import { ScrollView, View } from 'react-native';
 import { BookOpenCheck, Check, X } from 'lucide-react-native';
 import { memorizedPrefer, memorizedQuestions, readMemorized, readMemorizedAsked, setMemorizedAsked, subscribeMemorized, subscribeMemorizedAsked, writeMemorized, type Memorized } from '@shared/memorized';
@@ -12,6 +12,8 @@ import IconButton from '@/ui/IconButton';
 import { Tap } from '@/ui/Tap';
 import Card from '@/ui/Card';
 import SettingRow from '@/ui/SettingRow';
+import { useOnChange } from '@/lib/hooks/useOnChange';
+import { useOnLeave } from '@/lib/hooks/useOnLeave';
 
 const useMemorized = () => useSyncExternalStore(subscribeMemorized, readMemorized);
 
@@ -38,10 +40,11 @@ export function memorizedLabel(memorized: Memorized | null) {
 
 export function MemorizedPicker({ palette }: { palette: Palette }) {
   const memorized = useMemorized();
-  useEffect(() => { setPicking(1); return () => setPicking(-1); }, []);
+  useOnChange([], () => setPicking(1));
+  useOnLeave(() => setPicking(-1));
   const [unit, setUnit] = useState<'juz' | 'surah'>(() => (memorized && 'unit' in memorized ? memorized.unit : 'juz'));
   const last = useRef(memorized && 'unit' in memorized ? memorized : null);
-  useEffect(() => { if (memorized && 'unit' in memorized) { last.current = memorized; setUnit(memorized.unit); } }, [memorized]);
+  useOnChange([memorized], () => { if (memorized && 'unit' in memorized) { last.current = memorized; setUnit(memorized.unit); } });
   const all = !!memorized && 'all' in memorized;
   const picked = memorized && 'unit' in memorized && memorized.unit === unit ? memorized.picked : [];
   const toggle = (n: number) => {
