@@ -8,7 +8,7 @@ export default function LitAyat({ ayat, menu, palette }: { ayat: { words: string
   return (
     <AyahFlow color={palette.ink} menu={menu}>
       {ayat.map((ayah, k) => ayah.words.map((word, i) => (
-        <AyahWords key={`${k}/${i}`} look={ayah.lit.some(([from, to]) => i >= from && i <= to) ? { backgroundColor: palette.bands.word } : undefined}>{`${k || i ? ' ' : ''}${word}`}</AyahWords>
+        <AyahWords key={`${k}/${i}`} look={ayah.lit.some(([from, to]) => i >= from && i <= to) ? { backgroundColor: palette.bands.mark } : undefined}>{`${k || i ? ' ' : ''}${word}`}</AyahWords>
       )).concat(ayah.number !== undefined ? [<AyahWords key={`${k}#`}>{` ${num(ayah.number)}`}</AyahWords>] : []))}
     </AyahFlow>
   );

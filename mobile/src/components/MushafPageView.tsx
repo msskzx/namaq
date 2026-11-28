@@ -17,6 +17,7 @@ import { useOnChange } from '@/lib/hooks/useOnChange';
 const BASMALA = 'بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ';
 const BASE = 40;
 const EMPTY_END = '\u06DD';
+const SAVED_CIRCLE = 0.86;
 const GAP = WORD_GAP;
 const SQUEEZE = 0.9;
 const STRETCH = 1.15;
@@ -381,6 +382,9 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
                     {bands(row.id, cells)}
                     {cells.map(({ group, key, wordHidden, rel, at: wordAt }, at) => {
                       const endHidden = (end: number) => !!hidden?.(`${group.surah}:${end}`, Number.MAX_SAFE_INTEGER);
+                      const isSaved = (end: number) => saved.has(`${group.surah}:${end}`) && !endHidden(end);
+                      const tone = (end: number) => (!endHidden(end) && forgot[`${group.surah}:${end}`] ? palette.accent : palette.muted);
+                      const loose = !group.marks.some(isSaved);
                       const writing = !!group.word && wordHidden && write?.key === key;
                       const graded = !wordHidden && checked?.key === key ? (checked.right.includes(rel) ? palette.green : checked.wrong.includes(rel) ? palette.amber : null) : null;
                       const mistyped = graded === palette.amber && group.word ? checked!.typed[rel] : '';
@@ -393,15 +397,18 @@ function MushafPageView({ page, data, model, palette, width, height, top, names,
                         {mistyped ? <Mistyped text={mistyped} size={size} palette={palette} /> : null}
                         <Text style={{ fontFamily: QURAN_FONT, fontSize: size, color: graded ?? palette.ink }}>
                           {wordHidden ? '' : group.word}
-                          {group.marks.map(end => (
+                          {loose ? group.marks.map(end => (
                             <Text key={end}>
                               {group.word ? ' ' : ''}
-                              <Text style={{ color: endHidden(end) ? palette.muted : saved.has(`${group.surah}:${end}`) ? palette.root : forgot[`${group.surah}:${end}`] ? palette.accent : palette.muted }}>
-                                {endHidden(end) ? EMPTY_END : num(end)}
-                              </Text>
+                              <Text style={{ color: tone(end) }}>{endHidden(end) ? EMPTY_END : num(end)}</Text>
                             </Text>
-                          ))}
+                          )) : null}
                         </Text>
+                        {loose ? null : group.marks.map(end => (
+                          <View key={end} style={{ marginRight: group.word ? size * WORD_GAP : 0, width: size * SAVED_CIRCLE, height: size * SAVED_CIRCLE, borderRadius: size, backgroundColor: isSaved(end) ? palette.bands.saved : undefined, alignItems: 'center', justifyContent: 'center' }}>
+                            <Text style={{ fontFamily: QURAN_FONT, fontSize: size, lineHeight: size * SAVED_CIRCLE, color: isSaved(end) ? palette.ink : tone(end) }}>{endHidden(end) ? EMPTY_END : num(end)}</Text>
+                          </View>
+                        ))}
                         </View>
                         </Word>
                       );
